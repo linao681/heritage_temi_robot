@@ -16,14 +16,15 @@ class VisitorPerceptionNode(Node):
         self._monitor = VisitorMonitor(config)
         self._status = self.create_publisher(String, 'heritage/visitor/status', 10)
         self._events = self.create_publisher(String, 'heritage/visitor/events', 10)
-        count_topic = 'count' if config.count_source == 'mock' else 'vision_count'
+        count_topic = {'mock': 'count', 'offline_video': 'vision_count',
+                       'camera': 'camera_count'}[config.count_source]
         self.create_subscription(Int32, 'heritage/visitor/' + count_topic, self._on_count, 10)
         self.create_subscription(Int32, 'heritage/visitor/expected_count', self._on_expected, 10)
         self.create_timer(min(0.2, config.stale_timeout_sec / 2), self._on_timer,
                           clock=Clock(clock_type=ClockType.STEADY_TIME))
 
     def _publish(self, events):
-        snapshot = self._monitor.snapshot()
+        snapshot = self._monitor.snapshot(time.monotonic())
         self._status.publish(String(data=json.dumps(snapshot)))
         for event in events:
             self._events.publish(String(data=json.dumps({'event': event, **snapshot})))

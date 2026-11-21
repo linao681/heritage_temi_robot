@@ -27,13 +27,9 @@ def prepare(monkeypatch, tmp_path):
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
 
 
-def test_invalid_source_rejected():
-    with pytest.raises(ValueError):
-        VisitorConfig(count_source='camera')
-
-
 @pytest.mark.parametrize('source,topic,other', [
     ('mock', 'count', 'vision_count'), ('offline_video', 'vision_count', 'count'),
+    ('camera', 'camera_count', 'count'),
 ])
 def test_count_topic_source_isolation_and_staleness(monkeypatch, tmp_path, source, topic, other):
     config = VisitorConfig(count_source=source, stale_timeout_sec=.5)

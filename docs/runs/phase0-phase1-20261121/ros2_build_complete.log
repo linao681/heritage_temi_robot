@@ -1,0 +1,17 @@
+ROS2 build cache: /tmp/heritage-temi-ros2-build.SoGJsX
+Starting >>> temi_interfaces
+Finished <<< temi_interfaces [7.43s]
+Starting >>> heritage_dashboard
+Starting >>> heritage_knowledge
+Starting >>> heritage_tour_manager
+Starting >>> temi_bridge
+Starting >>> temi_speed_controller
+Starting >>> visitor_perception
+Finished <<< heritage_knowledge [1.48s]
+Finished <<< heritage_dashboard [1.50s]
+Finished <<< visitor_perception [1.49s]
+Finished <<< heritage_tour_manager [1.52s]
+Finished <<< temi_speed_controller [1.52s]
+Finished <<< temi_bridge [1.53s]
+
+Summary: 7 packages finished [9.15s]

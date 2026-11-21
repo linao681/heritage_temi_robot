@@ -8,9 +8,13 @@
 | --- | --- | --- |
 | `/heritage/visitor/count` | `std_msgs/msg/Int32` | 输入模拟区域人数（非负整数） |
 | `/heritage/visitor/vision_count` | `std_msgs/msg/Int32` | 输入本地离线视频实际检测人数，仅在 `count_source=offline_video` 模式接收 |
+| `/heritage/visitor/camera_count` | `std_msgs/msg/Int32` | 输入相机检测器的匿名帧人数，仅在 `count_source=camera` 模式接收 |
 | `/heritage/visitor/expected_count` | `std_msgs/msg/Int32` | 输入预期队伍人数；0 停止本次队伍监测 |
 | `/heritage/visitor/status` | `std_msgs/msg/String` | 输出 JSON 实时状态（每 0.2 秒或输入更新时，默认配置） |
 | `/heritage/visitor/events` | `std_msgs/msg/String` | 输出 JSON 状态变化事件，含 `event` 字段与当前状态 |
+| `/heritage/visitor/person_detections/raw` | `temi_interfaces/msg/PersonDetectionArray` | YOLOX ROS 节点输出的当前帧人数和归一化检测框 |
+| `/heritage/visitor/person_detections` | `temi_interfaces/msg/PersonDetectionArray` | 与匹配深度帧关联后的检测框、人员距离和可选标定密度 |
+| `/heritage/perception/fused` | `temi_interfaces/msg/PerceptionInput` | 多源有效性和时效融合结果，供速度控制器读取 |
 
 状态示例：
 
@@ -20,7 +24,9 @@
 
 `group_state` 分为 `untracked`（未监测队伍）、`unknown`（未获有效稳定评估）、`following`（观测人数达到预期）、`lost`（观测人数不足）。`following` 只表示匿名人数达标，不能确认是原队伍成员或正在跟随机器人。
 
-`source` 由启动配置 `count_source` 决定：默认 `mock` 只订阅 `/count`，专用 `offline_video` 只订阅 `/vision_count`；同一测试域只启动一个实例。两模式都发布状态，导览策略明确拒绝 `offline_video` 来源。
+`source` 由启动配置 `count_source` 决定：默认 `mock` 只订阅 `/count`，`offline_video` 只订阅 `/vision_count`，`camera` 只订阅 `/camera_count`；同一测试域只启动一个实例。三种模式都发布状态，live 融合/导览策略拒绝离线视频和模拟来源；Gazebo 数据只有显式仿真模式才可参与模拟速度策略。
+
+状态包含 `sample_timestamp_monotonic_sec` 和 `sample_age_sec`，均来自本机单调时钟；二者用于本机去抖和新鲜度判断，不可跨主机直接比较。相机和离线视频人数都保留稳定采样、抖动过滤与掉流不等于 0 人的语义。
 
 默认连续 3 个同值观测才能改变稳定人数；超过 2 秒未收到合法观测置为无效（`valid=false`、`people_count=null`）。在合法但不稳定的抖动输入下保留最后稳定值；`valid=true` 不代表最新原始输入与稳定人数一致。2.2 新增 `stable`、`stable_fresh`，持续变化且超过超时也判定稳定确认不新鲜。负数输入不刷新观测超时并重置连续判断。预期人数变化后等待下一次稳定观察；重复发送相同预期人数不重复报警。
 

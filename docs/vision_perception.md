@@ -1,4 +1,4 @@
-# 离线视觉游客人数检测（2.3）
+# 游客人数检测：离线评估与实时 ROS 输入
 
 本阶段使用真实公开视频、官方 OpenCV Zoo YOLOX-S ONNX，在本机 CPU 上实际进行匿名 person 类计数。不是 Mock 数字推演，也不是实体 temi 摄像头测试。Python 3.10、OpenCV 4.11.0、NumPy 1.23.5；未额外安装 PyTorch/GPU 推理环境。模型、录像、许可证及 SHA-256 详见 [视觉资产说明](../assets/vision/README.md)。
 
@@ -30,8 +30,27 @@ ros2 run visitor_perception offline_video_count \
 | --- | --- | --- |
 | 默认 | `/heritage/visitor/count` | `mock` |
 | 离线录像专用 | `/heritage/visitor/vision_count` | `offline_video` |
+| 相机帧检测 | `/heritage/visitor/camera_count` | `camera` |
 
-两模式共用原有 `/heritage/visitor/status` 及 `/heritage/visitor/events`。同一测试域只启动一个感知实例。项目默认 `visitor_perception.count_source: mock` 与 `tour.visitor_assist_enabled: false` 不变；录像模式通过独立配置显式选择，不冒充现场 Mock 游客。2.2 辅助导览仍仅接受 `source=mock`，离线录像不能 arm 或触发导航。录像结束或检测失效，停止发布，不补发假零人数；现有断流状态自然变为 `valid=false`。
+三种模式共用 `/heritage/visitor/status` 和 `/heritage/visitor/events`。同一测试域只启动一个感知实例。项目默认 `visitor_perception.count_source: mock` 与 `tour.visitor_assist_enabled: false` 不变；离线录像不会冒充实时摄像头。离线视频不能 arm 或触发导览；录像结束或检测失效，不补发假零人数，状态自然变为 `valid=false`。
+
+## 实时 ROS 图像与深度关联
+
+- `yolox_person_detector` 订阅 RGB `sensor_msgs/Image`，默认 topic 为 Gazebo 实测的 `/depth_camera/image_raw`；`model_path` 默认指向仓库已有 `assets/vision/object_detection_yolox_2022nov.onnx`。launch 参数 `image_topic` 和 `model_path` 可覆盖默认值。
+- 节点只发布匿名人数以及 `PersonDetectionArray` 归一化框，不输出图像或身份。默认模型不存在或无法加载时明确报错，不发布伪造计数。
+- `depth_association` 配对 RGB 检测与 `/camera/depth/image_raw`、`/camera/depth/camera_info`。只用匹配帧和 CameraInfo 内参计算检测框中心 ROI 的深度中值；深度像素不足或帧不匹配时标记距离无效。未用框大小估算距离。
+- `perception_fusion` 汇总稳定游客状态、人员距离、LaserScan、机器人/导航/导览/安全状态，发布类型化 `heritage/perception/fused`。可用下列方式在当前 Gazebo 配置运行感知节点（不会启动 temi 运动）：
+
+```bash
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
+ROS_LOCALHOST_ONLY=1 ROS_DOMAIN_ID=211 ros2 launch visitor_perception sensor_fusion.launch.py \
+  simulation_mode:=true \
+  model_path:=assets/vision/object_detection_yolox_2022nov.onnx \
+  image_topic:=depth_camera/image_raw
+```
+
+实体相机驱动的 RGB/深度 topic、CameraInfo、帧坐标和密度标定仍需 temi 硬件适配及实测；`simulation_mode:=true` 只允许 Gazebo/测试来源进入模拟策略，不是实体运行参数。
 
 独立实际视频回环演示：
 
@@ -68,3 +87,9 @@ python3 scripts/demo_offline_vision.py
 - DDS 的 `wait_for_all_acked` 在本机超时，但实际订阅端完整接收 20 项；报告保留 `publisher_ack_confirmed=false`，不宣称底层 ACK 已确认。节点退出竞争已通过新增 SIGTERM 生命周期用例验证干净退出。
 
 实际展厅数据、多角度/遮挡校准、专业人工复核、真实空场评估、设备摄像头和实机运动仍待验证；视觉结果不授权移动。下一步无实机期间可开发非遗知识库和离线问答。
+
+## 阶段1 Gazebo 输入检查（2026-11-21）
+
+- Gazebo 实际发布 `/depth_camera/image_raw`、`/camera/depth/image_raw`、CameraInfo 和 `/scan`；深度图为 320×240 `32FC1`，对应 optical frame 和 TF。[传感器报告](runs/phase0-phase1-20261121/gazebo_sensors.json)
+- YOLOX ROS 节点用上述 RGB topic 和仓库 ONNX 模型运行，收到一帧人数 `0`。[实际 Topic 输出](runs/phase0-phase1-20261121/yolox_gazebo_count.log) 场景没有行人，这只是模型启动/空场数据通路验证，不是检测精度验证。
+- 另一次融合到速度策略的检查使用了明确标记的合成 YOLOX 检测框和标定密度夹具；该结果不等于模型从 Gazebo 图像检测出人。[融合报告](runs/phase0-phase1-20261121/gazebo_fusion.json)

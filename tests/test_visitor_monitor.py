@@ -19,6 +19,7 @@ def test_initial_unknown_and_first_zero_is_not_departure():
     assert monitor.snapshot() == {
         'valid': False, 'people_count': None, 'expected_count': 0,
         'group_state': 'untracked', 'source': 'mock', 'stable': False, 'stable_fresh': False,
+        'sample_timestamp_monotonic_sec': None, 'sample_age_sec': None,
     }
     assert monitor.tick(10.0) == []
     assert stable(monitor, 0, 11.0) == []
@@ -46,6 +47,21 @@ def test_count_changes_without_new_arrival_and_transient_occlusion_filtered():
     assert stable(monitor, 0, 1.0) == ['departure']
     assert stable(monitor, 0, 1.4) == []
     assert stable(monitor, 1, 1.8) == ['arrival']
+
+
+def test_snapshot_exposes_monotonic_timestamp_and_age():
+    monitor = VisitorMonitor(VisitorConfig())
+    assert stable(monitor, 2, 10.0) == ['arrival']
+
+    snapshot = monitor.snapshot(now=10.5)
+
+    assert snapshot['sample_timestamp_monotonic_sec'] == 10.2
+    assert snapshot['sample_age_sec'] == pytest.approx(0.3)
+
+
+def test_camera_is_a_distinct_live_count_source():
+    monitor = VisitorMonitor(VisitorConfig(count_source='camera'))
+    assert monitor.snapshot()['source'] == 'camera'
 
 
 def test_tracking_only_after_explicit_expected_count():

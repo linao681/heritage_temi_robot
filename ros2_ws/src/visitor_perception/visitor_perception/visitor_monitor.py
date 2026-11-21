@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 import math
+import time
 
 import yaml
 
@@ -18,8 +19,8 @@ class VisitorConfig:
         if (type(self.stale_timeout_sec) not in (int, float) or
                 not math.isfinite(self.stale_timeout_sec) or self.stale_timeout_sec <= 0):
             raise ValueError('stale_timeout_sec 必须为有限正数')
-        if self.count_source not in ('mock', 'offline_video'):
-            raise ValueError('count_source 仅支持 mock 或 offline_video')
+        if self.count_source not in ('mock', 'offline_video', 'camera'):
+            raise ValueError('count_source 仅支持 mock、offline_video 或 camera')
 
     @classmethod
     def from_yaml(cls, path):
@@ -43,7 +44,8 @@ class VisitorMonitor:
         self._expected = 0
         self._group_lost = None
 
-    def snapshot(self) -> dict:
+    def snapshot(self, now: float | None = None) -> dict:
+        now = time.monotonic() if now is None else now
         if self._expected == 0:
             group = 'untracked'
         elif not self._valid or self._group_lost is None:
@@ -55,7 +57,10 @@ class VisitorMonitor:
                 'expected_count': self._expected, 'group_state': group, 'source': self.config.count_source,
                 'stable': self._valid and self._stable_fresh and
                           self._consecutive >= self.config.stable_samples,
-                'stable_fresh': self._valid and self._stable_fresh}
+                'stable_fresh': self._valid and self._stable_fresh,
+                'sample_timestamp_monotonic_sec': self._last_confirmed,
+                'sample_age_sec': (max(0.0, now - self._last_confirmed)
+                                   if self._last_confirmed is not None else None)}
 
     def _reset_candidate(self):
         self._candidate = None

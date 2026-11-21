@@ -10,6 +10,9 @@ find_package(action_msgs REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/RobotStatus.msg"
   "msg/NavigationStatus.msg"
+  "msg/PersonDetection.msg"
+  "msg/PersonDetectionArray.msg"
+  "msg/PerceptionInput.msg"
   "action/NavigateTo.action"
   "action/Speak.action"
   "srv/StopRobot.srv"

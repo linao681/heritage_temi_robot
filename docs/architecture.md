@@ -35,6 +35,34 @@ flowchart TD
 | `heritage_dashboard` | 本机 Tk 监控、虚拟路线、问答与 Mock 人工接管（4.1 本机测试通过，默认只读） |
 | `android/temi_heritage_bridge` | WebSocket 客户端、SDK 生命周期、机器人事件与命令关联 |
 
+## 感知到动态速度控制数据流
+
+阶段1补充的传感器输入与控制策略关系如下。感知融合节点只发布状态，不直接调用运动服务；旧版 JSON 速度输入仍保留。
+
+```mermaid
+flowchart LR
+  RGB[相机 RGB 图像] --> YOLO[YOLOX-S 检测]
+  YOLO --> RAW[匿名人数与归一化框]
+  DEPTH[深度图 + CameraInfo] --> ASSOC[时间配对与深度 ROI 关联]
+  RAW --> ASSOC
+  ASSOC --> PERSON[人员距离]
+  LIDAR[LaserScan] --> FUSION[PerceptionFusion]
+  VISITOR[稳定人数/队伍状态] --> FUSION
+  PERSON --> FUSION
+  STATUS[RobotStatus / NavigationStatus]
+  TOUR[导览状态]
+  SAFE[停车状态]
+  STATUS --> FUSION
+  TOUR --> FUSION
+  SAFE --> FUSION
+  FUSION --> INPUT[PerceptionInput]
+  INPUT --> SPEED[temi_speed_controller]
+  SPEED --> TOURCTL[TourManager pause/resume]
+  SPEED --> NAVCTL[当前导航会话调速]
+```
+
+统一 Topic：`heritage/perception/fused`。live 来源标记为 `temi_sensor_fusion`，仿真标记为 `gazebo_sensor_fusion`；有效性、数据年龄、导航会话和安全状态在速度控制入口重新检查。详见[速度控制架构](speed_control_architecture.md)及[阶段1报告](phase1_report.md)。
+
 ## TemiBackend 统一契约
 
 `temi_bridge/backend.py` 已实现独立 Python 抽象及数据模型。它不导入 `rclpy`、Android SDK 或 WebSocket 库。Mock 和未来 Linux WebSocket 代理使用同一契约；真实 SDK 动作仍只由 Android 执行。

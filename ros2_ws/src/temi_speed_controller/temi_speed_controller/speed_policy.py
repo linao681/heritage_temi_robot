@@ -4,6 +4,17 @@ import math
 import uuid
 
 
+def perception_source_allowed(source: str, *, mock_mode: bool, allow_simulated_sources: bool) -> bool:
+    """Offline-video, mock, and Gazebo streams are opt-in and never accepted as live temi data."""
+    if source == 'temi_sensor_fusion':
+        return not mock_mode
+    if source == 'gazebo_sensor_fusion':
+        return mock_mode or allow_simulated_sources
+    if source in ('simulation', 'mock'):
+        return mock_mode or allow_simulated_sources
+    return False
+
+
 @dataclass(frozen=True)
 class SpeedConfig:
     min_navigation_speed: float = 0.3
@@ -62,6 +73,12 @@ class SpeedInputs:
     navigation_session_id: str = ''
     manual_stop: bool = False
     sample_age_sec: float = 0.0
+    source_allowed: bool = True
+    people_valid: bool = True
+    person_distance_valid: bool = True
+    crowd_density_valid: bool = True
+    obstacle_distance_valid: bool = True
+    safety_stop_valid: bool = True
 
 
 @dataclass(frozen=True)
@@ -163,11 +180,17 @@ class SpeedController:
             if stop: self._stop_sent = True
             return self._decision(None, False, stop, inputs, now)
 
-        sensor_values = (inputs.nearest_person_m, inputs.crowd_density, inputs.obstacle_distance_m)
+        distance_values = (inputs.nearest_person_m, inputs.obstacle_distance_m)
+        density_valid = (inputs.crowd_density_valid and inputs.crowd_density is not None and
+                         type(inputs.crowd_density) in (int, float) and
+                         math.isfinite(inputs.crowd_density) and 0 <= inputs.crowd_density <= 1)
+        density_unknown = not inputs.crowd_density_valid and inputs.crowd_density is None
         sensors_valid = (type(inputs.sample_age_sec) in (int, float) and math.isfinite(inputs.sample_age_sec) and
                          inputs.sample_age_sec >= 0 and inputs.sample_age_sec + max(0.0, now - inputs.now) <= cfg.input_timeout_sec and now >= inputs.now and
-                         all(v is not None and type(v) in (int, float) and math.isfinite(v) and v >= 0 for v in sensor_values) and
-                         inputs.crowd_density <= 1.0)
+                         inputs.source_allowed and inputs.people_valid and inputs.person_distance_valid and
+                         inputs.obstacle_distance_valid and inputs.safety_stop_valid and
+                         all(v is not None and type(v) in (int, float) and math.isfinite(v) and v >= 0 for v in distance_values) and
+                         (density_valid or density_unknown))
         if not sensors_valid:
             self.state, self.reason = 'STOPPING', '感知数据无效或过期'
             stop = not self._stop_sent and not inputs.stop_confirmed
@@ -227,6 +250,8 @@ class SpeedController:
 
         if inputs.group_state not in ('following', 'untracked'):
             base, reason = cfg.crowded_speed, '团队状态未知，保守降速'
+        elif not density_valid:
+            base, reason = cfg.crowded_speed, '人群密度未标定，保守降速'
         elif inputs.crowd_density >= cfg.crowded_density:
             base, reason = cfg.crowded_speed, '人群密度较高'
         elif inputs.nearest_person_m <= cfg.slow_person_distance_m:

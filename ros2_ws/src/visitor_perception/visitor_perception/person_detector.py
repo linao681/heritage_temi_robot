@@ -96,9 +96,13 @@ class YoloXPersonCounter:
         self.confidence = confidence
         self.nms = nms
 
-    def count(self, frame) -> int:
-        """一次推理按当前画面计算匿名人数。推理错误原样传播。"""
+    def detect(self, frame):
+        """返回当前帧 person 框；距离由后续标定深度关联提供。"""
         blob, ratio = preprocess(frame)
         self._net.setInput(blob)
         output = self._net.forward()
-        return len(decode_person_boxes(output, ratio, frame.shape, self.confidence, self.nms))
+        return decode_person_boxes(output, ratio, frame.shape, self.confidence, self.nms)
+
+    def count(self, frame) -> int:
+        """一次推理按当前画面计算匿名人数。推理错误原样传播。"""
+        return len(self.detect(frame))

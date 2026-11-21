@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "data_source": "Gazebo scan/depth plus explicit synthetic YOLOX-box and calibrated-density fixture",
+  "person_detection_is_camera_model_output": false,
+  "nearest_person_m": 4.690515041351318,
+  "obstacle_distance_m": 3.3746399879455566,
+  "people_count": 1,
+  "sample_age_sec": 0.07346044480800629,
+  "navigation_session_id": "gazebo-fixture-session",
+  "controller_state": "NORMAL",
+  "target_speed_mps": 0.5,
+  "command_eligible": true
+}

@@ -1,0 +1,4 @@
+visitor_perception:
+  stable_samples: 3
+  stale_timeout_sec: 1.0
+  count_source: camera

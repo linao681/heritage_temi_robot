@@ -1,0 +1,27 @@
+# header.stamp is the fused ROS publication timestamp. sample_age_sec is computed with CLOCK_MONOTONIC.
+std_msgs/Header header
+string source
+string[] data_sources
+float64 sample_timestamp_monotonic_sec
+float32 sample_age_sec
+bool valid
+string error
+string warning
+uint32 people_count
+uint32 expected_count
+string group_state
+bool people_valid
+bool person_distance_valid
+float32 nearest_person_m
+bool crowd_density_valid
+float32 crowd_density
+bool obstacle_distance_valid
+float32 obstacle_distance_m
+bool position_valid
+bool communication_valid
+bool safety_stop_valid
+bool safety_stop
+bool navigating
+bool explaining
+bool navigation_error
+string navigation_session_id

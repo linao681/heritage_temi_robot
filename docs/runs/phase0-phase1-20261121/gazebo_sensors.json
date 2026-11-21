@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "scan_received": true,
+  "scan_frame_id": "laser_link",
+  "scan_valid_ranges": 288,
+  "scan_front_min_m": 3.045858860015869,
+  "depth_received": true,
+  "camera_info_received": true,
+  "camera_intrinsics_valid": true,
+  "base_to_depth_optical_tf": 1,
+  "depth": {
+    "encoding": "32FC1",
+    "width": 320,
+    "height": 240,
+    "frame_id": "depth_camera_optical_frame",
+    "valid_depth_pixel_count": 44123,
+    "min_depth_m": 1.2754753828048706,
+    "median_depth_m": 2.9595561027526855,
+    "max_depth_m": 7.8599772453308105
+  },
+  "data_source": "gazebo"
+}

@@ -66,6 +66,29 @@ def test_valid_empty_model_output_counts_zero():
     assert decode_person_boxes(output(), 1, (640, 640, 3)) == []
 
 
+def test_counter_exposes_boxes_for_depth_association_without_estimating_distance():
+    rows = output()
+    set_row(rows, 10, 10, 80, 80)
+
+    class FakeNet:
+        def setInput(self, _blob):
+            pass
+
+        def forward(self):
+            return rows
+
+    counter = object.__new__(YoloXPersonCounter)
+    counter._net = FakeNet()
+    counter.confidence = 0.5
+    counter.nms = 0.5
+
+    boxes = counter.detect(np.zeros((640, 640, 3), dtype=np.uint8))
+
+    assert len(boxes) == 1
+    assert boxes[0][:4] == pytest.approx((60, 40, 40, 80))
+    assert counter.count(np.zeros((640, 640, 3), dtype=np.uint8)) == 1
+
+
 @pytest.mark.parametrize('bad', [np.zeros((8400, 85)), np.full((1, 8400, 85), np.nan)])
 def test_invalid_model_output_is_error_not_zero(bad):
     with pytest.raises(ValueError):

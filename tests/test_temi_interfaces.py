@@ -43,6 +43,27 @@ def test_navigation_status_schema_and_roundtrip():
     ))
 
 
+def test_perception_interfaces_roundtrip_without_inventing_invalid_distances():
+    from temi_interfaces.msg import PerceptionInput, PersonDetection, PersonDetectionArray
+
+    detection = PersonDetection(x_min=0.125, y_min=0.25, x_max=0.5, y_max=0.75,
+                                confidence=1.0, distance_valid=False, distance_m=0.0)
+    people = PersonDetectionArray(header=Header(frame_id='camera_color_optical_frame'),
+                                  source='temi_rgb', valid=True, people_count=1,
+                                  detections=[detection], person_distance_valid=False,
+                                  crowd_density_valid=False)
+    fused = PerceptionInput(header=Header(frame_id='base_link'), source='temi_sensor_fusion',
+                            data_sources=['camera', 'temi_rgbd', 'temi_lidar'],
+                            sample_timestamp_monotonic_sec=12.5, sample_age_sec=0.0,
+                            valid=False, error='人员距离无效', person_distance_valid=False,
+                            nearest_person_m=0.0, obstacle_distance_valid=True,
+                            obstacle_distance_m=1.0, safety_stop_valid=False, safety_stop=True)
+
+    assert_roundtrip(detection)
+    assert_roundtrip(people)
+    assert_roundtrip(fused)
+
+
 def test_navigate_to_goal_result_and_feedback():
     from temi_interfaces.action import NavigateTo
 

@@ -23,6 +23,7 @@ SpeedController 规则策略、限速、滞回、变化率限制
 | 类型 | 名称 | 说明 |
 |---|---|---|
 | Topic 输入 | `heritage/speed_control/input` (`std_msgs/String`) | 感知汇总 JSON：`sample_age_sec`、`nearest_person_m`、`crowd_density`、`obstacle_distance_m`、`group_state`、`navigating`、`explaining`、`navigation_error`、`safety_stop`、`position_valid`、`communication_valid`、`navigation_session_id`。每个输入必须持续刷新；距离单位 m，密度范围 0–1，`sample_age_sec` 必填并代表传感数据采集后经过的时间。 |
+| Topic 输入 | `heritage/perception/fused` (`temi_interfaces/PerceptionInput`) | 新的类型化感知输入；包含数据来源、单调采样时间与年龄、人数/团队状态、人员/障碍距离有效标志、定位/通信/停车状态、导览状态和当前导航会话。原 JSON Topic 继续兼容。 |
 | Topic 输入 | `temi/navigation_status` (`temi_interfaces/NavigationStatus`) | 用于模拟场景获取活动导航会话 ID。生产融合节点必须提供与当前 Action UUID 一致的 `navigation_session_id`。 |
 | Topic 输入 | `heritage/tour/status` (`std_msgs/String`) | `PAUSED` 是暂停状态机的确认；恢复由 TourManager 的 `resume` 服务执行。 |
 | Service | `temi/set_navigation_speed` (`temi_interfaces/SetNavigationSpeed`) | 要求 command ID、当前导航会话 UUID、0.3–0.8 m/s 目标值和原因。旧会话会被网关和 Android 再次拒绝。 |
@@ -37,6 +38,8 @@ SpeedController 规则策略、限速、滞回、变化率限制
 ```json
 {"sample_age_sec":0.0,"nearest_person_m":3.2,"crowd_density":0.1,"obstacle_distance_m":3.0,"group_state":"following","navigating":true,"explaining":false,"navigation_error":false,"safety_stop":false,"position_valid":true,"communication_valid":true,"navigation_session_id":"<当前导航 UUID>"}
 ```
+
+类型化输入的 ROS `header.stamp` 是融合消息发布时间；`sample_timestamp_monotonic_sec` 与 `sample_age_sec` 是本机单调时钟语义。live 控制只接受 `temi_sensor_fusion`，仿真来源需显式启用；`offline_video` 永不作为运动输入。缺失或过期的人员距离、前向激光、通信、定位、停车状态或导航会话进入保守停止流程。人群密度未标定时输出 warning，并按配置拥挤速度限速。
 
 ## 状态与策略
 

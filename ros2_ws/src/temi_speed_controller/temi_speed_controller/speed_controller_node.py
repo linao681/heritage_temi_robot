@@ -7,9 +7,10 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.node import Node
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
+from temi_interfaces.msg import PerceptionInput
 from temi_interfaces.srv import SetNavigationSpeed, StopRobot
 
-from .speed_policy import SpeedConfig, SpeedController, SpeedInputs
+from .speed_policy import SpeedConfig, SpeedController, SpeedInputs, perception_source_allowed
 
 
 class SpeedControllerNode(Node):
@@ -19,9 +20,11 @@ class SpeedControllerNode(Node):
         for name, value in vars(defaults).items():
             self.declare_parameter(name, value)
         self.declare_parameter('mock_mode', False)
+        self.declare_parameter('allow_simulated_sources', False)
         self._policy = SpeedController(SpeedConfig(**{
             name: self.get_parameter(name).value for name in vars(defaults)}))
         self._mock_mode = self.get_parameter('mock_mode').value
+        self._allow_simulated_sources = self.get_parameter('allow_simulated_sources').value
         self._group = ReentrantCallbackGroup()
         self._speed_client = self.create_client(SetNavigationSpeed, 'temi/set_navigation_speed', callback_group=self._group)
         self._stop_client = self.create_client(StopRobot, 'temi/stop', callback_group=self._group)
@@ -41,6 +44,7 @@ class SpeedControllerNode(Node):
         self._status = self.create_publisher(String, 'heritage/speed_control/status', 10)
         self._commands = self.create_publisher(String, 'heritage/speed_control/commands', 10)
         self.create_subscription(String, 'heritage/speed_control/input', self._on_input, 10)
+        self.create_subscription(PerceptionInput, 'heritage/perception/fused', self._on_fused_input, 10)
         self.create_timer(0.1, self._tick, callback_group=self._group)
 
     def _reset_error(self, _request, response):
@@ -74,10 +78,45 @@ class SpeedControllerNode(Node):
                 return
             if type(value.get('sample_age_sec')) not in (int, float) or value['sample_age_sec'] < 0:
                 return
+            source = value.get('source', '')
+            if not isinstance(source, str):
+                return
+            value['source_allowed'] = perception_source_allowed(
+                source, mock_mode=self._mock_mode,
+                allow_simulated_sources=self._allow_simulated_sources)
+            for key in ('people_valid', 'person_distance_valid', 'crowd_density_valid',
+                        'obstacle_distance_valid', 'safety_stop_valid'):
+                if key in value and type(value[key]) is not bool:
+                    return
+                value.setdefault(key, value['source_allowed'])
+            value.setdefault('people_valid', value['source_allowed'])
             value['received_at'] = time.monotonic()
             self._input = value
         except (TypeError, ValueError, OverflowError):
             return
+
+    def _on_fused_input(self, message):
+        source = message.source
+        source_allowed = message.valid and perception_source_allowed(
+            source, mock_mode=self._mock_mode,
+            allow_simulated_sources=self._allow_simulated_sources)
+        self._input = {
+            'source': source, 'source_allowed': source_allowed,
+            'sample_age_sec': float(message.sample_age_sec), 'received_at': time.monotonic(),
+            'nearest_person_m': float(message.nearest_person_m) if message.person_distance_valid else None,
+            'crowd_density': float(message.crowd_density) if message.crowd_density_valid else None,
+            'obstacle_distance_m': float(message.obstacle_distance_m) if message.obstacle_distance_valid else None,
+            'people_valid': bool(message.people_valid),
+            'person_distance_valid': bool(message.person_distance_valid),
+            'crowd_density_valid': bool(message.crowd_density_valid),
+            'obstacle_distance_valid': bool(message.obstacle_distance_valid),
+            'safety_stop_valid': bool(message.safety_stop_valid),
+            'group_state': message.group_state, 'navigating': bool(message.navigating),
+            'explaining': bool(message.explaining), 'navigation_error': bool(message.navigation_error),
+            'safety_stop': bool(message.safety_stop), 'position_valid': bool(message.position_valid),
+            'communication_valid': bool(message.communication_valid),
+            'navigation_session_id': message.navigation_session_id, 'manual_stop': False,
+        }
 
     def _send_stop(self):
         if self._stop_future is not None and not self._stop_future.done():
@@ -160,7 +199,13 @@ class SpeedControllerNode(Node):
             navigation_error=raw.get('navigation_error', False), safety_stop=raw.get('safety_stop', False),
             position_valid=raw.get('position_valid', False), communication_valid=raw.get('communication_valid', False),
             stop_confirmed=self._stop_confirmed or self._tour_state == 'PAUSED', navigation_session_id=raw.get('navigation_session_id', ''),
-            manual_stop=raw.get('manual_stop', False), sample_age_sec=raw.get('sample_age_sec', math.inf))
+            manual_stop=raw.get('manual_stop', False), sample_age_sec=raw.get('sample_age_sec', math.inf),
+            source_allowed=raw.get('source_allowed', False),
+            people_valid=raw.get('people_valid', False),
+            person_distance_valid=raw.get('person_distance_valid', False),
+            crowd_density_valid=raw.get('crowd_density_valid', False),
+            obstacle_distance_valid=raw.get('obstacle_distance_valid', False),
+            safety_stop_valid=raw.get('safety_stop_valid', False))
         decision = self._policy.update(inputs, now)
         if self._tour_state == 'NAVIGATING':
             self._resume_requested_at = None
@@ -197,6 +242,11 @@ class SpeedControllerNode(Node):
             'stop_requested': decision.stop_requested, 'stop_confirmed': self._stop_confirmed,
             'reason': decision.reason, 'navigation_session_id': decision.navigation_session_id,
             'command_status': outcome, 'input_age_sec': age,
+            'input_source': raw.get('source', ''),
+            'input_valid': bool(raw.get('source_allowed', False) and raw.get('people_valid', False) and
+                                raw.get('person_distance_valid', False) and
+                                raw.get('obstacle_distance_valid', False) and raw.get('safety_stop_valid', False)),
+            'crowd_density_valid': bool(raw.get('crowd_density_valid', False)),
             'nearest_person_m': raw.get('nearest_person_m'), 'crowd_density': raw.get('crowd_density'),
             'obstacle_distance_m': raw.get('obstacle_distance_m'), 'group_state': raw.get('group_state', 'unknown')}
         self._status.publish(String(data=json.dumps(message, ensure_ascii=False)))

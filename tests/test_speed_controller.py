@@ -2,7 +2,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'ros2_ws/src/temi_speed_controller'))
-from temi_speed_controller.speed_policy import SpeedConfig, SpeedController, SpeedInputs
+from temi_speed_controller.speed_policy import (SpeedConfig, SpeedController, SpeedInputs,
+    perception_source_allowed)
 
 
 def sample(**changes):
@@ -61,6 +62,42 @@ def test_explaining_never_requests_positive_speed():
     decision = SpeedController().update(sample(explaining=True), now=0)
     assert decision.target_speed_mps is None
     assert decision.stop_requested
+
+
+def test_untrusted_simulation_source_fails_closed_in_live_mode():
+    decision = SpeedController().update(sample(source_allowed=False), now=0)
+
+    assert decision.state == 'STOPPING'
+    assert decision.target_speed_mps is None
+    assert decision.stop_requested
+
+
+def test_unconfirmed_safety_stop_signal_fails_closed():
+    decision = SpeedController().update(sample(safety_stop_valid=False), now=0)
+
+    assert decision.state == 'STOPPING'
+    assert decision.target_speed_mps is None
+    assert decision.stop_requested
+
+
+def test_unknown_crowd_density_uses_conservative_speed_without_claiming_a_measurement():
+    decision = SpeedController().update(
+        sample(crowd_density=None, crowd_density_valid=False), now=0)
+
+    assert decision.state == 'SLOW'
+    assert decision.target_speed_mps == 0.3
+    assert not decision.stop_requested
+
+
+def test_offline_video_source_is_never_an_allowed_motion_input():
+    assert not perception_source_allowed('offline_video', mock_mode=True,
+                                         allow_simulated_sources=True)
+    assert not perception_source_allowed('mock', mock_mode=False,
+                                         allow_simulated_sources=False)
+    assert perception_source_allowed('mock', mock_mode=True,
+                                     allow_simulated_sources=False)
+    assert perception_source_allowed('temi_sensor_fusion', mock_mode=False,
+                                     allow_simulated_sources=False)
 
 
 def test_speed_commands_are_rate_limited_and_not_sent_for_tiny_changes():
