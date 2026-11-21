@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "layout": "official",
+  "stations": [
+    {
+      "id": "zone_1",
+      "name": "非遗概览",
+      "status": 4,
+      "position_error_m": 0.24662595498174428,
+      "elapsed_sec": 0.061,
+      "stopped": true,
+      "success": true
+    }
+  ],
+  "requested_route": [
+    "zone_1"
+  ],
+  "status": 4,
+  "position_error_m": 0.24662595498174428,
+  "elapsed_sec": 0.061
+}

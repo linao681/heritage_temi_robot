@@ -1,0 +1,33 @@
+ROS2 build cache: /tmp/heritage-temi-ros2-build.05jIs5
+Starting >>> temi_bridge
+running egg_info
+creating ../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info
+writing ../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/PKG-INFO
+writing dependency_links to ../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/dependency_links.txt
+writing requirements to ../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/requires.txt
+writing top-level names to ../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/top_level.txt
+writing manifest file '../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/SOURCES.txt'
+reading manifest file '../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/SOURCES.txt'
+writing manifest file '../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build
+creating /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build/lib
+creating /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build/lib/temi_bridge
+copying temi_bridge/backend.py -> /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build/lib/temi_bridge
+copying temi_bridge/mock_backend.py -> /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build/lib/temi_bridge
+copying temi_bridge/__init__.py -> /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build/lib/temi_bridge
+running install
+running install_lib
+copying /tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/build/lib/temi_bridge/mock_backend.py -> /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_bridge/lib/python3.10/site-packages/temi_bridge
+byte-compiling /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_bridge/lib/python3.10/site-packages/temi_bridge/mock_backend.py to mock_backend.cpython-310.pyc
+running install_data
+copying package.xml -> /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_bridge/share/temi_bridge
+running install_egg_info
+removing '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_bridge/lib/python3.10/site-packages/temi_bridge-0.1.0-py3.10.egg-info' (and everything under it)
+Copying ../../../../../../../../../tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/temi_bridge.egg-info to /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_bridge/lib/python3.10/site-packages/temi_bridge-0.1.0-py3.10.egg-info
+running install_scripts
+writing list of installed files to '/tmp/heritage-temi-ros2-build.05jIs5/temi_bridge/install.log'
+Finished <<< temi_bridge [0.66s]
+
+Summary: 1 package finished [0.93s]

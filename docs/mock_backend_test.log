@@ -1,0 +1,40 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-6.2.5, py-1.10.0, pluggy-0.13.0 -- /usr/bin/python3
+rootdir: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot
+plugins: ament-pep257-0.12.15, ament-xmllint-0.12.15, launch-testing-ros-0.19.13, ament-lint-0.12.15, launch-testing-1.0.14, ament-copyright-0.12.15, ament-flake8-0.12.15, mock-3.6.1, colcon-core-0.20.1, cov-3.0.0
+collecting ... collected 32 items
+
+tests/test_mock_backend.py::test_yaml_configuration_has_virtual_destinations_and_no_random_failures PASSED [  3%]
+tests/test_mock_backend.py::test_invalid_configuration_is_rejected[override0] PASSED [  6%]
+tests/test_mock_backend.py::test_invalid_configuration_is_rejected[override1] PASSED [  9%]
+tests/test_mock_backend.py::test_invalid_configuration_is_rejected[override2] PASSED [ 12%]
+tests/test_mock_backend.py::test_invalid_configuration_is_rejected[override3] PASSED [ 15%]
+tests/test_mock_backend.py::test_invalid_configuration_is_rejected[override4] PASSED [ 18%]
+tests/test_mock_backend.py::test_invalid_configuration_is_rejected[override5] PASSED [ 21%]
+tests/test_mock_backend.py::test_connect_disconnect_and_reconnect_preserve_position PASSED [ 25%]
+tests/test_mock_backend.py::test_navigation_moves_continuously_and_drains_battery PASSED [ 28%]
+tests/test_mock_backend.py::test_configured_speed_and_planning_delay_affect_real_elapsed_time PASSED [ 31%]
+tests/test_mock_backend.py::test_explicit_navigation_failure_is_one_shot PASSED [ 34%]
+tests/test_mock_backend.py::test_configured_failure_probability_is_respected PASSED [ 37%]
+tests/test_mock_backend.py::test_stop_interrupts_navigation_immediately_without_stopping_speech PASSED [ 40%]
+tests/test_mock_backend.py::test_timeout_and_cancel_release_navigation PASSED [ 43%]
+tests/test_mock_backend.py::test_network_drop_aborts_tasks_and_reconnect_does_not_replay PASSED [ 46%]
+tests/test_mock_backend.py::test_stop_allows_immediate_replacement_without_old_task_overwriting_state PASSED [ 50%]
+tests/test_mock_backend.py::test_immediate_reconnect_accepts_new_tasks_and_ignores_old_completions PASSED [ 53%]
+tests/test_mock_backend.py::test_cancel_concurrent_with_disconnect_propagates_to_both_tasks PASSED [ 56%]
+tests/test_mock_backend.py::test_speech_has_correlated_feedback_timeout_and_cancellation PASSED [ 59%]
+tests/test_mock_backend.py::test_low_battery_and_invalid_or_conflicting_commands PASSED [ 62%]
+tests/test_temi_backend.py::test_backend_requires_all_six_operations PASSED [ 65%]
+tests/test_temi_backend.py::test_commands_are_async_but_snapshot_is_nonblocking PASSED [ 68%]
+tests/test_temi_backend.py::test_navigation_and_speech_have_command_id_and_feedback PASSED [ 71%]
+tests/test_temi_backend.py::test_disconnected_snapshot_is_safe_and_immutable PASSED [ 75%]
+tests/test_temi_backend.py::test_snapshot_fields_match_ros_status_contract PASSED [ 78%]
+tests/test_temi_backend.py::test_feedback_correlates_with_command_id PASSED [ 81%]
+tests/test_temi_interfaces.py::test_robot_status_schema_and_roundtrip PASSED [ 84%]
+tests/test_temi_interfaces.py::test_navigation_status_schema_and_roundtrip PASSED [ 87%]
+tests/test_temi_interfaces.py::test_navigate_to_goal_result_and_feedback PASSED [ 90%]
+tests/test_temi_interfaces.py::test_speak_goal_result_and_feedback PASSED [ 93%]
+tests/test_temi_interfaces.py::test_stop_robot_request_and_response PASSED [ 96%]
+tests/test_temi_interfaces.py::test_ros_node_publishes_and_receives_custom_message PASSED [100%]
+
+============================== 32 passed in 5.27s ==============================

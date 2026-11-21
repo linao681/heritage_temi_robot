@@ -1,0 +1,15 @@
+header:
+  stamp:
+    sec: 0
+    nanosec: 0
+  frame_id: ''
+connected: true
+battery_percentage: 82.5
+x: 0.0
+y: 0.0
+yaw: 0.0
+navigation_status: ''
+current_location: exhibit_01
+is_moving: false
+error_message: ''
+---

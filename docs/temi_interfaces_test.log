@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-6.2.5, py-1.10.0, pluggy-0.13.0 -- /usr/bin/python3
+rootdir: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot
+plugins: ament-pep257-0.12.15, ament-xmllint-0.12.15, launch-testing-ros-0.19.13, ament-lint-0.12.15, launch-testing-1.0.14, ament-copyright-0.12.15, ament-flake8-0.12.15, mock-3.6.1, colcon-core-0.20.1, cov-3.0.0
+collecting ... collected 6 items
+
+tests/test_temi_interfaces.py::test_robot_status_schema_and_roundtrip PASSED [ 16%]
+tests/test_temi_interfaces.py::test_navigation_status_schema_and_roundtrip PASSED [ 33%]
+tests/test_temi_interfaces.py::test_navigate_to_goal_result_and_feedback PASSED [ 50%]
+tests/test_temi_interfaces.py::test_speak_goal_result_and_feedback PASSED [ 66%]
+tests/test_temi_interfaces.py::test_stop_robot_request_and_response PASSED [ 83%]
+tests/test_temi_interfaces.py::test_ros_node_publishes_and_receives_custom_message PASSED [100%]
+
+============================== 6 passed in 0.20s ===============================

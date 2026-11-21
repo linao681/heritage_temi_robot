@@ -1,0 +1,9 @@
+# 初赛五区示例讲解，内容需场馆审核；坐标由仿真布局配置提供。
+exhibits:
+  - {id: entrance, name: 入口待命点, temi_location: wait, guide_content: 欢迎来到非遗展厅，让我们一起参观五个展区。 , guide_level: basic}
+  - {id: exhibit_01, name: 非遗概览, temi_location: zone_1, guide_content: 这里是非遗概览区，让我们先了解展厅的主题。 , guide_level: basic}
+  - {id: exhibit_02, name: 传统工艺, temi_location: zone_2, guide_content: 这里展示传统工艺的材料、工具和制作技艺。 , guide_level: basic}
+  - {id: exhibit_03, name: 代表作品, temi_location: zone_3, guide_content: 这里展示非遗代表作品，欢迎观察作品的细节。 , guide_level: basic}
+  - {id: exhibit_04, name: 传承故事, temi_location: zone_4, guide_content: 这里介绍手艺传承的故事与人物。 , guide_level: basic}
+  - {id: interaction_zone, name: 互动体验, temi_location: zone_5, guide_content: 这里是互动体验区，欢迎提出问题。 , guide_level: basic}
+  - {id: exit, name: 出口, temi_location: exit, guide_content: 本次导览结束，感谢您的参观。 , guide_level: basic}

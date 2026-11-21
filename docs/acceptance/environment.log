@@ -1,0 +1,67 @@
+2026-11-19T17:56:06+08:00
+PRETTY_NAME="Ubuntu 22.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.5 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+x86_64
+16
+               total        used        free      shared  buff/cache   available
+内存：       15Gi        11Gi       366Mi       225Mi       3.5Gi       3.5Gi
+交换：         0B          0B          0B
+文件系统        大小  已用  可用 已用% 挂载点
+/dev/nvme0n1p4  196G  138G   49G   74% /home/linao/文档/ChatGPT/ican国赛
+Python 3.10.12
+colcon-core: 0.20.1
+rclpy: 3.3.21
+ROS_DISTRO=humble
+/opt/ros/humble/bin/ros2
+/opt/ros/humble
+/opt/ros/humble
+/usr/bin/colcon
+cmake version 3.22.1
+git version 2.34.1
+openjdk version "11.0.32.1" 2026-08-18
+OpenJDK Runtime Environment (build 11.0.32.1+1-post-1ubuntu1-22.04-Ubuntu)
+OpenJDK 64-Bit Server VM (build 11.0.32.1+1-post-1ubuntu1-22.04-Ubuntu, mixed mode, sharing)
+openjdk version "17.0.21.1" 2026-11-17
+OpenJDK Runtime Environment Temurin-17.0.21.1+2 (build 17.0.21.1+2)
+OpenJDK 64-Bit Server VM Temurin-17.0.21.1+2 (build 17.0.21.1+2, mixed mode, sharing)
+javac 17.0.21.1
+project websockets 16.1.1 PyYAML 5.4.1 pytest 6.2.5
+system websockets None
+Pkg.Revision=3
+AndroidVersion.ApiLevel=34
+.toolchain/android-sdk/build-tools/34.0.0/source.properties:Pkg.Revision=34.0.0
+.toolchain/android-sdk/build-tools/34.0.0/source.properties:#Pkg.Revision=34.0.0 rc3
+.toolchain/android-sdk/build-tools/30.0.3/source.properties:Pkg.Revision=30.0.3
+.toolchain/android-sdk/build-tools/30.0.3/source.properties:#Pkg.Revision=30.0.0 rc4
+WARNING: The SDK Manager CLI tool (sdkmanager) is deprecated. Use Android CLI instead.
+The 'android' binary can also be found in the cmdline-tools directory, and 'android sdk' is the replacement for 'sdkmanager'.
+To learn more about the Android CLI and how to use it, see the documentation (https://d.android.com/tools/agents/android-cli)
+
+22.0
+
+
+------------------------------------------------------------
+Gradle 8.5
+------------------------------------------------------------
+
+Build time:   2023-11-29 14:08:57 UTC
+Revision:     28aca86a7180baa17117e0e5ba01d8ea9feca598
+
+Kotlin:       1.9.20
+Groovy:       3.0.17
+Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+JVM:          17.0.21.1 (Eclipse Adoptium 17.0.21.1+2)
+OS:           Linux 6.8.0-138-generic amd64
+
+v1.139.0
+ae1c713cb89ccd9b1e6fe2d497a4e05c1c45edad

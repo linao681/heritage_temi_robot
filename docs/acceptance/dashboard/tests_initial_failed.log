@@ -1,0 +1,36 @@
+........................................................................ [ 36%]
+.............................................F.......................... [ 73%]
+.....................................................                    [100%]
+=================================== FAILURES ===================================
+____________ test_dashboard_real_ros_telemetry_and_manual_takeover _____________
+
+rig = namespace(backend=<temi_bridge.mock_backend.MockTemiBackend object at 0x79c9979f5840>, gateway=<temi_bridge.ros_gatewa... client=<rclpy.node.Node object at 0x79c98d1ce0b0>, speech=<rclpy.action.client.ActionClient object at 0x79c98d1cdbd0>)
+
+    def test_dashboard_real_ros_telemetry_and_manual_takeover(rig):
+        from heritage_dashboard.ros_dashboard import DashboardNode
+>       monitor = DashboardNode(controls=True)
+
+tests/test_tour_ros_integration.py:174: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <heritage_dashboard.ros_dashboard.DashboardNode object at 0x79c98d1cd330>
+controls = True
+
+    def __init__(self, controls=False):
+        super().__init__('heritage_dashboard')
+        self.model = DashboardModel(controls=controls)
+        self.pending = None
+        self.control_message = '只读模式' if not controls else 'Mock 人工操作已启用'
+        self.create_subscription(RobotStatus, 'temi/robot_status', self._robot, 10)
+        self.create_subscription(NavigationStatus, 'temi/navigation_status', self._navigation, 10)
+        for key, topic in (('tour','heritage/tour/status'), ('visitor','heritage/visitor/status')):
+            self.create_subscription(String, topic, lambda msg, key=key: self._json(key,msg), 10)
+>       self.clients = {name: self.create_client(Trigger, 'heritage/tour/' + name)
+                        for name in ('pause','resume','cancel','manual_takeover')} if controls else {}
+E       AttributeError: can't set attribute 'clients'
+
+ros2_ws/install/heritage_dashboard/lib/python3.10/site-packages/heritage_dashboard/ros_dashboard.py:24: AttributeError
+- generated xml file: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/docs/acceptance/dashboard/linux_junit.xml -
+=========================== short test summary info ============================
+FAILED tests/test_tour_ros_integration.py::test_dashboard_real_ros_telemetry_and_manual_takeover
+1 failed, 196 passed in 77.51s (0:01:17)

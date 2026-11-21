@@ -1,0 +1,20 @@
+speed_controller:
+  ros__parameters:
+    min_navigation_speed: 0.3
+    max_navigation_speed: 0.8
+    default_speed: 0.5
+    crowded_speed: 0.3
+    open_area_speed: 0.7
+    crowded_density: 0.5
+    slow_person_distance_m: 2.0
+    stop_person_distance_m: 0.65
+    slow_obstacle_distance_m: 1.5
+    stop_obstacle_distance_m: 0.55
+    clear_distance_hysteresis_m: 0.25
+    lost_group_stop_sec: 8.0
+    recovery_hold_sec: 2.0
+    input_timeout_sec: 1.0
+    acceleration_limit_mps2: 0.2
+    deceleration_limit_mps2: 0.5
+    min_speed_delta_mps: 0.05
+    command_interval_sec: 0.5

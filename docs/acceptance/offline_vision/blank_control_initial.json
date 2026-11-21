@@ -1,0 +1,24 @@
+{
+  "source": "synthetic_uniform_frames",
+  "samples": [
+    {
+      "fill": 0,
+      "people_count": 0,
+      "reference": 0,
+      "latency_ms": 223.85868999845115
+    },
+    {
+      "fill": 114,
+      "people_count": 0,
+      "reference": 0,
+      "latency_ms": 142.85645900235977
+    },
+    {
+      "fill": 255,
+      "people_count": 0,
+      "reference": 0,
+      "latency_ms": 139.81441000214545
+    }
+  ],
+  "false_positive_frame_ratio": 0.0
+}

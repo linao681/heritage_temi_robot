@@ -1,0 +1,151 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.5/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 34
+
+This Android Gradle plugin (8.0.0) was tested up to compileSdk = 33.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 34.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 34 is available.
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=34
+to this project's gradle.properties.
+> Task :sample:preBuild UP-TO-DATE
+> Task :sample:preDebugBuild UP-TO-DATE
+> Task :sample:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :sample:checkKotlinGradlePluginConfigurationErrors
+> Task :sample:generateDebugResValues
+> Task :sample:dataBindingMergeDependencyArtifactsDebug
+> Task :sample:generateDebugResources
+> Task :sdk:preBuild UP-TO-DATE
+> Task :sdk:preDebugBuild UP-TO-DATE
+> Task :sdk:generateDebugResValues
+> Task :sdk:generateDebugResources
+> Task :sdk:packageDebugResources
+> Task :sample:generateDebugBuildConfig
+> Task :sdk:writeDebugAarMetadata
+> Task :sample:mapDebugSourceSetPaths
+> Task :sample:checkDebugAarMetadata
+> Task :sample:createDebugCompatibleScreenManifests
+> Task :sample:mergeDebugResources
+> Task :sample:extractDeepLinksDebug
+> Task :sample:dataBindingGenBaseClassesDebug
+> Task :sdk:extractDeepLinksDebug
+> Task :sdk:compileDebugLibraryResources
+> Task :sdk:processDebugManifest
+> Task :sdk:parseDebugLocalResources
+> Task :sample:processDebugMainManifest
+> Task :sample:processDebugManifest
+> Task :sdk:checkKotlinGradlePluginConfigurationErrors
+> Task :sdk:generateDebugBuildConfig
+> Task :sdk:javaPreCompileDebug
+> Task :sample:processDebugManifestForPackage
+> Task :sample:javaPreCompileDebug
+> Task :sample:mergeDebugShaders
+> Task :sample:compileDebugShaders NO-SOURCE
+> Task :sample:generateDebugAssets UP-TO-DATE
+> Task :sdk:mergeDebugShaders
+> Task :sdk:compileDebugShaders NO-SOURCE
+> Task :sdk:generateDebugAssets UP-TO-DATE
+> Task :sdk:packageDebugAssets
+> Task :sdk:generateDebugRFile
+> Task :sample:mergeDebugAssets
+> Task :sample:processDebugJavaRes NO-SOURCE
+> Task :sample:compressDebugAssets
+> Task :sdk:processDebugJavaRes NO-SOURCE
+> Task :sample:checkDebugDuplicateClasses
+> Task :sample:desugarDebugFileDependencies
+> Task :sample:mergeDebugJniLibFolders
+> Task :sdk:mergeDebugJniLibFolders
+> Task :sdk:mergeDebugNativeLibs NO-SOURCE
+> Task :sdk:copyDebugJniLibsProjectOnly
+> Task :sample:mergeDebugNativeLibs NO-SOURCE
+> Task :sample:stripDebugDebugSymbols NO-SOURCE
+> Task :sample:validateSigningDebug
+> Task :sample:writeDebugAppMetadata
+> Task :sample:writeDebugSigningConfigVersions
+> Task :sample:processDebugResources
+> Task :sdk:compileDebugAidl
+> Task :sample:mergeExtDexDebug
+
+> Task :sdk:compileDebugKotlin
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/Robot.kt:95:38 'MediaButtonListener' is deprecated. No longer supported by temi launcher
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/Robot.kt:3136:53 'MediaButtonListener' is deprecated. No longer supported by temi launcher
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/Robot.kt:3434:40 Elvis operator (?:) always returns the left operand of non-nullable type String
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/Robot.kt:3555:31 Variable 'cursor' initializer is redundant
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/Robot.kt:3591:31 Variable 'cursor' initializer is redundant
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/Robot.kt:4545:17 Type mismatch: inferred type is Date? but Date was expected
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/TtsRequest.kt:40:21 'readSerializable(): Serializable?' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/TtsRequest.kt:44:33 'readParcelable(ClassLoader?): T?' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/map/MapDataModel.kt:28:16 'readParcelable(ClassLoader?): T?' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/map/MapDataModel.kt:30:16 'readParcelable(ClassLoader?): T?' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/map/MapDataModel.kt:93:41 'readList((Mutable)List<(raw) Any?>, ClassLoader?): Unit' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/map/MapDataModel.kt:211:155 Unnecessary safe call on a non-null receiver of type String
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/tourguide/TourModel.kt:22:20 'readList((Mutable)List<(raw) Any?>, ClassLoader?): Unit' is deprecated. Deprecated in Java
+
+> Task :sdk:compileDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/third_party/robotemi-sdk/sdk/src/main/java/com/robotemi/sdk/NlpResult.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :sdk:bundleLibResDebug
+> Task :sdk:bundleLibRuntimeToJarDebug
+> Task :sdk:bundleLibCompileToJarDebug
+> Task :sample:mergeLibDexDebug
+
+> Task :sample:compileDebugKotlin
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/FaceActivity.kt:151:62 Parameter 'v' is never used, could be renamed to _
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/FaceActivity.kt:155:61 Parameter 'v' is never used, could be renamed to _
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/FaceActivity.kt:163:45 'get(String!): Any?' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/FaceActivity.kt:166:32 'constructor BitmapDrawable(Bitmap!)' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/FaceActivity.kt:182:21 Variable 'retUri' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/FaceActivity.kt:198:21 Variable 'retUri' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:213:26 'setter for systemUiVisibility: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:213:53 'SYSTEM_UI_FLAG_LAYOUT_STABLE: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:214:25 'SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:215:25 'SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:216:25 'SYSTEM_UI_FLAG_HIDE_NAVIGATION: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:217:25 'SYSTEM_UI_FLAG_FULLSCREEN: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:218:25 'SYSTEM_UI_FLAG_IMMERSIVE_STICKY: Int' is deprecated. Deprecated in Java
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:391:29 The value '0f' assigned to 'var x: Float defined in com.robotemi.sdk.sample.MainActivity.initOnClickListener.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:392:29 The value '0f' assigned to 'var y: Float defined in com.robotemi.sdk.sample.MainActivity.initOnClickListener.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:406:55 The value '0f' assigned to 'var x: Float defined in com.robotemi.sdk.sample.MainActivity.initOnClickListener.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:407:55 The value '0f' assigned to 'var x: Float defined in com.robotemi.sdk.sample.MainActivity.initOnClickListener.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:408:55 The value '0f' assigned to 'var y: Float defined in com.robotemi.sdk.sample.MainActivity.initOnClickListener.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:409:55 The value '0f' assigned to 'var y: Float defined in com.robotemi.sdk.sample.MainActivity.initOnClickListener.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:442:49 The corresponding parameter in the supertype 'OnMapStatusChangedListener' is named 'isLost'. This may cause problems when calling this function with named arguments.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:842:95 Unnecessary safe call on a non-null receiver of type Int
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:842:108 Elvis operator (?:) always returns the left operand of non-nullable type String
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:1426:15 'startTelepresence(String, String, Platform = ...): String' is deprecated. From 131 version, startMeeting() shall be used.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:2203:20 Variable 'text' initializer is redundant
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:2378:15 'startTelepresence(String, String, Platform = ...): String' is deprecated. From 131 version, startMeeting() shall be used.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt:2742:26 This declaration overrides deprecated member but not marked as deprecated itself. Please add @Deprecated annotation or suppress. See https://youtrack.jetbrains.com/issue/KT-47902 for details
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MapActivity.kt:321:25 The corresponding parameter in the supertype 'EditorActionListener' is named 'oldName'. This may cause problems when calling this function with named arguments.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/MapActivity.kt:322:25 The corresponding parameter in the supertype 'EditorActionListener' is named 'newName'. This may cause problems when calling this function with named arguments.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/new_feature/Test137Activity.kt:287:37 The corresponding parameter in the supertype 'OnSequencePlayStatusChangedListener' is named 'sequenceId'. This may cause problems when calling this function with named arguments.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/new_feature/Test137Activity.kt:358:37 The corresponding parameter in the supertype 'OnSequencePlayStatusChangedListener' is named 'sequenceId'. This may cause problems when calling this function with named arguments.
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/new_feature/Test137Activity.kt:417:37 Name shadowed: floors
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/new_feature/Test137Activity.kt:434:41 Name shadowed: floors
+w: file:///home/linao/%E6%96%87%E6%A1%A3/ChatGPT/ican%E5%9B%BD%E8%B5%9B/heritage_temi_robot/third_party/robotemi-sdk/sample/src/main/java/com/robotemi/sdk/sample/new_feature/Test137Activity.kt:459:41 Name shadowed: floors
+
+> Task :sample:compileDebugJavaWithJavac
+> Task :sample:mergeDebugJavaResource
+> Task :sample:dexBuilderDebug
+> Task :sample:mergeProjectDexDebug
+> Task :sample:packageDebug
+> Task :sample:createDebugApkListingFileRedirect
+> Task :sample:assembleDebug
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.5/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 31s
+54 actionable tasks: 54 executed

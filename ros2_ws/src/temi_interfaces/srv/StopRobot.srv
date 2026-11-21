@@ -1,0 +1,6 @@
+# 请求停止机器人，stop=true 表示发起停止。
+bool stop
+---
+# 返回停止请求是否成功及其说明。
+bool success
+string message

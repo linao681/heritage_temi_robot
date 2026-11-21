@@ -1,0 +1,106 @@
+{
+  "layout": "official",
+  "source": "browser_design_not_survey",
+  "resolution": 0.05,
+  "robot_clearance_radius": 0.34,
+  "obstacle_count": 45,
+  "assumptions": [
+    "case-west: height=1m assumed",
+    "case-east: height=1m assumed",
+    "case-small: height=1m assumed",
+    "case-lacquer: height=1m assumed",
+    "craft-back: height=1m assumed",
+    "craft-table-1: height=1m assumed",
+    "craft-table-2: height=1m assumed",
+    "craft-tool-case: height=1m assumed",
+    "overview-relief: height=1m assumed",
+    "overview-kiosk: height=1m assumed",
+    "works-front: height=1m assumed",
+    "story-portraits: height=1m assumed",
+    "story-screen: height=1m assumed",
+    "story-counter: height=1m assumed",
+    "story-side: height=1m assumed",
+    "interactive-screen: height=1m assumed",
+    "interactive-table: height=1m assumed",
+    "interactive-shelf: height=1m assumed",
+    "shop-front: height=1m assumed",
+    "north-pier: height=1m assumed",
+    "stool-330-91: height=1m assumed",
+    "stool-351-91: height=1m assumed",
+    "stool-374-91: height=1m assumed",
+    "stool-330-134: height=1m assumed",
+    "stool-351-134: height=1m assumed",
+    "stool-374-134: height=1m assumed",
+    "stool-424-91: height=1m assumed",
+    "stool-445-91: height=1m assumed",
+    "stool-466-91: height=1m assumed",
+    "stool-424-134: height=1m assumed",
+    "stool-445-134: height=1m assumed",
+    "stool-466-134: height=1m assumed",
+    "room-nw: height=1m assumed",
+    "room-wc: height=1m assumed",
+    "room-se: height=1m assumed",
+    "central-canopy: height=1m assumed",
+    "rooms treated as solid exclusion areas",
+    "goal yaw=0 placeholder, docking orientation not validated",
+    "glass treated as opaque collision for geometric precheck"
+  ],
+  "goals": {
+    "wait": {
+      "x": -12.653908843860373,
+      "y": -7.902236951471988,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_1": {
+      "x": -11.00115340302963,
+      "y": -2.5824303762980354,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_2": {
+      "x": -4.2351858171287775,
+      "y": 3.7703483493951313,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_3": {
+      "x": -3.2538622741355243,
+      "y": -7.643993913842184,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_4": {
+      "x": 6.507724548271049,
+      "y": -3.512105311765328,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_5": {
+      "x": 9.761586822406572,
+      "y": 5.319806575173953,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "entry": {
+      "x": -12.189071376126726,
+      "y": -10.94950479550367,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "exit": {
+      "x": 9.038506317043124,
+      "y": -10.94950479550367,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    }
+  }
+}

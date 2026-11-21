@@ -1,0 +1,24 @@
+  0.000s IDLE             开始新导览任务
+  0.000s GREETING         迎宾
+  0.409s WAITING_CONSENT  等待游客同意
+  0.410s PLANNING         确定固定八站路线
+  0.410s NAVIGATING       前往展厅入口
+  0.616s EXPLAINING       讲解展厅入口
+  1.025s NAVIGATING       前往潮绣
+  3.256s EXPLAINING       讲解潮绣
+  3.666s NAVIGATING       前往潮州木雕
+  5.894s EXPLAINING       讲解潮州木雕
+  6.304s NAVIGATING       前往潮州工夫茶艺
+  8.544s EXPLAINING       讲解潮州工夫茶艺
+  8.952s NAVIGATING       前往潮剧
+ 11.184s EXPLAINING       讲解潮剧
+ 11.592s NAVIGATING       前往潮州音乐
+ 13.823s EXPLAINING       讲解潮州音乐
+ 14.234s NAVIGATING       前往互动区
+ 16.466s EXPLAINING       讲解互动区
+ 16.873s QA               互动等待，人工结束或超时继续
+ 16.874s RETURNING        前往展厅出口
+ 19.104s EXPLAINING       讲解展厅出口
+ 19.514s COMPLETED        完整导览已结束
+最终结果: completed，访问 8 站，耗时 19.514s，异常 0 次
+运行报告: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/docs/runs/mock-tour-20261119-175848-898487/report.json

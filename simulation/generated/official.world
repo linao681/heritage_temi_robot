@@ -1,0 +1,911 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.6">
+  <world name="official">
+    <gravity>0 0 -9.81</gravity>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <model name="case-west">
+      <static>true</static>
+      <pose>-8.522020241783517 0.7230805053634499 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.756052655882664 4.7516718923883845 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.756052655882664 4.7516718923883845 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="case-east">
+      <static>true</static>
+      <pose>2.3758359461941922 -0.2582430376298035 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.8593498709345853 7.024210623530656 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.8593498709345853 7.024210623530656 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="case-small">
+      <static>true</static>
+      <pose>-8.367074419205634 -4.829144803677326 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.9626470859865068 2.6340789838239957 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.9626470859865068 2.6340789838239957 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="case-lacquer">
+      <static>true</static>
+      <pose>-2.6857275913499565 -5.11321214507011 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>6.197832903115285 2.3758359461941922 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>6.197832903115285 2.3758359461941922 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="craft-back">
+      <static>true</static>
+      <pose>-3.899469868210033 9.890708341221474 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>14.306664284691115 1.394512403200939 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>14.306664284691115 1.394512403200939 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="craft-table-1">
+      <static>true</static>
+      <pose>-8.961033405754183 6.068711384300383 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3.5637539192912886 1.4978096182528604 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3.5637539192912886 1.4978096182528604 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="craft-table-2">
+      <static>true</static>
+      <pose>-4.183537209602817 6.068711384300383 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3.4088080967134067 1.4978096182528604 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3.4088080967134067 1.4978096182528604 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="craft-tool-case">
+      <static>true</static>
+      <pose>1.0846207580451748 6.042887080537403 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.1692415160903495 1.8593498709345853 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.1692415160903495 1.8593498709345853 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="overview-relief">
+      <static>true</static>
+      <pose>-16.527554408307424 -0.20659443010384282 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.6197832903115285 9.193452139621005 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.6197832903115285 9.193452139621005 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="overview-kiosk">
+      <static>true</static>
+      <pose>-13.092922007831039 -2.2208901236163103 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.1879179730970961 2.272538731142271 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.1879179730970961 2.272538731142271 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="works-front">
+      <static>true</static>
+      <pose>-1.239566580623057 -9.42587087348783 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>15.287987827684368 1.6011068333047818 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>15.287987827684368 1.6011068333047818 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-portraits">
+      <static>true</static>
+      <pose>4.700023284862424 -1.1104450618081552 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.7230805053634499 7.695642521368145 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.7230805053634499 7.695642521368145 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-screen">
+      <static>true</static>
+      <pose>9.322573658435907 -1.8851741746975657 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>4.183537209602817 2.0142956935124676 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>4.183537209602817 2.0142956935124676 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-counter">
+      <static>true</static>
+      <pose>10.2522485939032 -5.655522524092697 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.732995435381638 1.1879179730970961 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.732995435381638 1.1879179730970961 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-side">
+      <static>true</static>
+      <pose>13.17039491911998 -1.8077012634086247 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.6197832903115285 6.301130118167206 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.6197832903115285 6.301130118167206 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="interactive-screen">
+      <static>true</static>
+      <pose>10.355545808955121 10.045654163799357 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.526401005277795 0.9813235429932534 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.526401005277795 0.9813235429932534 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="interactive-table">
+      <static>true</static>
+      <pose>10.433018720244062 7.514872395027282 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5.474752397751835 2.0142956935124676 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5.474752397751835 2.0142956935124676 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="interactive-shelf">
+      <static>true</static>
+      <pose>16.579203015833386 3.3313351854244653 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.032972150519214 8.522020241783517 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.032972150519214 8.522020241783517 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="shop-front">
+      <static>true</static>
+      <pose>15.881946814232917 -4.467604550995601 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.1175929085643888 4.286834424654739 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.1175929085643888 4.286834424654739 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="north-pier">
+      <static>true</static>
+      <pose>5.939589865485481 8.470371634257555 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1.032972150519214 3.7186997418691705 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1.032972150519214 3.7186997418691705 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-330-91">
+      <static>true</static>
+      <pose>-10.071478467562338 7.1791564461085375 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-351-91">
+      <static>true</static>
+      <pose>-8.986857709517162 7.1791564461085375 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-374-91">
+      <static>true</static>
+      <pose>-7.798939736420066 7.1791564461085375 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-330-134">
+      <static>true</static>
+      <pose>-10.071478467562338 4.958266322492228 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-351-134">
+      <static>true</static>
+      <pose>-8.986857709517162 4.958266322492228 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-374-134">
+      <static>true</static>
+      <pose>-7.798939736420066 4.958266322492228 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-424-91">
+      <static>true</static>
+      <pose>-5.216509360122031 7.1791564461085375 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-445-91">
+      <static>true</static>
+      <pose>-4.131888602076856 7.1791564461085375 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-466-91">
+      <static>true</static>
+      <pose>-3.0472678440316816 7.1791564461085375 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-424-134">
+      <static>true</static>
+      <pose>-5.216509360122031 4.958266322492228 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-445-134">
+      <static>true</static>
+      <pose>-4.131888602076856 4.958266322492228 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="stool-466-134">
+      <static>true</static>
+      <pose>-3.0472678440316816 4.958266322492228 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.30989164515576423 0.30989164515576423 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="room-nw">
+      <static>true</static>
+      <pose>-15.701176687892055 8.935209101991202 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.8923220214537997 3.512105311765328 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.8923220214537997 3.512105311765328 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="room-wc">
+      <static>true</static>
+      <pose>12.937976185253156 -8.986857709517162 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.94397062897976 3.2022136666095635 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.94397062897976 3.2022136666095635 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="room-se">
+      <static>true</static>
+      <pose>16.06271694057378 -8.986857709517162 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.789024806401878 3.2022136666095635 1.0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.789024806401878 3.2022136666095635 1.0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-north-a">
+      <static>true</static>
+      <pose>5.9654141692484615 4.648374677336464 0.45 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2.0142956935124676 0.16 0.9</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.0142956935124676 0.16 0.9</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-north-b">
+      <static>true</static>
+      <pose>8.134655685338812 3.5637539192912886 0.45 0 0 -0.7509290623979402</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3.1792224741838497 0.16 0.9</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3.1792224741838497 0.16 0.9</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="story-north-c">
+      <static>true</static>
+      <pose>11.233572136896454 2.479133161246114 0.45 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3.8736455644470524 0.16 0.9</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3.8736455644470524 0.16 0.9</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="outer-west">
+      <static>true</static>
+      <pose>-17.40558073624876 0 2.1 0 0 -1.5707963267948966</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>21.795712375955418 0.16 4.2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>21.795712375955418 0.16 4.2</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="outer-east">
+      <static>true</static>
+      <pose>17.50887795130068 0 2.1 0 0 -1.5707963267948966</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>21.795712375955418 0.16 4.2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>21.795712375955418 0.16 4.2</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="outer-north">
+      <static>true</static>
+      <pose>0.051648607525960344 10.897856187977709 2.1 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>34.91445868754944 0.16 4.2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>34.91445868754944 0.16 4.2</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="outer-front-0">
+      <static>true</static>
+      <pose>-15.39128504273629 -10.897856187977709 0.525 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>4.028591387024935 0.16 1.05</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>4.028591387024935 0.16 1.05</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="outer-front-1">
+      <static>true</static>
+      <pose>-1.5752825295418011 -10.897856187977709 0.525 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>18.95503896202758 0.16 1.05</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>18.95503896202758 0.16 1.05</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="outer-front-2">
+      <static>true</static>
+      <pose>13.86765112072045 -10.897856187977709 0.525 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>7.28245366116046 0.16 1.05</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>7.28245366116046 0.16 1.05</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="central-canopy">
+      <static>true</static>
+      <pose>-3.2022136666095635 -0.20659443010384282 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>1.2</radius>
+              <length>1.0</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>1.2</radius>
+              <length>1.0</length>
+            </cylinder>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

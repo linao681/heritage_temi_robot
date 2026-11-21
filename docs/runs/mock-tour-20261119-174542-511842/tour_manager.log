@@ -1,0 +1,23 @@
+[INFO] [1795081542.825785162] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-19 17:45:42,903 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-19 17:45:42,904 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-19 17:45:43,315 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-19 17:45:43,316 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定八站路线
+2026-11-19 17:45:43,316 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往展厅入口
+2026-11-19 17:45:43,523 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解展厅入口
+2026-11-19 17:45:43,933 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮绣
+2026-11-19 17:45:46,163 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮绣
+2026-11-19 17:45:46,573 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮州木雕
+2026-11-19 17:45:48,804 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮州木雕
+2026-11-19 17:45:49,215 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮州工夫茶艺
+2026-11-19 17:45:51,446 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮州工夫茶艺
+2026-11-19 17:45:51,858 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮剧
+2026-11-19 17:45:54,085 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮剧
+2026-11-19 17:45:54,494 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮州音乐
+2026-11-19 17:45:56,721 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮州音乐
+2026-11-19 17:45:57,131 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往互动区
+2026-11-19 17:45:59,359 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解互动区
+2026-11-19 17:45:59,768 INFO heritage_tour_manager.tour_manager: QA: 互动等待，人工结束或超时继续
+2026-11-19 17:45:59,769 INFO heritage_tour_manager.tour_manager: RETURNING: 前往展厅出口
+2026-11-19 17:46:01,998 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解展厅出口
+2026-11-19 17:46:02,408 INFO heritage_tour_manager.tour_manager: COMPLETED: 完整导览已结束

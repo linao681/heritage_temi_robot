@@ -1,0 +1,9 @@
+人工控制 arm_visitor: arm_visitor: 当前状态不允许
+Traceback (most recent call last):
+  File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/scripts/demo_visitor_tour.py", line 164, in <module>
+    raise SystemExit(main())
+  File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/scripts/demo_visitor_tour.py", line 106, in main
+    call('arm_visitor')
+  File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/scripts/demo_visitor_tour.py", line 101, in call
+    raise RuntimeError(f'{name} 返回非预期结果: {response.message}')
+RuntimeError: arm_visitor 返回非预期结果: arm_visitor: 当前状态不允许

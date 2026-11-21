@@ -1,0 +1,37 @@
+version: '2026-11-20'
+topics:
+  - exhibit: exhibit_01
+    aliases: [潮绣, 粤绣潮绣, 潮州刺绣]
+    source: {name: 中国非物质文化遗产网·潮州非遗知多少, url: 'https://www.ihchina.cn/Article/Index/detail?id=21784', checked: '2026-11-20'}
+    entries:
+      - {id: embroidery_features, keywords: [特点, 特色, 为什么立体], basic: 潮绣常通过垫高产生浮凸效果，并以金线和彩绒形成丰富的色彩。, advanced: 潮绣的垫高绣法使纹样具有浮雕般的视觉层次，金线与彩绒的组合体现其地方审美。}
+      - {id: embroidery_region, keywords: [哪里, 流行地区, 发源地], basic: 潮绣主要发源和流传于潮汕地区。, advanced: 潮绣属于粤绣传统，在潮汕地区形成鲜明的地域风格。}
+      - {id: embroidery_list, keywords: [哪年入选, 非遗名录, 国家级], basic: 粤绣（潮绣）于2006年入选首批国家级非遗代表性项目。, advanced: 该项目在国家级名录中以粤绣（潮绣）的名称列入，公布于2006年第一批。}
+  - exhibit: exhibit_02
+    aliases: [潮州木雕, 潮汕木雕, 木雕]
+    source: {name: 中国非物质文化遗产网·潮州木雕, url: 'https://www.ihchina.cn/art/detail/id/14020.html', checked: '2026-11-20'}
+    entries:
+      - {id: wood_usage, keywords: [用在哪里, 用途, 装饰什么], basic: 潮州木雕主要装饰建筑、家具及祭祀器物。, advanced: 潮州木雕是地方民间雕刻艺术，常用于建筑构件、家具与祭祀相关器具。}
+      - {id: wood_history, keywords: [历史, 起源, 什么时候出现], basic: 现有遗物显示潮州木雕至少在唐宋时期已经存在。, advanced: 潮州开元寺保存的唐宋时期构件为其早期历史提供线索，确切起始年代尚不明确。}
+      - {id: wood_composition, keywords: [构图, 径路, 特点], basic: 潮州木雕会在同一雕刻画面中表现不同情节。, advanced: 一些作品借助称为径路的构图手段组织人物活动与叙事关系。}
+  - exhibit: exhibit_03
+    aliases: [潮州工夫茶艺, 工夫茶, 功夫茶, 工夫茶艺]
+    source: {name: 中国非物质文化遗产网·茶艺（潮州工夫茶艺）, url: 'https://www.ihchina.cn/Article/Index/detail?id=15247', checked: '2026-11-20'}
+    entries:
+      - {id: tea_leaf, keywords: [什么茶, 茶叶, 茶品], basic: 潮州工夫茶主要使用乌龙茶。, advanced: 传统潮州工夫茶艺以乌龙茶为主要茶品，配合专门冲泡程序。}
+      - {id: tea_steps, keywords: [怎么泡, 步骤, 冲泡], basic: 工夫茶讲究温器、洗茶、冲泡、分茶和品饮。, advanced: 传统程式包括预热茶器、冲水、分注茶汤以及闻香细品等环节。}
+      - {id: tea_list, keywords: [哪年入选, 国家级, 非遗名录], basic: 潮州工夫茶艺于2008年列入第二批国家级非遗代表性项目。, advanced: 国家级名录将其归入民俗类别，以茶艺（潮州工夫茶艺）列项。}
+  - exhibit: exhibit_04
+    aliases: [潮剧, 潮州戏, 潮音戏]
+    source: {name: 中国非物质文化遗产网·潮剧, url: 'https://www.ihchina.cn/project_details/13143.html', checked: '2026-11-20'}
+    entries:
+      - {id: opera_language, keywords: [什么语言, 方言, 怎么唱], basic: 潮剧以潮州方言演唱。, advanced: 潮剧又称潮州戏和潮音戏，具有地方语言特色。}
+      - {id: opera_origin, keywords: [起源, 历史, 来源], basic: 潮剧源自宋元南戏的分支。, advanced: 潮剧保留了南戏传统，是延续至今的一种地方剧种。}
+      - {id: opera_works, keywords: [剧目, 代表作品, 经典], basic: 传统潮剧代表剧目有《荔镜记》和《苏六娘》等。, advanced: 潮剧拥有丰富的传统剧目，也包含折子戏与新编剧目。}
+  - exhibit: exhibit_05
+    aliases: [潮州音乐, 潮汕音乐]
+    source: {name: 中国非物质文化遗产网·潮州音乐, url: 'https://www.ihchina.cn/project_details/12553/', checked: '2026-11-20'}
+    entries:
+      - {id: music_types, keywords: [类型, 分类, 哪些种类], basic: 潮州音乐大致分为广场乐和室内乐。, advanced: 广场乐可见潮州大锣鼓，室内乐则有弦诗乐及细乐等形式。}
+      - {id: music_origin, keywords: [起源, 历史, 来源], basic: 潮州音乐源于当地民歌、歌舞和小调，并吸收多种音乐素材。, advanced: 潮州音乐在地方曲调基础上兼收其他音乐传统，逐步形成自身特色。}
+      - {id: music_list, keywords: [哪年入选, 国家级, 非遗名录], basic: 潮州音乐于2006年列入第一批国家级非遗代表性项目。, advanced: 国家级名录将潮州音乐归为传统音乐类别。}

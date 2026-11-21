@@ -1,0 +1,18 @@
+0.00s x=0.000 y=0.000 yaw=0.000 battery=100.00% moving=False
+0.00s navigation=start id=demo_nav
+0.00s navigation=calculating id=demo_nav
+0.20s navigation=going id=demo_nav
+0.25s x=0.000 y=0.000 yaw=0.000 battery=100.00% moving=True
+0.50s x=0.251 y=0.000 yaw=0.000 battery=99.87% moving=True
+0.75s x=0.503 y=0.000 yaw=0.000 battery=99.75% moving=True
+1.00s x=0.755 y=0.000 yaw=0.000 battery=99.62% moving=True
+1.25s x=1.007 y=0.000 yaw=0.000 battery=99.50% moving=True
+1.50s x=1.258 y=0.000 yaw=0.000 battery=99.37% moving=True
+1.75s x=1.509 y=0.000 yaw=0.000 battery=99.25% moving=True
+2.00s x=1.761 y=0.000 yaw=0.000 battery=99.12% moving=True
+2.21s navigation=complete id=demo_nav
+2.26s x=2.000 y=0.000 yaw=0.000 battery=99.00% moving=False
+导航结果：True / 已到达虚拟地点
+speech=started id=demo_speech
+speech=complete id=demo_speech
+语音结果：True / 模拟语音播报完成

@@ -1,0 +1,42 @@
+{
+  "success": false,
+  "layout": "official",
+  "stations": [
+    {
+      "id": "zone_1",
+      "name": "非遗概览",
+      "status": 4,
+      "position_error_m": 0.23870515995247302,
+      "elapsed_sec": 30.701,
+      "stopped": true,
+      "success": true
+    },
+    {
+      "id": "zone_2",
+      "name": "传统工艺",
+      "status": 4,
+      "position_error_m": 0.16395944153475703,
+      "elapsed_sec": 57.318,
+      "stopped": true,
+      "success": true
+    },
+    {
+      "id": "zone_3",
+      "name": "代表作品",
+      "status": 6,
+      "position_error_m": 3.1571765575963346,
+      "elapsed_sec": 72.531,
+      "stopped": true,
+      "success": false
+    }
+  ],
+  "requested_route": [
+    "zone_1",
+    "zone_2",
+    "zone_3",
+    "zone_4",
+    "zone_5",
+    "exit"
+  ],
+  "error": "station failed: zone_3"
+}

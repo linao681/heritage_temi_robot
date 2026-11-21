@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "scan_samples": 360,
+  "scan_frame": "laser_link",
+  "odom_received": true,
+  "odom_to_laser": 1
+}

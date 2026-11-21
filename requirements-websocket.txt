@@ -1,0 +1,2 @@
+# Python 3.10 兼容版本；仅在项目 .venv 内安装。
+websockets==16.1.1

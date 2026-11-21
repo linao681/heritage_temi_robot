@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "arrival": true,
+  "stop_confirmed": true,
+  "stop_message": "停车已确认",
+  "interrupted_not_success": true,
+  "stationary": true
+}

@@ -1,0 +1,6 @@
+[INFO] [1795098982.638423072] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+[INFO] [1795098982.755630843] [visitor_perception]: 游客感知: visitor_lost, {'valid': True, 'people_count': 2, 'expected_count': 3, 'group_state': 'lost', 'source': 'mock'}
+[INFO] [1795098982.816852764] [visitor_perception]: 游客感知: regrouped, {'valid': True, 'people_count': 3, 'expected_count': 3, 'group_state': 'following', 'source': 'mock'}
+[INFO] [1795098982.878465368] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+[INFO] [1795098984.923750859] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+[INFO] [1795098984.964539977] [visitor_perception]: 游客感知: data_restored, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}

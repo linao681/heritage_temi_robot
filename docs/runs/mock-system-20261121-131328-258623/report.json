@@ -1,0 +1,84 @@
+{
+  "success": true,
+  "mode": "idle",
+  "domain": 214,
+  "headless": true,
+  "children": [
+    {
+      "name": "speed_controller",
+      "pid": 71827,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "tour_manager",
+      "pid": 71826,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "visitor_perception",
+      "pid": 71825,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "knowledge_node",
+      "pid": 71824,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "temi_gateway",
+      "pid": 71823,
+      "exit_code": 0,
+      "forced": false
+    }
+  ],
+  "tour": {
+    "state": "IDLE",
+    "reason": "等待游客",
+    "outcome": "idle",
+    "route_index": -1,
+    "visited": [],
+    "target": "",
+    "current_location": "entrance",
+    "connected": true,
+    "battery_percentage": 100.0,
+    "is_moving": false,
+    "error_count": 0,
+    "elapsed_sec": 0.0,
+    "safe_return_completed": false,
+    "qa_waiting": false,
+    "qa_result": null,
+    "history": []
+  },
+  "visitor": {
+    "valid": false,
+    "people_count": null,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "mock",
+    "stable": false,
+    "stable_fresh": false
+  },
+  "robot": {
+    "connected": true,
+    "frame": "mock_map",
+    "moving": false,
+    "location": "entrance",
+    "battery_percentage": 100.0
+  },
+  "error": "",
+  "rounds": [],
+  "requested_rounds": 0,
+  "ready_nodes": [
+    "heritage_knowledge",
+    "heritage_tour_manager",
+    "temi_gateway",
+    "temi_speed_controller",
+    "visitor_perception"
+  ],
+  "wall_time_sec": 3.885,
+  "status_snapshot_note": "tour、robot、visitor 是关停前最后收到的状态，不是停车确认。"
+}

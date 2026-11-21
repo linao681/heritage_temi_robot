@@ -1,0 +1,8 @@
+string command_id
+string navigation_session_id
+float32 target_speed_mps
+string control_reason
+---
+bool success
+string message
+int32 sdk_return_code

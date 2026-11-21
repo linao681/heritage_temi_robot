@@ -1,0 +1,54 @@
+# 仅 Mock 模式：所有位置为虚拟坐标，并非实体展厅或真实 temi 地图数据。
+mock:
+  initial_location: entrance
+  speed_mps: 1.0
+  navigation_delay_sec: 0.2
+  navigation_failure_probability: 0.0
+  tick_sec: 0.05
+  speech_delay_sec: 0.4
+  speech_timeout_sec: 10.0
+  initial_battery_percentage: 100.0
+  battery_drain_per_meter: 0.5
+  locations:
+    entrance: [0.0, 0.0]
+    exhibit_01: [2.0, 0.0]
+    exhibit_02: [4.0, 0.0]
+    exhibit_03: [4.0, 2.0]
+    exhibit_04: [2.0, 2.0]
+    exhibit_05: [0.0, 2.0]
+    interaction_zone: [0.0, 4.0]
+    exit: [2.0, 4.0]
+
+gateway:
+  backend: mock
+  status_hz: 10.0
+  websocket:
+    # 默认为仅本机测试；部署时必须显式指定本机的一个私有 LAN IPv4 地址。
+    bind_host: 127.0.0.1
+    port: 8765
+    ack_timeout_sec: 1.0
+    speech_timeout_sec: 10.0
+    stop_timeout_sec: 2.0
+    heartbeat_interval_sec: 5.0
+    heartbeat_timeout_sec: 3.0
+    replay_window_sec: 300.0
+
+tour:
+  greeting_text: 您好，欢迎来到潮汕非遗文化展厅。请问您愿意参加机器人导览吗？
+  navigation_timeout_sec: 45.0
+  speech_timeout_sec: 15.0
+  communication_timeout_sec: 3.0
+  consent_timeout_sec: 30.0
+  qa_timeout_sec: 20.0
+  low_battery_threshold: 20.0
+  # 示例安全返回地点是入口，并非真实充电桩。
+  safe_return_location: entrance
+  # 仅 Mock 联动演示显式开启；默认保持人工导览。
+  visitor_assist_enabled: false
+  visitor_status_timeout_sec: 1.0
+
+# 第二阶段 2.1：仅模拟匿名人数，不直接控制导览或运动。
+visitor_perception:
+  stable_samples: 3
+  stale_timeout_sec: 2.0
+  count_source: mock  # 离线验证专用配置使用 offline_video；独立 Topic 保持隔离

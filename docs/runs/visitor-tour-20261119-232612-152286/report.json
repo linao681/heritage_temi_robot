@@ -1,0 +1,441 @@
+{
+  "success": true,
+  "tour": {
+    "state": "COMPLETED",
+    "reason": "完整导览已结束",
+    "outcome": "completed",
+    "route_index": 7,
+    "visited": [
+      "entrance",
+      "exhibit_01",
+      "exhibit_02",
+      "exhibit_03",
+      "exhibit_04",
+      "exhibit_05",
+      "interaction_zone",
+      "exit"
+    ],
+    "target": "exit",
+    "current_location": "exit",
+    "connected": true,
+    "battery_percentage": 93.0,
+    "is_moving": false,
+    "error_count": 1,
+    "elapsed_sec": 20.635,
+    "safe_return_completed": false,
+    "history": [
+      {
+        "state": "IDLE",
+        "reason": "开始新导览任务",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "GREETING",
+        "reason": "迎宾",
+        "elapsed_sec": 0.001
+      },
+      {
+        "state": "WAITING_CONSENT",
+        "reason": "等待游客同意",
+        "elapsed_sec": 0.413
+      },
+      {
+        "state": "PLANNING",
+        "reason": "确定固定八站路线",
+        "elapsed_sec": 0.415
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往展厅入口",
+        "elapsed_sec": 0.415
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解展厅入口",
+        "elapsed_sec": 0.62
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮绣",
+        "elapsed_sec": 1.031
+      },
+      {
+        "state": "PAUSED",
+        "reason": "游客掉队，等待重新集合",
+        "elapsed_sec": 1.61
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮绣",
+        "elapsed_sec": 2.486
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮绣",
+        "elapsed_sec": 4.369
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮州木雕",
+        "elapsed_sec": 4.783
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮州木雕",
+        "elapsed_sec": 7.014
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮州工夫茶艺",
+        "elapsed_sec": 7.424
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮州工夫茶艺",
+        "elapsed_sec": 9.656
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮剧",
+        "elapsed_sec": 10.066
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮剧",
+        "elapsed_sec": 12.302
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮州音乐",
+        "elapsed_sec": 12.712
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮州音乐",
+        "elapsed_sec": 14.941
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往互动区",
+        "elapsed_sec": 15.351
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解互动区",
+        "elapsed_sec": 17.579
+      },
+      {
+        "state": "QA",
+        "reason": "互动等待，人工结束或超时继续",
+        "elapsed_sec": 17.989
+      },
+      {
+        "state": "RETURNING",
+        "reason": "前往展厅出口",
+        "elapsed_sec": 17.99
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解展厅出口",
+        "elapsed_sec": 20.225
+      },
+      {
+        "state": "COMPLETED",
+        "reason": "完整导览已结束",
+        "elapsed_sec": 20.635
+      }
+    ],
+    "visitor_assist": {
+      "armed": false,
+      "observed_empty": false,
+      "active": false,
+      "expected_count": 0,
+      "can_arm": false,
+      "can_accept": false,
+      "can_resume": false,
+      "waiting_reason": "未启用本次协作"
+    }
+  },
+  "visitor": {
+    "valid": true,
+    "people_count": 3,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "mock",
+    "stable": true,
+    "stable_fresh": true
+  },
+  "controls": [
+    {
+      "command": "arm_visitor",
+      "success": true,
+      "elapsed_sec": 0.72
+    },
+    {
+      "command": "accept",
+      "success": true,
+      "elapsed_sec": 1.586
+    },
+    {
+      "command": "resume",
+      "success": false,
+      "elapsed_sec": 2.807
+    },
+    {
+      "command": "resume",
+      "success": true,
+      "elapsed_sec": 3.658
+    },
+    {
+      "command": "finish_qa",
+      "success": true,
+      "elapsed_sec": 19.162
+    }
+  ],
+  "paused_target": "exhibit_01",
+  "visitor_events": [
+    {
+      "event": "arrival",
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock",
+      "stable": true,
+      "stable_fresh": true
+    },
+    {
+      "event": "visitor_lost",
+      "valid": true,
+      "people_count": 2,
+      "expected_count": 3,
+      "group_state": "lost",
+      "source": "mock",
+      "stable": true,
+      "stable_fresh": true
+    },
+    {
+      "event": "regrouped",
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 3,
+      "group_state": "following",
+      "source": "mock",
+      "stable": true,
+      "stable_fresh": true
+    }
+  ],
+  "navigation_events": [
+    {
+      "task_id": "2cd58a465ef744e895a98c1b4ddbf3d0",
+      "target": "entrance",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "2cd58a465ef744e895a98c1b4ddbf3d0",
+      "target": "entrance",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "2cd58a465ef744e895a98c1b4ddbf3d0",
+      "target": "entrance",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "7df25cb945f0499c9b801767d990a409",
+      "target": "exhibit_01",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "7df25cb945f0499c9b801767d990a409",
+      "target": "exhibit_01",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "7df25cb945f0499c9b801767d990a409",
+      "target": "exhibit_01",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "7df25cb945f0499c9b801767d990a409",
+      "target": "exhibit_01",
+      "status": "stopped",
+      "description": "运动已停止"
+    },
+    {
+      "task_id": "ab4e4411ad894b408817069e54a1ec48",
+      "target": "exhibit_01",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "ab4e4411ad894b408817069e54a1ec48",
+      "target": "exhibit_01",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "ab4e4411ad894b408817069e54a1ec48",
+      "target": "exhibit_01",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "ab4e4411ad894b408817069e54a1ec48",
+      "target": "exhibit_01",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "3952a89eaf284a16b3013a834788c7f4",
+      "target": "exhibit_02",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "3952a89eaf284a16b3013a834788c7f4",
+      "target": "exhibit_02",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "3952a89eaf284a16b3013a834788c7f4",
+      "target": "exhibit_02",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "3952a89eaf284a16b3013a834788c7f4",
+      "target": "exhibit_02",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "57459564ba18423e8f6119db759a6321",
+      "target": "exhibit_03",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "57459564ba18423e8f6119db759a6321",
+      "target": "exhibit_03",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "57459564ba18423e8f6119db759a6321",
+      "target": "exhibit_03",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "57459564ba18423e8f6119db759a6321",
+      "target": "exhibit_03",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "2f56c088a79b494384128ee1024aeae1",
+      "target": "exhibit_04",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "2f56c088a79b494384128ee1024aeae1",
+      "target": "exhibit_04",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "2f56c088a79b494384128ee1024aeae1",
+      "target": "exhibit_04",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "2f56c088a79b494384128ee1024aeae1",
+      "target": "exhibit_04",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "7f89ccdf8ea843bc8d8d7acaa1c8adeb",
+      "target": "exhibit_05",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "7f89ccdf8ea843bc8d8d7acaa1c8adeb",
+      "target": "exhibit_05",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "7f89ccdf8ea843bc8d8d7acaa1c8adeb",
+      "target": "exhibit_05",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "7f89ccdf8ea843bc8d8d7acaa1c8adeb",
+      "target": "exhibit_05",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "45fc0181f0a7494e91f0123663707728",
+      "target": "interaction_zone",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "45fc0181f0a7494e91f0123663707728",
+      "target": "interaction_zone",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "45fc0181f0a7494e91f0123663707728",
+      "target": "interaction_zone",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "45fc0181f0a7494e91f0123663707728",
+      "target": "interaction_zone",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    },
+    {
+      "task_id": "bf18f86fc5d0400da8f0d1548ec48394",
+      "target": "exit",
+      "status": "start",
+      "description": "开始导航"
+    },
+    {
+      "task_id": "bf18f86fc5d0400da8f0d1548ec48394",
+      "target": "exit",
+      "status": "calculating",
+      "description": "计算虚拟路线"
+    },
+    {
+      "task_id": "bf18f86fc5d0400da8f0d1548ec48394",
+      "target": "exit",
+      "status": "going",
+      "description": "向虚拟地点移动"
+    },
+    {
+      "task_id": "bf18f86fc5d0400da8f0d1548ec48394",
+      "target": "exit",
+      "status": "complete",
+      "description": "已到达虚拟地点"
+    }
+  ],
+  "elapsed_sec": 21.807
+}

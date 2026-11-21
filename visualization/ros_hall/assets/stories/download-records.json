@@ -1,0 +1,55 @@
+[
+  {
+    "file": "hefuli.jpg",
+    "imageUrl": "https://ich.nlc.cn/resource/project/dd181653727424627.compress.jpg",
+    "sourceUrl": "https://ich.nlc.cn/detail/416",
+    "dimensions": [
+      490,
+      328
+    ],
+    "bytes": 48674,
+    "sha256": "1f6a824c2fc92e3d32137edef4cee79939846f0ed4da0d1890d6bcedd48e14b6"
+  },
+  {
+    "file": "gaofenglian-record.jpg",
+    "imageUrl": "https://ich.nlc.cn/resource/2015/EqYX9ZpRte.thumb.jpg",
+    "sourceUrl": "https://ich.nlc.cn/detail/1940",
+    "dimensions": [
+      490,
+      328
+    ],
+    "bytes": 153177,
+    "sha256": "95911642c765d08878103ea7b85c77054cdfa55477ea87a5b074d5adfdf1939a"
+  },
+  {
+    "file": "yaojianping.jpg",
+    "imageUrl": "https://www.ihchina.cn/Uploads/Picture/2023/09/05/s64f71a02d5650.jpg",
+    "sourceUrl": "https://www.ihchina.cn/character_detail/26851.html",
+    "dimensions": [
+      800,
+      559
+    ],
+    "bytes": 399280,
+    "sha256": "a7a51278af292028702f05d2d8a74a0e80983aa84dff76e8a024291d1c086583"
+  },
+  {
+    "file": "yaojianping-teaching.jpg",
+    "imageUrl": "https://www.ihchina.cn/Uploads/Picture/2023/07/20/s64b91af4a6fbf.jpg",
+    "sourceUrl": "https://www.ihchina.cn/project_details/27793.html",
+    "dimensions": [
+      800,
+      534
+    ],
+    "bytes": 285847,
+    "sha256": "c80a8bbb262960fa658cde49ca44a28028e0eeb0feca05c59ad28026848fbbd2"
+  },
+  {
+    "file": "gaofenglian-family.jpg",
+    "imageUrl": "https://country.cnr.cn/gundong/20160924/W020160924822697424213.jpg",
+    "sourceUrl": "https://country.cnr.cn/gundong/20160924/t20160924_523158675.shtml",
+    "bytes": 98527,
+    "sha256": "c2007d50725404144834f703f0b738c3882c2dbee4323c5c0fa46893256e5dad",
+    "caption": "高凤莲（中）和女儿刘洁琼（右）、外孙女樊蓉蓉在剪纸",
+    "credit": "程天赐 文/图；农民日报，央广网转载"
+  }
+]

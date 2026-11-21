@@ -1,0 +1,8 @@
+string question
+string exhibit
+string level
+---
+bool found
+string entry_id
+string answer
+string source_json

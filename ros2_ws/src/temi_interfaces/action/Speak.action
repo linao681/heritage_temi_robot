@@ -1,0 +1,9 @@
+# Goal：待播报文本。
+string text
+---
+# Result：播报最终成功标记及说明。
+bool success
+string message
+---
+# Feedback：播报过程状态。
+string status

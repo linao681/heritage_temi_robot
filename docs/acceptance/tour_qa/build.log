@@ -1,0 +1,15 @@
+ROS2 build cache: /tmp/heritage-temi-ros2-build.gSEO5d
+Starting >>> temi_interfaces
+Starting >>> visitor_perception
+Finished <<< visitor_perception [0.58s]
+[Processing: temi_interfaces]
+[Processing: temi_interfaces]
+Finished <<< temi_interfaces [1min 1s]
+Starting >>> heritage_knowledge
+Starting >>> heritage_tour_manager
+Starting >>> temi_bridge
+Finished <<< heritage_knowledge [1.00s]
+Finished <<< heritage_tour_manager [1.00s]
+Finished <<< temi_bridge [1.00s]
+
+Summary: 5 packages finished [1min 2s]

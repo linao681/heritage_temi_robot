@@ -1,0 +1,3 @@
+[INFO] [1795101973.333613942] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock', 'stable': True, 'stable_fresh': True}
+[INFO] [1795101974.928938722] [visitor_perception]: 游客感知: visitor_lost, {'valid': True, 'people_count': 2, 'expected_count': 3, 'group_state': 'lost', 'source': 'mock', 'stable': True, 'stable_fresh': True}
+[INFO] [1795101975.229007046] [visitor_perception]: 游客感知: regrouped, {'valid': True, 'people_count': 3, 'expected_count': 3, 'group_state': 'following', 'source': 'mock', 'stable': True, 'stable_fresh': True}

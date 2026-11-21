@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>heritage_knowledge</name><version>0.1.0</version>
+  <description>Offline heritage FAQ service</description>
+  <maintainer email="maintainer@heritage-temi.invalid">Heritage Temi Project Team</maintainer>
+  <license>UNLICENSED</license>
+  <exec_depend>rclpy</exec_depend><exec_depend>temi_interfaces</exec_depend><exec_depend>python3-yaml</exec_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

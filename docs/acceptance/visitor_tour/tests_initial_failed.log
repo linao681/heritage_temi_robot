@@ -1,0 +1,87 @@
+........................................................................ [ 59%]
+........................F........................                        [100%]
+=================================== FAILURES ===================================
+_____________ test_lost_or_unreliable_perception_pauses[malformed] _____________
+
+rig = namespace(backend=<temi_bridge.mock_backend.MockTemiBackend object at 0x7167371a4220>, gateway=<temi_bridge.ros_gatewa...l': <rclpy.client.Client object at 0x7167371f3130>, 'manual_takeover': <rclpy.client.Client object at 0x7167371f0fd0>})
+failure = 'malformed'
+
+    @pytest.mark.parametrize('failure', ['stale', 'jitter', 'heartbeat', 'malformed', 'expected_mismatch'])
+    def test_lost_or_unreliable_perception_pauses(rig, failure):
+        begin(rig)
+        if failure in ('heartbeat', 'malformed'):
+            rig.executor.remove_node(rig.visitor)
+            if failure == 'malformed':
+                bad = rig.client.create_publisher(String, 'heritage/visitor/status', 10)
+                wait(lambda: bad.get_subscription_count() >= 1)
+                rig.client.create_timer(0.05, lambda: bad.publish(String(data='invalid JSON')))
+        elif failure == 'expected_mismatch':
+            expected = rig.client.create_publisher(Int32, 'heritage/visitor/expected_count', 10)
+            wait(lambda: expected.get_subscription_count() == 1)
+            expected.publish(Int32(data=0))
+        else:
+            count(rig, 'jitter' if failure == 'jitter' else None)
+>       state(rig, 'PAUSED')
+
+tests/test_visitor_tour_integration.py:183: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_visitor_tour_integration.py:102: in state
+    wait(lambda: rig.statuses[-1]['state'] == name and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+predicate = <function state.<locals>.<lambda> at 0x7167347c49d0>, timeout = 8.0
+
+    def wait(predicate, timeout=8.0):
+        deadline = time.monotonic() + timeout
+        while not predicate():
+>           assert time.monotonic() < deadline, '等待联动状态超时'
+E           AssertionError: 等待联动状态超时
+E           assert 36334.019121469 < 36334.016042833
+E            +  where 36334.019121469 = <built-in function monotonic>()
+E            +    where <built-in function monotonic> = time.monotonic
+
+tests/test_visitor_tour_integration.py:28: AssertionError
+----------------------------- Captured stderr call -----------------------------
+[INFO] [1795101913.445787791] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock', 'stable': True, 'stable_fresh': True}
+--------------------------- Captured stderr teardown ---------------------------
+[WARN] [1795101922.904706262] [heritage_tour_manager]: 关闭时仍有 Action 未确认终止
+=============================== warnings summary ===============================
+tests/test_visitor_tour_integration.py::test_lost_or_unreliable_perception_pauses[malformed]
+  Warning: Exception in thread Thread-28 (spin)
+  
+  Traceback (most recent call last):
+    File "/usr/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+      self.run()
+    File "/usr/lib/python3.10/threading.py", line 953, in run
+      self._target(*self._args, **self._kwargs)
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 323, in spin
+      self.spin_once()
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 863, in spin_once
+      self._spin_once_impl(timeout_sec)
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 860, in _spin_once_impl
+      future.result()
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/task.py", line 109, in result
+      raise self.exception()
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/task.py", line 272, in _execute_coroutine_step
+      result = coro.send(None)
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 488, in handler
+      await call_coroutine(entity, arg)
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 407, in _execute_subscription
+      await await_or_execute(sub.callback, msg)
+    File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 110, in await_or_execute
+      return callback(*args)
+    File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/tests/test_visitor_tour_integration.py", line 55, in <lambda>
+      lambda msg: visitors.append(json.loads(msg.data)), 100)
+    File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
+      return _default_decoder.decode(s)
+    File "/usr/lib/python3.10/json/decoder.py", line 337, in decode
+      obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+    File "/usr/lib/python3.10/json/decoder.py", line 355, in raw_decode
+      raise JSONDecodeError("Expecting value", s, err.value) from None
+  json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+- generated xml file: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/docs/acceptance/visitor_tour/linux_junit.xml -
+=========================== short test summary info ============================
+FAILED tests/test_visitor_tour_integration.py::test_lost_or_unreliable_perception_pauses[malformed]
+1 failed, 120 passed, 1 warning in 64.75s (0:01:04)

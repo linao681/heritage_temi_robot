@@ -1,0 +1,122 @@
+{
+  "success": false,
+  "mode": "demo",
+  "domain": 214,
+  "headless": true,
+  "children": [
+    {
+      "name": "speed_controller",
+      "pid": 66088,
+      "exit_code": -15,
+      "forced": false
+    },
+    {
+      "name": "tour_manager",
+      "pid": 66087,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "visitor_perception",
+      "pid": 66086,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "knowledge_node",
+      "pid": 66085,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "temi_gateway",
+      "pid": 66084,
+      "exit_code": 0,
+      "forced": false
+    }
+  ],
+  "tour": {
+    "state": "NAVIGATING",
+    "reason": "前往潮绣",
+    "outcome": "running",
+    "route_index": 1,
+    "visited": [
+      "entrance"
+    ],
+    "target": "exhibit_01",
+    "current_location": "entrance",
+    "connected": true,
+    "battery_percentage": 100.0,
+    "is_moving": false,
+    "error_count": 0,
+    "elapsed_sec": 1.027,
+    "safe_return_completed": false,
+    "qa_waiting": false,
+    "qa_result": null,
+    "history": [
+      {
+        "state": "IDLE",
+        "reason": "开始新导览任务",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "GREETING",
+        "reason": "迎宾",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "WAITING_CONSENT",
+        "reason": "等待游客同意",
+        "elapsed_sec": 0.411
+      },
+      {
+        "state": "PLANNING",
+        "reason": "确定固定导览路线",
+        "elapsed_sec": 0.412
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往展厅入口",
+        "elapsed_sec": 0.413
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解展厅入口",
+        "elapsed_sec": 0.617
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮绣",
+        "elapsed_sec": 1.027
+      }
+    ]
+  },
+  "visitor": {
+    "valid": true,
+    "people_count": 3,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "mock",
+    "stable": true,
+    "stable_fresh": true
+  },
+  "robot": {
+    "connected": true,
+    "frame": "mock_map",
+    "moving": false,
+    "location": "entrance",
+    "battery_percentage": 100.0
+  },
+  "error": "temi_gateway 提前退出 (0)",
+  "rounds": [],
+  "requested_rounds": 1,
+  "ready_nodes": [
+    "heritage_knowledge",
+    "heritage_tour_manager",
+    "temi_gateway",
+    "temi_speed_controller",
+    "visitor_perception"
+  ],
+  "wall_time_sec": 16.112,
+  "status_snapshot_note": "tour、robot、visitor 是关停前最后收到的状态，不是停车确认。"
+}

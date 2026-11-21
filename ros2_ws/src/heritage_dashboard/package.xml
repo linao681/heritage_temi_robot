@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>heritage_dashboard</name><version>0.1.0</version>
+  <description>Local Tk ROS2 heritage tour monitoring dashboard</description>
+  <maintainer email="maintainer@heritage-temi.invalid">Heritage Temi Project Team</maintainer>
+  <license>UNLICENSED</license>
+  <exec_depend>rclpy</exec_depend><exec_depend>std_msgs</exec_depend><exec_depend>std_srvs</exec_depend>
+  <exec_depend>temi_interfaces</exec_depend><exec_depend>python3-yaml</exec_depend><exec_depend>python3-tk</exec_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

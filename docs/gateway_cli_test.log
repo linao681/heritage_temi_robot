@@ -1,0 +1,9 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-6.2.5, py-1.10.0, pluggy-0.13.0 -- /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/.venv/bin/python
+rootdir: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot
+plugins: ament-pep257-0.12.15, ament-xmllint-0.12.15, launch-testing-ros-0.19.13, ament-lint-0.12.15, launch-testing-1.0.14, ament-copyright-0.12.15, ament-flake8-0.12.15, mock-3.6.1, colcon-core-0.20.1, cov-3.0.0
+collecting ... collected 1 item
+
+tests/test_gateway_cli.py::test_gateway_process_commands_and_sigterm_shutdown PASSED [100%]
+
+============================== 1 passed in 1.77s ===============================

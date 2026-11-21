@@ -1,0 +1,29 @@
+感知状态: {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'offline_video', 'stable': False, 'stable_fresh': False}
+视频匿名人数: 3
+视频匿名人数: 3
+视频匿名人数: 4
+视频匿名人数: 4
+视频匿名人数: 4
+感知状态: {'valid': True, 'people_count': 4, 'expected_count': 0, 'group_state': 'untracked', 'source': 'offline_video', 'stable': True, 'stable_fresh': True}
+感知事件: arrival
+视频匿名人数: 4
+视频匿名人数: 3
+感知状态: {'valid': True, 'people_count': 4, 'expected_count': 0, 'group_state': 'untracked', 'source': 'offline_video', 'stable': False, 'stable_fresh': True}
+视频匿名人数: 4
+视频匿名人数: 6
+视频匿名人数: 5
+感知状态: {'valid': True, 'people_count': 4, 'expected_count': 0, 'group_state': 'untracked', 'source': 'offline_video', 'stable': False, 'stable_fresh': False}
+视频匿名人数: 5
+视频匿名人数: 4
+视频匿名人数: 6
+视频匿名人数: 5
+视频匿名人数: 5
+视频匿名人数: 6
+视频匿名人数: 6
+视频匿名人数: 6
+感知状态: {'valid': True, 'people_count': 6, 'expected_count': 0, 'group_state': 'untracked', 'source': 'offline_video', 'stable': True, 'stable_fresh': True}
+视频匿名人数: 6
+视频匿名人数: 6
+感知状态: {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'offline_video', 'stable': False, 'stable_fresh': False}
+感知事件: data_stale
+实际视频 ROS2 回环: 通过，收到 20 个匿名计数，报告 /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/docs/runs/offline-vision-20261120-001026-631467/report.json

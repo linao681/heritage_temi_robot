@@ -1,0 +1,157 @@
+{
+  "success": true,
+  "final_status": {
+    "valid": true,
+    "people_count": 0,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "mock"
+  },
+  "states": [
+    {
+      "elapsed_sec": 0.39,
+      "valid": false,
+      "people_count": null,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.451,
+      "valid": true,
+      "people_count": 0,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.512,
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.512,
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 3,
+      "group_state": "unknown",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.573,
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 3,
+      "group_state": "following",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.634,
+      "valid": true,
+      "people_count": 2,
+      "expected_count": 3,
+      "group_state": "lost",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.696,
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 3,
+      "group_state": "following",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.696,
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.757,
+      "valid": true,
+      "people_count": 0,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 2.782,
+      "valid": false,
+      "people_count": null,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 2.844,
+      "valid": true,
+      "people_count": 0,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    }
+  ],
+  "events": [
+    {
+      "elapsed_sec": 0.512,
+      "event": "arrival",
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.634,
+      "event": "visitor_lost",
+      "valid": true,
+      "people_count": 2,
+      "expected_count": 3,
+      "group_state": "lost",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.696,
+      "event": "regrouped",
+      "valid": true,
+      "people_count": 3,
+      "expected_count": 3,
+      "group_state": "following",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 0.757,
+      "event": "departure",
+      "valid": true,
+      "people_count": 0,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 2.782,
+      "event": "data_stale",
+      "valid": false,
+      "people_count": null,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    },
+    {
+      "elapsed_sec": 2.843,
+      "event": "data_restored",
+      "valid": true,
+      "people_count": 0,
+      "expected_count": 0,
+      "group_state": "untracked",
+      "source": "mock"
+    }
+  ],
+  "elapsed_sec": 2.844
+}

@@ -1,0 +1,11 @@
+# Goal：导航至已配置的地点名称，超时单位为秒。
+string location
+float64 timeout_sec
+---
+# Result：任务最终成功标记及说明。
+bool success
+string message
+---
+# Feedback：导航过程状态及说明。
+string status
+string description

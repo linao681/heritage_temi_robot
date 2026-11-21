@@ -1,0 +1,393 @@
+Starting >>> temi_interfaces
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found rosidl_default_generators: 1.2.1 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found std_msgs: 4.9.1 (/opt/ros/humble/share/std_msgs/cmake)
+-- Found action_msgs: 1.2.2 (/opt/ros/humble/share/action_msgs/cmake)
+-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+-- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+-- Found PythonExtra: .so  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/heritage-temi-ros2-build.1ISawR/temi_interfaces
+[  1%] Generating C code for ROS interfaces
+[  3%] Generating C++ code for ROS interfaces
+[  4%] Generating Rust code for ROS interfaces
+[  4%] Built target ament_cmake_python_copy_temi_interfaces
+running egg_info
+creating temi_interfaces.egg-info
+writing temi_interfaces.egg-info/PKG-INFO
+writing dependency_links to temi_interfaces.egg-info/dependency_links.txt
+writing top-level names to temi_interfaces.egg-info/top_level.txt
+writing manifest file 'temi_interfaces.egg-info/SOURCES.txt'
+reading manifest file 'temi_interfaces.egg-info/SOURCES.txt'
+writing manifest file 'temi_interfaces.egg-info/SOURCES.txt'
+[  4%] Built target ament_cmake_python_build_temi_interfaces_egg
+[  4%] Built target temi_interfaces__rs
+[  6%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_c.dir/rosidl_generator_c/temi_interfaces/msg/detail/navigation_status__functions.c.o
+[  7%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_c.dir/rosidl_generator_c/temi_interfaces/action/detail/speak__functions.c.o
+[  9%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_c.dir/rosidl_generator_c/temi_interfaces/srv/detail/stop_robot__functions.c.o
+[ 10%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_c.dir/rosidl_generator_c/temi_interfaces/msg/detail/robot_status__functions.c.o
+[ 12%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_c.dir/rosidl_generator_c/temi_interfaces/action/detail/navigate_to__functions.c.o
+[ 12%] Built target temi_interfaces__cpp
+[ 14%] Generating C++ type support dispatch for ROS interfaces
+[ 15%] Generating C++ type support for eProsima Fast-RTPS
+[ 17%] Generating C++ introspection for ROS interfaces
+[ 18%] Linking C shared library libtemi_interfaces__rosidl_generator_c.so
+[ 18%] Built target temi_interfaces__rosidl_generator_c
+[ 20%] Generating C type support dispatch for ROS interfaces
+[ 21%] Generating C type support for eProsima Fast-RTPS
+[ 23%] Generating C introspection for ROS interfaces
+[ 25%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/temi_interfaces/action/navigate_to__type_support.cpp.o
+[ 26%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/temi_interfaces/srv/stop_robot__type_support.cpp.o
+[ 29%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/temi_interfaces/msg/robot_status__type_support.cpp.o
+[ 29%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/temi_interfaces/msg/navigation_status__type_support.cpp.o
+[ 31%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/temi_interfaces/action/speak__type_support.cpp.o
+[ 34%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/temi_interfaces/msg/detail/robot_status__type_support.cpp.o
+[ 34%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/temi_interfaces/action/detail/navigate_to__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/temi_interfaces/msg/detail/navigation_status__type_support.cpp.o
+[ 37%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/temi_interfaces/action/detail/speak__type_support.cpp.o
+[ 39%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/temi_interfaces/srv/detail/stop_robot__type_support.cpp.o
+[ 42%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/temi_interfaces/msg/robot_status__type_support.cpp.o
+[ 42%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/temi_interfaces/msg/navigation_status__type_support.cpp.o
+[ 43%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/temi_interfaces/action/navigate_to__type_support.cpp.o
+[ 45%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/temi_interfaces/action/speak__type_support.cpp.o
+[ 46%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/temi_interfaces/srv/stop_robot__type_support.cpp.o
+[ 48%] Linking CXX shared library libtemi_interfaces__rosidl_typesupport_c.so
+[ 50%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/temi_interfaces/action/detail/navigate_to__type_support_c.cpp.o
+[ 53%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/temi_interfaces/msg/detail/robot_status__type_support_c.cpp.o
+[ 53%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/temi_interfaces/msg/detail/navigation_status__type_support_c.cpp.o
+[ 54%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/temi_interfaces/srv/detail/stop_robot__type_support_c.cpp.o
+[ 56%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/temi_interfaces/action/detail/speak__type_support_c.cpp.o
+[ 57%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/temi_interfaces/msg/detail/dds_fastrtps/navigation_status__type_support.cpp.o
+[ 59%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/temi_interfaces/msg/detail/dds_fastrtps/robot_status__type_support.cpp.o
+[ 59%] Built target temi_interfaces__rosidl_typesupport_c
+[ 60%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/temi_interfaces/action/detail/dds_fastrtps/navigate_to__type_support.cpp.o
+[ 62%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/temi_interfaces/action/detail/dds_fastrtps/speak__type_support.cpp.o
+[ 64%] Building CXX object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/temi_interfaces/srv/detail/dds_fastrtps/stop_robot__type_support.cpp.o
+[ 67%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/temi_interfaces/msg/detail/navigation_status__type_support.c.o
+[ 67%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/temi_interfaces/msg/detail/robot_status__type_support.c.o
+[ 68%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/temi_interfaces/action/detail/navigate_to__type_support.c.o
+[ 70%] Linking CXX shared library libtemi_interfaces__rosidl_typesupport_cpp.so
+[ 71%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/temi_interfaces/action/detail/speak__type_support.c.o
+[ 73%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/temi_interfaces/srv/detail/stop_robot__type_support.c.o
+[ 73%] Built target temi_interfaces__rosidl_typesupport_cpp
+[ 75%] Linking C shared library libtemi_interfaces__rosidl_typesupport_introspection_c.so
+[ 75%] Built target temi_interfaces__rosidl_typesupport_introspection_c
+[ 76%] Linking CXX shared library libtemi_interfaces__rosidl_typesupport_introspection_cpp.so
+[ 76%] Built target temi_interfaces__rosidl_typesupport_introspection_cpp
+[ 78%] Linking CXX shared library libtemi_interfaces__rosidl_typesupport_fastrtps_c.so
+[ 78%] Built target temi_interfaces__rosidl_typesupport_fastrtps_c
+[ 79%] Linking CXX shared library libtemi_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[ 79%] Built target temi_interfaces__rosidl_typesupport_fastrtps_cpp
+[ 79%] Built target temi_interfaces
+[ 81%] Generating Python code for ROS interfaces
+[ 81%] Built target temi_interfaces__py
+[ 85%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_py.dir/rosidl_generator_py/temi_interfaces/msg/_navigation_status_s.c.o
+[ 85%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_py.dir/rosidl_generator_py/temi_interfaces/action/_speak_s.c.o
+[ 85%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_py.dir/rosidl_generator_py/temi_interfaces/srv/_stop_robot_s.c.o
+[ 89%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_py.dir/rosidl_generator_py/temi_interfaces/msg/_robot_status_s.c.o
+[ 89%] Building C object CMakeFiles/temi_interfaces__rosidl_generator_py.dir/rosidl_generator_py/temi_interfaces/action/_navigate_to_s.c.o
+[ 90%] Linking C shared library rosidl_generator_py/temi_interfaces/libtemi_interfaces__rosidl_generator_py.so
+[ 90%] Built target temi_interfaces__rosidl_generator_py
+[ 92%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/temi_interfaces/_temi_interfaces_s.ep.rosidl_typesupport_c.c.o
+[ 93%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/temi_interfaces/_temi_interfaces_s.ep.rosidl_typesupport_introspection_c.c.o
+[ 95%] Building C object CMakeFiles/temi_interfaces__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/temi_interfaces/_temi_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c.o
+[ 96%] Linking C shared library rosidl_generator_py/temi_interfaces/temi_interfaces_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[ 98%] Linking C shared library rosidl_generator_py/temi_interfaces/temi_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[100%] Linking C shared library rosidl_generator_py/temi_interfaces/temi_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[100%] Built target temi_interfaces__rosidl_typesupport_c__pyext
+[100%] Built target temi_interfaces__rosidl_typesupport_fastrtps_c__pyext
+[100%] Built target temi_interfaces__rosidl_typesupport_introspection_c__pyext
+-- Install configuration: ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/ament_index/resource_index/rosidl_interfaces/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__struct.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__type_support.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__type_support.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__functions.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__functions.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__functions.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__functions.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__struct.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/speak.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/navigate_to.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/robot_status.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__struct.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__functions.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__functions.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__struct.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__type_support.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__type_support.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__functions.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__functions.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/navigation_status.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/rosidl_generator_c__visibility_control.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__functions.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__functions.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__struct.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__type_support.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/stop_robot.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/library_path.sh
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/library_path.dsv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_generator_c.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_generator_c.so" to ""
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_fastrtps_c.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_fastrtps_c.so" to ""
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__rosidl_typesupport_introspection_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__type_support.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__type_support.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__rosidl_typesupport_introspection_c.h
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__type_support.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__rosidl_typesupport_introspection_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__rosidl_typesupport_introspection_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__type_support.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__rosidl_typesupport_introspection_c.h
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__type_support.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_introspection_c.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_c.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_c.so" to ""
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__builder.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__traits.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__type_support.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__struct.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__type_support.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__traits.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__builder.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__struct.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/speak.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/navigate_to.hpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__type_support.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__builder.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__type_support.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__traits.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__struct.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__struct.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__traits.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__builder.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/navigation_status.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/robot_status.hpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__type_support.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__struct.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__traits.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__builder.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/stop_robot.hpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/dds_fastrtps
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/dds_fastrtps
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/dds_fastrtps
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_fastrtps_cpp.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_fastrtps_cpp.so" to ""
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__type_support.cpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/speak__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__type_support.cpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/action/detail/navigate_to__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__type_support.cpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/robot_status__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/msg/detail/navigation_status__type_support.cpp
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv
+-- Up-to-date: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/include/temi_interfaces/temi_interfaces/srv/detail/stop_robot__type_support.cpp
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_introspection_cpp.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_introspection_cpp.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_cpp.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_typesupport_cpp.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/pythonpath.sh
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/pythonpath.dsv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces-0.1.0-py3.10.egg-info
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces-0.1.0-py3.10.egg-info/PKG-INFO
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces-0.1.0-py3.10.egg-info/top_level.txt
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces-0.1.0-py3.10.egg-info/SOURCES.txt
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces-0.1.0-py3.10.egg-info/dependency_links.txt
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/_navigate_to_s.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/_navigate_to.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/__init__.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/_speak.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/_speak_s.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/_temi_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/__init__.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/_robot_status_s.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/_navigation_status_s.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/_robot_status.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/_navigation_status.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/__init__.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/libtemi_interfaces__rosidl_generator_py.so
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/_temi_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/_temi_interfaces_s.ep.rosidl_typesupport_c.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv/__init__.py
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv/_stop_robot_s.c
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv/_stop_robot.py
+Listing '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/__init__.py'...
+Listing '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/__init__.py'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/_navigate_to.py'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/action/_speak.py'...
+Listing '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/__init__.py'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/_navigation_status.py'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/msg/_robot_status.py'...
+Listing '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv/__init__.py'...
+Compiling '/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/srv/_stop_robot.py'...
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/local/lib/python3.10/dist-packages/temi_interfaces/temi_interfaces_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_generator_py.so
+-- Set runtime path of "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/lib/libtemi_interfaces__rosidl_generator_py.so" to ""
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/ament_index/resource_index/rust_packages/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/action
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/action/rmw.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/srv.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/msg.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/action.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/msg/rmw.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/lib.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/srv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/src/srv/rmw.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/Cargo.toml
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/rust/build.rs
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/msg/RobotStatus.idl
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/msg/NavigationStatus.idl
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/action/NavigateTo.idl
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/action/Speak.idl
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/srv/StopRobot.idl
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/msg/RobotStatus.msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/msg/NavigationStatus.msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/action/NavigateTo.action
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/action/Speak.action
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/srv/StopRobot.srv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/srv/StopRobot_Request.msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/srv/StopRobot_Response.msg
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/ament_index/resource_index/package_run_dependencies/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/ament_index/resource_index/parent_prefix_path/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/ament_prefix_path.sh
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/ament_prefix_path.dsv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/path.sh
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/environment/path.dsv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/local_setup.bash
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/local_setup.sh
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/local_setup.zsh
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/local_setup.dsv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/package.dsv
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/ament_index/resource_index/packages/temi_interfaces
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_generator_cExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_generator_cExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_introspection_cExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_cExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_generator_cppExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_cppExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_generator_pyExport.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/export_temi_interfaces__rosidl_generator_pyExport-noconfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/rosidl_cmake-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfacesConfig.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/cmake/temi_interfacesConfig-version.cmake
+-- Installing: /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/temi_interfaces/share/temi_interfaces/package.xml
+Finished <<< temi_interfaces [5.17s]
+
+Summary: 1 package finished [5.37s]

@@ -1,0 +1,18 @@
+状态: {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+状态: {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+事件: arrival
+状态: {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+状态: {'valid': True, 'people_count': 3, 'expected_count': 3, 'group_state': 'unknown', 'source': 'mock'}
+状态: {'valid': True, 'people_count': 3, 'expected_count': 3, 'group_state': 'following', 'source': 'mock'}
+事件: visitor_lost
+状态: {'valid': True, 'people_count': 2, 'expected_count': 3, 'group_state': 'lost', 'source': 'mock'}
+事件: regrouped
+状态: {'valid': True, 'people_count': 3, 'expected_count': 3, 'group_state': 'following', 'source': 'mock'}
+状态: {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+事件: departure
+状态: {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+状态: {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+事件: data_stale
+事件: data_restored
+状态: {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock'}
+最终结果: 通过，事件数 6，报告 /home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/docs/runs/mock-visitors-20261119-223622-137782/report.json

@@ -1,0 +1,102 @@
+{
+  "layout": "adaptive",
+  "source": "browser_design_not_survey",
+  "resolution": 0.05,
+  "robot_clearance_radius": 0.34,
+  "obstacle_count": 42,
+  "assumptions": [
+    "overview-relief: height=1m assumed",
+    "overview-kiosk: height=1m assumed",
+    "craft-back: height=1m assumed",
+    "craft-table-1: height=1m assumed",
+    "craft-table-2: height=1m assumed",
+    "craft-tool-case: height=1m assumed",
+    "case-west: height=1m assumed",
+    "case-east: height=1m assumed",
+    "case-lacquer: height=1m assumed",
+    "case-small: height=1m assumed",
+    "works-front: height=1m assumed",
+    "story-portraits: height=1m assumed",
+    "story-screen: height=1m assumed",
+    "story-counter: height=1m assumed",
+    "story-side: height=1m assumed",
+    "interactive-screen: height=1m assumed",
+    "interactive-table: height=1m assumed",
+    "interactive-shelf: height=1m assumed",
+    "shop-front: height=1m assumed",
+    "north-pier: height=1m assumed",
+    "stool--12.55--7.1: height=1m assumed",
+    "stool--12.55--5.7: height=1m assumed",
+    "stool--10.45--7.1: height=1m assumed",
+    "stool--10.45--5.7: height=1m assumed",
+    "stool--8.15--7.1: height=1m assumed",
+    "stool--8.15--5.7: height=1m assumed",
+    "stool--6.05--7.1: height=1m assumed",
+    "stool--6.05--5.7: height=1m assumed",
+    "room-nw: height=1m assumed",
+    "room-wc: height=1m assumed",
+    "room-se: height=1m assumed",
+    "central-canopy: height=1m assumed",
+    "rooms treated as solid exclusion areas",
+    "goal yaw=0 placeholder, docking orientation not validated",
+    "glass treated as opaque collision for geometric precheck"
+  ],
+  "goals": {
+    "wait": {
+      "x": -11.0,
+      "y": -9.2,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_1": {
+      "x": -10.000000000000002,
+      "y": -5.3999999999999995,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_2": {
+      "x": -9.0,
+      "y": 2.000000000000001,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_3": {
+      "x": 0.999999999999999,
+      "y": 3.0,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_4": {
+      "x": 9.000000000000002,
+      "y": 3.0,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "zone_5": {
+      "x": 9.000000000000002,
+      "y": -6.0,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "entry": {
+      "x": -11.0,
+      "y": -12.667548783981962,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    },
+    "exit": {
+      "x": 11.399999999999999,
+      "y": -12.667548783981962,
+      "yaw": 0.0,
+      "component": 1,
+      "reachable": true
+    }
+  }
+}

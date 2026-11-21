@@ -1,0 +1,62 @@
+gateway:
+  backend: mock
+  status_hz: 10.0
+  websocket:
+    ack_timeout_sec: 1.0
+    bind_host: 127.0.0.1
+    heartbeat_interval_sec: 5.0
+    heartbeat_timeout_sec: 3.0
+    port: 8765
+    replay_window_sec: 300.0
+    speech_timeout_sec: 10.0
+    stop_timeout_sec: 2.0
+mock:
+  battery_drain_per_meter: 0.5
+  initial_battery_percentage: 100.0
+  initial_location: entrance
+  locations:
+    entrance:
+    - 0.0
+    - 0.0
+    exhibit_01:
+    - 2.0
+    - 0.0
+    exhibit_02:
+    - 4.0
+    - 0.0
+    exhibit_03:
+    - 4.0
+    - 2.0
+    exhibit_04:
+    - 2.0
+    - 2.0
+    exhibit_05:
+    - 0.0
+    - 2.0
+    exit:
+    - 2.0
+    - 4.0
+    interaction_zone:
+    - 0.0
+    - 4.0
+  navigation_delay_sec: 0.2
+  navigation_failure_probability: 0.0
+  speech_delay_sec: 0.4
+  speech_timeout_sec: 10.0
+  speed_mps: 1.0
+  tick_sec: 0.05
+tour:
+  communication_timeout_sec: 3.0
+  consent_timeout_sec: 30.0
+  greeting_text: 您好，欢迎来到潮汕非遗文化展厅。请问您愿意参加机器人导览吗？
+  low_battery_threshold: 20.0
+  navigation_timeout_sec: 45.0
+  qa_timeout_sec: 20.0
+  safe_return_location: entrance
+  speech_timeout_sec: 15.0
+  visitor_assist_enabled: false
+  visitor_status_timeout_sec: 1.0
+visitor_perception:
+  count_source: offline_video
+  stable_samples: 3
+  stale_timeout_sec: 2.0

@@ -1,0 +1,2 @@
+[INFO] [1795238418.773812038] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock', 'stable': True, 'stable_fresh': True}
+[INFO] [1795238422.065875008] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock', 'stable': False, 'stable_fresh': False}

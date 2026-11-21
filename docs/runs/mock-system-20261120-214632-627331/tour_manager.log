@@ -1,0 +1,24 @@
+[INFO] [1795182394.574389829] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-20 21:46:34,982 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-20 21:46:34,982 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-20 21:46:35,391 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-20 21:46:35,392 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定八站路线
+2026-11-20 21:46:35,392 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往展厅入口
+2026-11-20 21:46:35,596 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解展厅入口
+2026-11-20 21:46:36,005 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮绣
+2026-11-20 21:46:38,234 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮绣
+2026-11-20 21:46:38,642 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮州木雕
+2026-11-20 21:46:40,870 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮州木雕
+2026-11-20 21:46:41,278 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮州工夫茶艺
+2026-11-20 21:46:43,506 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮州工夫茶艺
+2026-11-20 21:46:43,916 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮剧
+2026-11-20 21:46:46,144 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮剧
+2026-11-20 21:46:46,553 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮州音乐
+2026-11-20 21:46:48,787 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解潮州音乐
+2026-11-20 21:46:49,196 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往互动区
+2026-11-20 21:46:51,427 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解互动区
+2026-11-20 21:46:51,837 INFO heritage_tour_manager.tour_manager: QA: 互动等待，接受文字提问、人工结束或超时继续
+2026-11-20 21:46:51,838 INFO heritage_tour_manager.tour_manager: QA: 知识问答与播报
+2026-11-20 21:46:52,258 INFO heritage_tour_manager.tour_manager: RETURNING: 前往展厅出口
+2026-11-20 21:46:54,494 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解展厅出口
+2026-11-20 21:46:54,903 INFO heritage_tour_manager.tour_manager: COMPLETED: 完整导览已结束

@@ -1,0 +1,8 @@
+all 5 custom Python types imported
+    temi_interfaces/msg/NavigationStatus
+    temi_interfaces/msg/RobotStatus
+    temi_interfaces/srv/StopRobot
+    temi_interfaces/action/NavigateTo
+    temi_interfaces/action/Speak
+temi_bridge temi_gateway
+heritage_tour_manager tour_manager

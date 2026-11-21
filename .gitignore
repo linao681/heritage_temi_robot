@@ -1,0 +1,26 @@
+# 项目专属工具链与依赖缓存
+/.toolchain/
+/.venv/
+
+# ROS2 colcon 构建产物
+/ros2_ws/build/
+/ros2_ws/install/
+/ros2_ws/log/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Android 本地配置和构建产物
+/android/**/.gradle/
+/android/**/build/
+/android/**/local.properties
+
+# 官方 SDK 通过独立 Git 仓库及固定标签获取
+/third_party/robotemi-sdk/
+
+# 官方公开视觉测试资产仅供本地运行，不作为项目发布素材
+/assets/vision/*.onnx
+/assets/vision/*.part
+/assets/vision/*.avi

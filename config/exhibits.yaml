@@ -1,0 +1,43 @@
+# 第一阶段示例路线：五个主题为导览脚本示例，非真实展厅布置。
+# temi_location 当前仅使用虚拟保存地点名称，获得实体设备后再映射真实地图。
+exhibits:
+  - id: entrance
+    name: 展厅入口
+    temi_location: entrance
+    guide_content: 欢迎开始潮汕非遗文化导览。我们将依次参观五个主题展区，请大家有序跟随并留意周围行人。
+    guide_level: basic
+  - id: exhibit_01
+    name: 潮绣
+    temi_location: exhibit_01
+    guide_content: 潮绣是潮州传统刺绣艺术。请欣赏纹样、色彩和针线层次，感受手工技艺表达生活与审美的方式。
+    guide_level: basic
+  - id: exhibit_02
+    name: 潮州木雕
+    temi_location: exhibit_02
+    guide_content: 潮州木雕常以人物、花鸟、鱼虫等为创作题材。请留意雕刻的层次、细节和构图，体会工匠的精细劳动。
+    guide_level: basic
+  - id: exhibit_03
+    name: 潮州工夫茶艺
+    temi_location: exhibit_03
+    guide_content: 潮州工夫茶艺是潮汕地区的茶叶冲泡技艺。请关注茶具、冲泡过程和待客礼节，感受茶与日常生活的联系。
+    guide_level: basic
+  - id: exhibit_04
+    name: 潮剧
+    temi_location: exhibit_04
+    guide_content: 潮剧是具有地域特色的戏曲表演艺术。请留意唱腔、服饰和表演动作，理解舞台如何传递故事与情感。
+    guide_level: basic
+  - id: exhibit_05
+    name: 潮州音乐
+    temi_location: exhibit_05
+    guide_content: 潮州音乐包括丰富的民间器乐传统。请关注乐器音色和旋律的配合，感受潮汕音乐文化的多样性。
+    guide_level: basic
+  - id: interaction_zone
+    name: 互动区
+    temi_location: interaction_zone
+    guide_content: 接下来是互动时间，欢迎与工作人员交流您最感兴趣的非遗主题。互动结束后，我们将前往出口。
+    guide_level: basic
+  - id: exit
+    name: 展厅出口
+    temi_location: exit
+    guide_content: 本次导览结束，感谢大家的参与。希望您继续关注非物质文化遗产的传承与保护，欢迎再次参观。
+    guide_level: basic

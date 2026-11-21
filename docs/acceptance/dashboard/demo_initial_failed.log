@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/scripts/demo_dashboard.py", line 95, in <module>
+    raise SystemExit(main())
+  File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/scripts/demo_dashboard.py", line 50, in main
+    dashboard = DashboardNode(controls=True)
+  File "/home/linao/文档/ChatGPT/ican国赛/heritage_temi_robot/ros2_ws/install/heritage_dashboard/lib/python3.10/site-packages/heritage_dashboard/ros_dashboard.py", line 24, in __init__
+    self.clients = {name: self.create_client(Trigger, 'heritage/tour/' + name)
+AttributeError: can't set attribute 'clients'

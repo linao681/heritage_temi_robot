@@ -1,0 +1,15 @@
+{
+  "video": "vtest.avi",
+  "video_sha256": "45cddc9490be69345cbdab64ca583be65987e864ca408038e648db99e10516cf",
+  "source": "OpenCV 4.11.0 samples/data/vtest.avi",
+  "fps": 10.0,
+  "frame_count": 795,
+  "sampling": "0-based frame indices 0,40,...,760 preselected before inference",
+  "annotation": "Codex independent visual count of distinct visible people in full frames before running YOLOX; include clearly distinguishable partially visible people, including edge/vehicle occlusions; exclude uncertain non-person objects. Exploratory visual reference, not independently human-validated ground truth.",
+  "frames": {
+    "0": 3, "40": 6, "80": 7, "120": 8, "160": 8,
+    "200": 7, "240": 7, "280": 7, "320": 6, "360": 6,
+    "400": 3, "440": 3, "480": 4, "520": 7, "560": 6,
+    "600": 6, "640": 6, "680": 8, "720": 9, "760": 8
+  }
+}
