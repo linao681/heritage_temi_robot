@@ -90,7 +90,7 @@ trap 'exit 0' INT TERM
 echo "日志目录：$log_dir"
 start_group hall ros2 launch "$project_dir/simulation/hall.launch.py" layout:=official gui:=false
 deadline=$((SECONDS + 60))
-until ros2 service list 2>/dev/null | rg -q '^/spawn_entity$'; do
+until ros2 service list 2>/dev/null | grep -q '^/spawn_entity$'; do
   alive || { echo 'Gazebo 启动失败，查看 hall.log' >&2; exit 1; }
   (( SECONDS < deadline )) || { echo 'Gazebo 服务等待超时' >&2; exit 1; }
   sleep 1
