@@ -1,0 +1,11 @@
+experiment_id,status,scenario,ros_domain_id,tour_duration_s,recorded_segment_duration_s,route_completed,nav2_successful_targets,mean_abs_cmd_vel_odom_mps,camera_candidate_detection_rate,camera_candidate_count_mae_people,rgbd_forward_depth_mae_m,mean_stop_request_to_confirm_s,gazebo_actor_path_m,minimum_estimated_surface_clearance_m,primary_evidence,notes
+E01,PASS,empty/normal tour,225,272.552,14.814,true,7/7,0.007,0.138,0.862,0.105,1.200,,,clean_tour/20261121-222535/report.json,Route completed; one safety stop and automatic recovery; camera candidate accuracy is not a labeled-set metric
+E02,NOT RUN,crowded,225,,,,,,,,,,,,,No active-navigation crowd-increase evidence
+E03,PASS_WITH_RISK,approaching,225,372.008,14.814,true,7/7,0.017,0.940,0.060,0.133,1.049,0.905,0.269,dynamic_people/approaching/20261122-0008-late-stop-fix-delay8/truth.json,Vision lost actor near camera boundary; fail-safe stop; minimum clearance estimated from assumed support radii
+E04,FAIL,crossing,225,,,,,,,,,,,,dynamic_people/crossing/20261121-224015/truth.json,Gazebo model pose was not confirmed; no valid perception result
+E05,NOT RUN,near_hazard,225,,,,,,,,,,,,dynamic_people/approaching/20261122-0008-late-stop-fix-delay8/truth.json,E03 reached 0.269 m estimated clearance but no separate threshold test
+E06,NOT RUN,leaving,225,,,,,,,,,,,,dynamic_people/leaving/20261122-0013-e06-run1/monitor.json,No eligible exit/returning injection window
+E07,NOT RUN,group_straggler,225,,,,,,,,,,,,tests/test_tour_manager.py,Unit logic passes; no Gazebo group integration trial
+E08,PASS,sensor_dropout,225,,13.900,,,0.009,,,,,,,robustness/sensor_dropout/20261121-2258/fault_injection.json,Actual visitor_perception publisher process paused for 3.004 s; one stop confirmation in recording
+E09,PASS,navigation_failure,225,24.113,,,,,,,,,,,robustness/navigation_failure/20261121-2305/report.json,Nav2 status 6 ABORTED; stale navigation UUID command rejected; max odom linear speed 0.0543 m/s
+E10,PASS,manual_cancel,225,,11.900,,,0.009,,,,0.900,,,robustness/manual_stop/20261121-2300/manual_cancel.json,Cancel accepted while moving; stop confirmed; no auto-resume

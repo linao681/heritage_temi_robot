@@ -4,6 +4,7 @@
     <static>true</static>
     <self_collide>false</self_collide>
     <link name="body">
+      <gravity>false</gravity>
       <inertial>
         <mass>75</mass>
         <inertia><ixx>12</ixx><iyy>12</iyy><izz>2</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia>

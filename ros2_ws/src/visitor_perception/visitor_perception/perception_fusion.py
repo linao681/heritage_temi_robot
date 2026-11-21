@@ -6,7 +6,7 @@ import math
 @dataclass(frozen=True)
 class FusionConfig:
     max_sample_age_sec: float = 1.0
-    front_half_angle_rad: float = math.pi / 3
+    front_half_angle_rad: float = math.pi / 6
     scan_min_valid_samples: int = 1
     simulation_mode: bool = False
 
@@ -22,7 +22,7 @@ class FusionConfig:
 class PerceptionFusion:
     """Fusion state uses one local monotonic clock and fails closed on missing inputs."""
 
-    def __init__(self, max_sample_age_sec=1.0, front_half_angle_rad=math.pi / 3,
+    def __init__(self, max_sample_age_sec=1.0, front_half_angle_rad=math.pi / 6,
                  scan_min_valid_samples=1, simulation_mode=False):
         self.config = FusionConfig(max_sample_age_sec, front_half_angle_rad,
                                    scan_min_valid_samples, simulation_mode)

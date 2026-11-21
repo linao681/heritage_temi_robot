@@ -298,6 +298,43 @@ def test_assisted_brief_invalid_update_revokes_pending_resume_even_if_recovered(
     asyncio.run(scenario())
 
 
+def test_camera_group_assist_on_map_frame_requires_manual_resume_after_dropout():
+    from heritage_tour_manager.visitor_assist import VisitorAssist
+
+    async def scenario():
+        manager, backend, driver, _, monitor = await setup_rig()
+        expected = []
+        assist = VisitorAssist(manager, expected.append, 10.0)
+
+        def snapshot(count, group_count=0, group='untracked'):
+            return {'source': 'camera', 'valid': True, 'stable': True,
+                    'stable_fresh': True, 'people_count': count,
+                    'expected_count': group_count, 'group_state': group}
+
+        try:
+            assist.robot_frame('map')
+            assist.observe(snapshot(0))
+            assert assist.snapshot()['can_arm']
+            assert assist.arm()
+            assist.observe(snapshot(0))
+            assist.observe(snapshot(3))
+            assert expected == [3]
+            assist.observe(snapshot(3, 3, 'following'))
+            await wait_until(lambda: manager.state.value == 'WAITING_CONSENT')
+            assert manager.consent(True)
+            await wait_until(lambda: backend.get_status().is_moving)
+            assist.observe(snapshot(2, 3, 'lost'))
+            await wait_until(lambda: manager.state.value == 'PAUSED' and not manager.is_moving)
+            previous = list(driver.navigation_calls)
+            assist.observe(snapshot(3, 3, 'following'))
+            assert manager.resume()
+            await wait_until(lambda: len(driver.navigation_calls) > len(previous))
+        finally:
+            await end_rig(manager, monitor)
+
+    asyncio.run(scenario())
+
+
 def test_low_battery_interrupts_and_returns_to_safe_configured_location():
     async def scenario():
         manager, backend, driver, _, monitor = await setup_rig()

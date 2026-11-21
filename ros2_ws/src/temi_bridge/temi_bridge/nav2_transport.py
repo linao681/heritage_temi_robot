@@ -16,6 +16,18 @@ from temi_interfaces.msg import SafetyStopStatus
 from tf2_ros import Buffer, TransformListener
 
 
+def arrival_stop_confirmed(stable_since, last_sample, now,
+                           stationary_window_sec=0.5, freshness_sec=0.5):
+    if stable_since is None:
+        return False
+    values = (stable_since, last_sample, now, stationary_window_sec, freshness_sec)
+    if any(not math.isfinite(value) for value in values):
+        return False
+    return (stable_since <= last_sample <= now and
+            now - last_sample <= freshness_sec and
+            now - stable_since >= stationary_window_sec)
+
+
 class Nav2Transport(Node):
     def __init__(self):
         super().__init__('heritage_nav2_transport')
@@ -31,6 +43,7 @@ class Nav2Transport(Node):
         self._mutex = Lock()
         self._last_odom = 0.0
         self._linear = self._angular = float('inf')
+        self._arrival_stable_since = None
         self._pending = self._goal = self._result = None
         self._abort = False
         self._unsafe = False
@@ -50,6 +63,10 @@ class Nav2Transport(Node):
             self._last_odom = time.monotonic()
             self._linear = math.hypot(msg.twist.twist.linear.x, msg.twist.twist.linear.y)
             self._angular = abs(msg.twist.twist.angular.z)
+            if self._linear < 0.02 and self._angular < 0.05:
+                self._arrival_stable_since = self._arrival_stable_since or self._last_odom
+            else:
+                self._arrival_stable_since = None
             if self._stop_state == 'STOPPING':
                 if self._linear < 0.02 and self._angular < 0.05:
                     self._stop_stable_since = self._stop_stable_since or self._last_odom
@@ -130,6 +147,18 @@ class Nav2Transport(Node):
             await asyncio.sleep(0.02)
         return future.result()
 
+    async def _wait_for_arrival_stop(self, timeout_sec=5.0):
+        deadline = time.monotonic() + timeout_sec
+        while not self._abort and time.monotonic() < deadline:
+            now = time.monotonic()
+            with self._mutex:
+                confirmed = arrival_stop_confirmed(
+                    self._arrival_stable_since, self._last_odom, now)
+            if confirmed:
+                return True
+            await asyncio.sleep(0.05)
+        return False
+
     async def navigate(self, pose, *, on_active=None):
         if self._unsafe or self._pending is not None:
             return False
@@ -152,7 +181,9 @@ class Nav2Transport(Node):
             if self._abort:
                 return False
             result = await self._future(self._result, 3600)
-            return result.status == GoalStatus.STATUS_SUCCEEDED and not self._abort
+            if result.status != GoalStatus.STATUS_SUCCEEDED or self._abort:
+                return False
+            return await self._wait_for_arrival_stop()
         except TimeoutError:
             self._unsafe = True
             return False

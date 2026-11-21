@@ -7,7 +7,7 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.node import Node
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
-from temi_interfaces.msg import PerceptionInput
+from temi_interfaces.msg import NavigationStatus, PerceptionInput
 from temi_interfaces.srv import SetNavigationSpeed, StopRobot
 
 from .speed_policy import SpeedConfig, SpeedController, SpeedInputs, perception_source_allowed
@@ -33,7 +33,11 @@ class SpeedControllerNode(Node):
         self.create_service(Trigger, 'heritage/speed_control/reset_error', self._reset_error, callback_group=self._group)
         self._tour_state = ''
         self._last_navigation_session_id = ''
+        self._latest_navigation_session_id = ''
         self.create_subscription(String, 'heritage/tour/status', self._on_tour_status, 10)
+        self.create_subscription(NavigationStatus, 'temi/navigation_status',
+                                 self._on_navigation_status, 20,
+                                 callback_group=self._group)
         self._input = None
         self._stop_confirmed = False
         self._stop_future = None
@@ -61,6 +65,12 @@ class SpeedControllerNode(Node):
                 self._tour_state = value['state']
         except (ValueError, TypeError):
             pass
+
+    def _on_navigation_status(self, message):
+        if message.status in ('start', 'calculating', 'going', 'reposing'):
+            self._latest_navigation_session_id = message.task_id
+        elif message.task_id == self._latest_navigation_session_id:
+            self._latest_navigation_session_id = ''
 
     def _on_input(self, message):
         try:
@@ -194,7 +204,11 @@ class SpeedControllerNode(Node):
                            'sdk_return_code': None, 'message': str(error),
                            'navigation_session_id': decision.navigation_session_id}
             self._commands.publish(String(data=json.dumps(outcome, ensure_ascii=False)))
-            self._policy.report_speed_result(outcome['status'] == 'complete')
+            self._policy.report_speed_result(
+                outcome['status'] == 'complete',
+                navigation_session_id=decision.navigation_session_id,
+                current_navigation_session_id=self._latest_navigation_session_id,
+                recovery_command=decision.state == 'RECOVERING')
         future.add_done_callback(completed)
         return 'sent_pending_confirmation'
 

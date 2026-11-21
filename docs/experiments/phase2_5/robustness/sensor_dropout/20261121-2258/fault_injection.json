@@ -1,0 +1,11 @@
+{
+  "experiment_id": "E08",
+  "injection": "SIGSTOP/SIGCONT of visitor_perception ROS2 publishers in the project Domain 225 launch group",
+  "process_group_id": 243705,
+  "recording_started_utc": "2026-11-21T14:55:04.701783+00:00",
+  "pause_started_utc": "2026-11-21T14:55:06.703939+00:00",
+  "pause_duration_sec": 3.004,
+  "recording_overlap_sec": 3.004,
+  "restored": true,
+  "domain_id": 225
+}

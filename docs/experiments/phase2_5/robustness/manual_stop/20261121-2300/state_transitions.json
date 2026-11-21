@@ -1,0 +1,44 @@
+[
+  {
+    "time_sec": 0.0,
+    "field": "tour_state",
+    "from": "",
+    "to": "NAVIGATING"
+  },
+  {
+    "time_sec": 0.0,
+    "field": "speed_controller_state",
+    "from": "",
+    "to": "SLOW"
+  },
+  {
+    "time_sec": 0.0,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "e8ce8f769b8b48ada686f3c14826562c"
+  },
+  {
+    "time_sec": 2.6986200000028475,
+    "field": "speed_controller_state",
+    "from": "SLOW",
+    "to": "STOPPING"
+  },
+  {
+    "time_sec": 2.7985960000005434,
+    "field": "speed_controller_state",
+    "from": "STOPPING",
+    "to": "ERROR"
+  },
+  {
+    "time_sec": 3.4986550000030547,
+    "field": "tour_state",
+    "from": "NAVIGATING",
+    "to": "IDLE"
+  },
+  {
+    "time_sec": 3.598399000002246,
+    "field": "navigation_session_id",
+    "from": "e8ce8f769b8b48ada686f3c14826562c",
+    "to": ""
+  }
+]

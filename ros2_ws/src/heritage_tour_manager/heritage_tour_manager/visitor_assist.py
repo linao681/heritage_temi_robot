@@ -21,7 +21,7 @@ class VisitorAssist:
 
     @staticmethod
     def _valid_schema(value):
-        if not isinstance(value, dict) or value.get('source') != 'mock':
+        if not isinstance(value, dict) or value.get('source') not in ('mock', 'camera', 'temi_camera'):
             return False
         if any(type(value.get(key)) is not bool for key in ('valid', 'stable', 'stable_fresh')):
             return False
@@ -44,7 +44,7 @@ class VisitorAssist:
         return None
 
     def _robot_ready(self):
-        return (self._frame == 'mock_map' and self.manager.connected and
+        return (self._frame in ('mock_map', 'map') and self.manager.connected and
                 self.manager.battery_percentage > self.manager.config.low_battery_threshold)
 
     def _group_reliable(self, value):
@@ -111,7 +111,7 @@ class VisitorAssist:
         if self.active:
             if not self.ready():
                 self.manager.invalidate_visitor_resume()
-            if self._frame != 'mock_map':
+            if self._frame not in ('mock_map', 'map'):
                 self.manager.visitor_source_lost()
             elif (self.manager.consent_accepted and not self.manager.returning_low and
                   not self._group_reliable(self._current())):

@@ -10,7 +10,7 @@ speed_controller:
     stop_person_distance_m: 0.65
     slow_obstacle_distance_m: 1.5
     stop_obstacle_distance_m: 0.55
-    clear_distance_hysteresis_m: 0.25
+    clear_distance_hysteresis_m: 0.10
     lost_group_stop_sec: 8.0
     recovery_hold_sec: 2.0
     input_timeout_sec: 1.0

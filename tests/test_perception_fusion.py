@@ -1,3 +1,4 @@
+import math
 import sys
 from pathlib import Path
 
@@ -143,6 +144,14 @@ def test_laser_uses_only_front_sector_and_filters_nonfinite_and_out_of_range_val
                        -1.0, 0.4, 0.08, 10.0, now=0.0)
 
     assert fusion.obstacle_distance_m == 1.1
+
+
+def test_default_speed_safety_scan_ignores_side_corner_but_keeps_forward_path():
+    fusion = PerceptionFusion()
+    fusion.update_scan([0.576, 1.154], -math.pi / 3, math.radians(35),
+                       0.08, 12.0, now=0.0)
+
+    assert fusion.obstacle_distance_m == pytest.approx(1.154)
 
 
 def test_clear_positive_infinity_scan_is_a_valid_range_max_bound():

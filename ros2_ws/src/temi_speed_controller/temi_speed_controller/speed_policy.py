@@ -27,7 +27,7 @@ class SpeedConfig:
     stop_person_distance_m: float = 0.65
     slow_obstacle_distance_m: float = 1.5
     stop_obstacle_distance_m: float = 0.55
-    clear_distance_hysteresis_m: float = 0.25
+    clear_distance_hysteresis_m: float = 0.10
     lost_group_stop_sec: float = 8.0
     recovery_hold_sec: float = 2.0
     input_timeout_sec: float = 1.0
@@ -108,6 +108,7 @@ class SpeedController:
         self._last_speed = None
         self._last_command_at = -math.inf
         self._last_session = ''
+        self._confirmed_session = ''
         self._stop_sent = False
         self._last_update = None
         self._resume_sent = False
@@ -119,10 +120,23 @@ class SpeedController:
             self._stop_sent = True
             self.state, self.reason = 'ERROR', '停车请求未成功确认'
 
-    def report_speed_result(self, success: bool):
+    def report_speed_result(self, success: bool, *, navigation_session_id: str = '',
+                            current_navigation_session_id: str | None = None,
+                            recovery_command: bool = False):
+        current_session = (self._last_session if current_navigation_session_id is None
+                           else current_navigation_session_id)
+        if navigation_session_id and navigation_session_id != current_session:
+            if not success and self._confirmed_session != current_session:
+                self._last_speed = None
+                self._last_command_at = -math.inf
+            return
         if not success:
             self._error_latched = True
             self.state, self.reason = 'ERROR', '调速命令执行失败或 SDK 拒绝'
+        else:
+            self._confirmed_session = navigation_session_id or self._last_session
+            if recovery_command and self.state == 'RECOVERING':
+                self.state, self.reason = 'SLOW', '恢复低速指令已确认，按当前感知爬升'
 
     def reset_error(self):
         """仅由显式人工复位调用，ERROR 不自行恢复。"""
@@ -132,6 +146,7 @@ class SpeedController:
         self._last_speed = None
         self._last_command_at = -math.inf
         self._last_session = ''
+        self._confirmed_session = ''
         self.state = 'IDLE'
         self.reason = '人工复位'
 
@@ -142,6 +157,7 @@ class SpeedController:
         new_session = bool(inputs.navigation_session_id and inputs.navigation_session_id != self._last_session)
         if new_session:
             self._last_session = inputs.navigation_session_id
+            self._confirmed_session = ''
             self._last_speed = None
             self._last_command_at = -math.inf
             self._stop_sent = False

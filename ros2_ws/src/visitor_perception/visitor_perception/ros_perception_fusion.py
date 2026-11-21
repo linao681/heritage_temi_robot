@@ -15,7 +15,7 @@ class PerceptionFusionNode(Node):
     def __init__(self, simulation_mode=False):
         super().__init__('heritage_perception_fusion')
         self.declare_parameter('max_sample_age_sec', 1.0)
-        self.declare_parameter('front_half_angle_rad', 1.0471975512)
+        self.declare_parameter('front_half_angle_rad', 0.5235987756)
         self.declare_parameter('scan_min_valid_samples', 1)
         self.declare_parameter('simulation_mode', simulation_mode)
         self._fusion = PerceptionFusion(

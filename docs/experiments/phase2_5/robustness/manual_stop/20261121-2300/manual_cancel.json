@@ -1,0 +1,9 @@
+{
+  "experiment_id": "E10",
+  "injection": "Operator invoked the actual heritage/tour/cancel Trigger during active Nav2 motion",
+  "requested_utc": "2026-11-21T15:02:08.283929+00:00",
+  "service": "heritage/tour/cancel",
+  "accepted": true,
+  "message": "cancel: 已接受",
+  "domain_id": 225
+}

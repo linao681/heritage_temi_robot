@@ -43,8 +43,8 @@ tour:
   low_battery_threshold: 20.0
   # 示例安全返回地点是入口，并非真实充电桩。
   safe_return_location: wait
-  # 仅 Mock 联动演示显式开启；默认保持人工导览。
-  visitor_assist_enabled: false
+  # 仅在可稳定统计匿名人数的仿真/受控运行中显式启用；恢复仍需人工确认。
+  visitor_assist_enabled: true
   visitor_status_timeout_sec: 1.0
 
 # 第二阶段 2.1：仅模拟匿名人数，不直接控制导览或运动。

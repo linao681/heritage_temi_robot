@@ -32,6 +32,11 @@ def build_hall(layout, directory):
     sdf = ET.Element('sdf', version='1.6')
     world = ET.SubElement(sdf, 'world', name=name)
     ET.SubElement(world, 'gravity').text = '0 0 -9.81'
+    state_plugin = ET.SubElement(world, 'plugin', name='gazebo_ros_state',
+                                 filename='libgazebo_ros_state.so')
+    state_ros = ET.SubElement(state_plugin, 'ros')
+    ET.SubElement(state_ros, 'namespace').text = '/gazebo'
+    ET.SubElement(state_plugin, 'update_rate').text = '20.0'
     floor = ET.SubElement(world, 'include')
     ET.SubElement(floor, 'uri').text = 'model://ground_plane'
     assumptions = []

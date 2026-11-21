@@ -1,0 +1,80 @@
+[
+  {
+    "time_sec": 1.2996170000042184,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "444eef56004f4355aa9ea3d26cbf1aee"
+  },
+  {
+    "time_sec": 1.4004560000030324,
+    "field": "navigation_session_id",
+    "from": "444eef56004f4355aa9ea3d26cbf1aee",
+    "to": ""
+  },
+  {
+    "time_sec": 1.5003429999997024,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "60bd4ae9a79443cfa98d885ad5948e95"
+  },
+  {
+    "time_sec": 1.7994890000045416,
+    "field": "tour_state",
+    "from": "",
+    "to": "NAVIGATING"
+  },
+  {
+    "time_sec": 2.299371000000974,
+    "field": "speed_controller_state",
+    "from": "",
+    "to": "STOPPING"
+  },
+  {
+    "time_sec": 3.2995850000006612,
+    "field": "tour_state",
+    "from": "NAVIGATING",
+    "to": "PAUSED"
+  },
+  {
+    "time_sec": 4.4996160000009695,
+    "field": "navigation_session_id",
+    "from": "60bd4ae9a79443cfa98d885ad5948e95",
+    "to": ""
+  },
+  {
+    "time_sec": 4.699817000000621,
+    "field": "speed_controller_state",
+    "from": "STOPPING",
+    "to": "STOPPED"
+  },
+  {
+    "time_sec": 5.400196000002325,
+    "field": "speed_controller_state",
+    "from": "STOPPED",
+    "to": "WAITING"
+  },
+  {
+    "time_sec": 7.499866000005568,
+    "field": "tour_state",
+    "from": "PAUSED",
+    "to": "NAVIGATING"
+  },
+  {
+    "time_sec": 7.499866000005568,
+    "field": "speed_controller_state",
+    "from": "WAITING",
+    "to": "RECOVERING"
+  },
+  {
+    "time_sec": 7.599890000004962,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "930aedf07a5147b0b74aeb8c88936cd8"
+  },
+  {
+    "time_sec": 7.700348999998823,
+    "field": "speed_controller_state",
+    "from": "RECOVERING",
+    "to": "SLOW"
+  }
+]

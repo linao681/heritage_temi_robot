@@ -30,9 +30,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--layout', choices=['official', 'adaptive'], default='official')
     parser.add_argument('--port', type=int, default=8088)
+    parser.add_argument('--domain-id', type=int, default=211)
     args = parser.parse_args()
-    if os.environ.get('ROS_LOCALHOST_ONLY') != '1' or os.environ.get('ROS_DOMAIN_ID') != '211':
-        parser.error('须使用本机 ROS_LOCALHOST_ONLY=1 与 ROS_DOMAIN_ID=211')
+    if (os.environ.get('ROS_LOCALHOST_ONLY') != '1' or
+            os.environ.get('ROS_DOMAIN_ID') != str(args.domain_id) or
+            not 0 <= args.domain_id <= 232):
+        parser.error('须使用本机 ROS_LOCALHOST_ONLY=1 与匹配的 ROS_DOMAIN_ID')
     from rclpy.signals import SignalHandlerOptions
     rclpy.init(signal_handler_options=SignalHandlerOptions.NO)
     node = rclpy.create_node('heritage_web_visualization')

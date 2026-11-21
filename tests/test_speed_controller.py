@@ -188,6 +188,59 @@ def test_old_navigation_session_cannot_be_reused():
     assert changed.send_speed
 
 
+def test_failed_speed_result_from_finished_session_does_not_poison_new_navigation():
+    controller = SpeedController()
+    stale = controller.update(sample(navigation_session_id='instant-wait'), now=0.0)
+    current = controller.update(sample(now=0.1, navigation_session_id='zone-1'), now=0.1)
+
+    assert stale.send_speed and current.send_speed
+    controller.report_speed_result(False, navigation_session_id='instant-wait')
+
+    assert controller.state != 'ERROR'
+    retry = controller.update(sample(now=0.2, navigation_session_id='zone-1'), now=0.2)
+    assert retry.send_speed
+    assert retry.navigation_session_id == 'zone-1'
+
+
+def test_stale_speed_failure_after_current_session_confirmation_does_not_retrigger_command():
+    controller = SpeedController()
+    old = controller.update(sample(navigation_session_id='instant-wait'), now=0.0)
+    current = controller.update(sample(now=0.1, navigation_session_id='zone-1'), now=0.1)
+    controller.report_speed_result(True, navigation_session_id='zone-1')
+
+    controller.report_speed_result(False, navigation_session_id='instant-wait')
+    next_decision = controller.update(sample(now=0.2, navigation_session_id='zone-1'), now=0.2)
+
+    assert controller.state != 'ERROR'
+    assert not next_decision.send_speed
+    assert old.navigation_session_id != current.navigation_session_id
+
+
+def test_speed_failure_is_stale_when_nav_status_advanced_before_policy_tick():
+    controller = SpeedController()
+    old = controller.update(sample(navigation_session_id='instant-wait'), now=0.0)
+
+    controller.report_speed_result(
+        False, navigation_session_id=old.navigation_session_id,
+        current_navigation_session_id='zone-1')
+    next_decision = controller.update(sample(now=0.1, navigation_session_id='zone-1'), now=0.1)
+
+    assert controller.state != 'ERROR'
+    assert next_decision.send_speed
+    assert next_decision.navigation_session_id == 'zone-1'
+
+
+def test_failed_speed_result_for_current_navigation_session_latches_error():
+    controller = SpeedController()
+    decision = controller.update(sample(navigation_session_id='zone-1'), now=0.0)
+
+    controller.report_speed_result(
+        False, navigation_session_id=decision.navigation_session_id,
+        current_navigation_session_id='zone-1')
+
+    assert controller.state == 'ERROR'
+
+
 def test_waiting_for_confirmed_stop_can_resume_only_after_stable_clear_period():
     controller = SpeedController(SpeedConfig(recovery_hold_sec=1.0))
     controller.update(sample(obstacle_distance_m=0.4), now=0)
@@ -196,16 +249,60 @@ def test_waiting_for_confirmed_stop_can_resume_only_after_stable_clear_period():
                                       navigating=False), now=0.1)
     assert waiting.state == 'STOPPED'
     clearing = controller.update(sample(now=0.2, stop_confirmed=True,
-                                       stop_confirmed_session_id='active', navigating=False), now=0.2)
+                                       stop_confirmed_session_id='active', navigating=False,
+                                       obstacle_distance_m=0.75), now=0.2)
     assert clearing.state == 'WAITING' and not clearing.resume_requested
     resumed = controller.update(sample(now=1.3, stop_confirmed=True,
-                                      stop_confirmed_session_id='active', navigating=False), now=1.3)
+                                      stop_confirmed_session_id='active', navigating=False,
+                                      obstacle_distance_m=0.75), now=1.3)
     assert resumed.state == 'RECOVERING'
     assert resumed.resume_requested
     new_goal = controller.update(sample(now=1.4, navigation_session_id='new-goal'), now=1.4)
     assert new_goal.state == 'RECOVERING'
     assert new_goal.target_speed_mps == 0.3
     assert new_goal.send_speed
+    controller.report_speed_result(True, navigation_session_id='old-goal',
+                                   recovery_command=True)
+    assert controller.state == 'RECOVERING'
+    controller.report_speed_result(True, navigation_session_id='new-goal',
+                                   recovery_command=True)
+    accelerating = controller.update(sample(now=1.5, navigation_session_id='new-goal'), now=1.5)
+    assert accelerating.state != 'RECOVERING'
+    assert accelerating.target_speed_mps > 0.3
+
+
+def test_stable_obstacle_clearance_above_stop_plus_hysteresis_can_resume():
+    controller = SpeedController(SpeedConfig(recovery_hold_sec=1.0))
+    controller.update(sample(obstacle_distance_m=0.4), now=0.0)
+    controller.update(sample(now=0.1, obstacle_distance_m=0.4, stop_confirmed=True,
+                             stop_confirmed_session_id='active', navigating=False), now=0.1)
+
+    controller.update(sample(now=0.2, obstacle_distance_m=0.662, stop_confirmed=True,
+                             stop_confirmed_session_id='active', navigating=False), now=0.2)
+    recovered = controller.update(sample(now=1.3, obstacle_distance_m=0.662,
+                                          stop_confirmed=True,
+                                          stop_confirmed_session_id='active',
+                                          navigating=False), now=1.3)
+
+    assert recovered.state == 'RECOVERING'
+    assert recovered.resume_requested
+
+
+def test_obstacle_below_stop_plus_hysteresis_remains_waiting():
+    controller = SpeedController(SpeedConfig(recovery_hold_sec=1.0))
+    controller.update(sample(obstacle_distance_m=0.4), now=0.0)
+    controller.update(sample(now=0.1, obstacle_distance_m=0.4, stop_confirmed=True,
+                             stop_confirmed_session_id='active', navigating=False), now=0.1)
+
+    controller.update(sample(now=0.2, obstacle_distance_m=0.64, stop_confirmed=True,
+                             stop_confirmed_session_id='active', navigating=False), now=0.2)
+    waiting = controller.update(sample(now=1.3, obstacle_distance_m=0.64,
+                                       stop_confirmed=True,
+                                       stop_confirmed_session_id='active',
+                                       navigating=False), now=1.3)
+
+    assert waiting.state == 'WAITING'
+    assert not waiting.resume_requested
 
 
 def test_obstacle_distance_moves_through_slow_and_stop_zones():

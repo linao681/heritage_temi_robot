@@ -1,0 +1,98 @@
+[
+  {
+    "time_sec": 0.0,
+    "field": "tour_state",
+    "from": "",
+    "to": "NAVIGATING"
+  },
+  {
+    "time_sec": 0.0,
+    "field": "speed_controller_state",
+    "from": "",
+    "to": "SLOW"
+  },
+  {
+    "time_sec": 0.0,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "af7d017ced61479ab609d832a3b297e4"
+  },
+  {
+    "time_sec": 1.9002409999957308,
+    "field": "speed_controller_state",
+    "from": "SLOW",
+    "to": "STOPPING"
+  },
+  {
+    "time_sec": 2.80015199999616,
+    "field": "tour_state",
+    "from": "NAVIGATING",
+    "to": "PAUSED"
+  },
+  {
+    "time_sec": 2.80015199999616,
+    "field": "navigation_session_id",
+    "from": "af7d017ced61479ab609d832a3b297e4",
+    "to": ""
+  },
+  {
+    "time_sec": 2.900631999997131,
+    "field": "speed_controller_state",
+    "from": "STOPPING",
+    "to": "STOPPED"
+  },
+  {
+    "time_sec": 3.0008559999987483,
+    "field": "speed_controller_state",
+    "from": "STOPPED",
+    "to": "WAITING"
+  },
+  {
+    "time_sec": 5.100245999994513,
+    "field": "tour_state",
+    "from": "PAUSED",
+    "to": "NAVIGATING"
+  },
+  {
+    "time_sec": 5.100245999994513,
+    "field": "speed_controller_state",
+    "from": "WAITING",
+    "to": "RECOVERING"
+  },
+  {
+    "time_sec": 5.100245999994513,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "677c107dc081491e950019181e03ba3a"
+  },
+  {
+    "time_sec": 5.300071999998181,
+    "field": "speed_controller_state",
+    "from": "RECOVERING",
+    "to": "SLOW"
+  },
+  {
+    "time_sec": 13.602012999996077,
+    "field": "speed_controller_state",
+    "from": "SLOW",
+    "to": "STOPPING"
+  },
+  {
+    "time_sec": 14.500627999994322,
+    "field": "tour_state",
+    "from": "NAVIGATING",
+    "to": "PAUSED"
+  },
+  {
+    "time_sec": 14.600297999997565,
+    "field": "navigation_session_id",
+    "from": "677c107dc081491e950019181e03ba3a",
+    "to": ""
+  },
+  {
+    "time_sec": 14.700413999999,
+    "field": "speed_controller_state",
+    "from": "STOPPING",
+    "to": "STOPPED"
+  }
+]
