@@ -4,8 +4,9 @@ import time
 
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
-from std_msgs.msg import Bool, String
-from temi_interfaces.msg import NavigationStatus, PerceptionInput, PersonDetectionArray, RobotStatus
+from std_msgs.msg import String
+from temi_interfaces.msg import (NavigationStatus, PerceptionInput, PersonDetectionArray,
+                                 RobotStatus, SafetyStopStatus)
 
 from .perception_fusion import PerceptionFusion
 
@@ -30,7 +31,8 @@ class PerceptionFusionNode(Node):
         self.create_subscription(RobotStatus, 'temi/robot_status', self._robot, 10)
         self.create_subscription(NavigationStatus, 'temi/navigation_status', self._navigation, 10)
         self.create_subscription(String, 'heritage/tour/status', self._tour, 10)
-        self.create_subscription(Bool, 'heritage/safety_stop', self._safety_stop, 10)
+        self.create_subscription(SafetyStopStatus, 'heritage/safety_stop/status',
+                                 self._safety_stop_status, 10)
         self.create_timer(0.1, self._publish)
 
     def _visitor(self, message):
@@ -43,6 +45,8 @@ class PerceptionFusionNode(Node):
     def _people(self, message):
         self._fusion.update_people({
             'source': message.source, 'valid': message.valid,
+            'observation_state': message.observation_state,
+            'people_count': message.people_count,
             'sample_age_sec': message.sample_age_sec,
             'person_distance_valid': message.person_distance_valid,
             'nearest_person_m': message.nearest_person_m,
@@ -72,8 +76,16 @@ class PerceptionFusionNode(Node):
         except (TypeError, ValueError):
             self._fusion.update_tour('', time.monotonic())
 
-    def _safety_stop(self, message):
-        self._fusion.update_safety_stop(message.data, time.monotonic())
+    def _safety_stop_status(self, message):
+        self._fusion.update_safety_stop_status({
+            'source': message.source, 'valid': message.valid, 'state': message.state,
+            'navigation_session_id': message.navigation_session_id,
+            'action_terminal': message.action_terminal,
+            'linear_speed_mps': message.linear_speed_mps,
+            'angular_speed_rps': message.angular_speed_rps,
+            'odom_age_sec': message.odom_age_sec,
+            'stopped_duration_sec': message.stopped_duration_sec,
+        }, time.monotonic())
 
     def _publish(self):
         value = self._fusion.snapshot(time.monotonic())
@@ -91,6 +103,8 @@ class PerceptionFusionNode(Node):
         message.expected_count = value['expected_count'] or 0
         message.group_state = value['group_state']
         message.people_valid = value['people_valid']
+        message.person_observation_state = value['person_observation_state']
+        message.person_observation_valid = value['person_observation_valid']
         message.person_distance_valid = value['person_distance_valid']
         message.nearest_person_m = value['nearest_person_m'] or 0.0
         message.crowd_density_valid = value['crowd_density_valid']
@@ -101,6 +115,8 @@ class PerceptionFusionNode(Node):
         message.communication_valid = value['communication_valid']
         message.safety_stop_valid = value['safety_stop_valid']
         message.safety_stop = value['safety_stop']
+        message.stop_confirmed = value['stop_confirmed']
+        message.stop_confirmed_session_id = value['stop_confirmed_session_id']
         message.navigating = value['navigating']
         message.explaining = value['explaining']
         message.navigation_error = value['navigation_error']

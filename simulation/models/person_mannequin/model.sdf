@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="person_mannequin">
+    <static>true</static>
+    <self_collide>false</self_collide>
+    <link name="body">
+      <inertial>
+        <mass>75</mass>
+        <inertia><ixx>12</ixx><iyy>12</iyy><izz>2</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia>
+      </inertial>
+      <collision name="torso_collision"><pose>0 0 1.05 0 0 0</pose><geometry><box><size>0.24 0.38 0.68</size></box></geometry></collision>
+      <collision name="left_arm_collision"><pose>0 0.30 1.12 0 0 0</pose><geometry><box><size>0.18 0.18 0.54</size></box></geometry></collision>
+      <collision name="right_arm_collision"><pose>0 -0.30 1.12 0 0 0</pose><geometry><box><size>0.18 0.18 0.54</size></box></geometry></collision>
+      <collision name="left_leg_collision"><pose>0 0.105 0.37 0 0 0</pose><geometry><box><size>0.22 0.14 0.74</size></box></geometry></collision>
+      <collision name="right_leg_collision"><pose>0 -0.105 0.37 0 0 0</pose><geometry><box><size>0.22 0.14 0.74</size></box></geometry></collision>
+      <collision name="head_collision"><pose>0 0 1.55 0 0 0</pose><geometry><sphere><radius>0.14</radius></sphere></geometry></collision>
+      <visual name="visitor_billboard">
+        <pose>0 0 0.86 1.5707963 0 1.5707963</pose>
+        <geometry><plane><normal>0 0 1</normal><size>0.82 1.72</size></plane></geometry>
+        <material>
+          <script>
+            <uri>__VISITOR_MATERIALS_URI__</uri>
+            <uri>__VISITOR_TEXTURES_URI__</uri>
+            <name>Person/Visitor</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

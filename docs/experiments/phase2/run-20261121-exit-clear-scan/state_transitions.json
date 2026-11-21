@@ -1,0 +1,56 @@
+[
+  {
+    "time_sec": 0.0,
+    "field": "tour_state",
+    "from": "",
+    "to": "PAUSED"
+  },
+  {
+    "time_sec": 0.0,
+    "field": "speed_controller_state",
+    "from": "",
+    "to": "ERROR"
+  },
+  {
+    "time_sec": 107.70010900000125,
+    "field": "speed_controller_state",
+    "from": "ERROR",
+    "to": "IDLE"
+  },
+  {
+    "time_sec": 109.40037700000175,
+    "field": "tour_state",
+    "from": "PAUSED",
+    "to": "RETURNING"
+  },
+  {
+    "time_sec": 109.5000570000011,
+    "field": "navigation_session_id",
+    "from": "",
+    "to": "4eaa93d8c313406aad26b17e14466a75"
+  },
+  {
+    "time_sec": 109.59982200000013,
+    "field": "speed_controller_state",
+    "from": "IDLE",
+    "to": "SLOW"
+  },
+  {
+    "time_sec": 112.49989300000016,
+    "field": "tour_state",
+    "from": "RETURNING",
+    "to": "COMPLETED"
+  },
+  {
+    "time_sec": 112.49989300000016,
+    "field": "navigation_session_id",
+    "from": "4eaa93d8c313406aad26b17e14466a75",
+    "to": ""
+  },
+  {
+    "time_sec": 112.59988800000065,
+    "field": "speed_controller_state",
+    "from": "SLOW",
+    "to": "IDLE"
+  }
+]

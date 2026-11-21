@@ -13,6 +13,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/PersonDetection.msg"
   "msg/PersonDetectionArray.msg"
   "msg/PerceptionInput.msg"
+  "msg/SafetyStopStatus.msg"
   "action/NavigateTo.action"
   "action/Speak.action"
   "srv/StopRobot.srv"

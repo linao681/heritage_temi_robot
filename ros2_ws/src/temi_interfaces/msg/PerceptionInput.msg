@@ -11,6 +11,8 @@ uint32 people_count
 uint32 expected_count
 string group_state
 bool people_valid
+string person_observation_state
+bool person_observation_valid
 bool person_distance_valid
 float32 nearest_person_m
 bool crowd_density_valid
@@ -21,6 +23,8 @@ bool position_valid
 bool communication_valid
 bool safety_stop_valid
 bool safety_stop
+bool stop_confirmed
+string stop_confirmed_session_id
 bool navigating
 bool explaining
 bool navigation_error

@@ -10,9 +10,11 @@ class Transport:
         self.started = asyncio.Event()
         self.finished = asyncio.Event()
         self.cancelled = False
-    async def navigate(self, pose):
+    async def navigate(self, pose, *, on_active=None):
         self.destinations.append(pose)
         self.started.set()
+        if on_active is not None:
+            on_active()
         await self.finished.wait()
         return True
     async def stop(self):
@@ -23,6 +25,46 @@ class Transport:
         return True
     def snapshot(self):
         return {'x': 0.0, 'y': 0.0, 'yaw': 0.0, 'moving': False}
+
+
+def test_nav2_backend_binds_gateway_task_id_to_transport_safety_state():
+    class SessionTransport(Transport):
+        def __init__(self):
+            super().__init__()
+            self.session_id = ''
+            self.finished.set()
+
+        def set_navigation_session_id(self, session_id):
+            self.session_id = session_id
+
+    async def scenario():
+        transport = SessionTransport()
+        backend = Nav2Backend(transport, {'zone_1': {'x': 1., 'y': 2., 'yaw': 0.}})
+        await backend.connect()
+        result = await backend.navigate_to('zone_1', 2, task_id='current-task')
+
+        assert result.success
+        assert transport.session_id == 'current-task'
+
+    asyncio.run(scenario())
+
+
+def test_nav2_backend_reports_navigation_events_with_the_gateway_task_id():
+    async def scenario():
+        transport = Transport()
+        transport.finished.set()
+        backend = Nav2Backend(transport, {'zone_1': {'x': 1., 'y': 2., 'yaw': 0.}})
+        await backend.connect()
+        events = []
+
+        result = await backend.navigate_to(
+            'zone_1', 2, task_id='active-task', feedback=events.append)
+
+        assert result.success
+        assert [event.status for event in events] == ['start', 'calculating', 'going', 'complete']
+        assert all(event.task_id == 'active-task' and event.target == 'zone_1' for event in events)
+
+    asyncio.run(scenario())
 
 
 def test_interaction_route_uses_waypoints_only_after_zone_four():
@@ -71,10 +113,14 @@ def test_cancelling_navigation_stops_transport_and_unlocks():
         transport = Transport()
         backend = Nav2Backend(transport, {'zone_1': {'x': 1., 'y': 2., 'yaw': 0.}})
         await backend.connect()
-        nav = asyncio.create_task(backend.navigate_to('zone_1', 5, task_id='a'))
+        events = []
+        nav = asyncio.create_task(backend.navigate_to(
+            'zone_1', 5, task_id='a', feedback=events.append))
         await transport.started.wait()
         nav.cancel()
         with pytest.raises(asyncio.CancelledError):
             await nav
         assert transport.cancelled and not backend.active
+        assert events[-1].status == 'cancelled'
+        assert events[-1].task_id == 'a'
     asyncio.run(scenario())

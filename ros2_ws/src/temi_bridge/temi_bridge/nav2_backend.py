@@ -2,7 +2,7 @@
 import asyncio
 import math
 
-from .backend import RobotSnapshot, TaskResult, TemiBackend
+from .backend import NavigationFeedback, RobotSnapshot, TaskResult, TemiBackend
 
 
 class Nav2Backend(TemiBackend):
@@ -37,15 +37,32 @@ class Nav2Backend(TemiBackend):
             return TaskResult(False, '导航未就绪或地点无效')
         if self.active or self.stopping:
             return TaskResult(False, '已有活动导航或正在停止')
+        set_session = getattr(self.transport, 'set_navigation_session_id', None)
+        if set_session is not None:
+            try:
+                set_session(task_id)
+            except (RuntimeError, ValueError) as error:
+                return TaskResult(False, f'导航会话未建立：{error}')
         self.active = True
         self.navigation_task_id = task_id
         self.interrupted = False
+
+        def report(status, description):
+            if feedback is not None:
+                feedback(NavigationFeedback(task_id, location, status, description))
+
         try:
+            report('start', '开始 Nav2 导航')
+
             async def follow_route():
                 points = [*self.waypoints.get((self.current_location, location), []), self.goals[location]]
-                for point in points:
-                    if self.interrupted or not await self.transport.navigate(point):
+                for index, point in enumerate(points):
+                    report('calculating', '提交 Nav2 导航目标')
+                    if self.interrupted or not await self.transport.navigate(
+                            point, on_active=lambda: report('going', 'Nav2 已接受导航目标')):
                         return False
+                    if index + 1 < len(points):
+                        report('reposing', '到达路径中间点，继续导航')
                 return True
             task = asyncio.create_task(follow_route())
             done, _ = await asyncio.wait({task}, timeout=timeout_sec)
@@ -55,10 +72,14 @@ class Nav2Backend(TemiBackend):
                 if not task.done():
                     task.cancel()
                 await asyncio.gather(task, return_exceptions=True)
+                report('timeout', 'Nav2 导航超时')
                 return TaskResult(False, '导航超时' if stopped else '导航超时，停车未确认')
             success = task.result() and not self.interrupted
             if success:
                 self.current_location = location
+                report('complete', 'Nav2 已到达目标')
+            elif not self.interrupted:
+                report('aborted', 'Nav2 导航失败')
             return TaskResult(success, '导航到达' if success else '导航失败或已停止')
         except asyncio.CancelledError:
             self.interrupted = True
@@ -67,7 +88,9 @@ class Nav2Backend(TemiBackend):
                 task.cancel()
                 await asyncio.gather(task, return_exceptions=True)
             if not stopped:
+                report('aborted', '导航取消后未能确认停车')
                 raise RuntimeError('导航取消时停车未确认')
+            report('cancelled', 'Nav2 导航已取消并确认停车')
             raise
         finally:
             self.active = False

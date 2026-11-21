@@ -20,9 +20,13 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--layout', choices=['official', 'adaptive'], default='official')
+    parser.add_argument('--domain-id', type=int,
+                        default=int(os.environ.get('ROS_DOMAIN_ID', '211')))
     args = parser.parse_args()
-    if os.environ.get('ROS_LOCALHOST_ONLY') != '1' or os.environ.get('ROS_DOMAIN_ID') != '211':
-        parser.error('仅允许本机隔离的仿真域 211')
+    if (os.environ.get('ROS_LOCALHOST_ONLY') != '1' or
+            not 0 <= args.domain_id <= 232 or
+            os.environ.get('ROS_DOMAIN_ID') != str(args.domain_id)):
+        parser.error('需设置匹配的 ROS_DOMAIN_ID（0–232）并启用 ROS_LOCALHOST_ONLY=1')
     goals = json.loads((ROOT / 'simulation/generated' / f'{args.layout}_goals.json').read_text())['goals']
     waypoints = {}
     if args.layout == 'official':

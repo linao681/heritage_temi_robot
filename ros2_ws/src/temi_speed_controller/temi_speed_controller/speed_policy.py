@@ -79,6 +79,8 @@ class SpeedInputs:
     crowd_density_valid: bool = True
     obstacle_distance_valid: bool = True
     safety_stop_valid: bool = True
+    person_observation_state: str = 'PERSON_DISTANCE_VALID'
+    stop_confirmed_session_id: str = ''
 
 
 @dataclass(frozen=True)
@@ -145,60 +147,67 @@ class SpeedController:
             self._stop_sent = False
             self._resume_sent = False
             recovering = self.state == 'RECOVERING'
-            if recovering:
-                self._last_speed = self.config.crowded_speed
-            else:
+            if not recovering:
                 self.state = 'NORMAL'
             self._lost_since = None
             self._clear_since = None
             if not self._error_latched and not recovering:
                 self.state = 'NORMAL'
 
+        current_session_id = inputs.navigation_session_id or self._last_session
+        stop_confirmed = (inputs.stop_confirmed and bool(current_session_id) and
+                          inputs.stop_confirmed_session_id == current_session_id)
+
         if inputs.manual_stop:
             self._manual_latched = True
         if (not inputs.navigating and self.state not in ('STOPPED', 'WAITING', 'STOPPING', 'RECOVERING', 'ERROR') and
-                not inputs.explaining and not inputs.safety_stop and not self._manual_latched):
+                not inputs.explaining and not inputs.navigation_error and not self._manual_latched):
             self.state, self.reason = 'IDLE', '当前无导航任务'
             return self._decision(None, False, False, inputs, now)
         if inputs.navigating and not inputs.navigation_session_id.strip():
             self._error_latched = True
             self.state, self.reason = 'ERROR', '活动导航会话 ID 缺失'
         if self._error_latched and self.reason == '活动导航会话 ID 缺失':
-            stop = not inputs.stop_confirmed and not self._stop_sent
+            stop = not stop_confirmed and not self._stop_sent
             if stop: self._stop_sent = True
             return self._decision(None, False, stop, inputs, now)
         if self._manual_latched or not inputs.communication_valid or not inputs.position_valid or inputs.navigation_error:
             self._error_latched = True
             self.state, self.reason = 'ERROR', ('人工停止' if self._manual_latched else
                 '通信异常' if not inputs.communication_valid else '定位异常' if not inputs.position_valid else '导航异常')
-            stop = not inputs.stop_confirmed and not self._stop_sent
+            stop = not stop_confirmed and not self._stop_sent
             if stop: self._stop_sent = True
             return self._decision(None, False, stop, inputs, now)
         if self._error_latched:
             self.state, self.reason = 'ERROR', '故障锁存，等待人工复位'
-            stop = not inputs.stop_confirmed and not self._stop_sent
+            stop = not stop_confirmed and not self._stop_sent
             if stop: self._stop_sent = True
             return self._decision(None, False, stop, inputs, now)
 
-        distance_values = (inputs.nearest_person_m, inputs.obstacle_distance_m)
+        person_distance_valid = (inputs.person_distance_valid and
+            inputs.nearest_person_m is not None and type(inputs.nearest_person_m) in (int, float) and
+            math.isfinite(inputs.nearest_person_m) and inputs.nearest_person_m >= 0)
+        no_person_observed = inputs.person_observation_state == 'NO_PERSON_OBSERVED'
+        person_observation_valid = inputs.people_valid and (person_distance_valid or no_person_observed)
         density_valid = (inputs.crowd_density_valid and inputs.crowd_density is not None and
                          type(inputs.crowd_density) in (int, float) and
                          math.isfinite(inputs.crowd_density) and 0 <= inputs.crowd_density <= 1)
         density_unknown = not inputs.crowd_density_valid and inputs.crowd_density is None
         sensors_valid = (type(inputs.sample_age_sec) in (int, float) and math.isfinite(inputs.sample_age_sec) and
                          inputs.sample_age_sec >= 0 and inputs.sample_age_sec + max(0.0, now - inputs.now) <= cfg.input_timeout_sec and now >= inputs.now and
-                         inputs.source_allowed and inputs.people_valid and inputs.person_distance_valid and
+                         inputs.source_allowed and person_observation_valid and
                          inputs.obstacle_distance_valid and inputs.safety_stop_valid and
-                         all(v is not None and type(v) in (int, float) and math.isfinite(v) and v >= 0 for v in distance_values) and
+                         inputs.obstacle_distance_m is not None and type(inputs.obstacle_distance_m) in (int, float) and
+                         math.isfinite(inputs.obstacle_distance_m) and inputs.obstacle_distance_m >= 0 and
                          (density_valid or density_unknown))
         if not sensors_valid:
             self.state, self.reason = 'STOPPING', '感知数据无效或过期'
-            stop = not self._stop_sent and not inputs.stop_confirmed
+            stop = not self._stop_sent and not stop_confirmed
             if stop: self._stop_sent = True
-            if inputs.stop_confirmed: self.state = 'STOPPED'
+            if stop_confirmed: self.state = 'STOPPED'
             return self._decision(None, False, stop, inputs, now)
 
-        if inputs.stop_confirmed and self.state == 'STOPPING':
+        if stop_confirmed and self.state == 'STOPPING':
             self.state, self.reason = 'STOPPED', '已收到导航停车确认'
             self._stop_sent = True
             return self._decision(None, False, False, inputs, now)
@@ -207,14 +216,14 @@ class SpeedController:
         if not inputs.navigating:
             if self.state == 'RECOVERING':
                 return self._decision(None, False, False, inputs, now)
-            if self.state == 'STOPPING' and not inputs.stop_confirmed:
+            if self.state == 'STOPPING' and not stop_confirmed:
                 return self._decision(None, False, False, inputs, now)
             if self.state != 'WAITING':
                 self.state, self.reason = 'IDLE', '当前无导航任务'
                 return self._decision(None, False, False, inputs, now)
 
         hard_stop = (inputs.safety_stop or inputs.explaining or
-                     inputs.nearest_person_m <= cfg.stop_person_distance_m or
+                     (person_distance_valid and inputs.nearest_person_m <= cfg.stop_person_distance_m) or
                      inputs.obstacle_distance_m <= cfg.stop_obstacle_distance_m)
         if inputs.group_state == 'lost':
             self._lost_since = now if self._lost_since is None else self._lost_since
@@ -222,17 +231,19 @@ class SpeedController:
             self._lost_since = None
         group_wait = self._lost_since is not None and now - self._lost_since >= cfg.lost_group_stop_sec
         if hard_stop or group_wait:
-            self.state, self.reason = ('STOPPED' if inputs.stop_confirmed else 'STOPPING'), ('安全停车条件' if inputs.safety_stop else
+            self.state, self.reason = ('STOPPED' if stop_confirmed else 'STOPPING'), ('安全停车条件' if inputs.safety_stop else
                 '讲解期间停车' if inputs.explaining else '近距离危险停车' if hard_stop else '游客掉队等待')
-            stop = not self._stop_sent and not inputs.stop_confirmed
+            stop = not self._stop_sent and not stop_confirmed
             if stop: self._stop_sent = True
-            if inputs.stop_confirmed:
+            if stop_confirmed:
                 self.state = 'STOPPED'
                 self._clear_since = None
             return self._decision(None, False, stop, inputs, now)
 
         if self.state in ('STOPPED', 'WAITING', 'STOPPING'):
-            clear = (inputs.nearest_person_m > cfg.stop_person_distance_m + cfg.clear_distance_hysteresis_m and
+            person_clear = no_person_observed or (person_distance_valid and
+                inputs.nearest_person_m > cfg.stop_person_distance_m + cfg.clear_distance_hysteresis_m)
+            clear = (person_clear and
                      inputs.obstacle_distance_m > cfg.stop_obstacle_distance_m + cfg.clear_distance_hysteresis_m and
                      inputs.group_state != 'lost' and not inputs.safety_stop and not inputs.explaining)
             if not clear:
@@ -250,11 +261,9 @@ class SpeedController:
 
         if inputs.group_state not in ('following', 'untracked'):
             base, reason = cfg.crowded_speed, '团队状态未知，保守降速'
-        elif not density_valid:
-            base, reason = cfg.crowded_speed, '人群密度未标定，保守降速'
-        elif inputs.crowd_density >= cfg.crowded_density:
+        elif density_valid and inputs.crowd_density >= cfg.crowded_density:
             base, reason = cfg.crowded_speed, '人群密度较高'
-        elif inputs.nearest_person_m <= cfg.slow_person_distance_m:
+        elif person_distance_valid and inputs.nearest_person_m <= cfg.slow_person_distance_m:
             ratio = ((inputs.nearest_person_m - cfg.stop_person_distance_m) /
                      (cfg.slow_person_distance_m - cfg.stop_person_distance_m))
             base = cfg.crowded_speed + max(0.0, min(1.0, ratio)) * (cfg.default_speed - cfg.crowded_speed)
@@ -264,8 +273,11 @@ class SpeedController:
                      (cfg.slow_obstacle_distance_m - cfg.stop_obstacle_distance_m))
             base = cfg.crowded_speed + max(0.0, min(1.0, ratio)) * (cfg.default_speed - cfg.crowded_speed)
             reason = '前方障碍，按距离减速'
-        elif inputs.crowd_density <= 0.2 and inputs.nearest_person_m > cfg.slow_person_distance_m * 1.5:
+        elif density_valid and inputs.crowd_density <= 0.2 and (no_person_observed or
+                inputs.nearest_person_m > cfg.slow_person_distance_m * 1.5):
             base, reason = cfg.open_area_speed, '空旷区域'
+        elif not density_valid:
+            base, reason = cfg.default_speed, '人群密度未标定，采用默认限速'
         else:
             base, reason = cfg.default_speed, '正常导览'
         if self.state == 'RECOVERING':

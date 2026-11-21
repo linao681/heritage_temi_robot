@@ -22,6 +22,29 @@ def test_open_area_uses_configured_open_speed():
     assert decision.state == 'NORMAL'
 
 
+def test_valid_empty_person_observation_allows_safe_cruise_without_fake_distance():
+    decision = SpeedController().update(sample(
+        nearest_person_m=None, person_distance_valid=False,
+        person_observation_state='NO_PERSON_OBSERVED', crowd_density=None,
+        crowd_density_valid=False, obstacle_distance_valid=True), now=0.0)
+
+    assert decision.state == 'SLOW'
+    assert decision.target_speed_mps == 0.5
+    assert decision.send_speed
+    assert not decision.stop_requested
+
+
+def test_person_proximity_reduces_speed_when_crowd_density_is_uncalibrated():
+    far = SpeedController().update(sample(
+        nearest_person_m=3.2, crowd_density=None, crowd_density_valid=False), now=0.0)
+    near = SpeedController().update(sample(
+        nearest_person_m=1.2, crowd_density=None, crowd_density_valid=False), now=0.0)
+
+    assert far.target_speed_mps == 0.5
+    assert near.target_speed_mps < far.target_speed_mps
+    assert near.state == 'SLOW'
+
+
 def test_crowd_and_person_proximity_only_reduce_speed():
     controller = SpeedController()
     open_speed = controller.update(sample(), now=0).target_speed_mps
@@ -44,10 +67,35 @@ def test_stop_confirmation_is_required_before_waiting_state():
     pending = controller.update(sample(obstacle_distance_m=0.4), now=0)
     assert pending.state == 'STOPPING'
     assert pending.stop_requested
-    stopped = controller.update(sample(now=0.1, obstacle_distance_m=0.4, stop_confirmed=True), now=0.1)
+    stopped = controller.update(sample(now=0.1, obstacle_distance_m=0.4, stop_confirmed=True,
+                                       stop_confirmed_session_id='active'), now=0.1)
     assert stopped.state == 'STOPPED'
-    waiting = controller.update(sample(now=0.2, obstacle_distance_m=0.4, stop_confirmed=True), now=0.2)
+    waiting = controller.update(sample(now=0.2, obstacle_distance_m=0.4, stop_confirmed=True,
+                                       stop_confirmed_session_id='active'), now=0.2)
     assert waiting.state == 'STOPPED'
+
+
+def test_stop_confirmation_from_old_navigation_session_is_ignored():
+    controller = SpeedController()
+    controller.update(sample(navigation_session_id='new-session', obstacle_distance_m=0.4), now=0)
+
+    decision = controller.update(sample(now=0.1, navigation_session_id='new-session',
+        obstacle_distance_m=0.4, stop_confirmed=True,
+        stop_confirmed_session_id='old-session'), now=0.1)
+
+    assert decision.state == 'STOPPING'
+    assert not decision.send_speed
+
+
+def test_current_navigation_session_stop_confirmation_is_accepted():
+    controller = SpeedController()
+    controller.update(sample(navigation_session_id='current-session', obstacle_distance_m=0.4), now=0)
+
+    decision = controller.update(sample(now=0.1, navigation_session_id='current-session',
+        obstacle_distance_m=0.4, stop_confirmed=True,
+        stop_confirmed_session_id='current-session'), now=0.1)
+
+    assert decision.state == 'STOPPED'
 
 
 def test_stale_or_invalid_perception_fails_closed():
@@ -80,12 +128,12 @@ def test_unconfirmed_safety_stop_signal_fails_closed():
     assert decision.stop_requested
 
 
-def test_unknown_crowd_density_uses_conservative_speed_without_claiming_a_measurement():
+def test_unknown_crowd_density_uses_conservative_default_without_claiming_a_measurement():
     decision = SpeedController().update(
         sample(crowd_density=None, crowd_density_valid=False), now=0)
 
     assert decision.state == 'SLOW'
-    assert decision.target_speed_mps == 0.3
+    assert decision.target_speed_mps == 0.5
     assert not decision.stop_requested
 
 
@@ -120,6 +168,17 @@ def test_error_is_latched_until_explicit_reset():
     assert controller.update(recovered_input, now=1.1).state == 'NORMAL'
 
 
+def test_idle_startup_does_not_latch_before_navigation_and_sensors_are_ready():
+    decision = SpeedController().update(sample(
+        navigating=False, navigation_session_id='', communication_valid=False,
+        position_valid=False, safety_stop=True, safety_stop_valid=False,
+        sample_age_sec=float('inf')), now=0)
+
+    assert decision.state == 'IDLE'
+    assert decision.target_speed_mps is None
+    assert not decision.stop_requested
+
+
 def test_old_navigation_session_cannot_be_reused():
     controller = SpeedController()
     first = controller.update(sample(navigation_session_id='old'), now=0)
@@ -133,16 +192,20 @@ def test_waiting_for_confirmed_stop_can_resume_only_after_stable_clear_period():
     controller = SpeedController(SpeedConfig(recovery_hold_sec=1.0))
     controller.update(sample(obstacle_distance_m=0.4), now=0)
     waiting = controller.update(sample(now=0.1, obstacle_distance_m=0.4, stop_confirmed=True,
+                                      stop_confirmed_session_id='active',
                                       navigating=False), now=0.1)
     assert waiting.state == 'STOPPED'
-    clearing = controller.update(sample(now=0.2, stop_confirmed=True, navigating=False), now=0.2)
+    clearing = controller.update(sample(now=0.2, stop_confirmed=True,
+                                       stop_confirmed_session_id='active', navigating=False), now=0.2)
     assert clearing.state == 'WAITING' and not clearing.resume_requested
-    resumed = controller.update(sample(now=1.3, stop_confirmed=True, navigating=False), now=1.3)
+    resumed = controller.update(sample(now=1.3, stop_confirmed=True,
+                                      stop_confirmed_session_id='active', navigating=False), now=1.3)
     assert resumed.state == 'RECOVERING'
     assert resumed.resume_requested
     new_goal = controller.update(sample(now=1.4, navigation_session_id='new-goal'), now=1.4)
     assert new_goal.state == 'RECOVERING'
     assert new_goal.target_speed_mps == 0.3
+    assert new_goal.send_speed
 
 
 def test_obstacle_distance_moves_through_slow_and_stop_zones():

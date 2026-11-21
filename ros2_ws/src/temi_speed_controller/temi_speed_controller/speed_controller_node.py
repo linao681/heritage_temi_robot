@@ -32,6 +32,7 @@ class SpeedControllerNode(Node):
         self._resume_client = self.create_client(Trigger, 'heritage/tour/resume', callback_group=self._group)
         self.create_service(Trigger, 'heritage/speed_control/reset_error', self._reset_error, callback_group=self._group)
         self._tour_state = ''
+        self._last_navigation_session_id = ''
         self.create_subscription(String, 'heritage/tour/status', self._on_tour_status, 10)
         self._input = None
         self._stop_confirmed = False
@@ -96,6 +97,13 @@ class SpeedControllerNode(Node):
             return
 
     def _on_fused_input(self, message):
+        session_id = message.navigation_session_id
+        if session_id and session_id != self._last_navigation_session_id:
+            self._last_navigation_session_id = session_id
+        confirmed_session_id = message.stop_confirmed_session_id
+        self._stop_confirmed = bool(message.stop_confirmed and message.safety_stop_valid and
+                                    confirmed_session_id and
+                                    confirmed_session_id == self._last_navigation_session_id)
         source = message.source
         source_allowed = message.valid and perception_source_allowed(
             source, mock_mode=self._mock_mode,
@@ -107,6 +115,8 @@ class SpeedControllerNode(Node):
             'crowd_density': float(message.crowd_density) if message.crowd_density_valid else None,
             'obstacle_distance_m': float(message.obstacle_distance_m) if message.obstacle_distance_valid else None,
             'people_valid': bool(message.people_valid),
+            'person_observation_state': message.person_observation_state,
+            'person_observation_valid': bool(message.person_observation_valid),
             'person_distance_valid': bool(message.person_distance_valid),
             'crowd_density_valid': bool(message.crowd_density_valid),
             'obstacle_distance_valid': bool(message.obstacle_distance_valid),
@@ -115,7 +125,8 @@ class SpeedControllerNode(Node):
             'explaining': bool(message.explaining), 'navigation_error': bool(message.navigation_error),
             'safety_stop': bool(message.safety_stop), 'position_valid': bool(message.position_valid),
             'communication_valid': bool(message.communication_valid),
-            'navigation_session_id': message.navigation_session_id, 'manual_stop': False,
+            'navigation_session_id': session_id,
+            'stop_confirmed_session_id': confirmed_session_id, 'manual_stop': False,
         }
 
     def _send_stop(self):
@@ -151,8 +162,8 @@ class SpeedControllerNode(Node):
     def _on_stop_result(self, future):
         try:
             response = future.result()
-            self._stop_confirmed = bool(response.success)
             if not response.success:
+                self._stop_confirmed = False
                 self._policy.report_stop_result(False)
         except Exception:
             self._stop_confirmed = False
@@ -198,14 +209,18 @@ class SpeedControllerNode(Node):
             navigating=raw.get('navigating', False), explaining=raw.get('explaining', False),
             navigation_error=raw.get('navigation_error', False), safety_stop=raw.get('safety_stop', False),
             position_valid=raw.get('position_valid', False), communication_valid=raw.get('communication_valid', False),
-            stop_confirmed=self._stop_confirmed or self._tour_state == 'PAUSED', navigation_session_id=raw.get('navigation_session_id', ''),
+            stop_confirmed=bool(self._stop_confirmed and age <= 0.5),
+            stop_confirmed_session_id=raw.get('stop_confirmed_session_id', ''),
+            navigation_session_id=raw.get('navigation_session_id', ''),
             manual_stop=raw.get('manual_stop', False), sample_age_sec=raw.get('sample_age_sec', math.inf),
             source_allowed=raw.get('source_allowed', False),
-            people_valid=raw.get('people_valid', False),
+            people_valid=bool(raw.get('people_valid', False) and raw.get(
+                'person_observation_valid', raw.get('person_distance_valid', False))),
             person_distance_valid=raw.get('person_distance_valid', False),
             crowd_density_valid=raw.get('crowd_density_valid', False),
             obstacle_distance_valid=raw.get('obstacle_distance_valid', False),
-            safety_stop_valid=raw.get('safety_stop_valid', False))
+            safety_stop_valid=raw.get('safety_stop_valid', False),
+            person_observation_state=raw.get('person_observation_state', 'PERSON_DISTANCE_VALID'))
         decision = self._policy.update(inputs, now)
         if self._tour_state == 'NAVIGATING':
             self._resume_requested_at = None
@@ -244,7 +259,7 @@ class SpeedControllerNode(Node):
             'command_status': outcome, 'input_age_sec': age,
             'input_source': raw.get('source', ''),
             'input_valid': bool(raw.get('source_allowed', False) and raw.get('people_valid', False) and
-                                raw.get('person_distance_valid', False) and
+                                raw.get('person_observation_valid', raw.get('person_distance_valid', False)) and
                                 raw.get('obstacle_distance_valid', False) and raw.get('safety_stop_valid', False)),
             'crowd_density_valid': bool(raw.get('crowd_density_valid', False)),
             'nearest_person_m': raw.get('nearest_person_m'), 'crowd_density': raw.get('crowd_density'),

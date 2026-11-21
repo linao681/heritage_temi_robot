@@ -1,0 +1,19 @@
+material Person/Visitor
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+      scene_blend alpha_blend
+      depth_write off
+      alpha_rejection greater_equal 0.05
+      texture_unit
+      {
+        texture visitor.png
+        filtering linear
+        clamp_mode clamp
+      }
+    }
+  }
+}

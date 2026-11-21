@@ -1,0 +1,11 @@
+std_msgs/Header header
+string source
+string state
+string navigation_session_id
+string reason
+bool valid
+bool action_terminal
+float32 linear_speed_mps
+float32 angular_speed_rps
+float32 odom_age_sec
+float32 stopped_duration_sec

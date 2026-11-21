@@ -1,0 +1,26 @@
+{
+  "scenario": "single",
+  "layout": "official",
+  "source": "gazebo_spawn_entity_and_set_entity_state",
+  "started_unix_sec": 1795252848.3012176,
+  "duration_sec": 1.4020531177520752,
+  "removed_previous_models": [
+    "phase2_person_01"
+  ],
+  "commanded_model_poses_world": [
+    {
+      "name": "phase2_person_01",
+      "x": -9.925421450496659,
+      "y": -9.16798390952749,
+      "yaw": 2.714777007299653
+    }
+  ],
+  "robot_pose_world_at_spawn": {
+    "x": -12.656287259544374,
+    "y": -7.926061233603515,
+    "yaw": -0.42681564629014007
+  },
+  "crossing_pose_samples": [],
+  "model_asset": "simulation/models/person_mannequin/model.sdf",
+  "ground_truth_note": "记录 Gazebo 世界坐标中的模型中心指令位置；不是 YOLOX 检测结果。"
+}

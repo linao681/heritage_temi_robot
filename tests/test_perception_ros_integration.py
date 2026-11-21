@@ -20,14 +20,15 @@ def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_
     import rclpy
     from rclpy.executors import SingleThreadedExecutor
     from sensor_msgs.msg import LaserScan
-    from std_msgs.msg import Bool, Header, String
-    from temi_interfaces.msg import NavigationStatus, PerceptionInput, PersonDetectionArray, RobotStatus
+    from std_msgs.msg import Header, String
+    from temi_interfaces.msg import (NavigationStatus, PerceptionInput, PersonDetectionArray,
+                                     RobotStatus, SafetyStopStatus)
     from temi_speed_controller.speed_policy import SpeedController, SpeedInputs
     from visitor_perception.ros_perception_fusion import PerceptionFusionNode
 
     rclpy.init(args=[])
     probe = rclpy.create_node('perception_fusion_test_probe')
-    fusion = PerceptionFusionNode()
+    fusion = PerceptionFusionNode(simulation_mode=True)
     executor = SingleThreadedExecutor()
     executor.add_node(probe)
     executor.add_node(fusion)
@@ -39,7 +40,7 @@ def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_
     robot_pub = probe.create_publisher(RobotStatus, 'temi/robot_status', 10)
     nav_pub = probe.create_publisher(NavigationStatus, 'temi/navigation_status', 10)
     tour_pub = probe.create_publisher(String, 'heritage/tour/status', 10)
-    safety_pub = probe.create_publisher(Bool, 'heritage/safety_stop', 10)
+    safety_pub = probe.create_publisher(SafetyStopStatus, 'heritage/safety_stop/status', 10)
     thread = threading.Thread(target=executor.spin, daemon=True)
     thread.start()
     try:
@@ -58,7 +59,9 @@ def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_
                 connected=True, x=1.0, y=2.0, yaw=0.0))
             nav_pub.publish(NavigationStatus(task_id='nav-live', status='going'))
             tour_pub.publish(String(data='{"state":"NAVIGATING"}'))
-            safety_pub.publish(Bool(data=False))
+            safety_pub.publish(SafetyStopStatus(
+                source='gazebo_nav2_transport', state='CLEAR',
+                navigation_session_id='nav-live', valid=True, odom_age_sec=0.02))
             time.sleep(0.05)
         assert received, '未收到融合感知状态'
         fused = next((value for value in reversed(received) if value.valid), None)
@@ -76,7 +79,9 @@ def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_
             safety_stop=fused.safety_stop, position_valid=fused.position_valid,
             communication_valid=fused.communication_valid, stop_confirmed=False,
             navigation_session_id=fused.navigation_session_id,
-            sample_age_sec=fused.sample_age_sec, source_allowed=fused.source == 'temi_sensor_fusion',
+            stop_confirmed_session_id=fused.stop_confirmed_session_id,
+            sample_age_sec=fused.sample_age_sec,
+            source_allowed=fused.source == 'gazebo_sensor_fusion',
             people_valid=fused.people_valid, person_distance_valid=fused.person_distance_valid,
             crowd_density_valid=fused.crowd_density_valid,
             obstacle_distance_valid=fused.obstacle_distance_valid,
