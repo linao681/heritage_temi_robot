@@ -12,6 +12,29 @@ sys.path.insert(0, str(ROOT / 'ros2_ws/src/visitor_perception'))
 sys.path.insert(0, str(ROOT / 'ros2_ws/src/temi_speed_controller'))
 
 
+def test_fused_input_source_allowance_is_independent_of_visitor_count_validity():
+    from temi_interfaces.msg import PerceptionInput
+    from temi_speed_controller.speed_controller_node import SpeedControllerNode
+
+    node = object.__new__(SpeedControllerNode)
+    node._mock_mode = False
+    node._allow_simulated_sources = True
+    node._last_navigation_session_id = ''
+    node._stop_confirmed = False
+    message = PerceptionInput(
+        source='gazebo_sensor_fusion', valid=False, sample_age_sec=0.1,
+        navigation_session_id='nav-live', people_valid=False,
+        person_observation_valid=True, person_distance_valid=True,
+        nearest_person_m=0.5, obstacle_distance_valid=True,
+        obstacle_distance_m=2.0, safety_stop_valid=True)
+
+    node._on_fused_input(message)
+
+    assert node._input['source_allowed'] is True
+    assert node._input['people_valid'] is False
+    assert node._input['person_observation_valid'] is True
+
+
 def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_path):
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
     monkeypatch.setenv('ROS_DOMAIN_ID', '230')
@@ -51,7 +74,7 @@ def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_
                 'people_count': 3, 'expected_count': 3, 'group_state': 'following',
             })))
             people_pub.publish(PersonDetectionArray(source='temi_rgbd', valid=True,
-                people_count=3, person_distance_valid=True, nearest_person_m=1.3,
+                people_count=3, person_distance_valid=True, nearest_person_m=1.6,
                 crowd_density_valid=True, crowd_density=0.2))
             scan_pub.publish(LaserScan(angle_min=-0.2, angle_increment=0.2,
                 range_min=0.08, range_max=10.0, ranges=[3.0, 2.2, 3.0]))
@@ -67,7 +90,7 @@ def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_
         fused = next((value for value in reversed(received) if value.valid), None)
         assert fused is not None, f'{received[-1].error}; latest_scan={fusion._fusion._scan_at}, distance={fusion._fusion.obstacle_distance_m}'
         assert fused.people_count == 3
-        assert fused.nearest_person_m == pytest.approx(1.3)
+        assert fused.nearest_person_m == pytest.approx(1.6)
         assert fused.obstacle_distance_m == pytest.approx(2.2)
         assert fused.navigation_session_id == 'nav-live'
         now = time.monotonic()

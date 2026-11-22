@@ -8,8 +8,9 @@ import time
 
 import rclpy
 from gazebo_msgs.msg import EntityState, ModelStates
-from gazebo_msgs.srv import DeleteEntity, SetEntityState, SpawnEntity
+from gazebo_msgs.srv import DeleteEntity, GetEntityState, SetEntityState, SpawnEntity
 from geometry_msgs.msg import Pose
+from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from temi_interfaces.msg import NavigationStatus, SafetyStopStatus
 
@@ -25,13 +26,20 @@ class PeopleScenario(Node):
         self._spawn = self.create_client(SpawnEntity, '/spawn_entity')
         self._delete = self.create_client(DeleteEntity, '/delete_entity')
         self._set_state = self.create_client(SetEntityState, '/gazebo/set_entity_state')
+        self._get_entity_state = self.create_client(GetEntityState, '/gazebo/get_entity_state')
         self._model_states = {}
         self._model_states_received_at = 0.0
+        self._last_pose_confirmation_source = ''
         self.active_navigation_session_id = ''
         self.safety_stop_requested = False
+        self._latest_navigation = {}
+        self._navigation_received_at = 0.0
+        self._odom_speed_mps = None
+        self._odom_received_at = 0.0
         self.create_subscription(ModelStates, '/gazebo/model_states', self._on_model_states, 10)
         self.create_subscription(NavigationStatus, 'temi/navigation_status',
                                  self._on_navigation_status, 10)
+        self.create_subscription(Odometry, 'odom', self._on_odom, 10)
         self.create_subscription(SafetyStopStatus, 'heritage/safety_stop/status',
                                  self._on_safety_stop, 10)
 
@@ -53,22 +61,51 @@ class PeopleScenario(Node):
             self.safety_stop_requested = True
 
     def _on_navigation_status(self, message):
+        self._latest_navigation = {
+            'task_id': message.task_id, 'target': getattr(message, 'target', ''),
+            'status': message.status,
+        }
+        self._navigation_received_at = time.monotonic()
         if (message.status in ('start', 'calculating', 'going', 'reposing') and
                 message.task_id):
             self.active_navigation_session_id = message.task_id
+
+    def _on_odom(self, message):
+        twist = message.twist.twist.linear
+        speed = math.hypot(twist.x, twist.y)
+        if math.isfinite(speed):
+            self._odom_speed_mps = speed
+            self._odom_received_at = time.monotonic()
+
+    def navigation_snapshot(self, target, now=None):
+        now = time.monotonic() if now is None else now
+        navigation_age = now - self._navigation_received_at
+        odom_age = now - self._odom_received_at
+        if (navigation_age < 0 or navigation_age > 0.5 or
+                self._latest_navigation.get('target') != target or
+                self._latest_navigation.get('status') not in ('going', 'reposing') or
+                not self._latest_navigation.get('task_id') or
+                odom_age < 0 or odom_age > 0.5 or
+                self._odom_speed_mps is None or self._odom_speed_mps < 0.05):
+            return None
+        return {**self._latest_navigation, 'odom_speed_mps': self._odom_speed_mps,
+                'navigation_age_sec': navigation_age, 'odom_age_sec': odom_age}
+
+    def wait_for_navigation(self, target, timeout_sec=120.0):
+        deadline = time.monotonic() + timeout_sec
+        while rclpy.ok() and time.monotonic() < deadline:
+            snapshot = self.navigation_snapshot(target)
+            if snapshot is not None:
+                return snapshot
+            rclpy.spin_once(self, timeout_sec=0.05)
+        raise TimeoutError(f'未在 {timeout_sec:.1f}s 内观察到 {target} 的活动导航 UUID 与新鲜 odom 运动')
 
     def _on_model_states(self, message):
         self._model_states = dict(zip(message.name, message.pose))
         self._model_states_received_at = time.monotonic()
 
     def current_pose(self):
-        deadline = time.monotonic() + 5.0
-        while (rclpy.ok() and 'heritage_robot' not in self._model_states and
-               time.monotonic() < deadline):
-            rclpy.spin_once(self, timeout_sec=0.1)
-        if 'heritage_robot' not in self._model_states:
-            raise RuntimeError('Gazebo /model_states 中没有 heritage_robot，未生成人员模型')
-        return self._pose(self._model_states['heritage_robot'])
+        return self.wait_for_model_pose('heritage_robot', timeout_sec=5.0)
 
     @staticmethod
     def _pose(pose):
@@ -83,16 +120,35 @@ class PeopleScenario(Node):
             return None
         return self._pose(pose)
 
-    def wait_for_model_pose(self, name, expected=None, timeout_sec=2.0):
+    def wait_for_model_pose(self, name, expected=None, timeout_sec=5.0, tolerance_m=0.08):
         deadline = time.monotonic() + timeout_sec
         while rclpy.ok() and time.monotonic() < deadline:
             pose = self.model_pose(name)
             if pose is not None and (expected is None or
                                      math.hypot(pose['x'] - expected[0],
-                                                pose['y'] - expected[1]) <= 0.08):
+                                                pose['y'] - expected[1]) <= tolerance_m):
+                self._last_pose_confirmation_source = 'gazebo_model_states'
                 return pose
             rclpy.spin_once(self, timeout_sec=0.05)
-        raise RuntimeError(f'Gazebo /model_states 未确认模型位姿：{name}')
+        service_error = ''
+        if self._get_entity_state.wait_for_service(timeout_sec=2.0):
+            request = GetEntityState.Request(name=name, reference_frame='world')
+            future = self._get_entity_state.call_async(request)
+            rclpy.spin_until_future_complete(self, future, timeout_sec=2.0)
+            if future.done() and not future.exception() and future.result().success:
+                pose = self._pose(future.result().state.pose)
+                if (expected is None or math.hypot(pose['x'] - expected[0],
+                                                   pose['y'] - expected[1]) <= tolerance_m):
+                    self._last_pose_confirmation_source = 'gazebo_get_entity_state'
+                    return pose
+                service_error = f'get_entity_state pose outside tolerance: {pose}'
+            elif future.done() and not future.exception():
+                service_error = future.result().status_message
+            else:
+                service_error = 'get_entity_state timed out or failed'
+        else:
+            service_error = 'get_entity_state service unavailable'
+        raise RuntimeError(f'Gazebo 未确认模型位姿：{name}; /model_states stale/timeout; {service_error}')
 
     def _call(self, client, request):
         if not client.wait_for_service(timeout_sec=10.0):
@@ -139,8 +195,10 @@ class PeopleScenario(Node):
         pose.orientation.z, pose.orientation.w = math.sin(yaw / 2), math.cos(yaw / 2)
         request = SpawnEntity.Request(name=name, xml=sdf, initial_pose=pose, reference_frame='world')
         self._call(self._spawn, request)
-        self.wait_for_model_pose(name, (x, y))
-        return {'name': name, 'x': x, 'y': y, 'yaw': yaw}
+        observed = self.wait_for_model_pose(name, (x, y))
+        return {'name': name, 'x': x, 'y': y, 'yaw': yaw,
+                'gazebo_readback_x': observed['x'], 'gazebo_readback_y': observed['y'],
+                'readback_source': self._last_pose_confirmation_source}
 
     def move(self, name, x, y, yaw):
         state = EntityState()
@@ -149,7 +207,7 @@ class PeopleScenario(Node):
         state.pose.position.x, state.pose.position.y = x, y
         state.pose.orientation.z, state.pose.orientation.w = math.sin(yaw / 2), math.cos(yaw / 2)
         self._call(self._set_state, SetEntityState.Request(state=state))
-        self.wait_for_model_pose(name)
+        return self.wait_for_model_pose(name, (x, y), tolerance_m=0.02)
 
 
 def _basis(pose):
@@ -161,6 +219,16 @@ def _basis(pose):
 def _relative_pose(anchor, forward, left, forward_m, left_m, yaw):
     return (anchor['x'] + forward_m * forward[0] + left_m * left[0],
             anchor['y'] + forward_m * forward[1] + left_m * left[1], yaw)
+
+
+def navigation_heading(robot_pose, goal_pose):
+    dx = goal_pose['x'] - robot_pose['x']
+    dy = goal_pose['y'] - robot_pose['y']
+    if not all(math.isfinite(value) for value in (dx, dy)):
+        raise ValueError('机器人和导航目标坐标必须为有限数值')
+    if math.hypot(dx, dy) <= 1e-6:
+        return robot_pose['yaw']
+    return math.atan2(dy, dx)
 
 
 def scenario_anchor(scenario, wait, robot_pose):
@@ -187,7 +255,7 @@ def scene_positions(scenario, wait, seed=0):
     if scenario == 'leaving':
         return [_relative_pose(anchor, forward, left, 1.1, 0.0, facing)]
     if scenario == 'crossing':
-        return [_relative_pose(anchor, forward, left, 2.4, -1.2, yaw + math.pi / 2)]
+        return [_relative_pose(anchor, forward, left, 3.5, -1.5, facing)]
     if scenario == 'crowded':
         rng = random.Random(seed)
         offsets = (-1.2, -0.6, 0.0, 0.6, 1.2)
@@ -211,7 +279,7 @@ def trajectory_position(scenario, start, robot_pose, progress, person_index=0,
     if scenario == 'approaching':
         end = _relative_pose(anchor, forward, left, end_distance_m, 0.0, start[2])
     elif scenario == 'crossing':
-        end = _relative_pose(anchor, forward, left, 2.4, 1.2, start[2])
+        end = _relative_pose(anchor, forward, left, 3.5, 1.5, start[2])
     elif scenario == 'leaving':
         end = _relative_pose(anchor, forward, left, 5.0, 0.0, start[2])
     elif scenario == 'group_straggler':
@@ -264,6 +332,11 @@ def main():
     parser.add_argument('--start-delay-sec', type=float, default=2.0)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--person-pose', type=float, nargs=3, metavar=('X', 'Y', 'YAW'))
+    parser.add_argument('--wait-for-navigation-target',
+                        help='等待指定目标的活动导航 UUID 和新鲜 odom 运动后再注入')
+    parser.add_argument('--navigation-timeout-sec', type=float, default=120.0)
+    parser.add_argument('--ready-file', type=Path,
+                        help='清理完已有模型并准备监听导航后写入的就绪标记')
     parser.add_argument('--remove-after', action='store_true')
     parser.add_argument('--stop-on-safety-stop', action='store_true',
                         help='收到实际 Nav2 停车状态后立即冻结人物轨迹')
@@ -273,7 +346,8 @@ def main():
             not math.isfinite(args.update_hz) or not 1.0 <= args.update_hz <= 20.0 or
             not math.isfinite(args.start_delay_sec) or args.start_delay_sec < 0 or
             (args.duration_sec is not None and
-             (not math.isfinite(args.duration_sec) or args.duration_sec <= 0))):
+             (not math.isfinite(args.duration_sec) or args.duration_sec <= 0)) or
+            not math.isfinite(args.navigation_timeout_sec) or args.navigation_timeout_sec <= 0):
         parser.error('speed、update-hz、start-delay 和 duration 参数无效')
     if (not math.isfinite(args.end_distance_m) or
             not 0.5 <= args.end_distance_m <= 4.5):
@@ -296,7 +370,10 @@ def main():
     record = {
         'status': 'FAIL', 'scenario': args.scenario, 'layout': args.layout,
         'source': 'gazebo_model_states_and_set_entity_state',
-        'started_unix_sec': started, 'duration_sec': 0.0,
+        'started_unix_sec': started, 'started_monotonic_sec': started_monotonic,
+        'movement_started_monotonic_sec': None,
+        'movement_ended_monotonic_sec': None,
+        'duration_sec': 0.0,
         'seed': args.seed, 'speed_mps': args.speed_mps, 'update_hz': args.update_hz,
         'end_distance_m': args.end_distance_m,
         'removed_previous_models': removed, 'commanded_model_poses_world': models,
@@ -307,10 +384,26 @@ def main():
     try:
         removed = node.clear_existing()
         record['removed_previous_models'] = removed
+        if args.ready_file:
+            args.ready_file.parent.mkdir(parents=True, exist_ok=True)
+            args.ready_file.write_text('ready\n', encoding='utf-8')
+        if args.wait_for_navigation_target:
+            record['navigation_trigger'] = node.wait_for_navigation(
+                args.wait_for_navigation_target, args.navigation_timeout_sec)
         robot_pose = node.current_pose()
         record['robot_pose_world_at_spawn'] = robot_pose
+        scenario_robot_pose = robot_pose
+        if args.scenario == 'approaching' and args.wait_for_navigation_target:
+            goals = json.loads((ROOT / 'simulation/generated/official_goals.json').read_text())['goals']
+            target_goal = goals.get(args.wait_for_navigation_target)
+            if target_goal is not None:
+                scenario_robot_pose = dict(robot_pose)
+                scenario_robot_pose['yaw'] = navigation_heading(robot_pose, target_goal)
+                record['trajectory_heading_rad'] = scenario_robot_pose['yaw']
+                record['trajectory_heading_source'] = 'active_navigation_goal_bearing'
         positions = scene_positions(
-            args.scenario, scenario_anchor(args.scenario, wait, robot_pose), seed=args.seed)
+            args.scenario, scenario_anchor(args.scenario, wait, scenario_robot_pose),
+            seed=args.seed)
         if args.person_pose is not None and positions:
             positions[0] = tuple(args.person_pose)
         models = [node.spawn(f'{PREFIX}{index + 1:02d}', *pose)
@@ -319,7 +412,7 @@ def main():
         moving = args.scenario in ('approaching', 'crossing', 'leaving', 'group_straggler')
         natural_duration = max(
             (trajectory_duration(args.scenario, (model['x'], model['y'], model['yaw']),
-                                 robot_pose, args.speed_mps, args.end_distance_m)
+                                 scenario_robot_pose, args.speed_mps, args.end_distance_m)
              for model in models),
             default=0.0)
         duration = (args.duration_sec if args.duration_sec is not None else
@@ -329,6 +422,7 @@ def main():
             rclpy.spin_once(node, timeout_sec=0.05)
         if moving and models:
             start = time.monotonic()
+            record['movement_started_monotonic_sec'] = start
             interval = 1.0 / args.update_hz
             while rclpy.ok():
                 if args.stop_on_safety_stop and node.safety_stop_requested:
@@ -339,12 +433,14 @@ def main():
                 for index, model in enumerate(models):
                     x, y, yaw = trajectory_position(
                         args.scenario, (model['x'], model['y'], model['yaw']),
-                        robot_pose, progress, person_index=index,
+                        scenario_robot_pose, progress, person_index=index,
                         end_distance_m=args.end_distance_m)
                     if progress > 0:
                         node.move(model['name'], x, y, yaw)
                     actual = node.wait_for_model_pose(model['name'])
-                    path.append({'elapsed_sec': time.monotonic() - start,
+                    sampled_at = time.monotonic()
+                    path.append({'elapsed_sec': sampled_at - start,
+                                 'time_monotonic_sec': sampled_at,
                                  'name': model['name'], 'x': actual['x'],
                                  'y': actual['y'], 'yaw': actual['yaw'],
                                  'commanded_x': x, 'commanded_y': y})
@@ -355,6 +451,7 @@ def main():
                     stopped_by_safety = True
                     break
                 time.sleep(interval)
+            record['movement_ended_monotonic_sec'] = time.monotonic()
         elif duration > 0:
             end = time.monotonic() + duration
             while rclpy.ok() and time.monotonic() < end:
@@ -376,6 +473,7 @@ def main():
         removed_after = node.clear_existing() if args.remove_after else []
         record.update({
             'status': 'PASS', 'duration_sec': time.monotonic() - started_monotonic,
+            'ended_monotonic_sec': time.monotonic(),
             'stopped_by_actual_safety_status': stopped_by_safety,
             'removed_after': removed_after,
         })
@@ -383,6 +481,7 @@ def main():
         print(json.dumps(record, ensure_ascii=False))
     except Exception as error:
         record.update({'status': 'FAIL', 'duration_sec': time.monotonic() - started_monotonic,
+                       'ended_monotonic_sec': time.monotonic(),
                        'error': f'{type(error).__name__}: {error}'})
         try:
             record['failed_cleanup_removed'] = node.clear_existing()

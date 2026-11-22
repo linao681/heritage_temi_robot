@@ -34,15 +34,83 @@ def test_valid_empty_person_observation_allows_safe_cruise_without_fake_distance
     assert not decision.stop_requested
 
 
+def test_invalid_visitor_count_does_not_discard_valid_person_distance():
+    decision = SpeedController().update(sample(
+        nearest_person_m=0.5, people_valid=False, person_distance_valid=True,
+        person_observation_state='PERSON_DISTANCE_VALID'), now=0.0)
+
+    assert decision.state == 'STOPPING'
+    assert decision.reason == '近距离人员停车'
+    assert decision.stop_requested
+
+
+def test_close_laser_obstacle_is_not_mislabeled_as_a_person_stop():
+    decision = SpeedController().update(sample(
+        nearest_person_m=None, person_distance_valid=False,
+        person_observation_state='NO_PERSON_OBSERVED', obstacle_distance_m=0.08), now=0.0)
+
+    assert decision.state == 'STOPPING'
+    assert decision.reason == '近距离障碍物停车'
+    assert decision.stop_requested
+
+
+def test_person_and_laser_stop_sources_are_both_reported_when_both_trigger():
+    decision = SpeedController().update(sample(
+        nearest_person_m=0.5, person_distance_valid=True,
+        person_observation_state='PERSON_DISTANCE_VALID', obstacle_distance_m=0.4), now=0.0)
+
+    assert decision.state == 'STOPPING'
+    assert decision.reason == '人员与障碍物近距离停车'
+    assert decision.stop_requested
+
+
+def test_valid_no_person_observation_is_not_a_sensor_fault_when_count_is_unknown():
+    decision = SpeedController().update(sample(
+        nearest_person_m=None, people_valid=False, person_distance_valid=False,
+        person_observation_state='NO_PERSON_OBSERVED', crowd_density=None,
+        crowd_density_valid=False), now=0.0)
+
+    assert decision.state == 'SLOW'
+    assert not decision.stop_requested
+
+
+def test_invalid_person_observation_still_fails_closed_when_count_is_unknown():
+    decision = SpeedController().update(sample(
+        nearest_person_m=None, people_valid=False, person_distance_valid=False,
+        person_observation_state='SENSOR_INVALID'), now=0.0)
+
+    assert decision.state == 'STOPPING'
+    assert decision.reason == '感知数据无效或过期'
+    assert decision.stop_requested
+
+
 def test_person_proximity_reduces_speed_when_crowd_density_is_uncalibrated():
     far = SpeedController().update(sample(
         nearest_person_m=3.2, crowd_density=None, crowd_density_valid=False), now=0.0)
     near = SpeedController().update(sample(
-        nearest_person_m=1.2, crowd_density=None, crowd_density_valid=False), now=0.0)
+        nearest_person_m=1.8, crowd_density=None, crowd_density_valid=False), now=0.0)
 
     assert far.target_speed_mps == 0.5
     assert near.target_speed_mps < far.target_speed_mps
     assert near.state == 'SLOW'
+
+
+def test_conservative_stop_floor_triggers_before_observed_near_field_dropout():
+    controller = SpeedController(SpeedConfig(
+        stop_person_distance_m=1.3, person_stop_margin_m=0.2))
+    decision = controller.update(sample(
+        nearest_person_m=1.2, person_distance_valid=True,
+        person_observation_state='PERSON_DISTANCE_VALID'), now=0.0)
+
+    assert decision.stop_requested
+    assert decision.reason == '近距离人员停车'
+
+
+def test_python_defaults_match_conservative_ros_person_stop_parameters():
+    config = SpeedConfig()
+
+    assert config.stop_person_distance_m == 1.3
+    assert config.person_stop_margin_m == 0.9
 
 
 def test_crowd_and_person_proximity_only_reduce_speed():
@@ -73,6 +141,18 @@ def test_stop_confirmation_is_required_before_waiting_state():
     waiting = controller.update(sample(now=0.2, obstacle_distance_m=0.4, stop_confirmed=True,
                                        stop_confirmed_session_id='active'), now=0.2)
     assert waiting.state == 'STOPPED'
+
+
+def test_dynamic_threshold_shrinking_during_braking_cannot_skip_stop_confirmation():
+    controller = SpeedController(SpeedConfig(recovery_hold_sec=0.1))
+    pending = controller.update(sample(nearest_person_m=0.5), now=0.0)
+    clear_but_unconfirmed = controller.update(sample(now=0.2, nearest_person_m=2.0,
+        current_speed_mps=0.1, current_speed_valid=True), now=0.2)
+
+    assert pending.stop_requested
+    assert clear_but_unconfirmed.state == 'STOPPING'
+    assert not clear_but_unconfirmed.send_speed
+    assert not clear_but_unconfirmed.resume_requested
 
 
 def test_stop_confirmation_from_old_navigation_session_is_ignored():
@@ -359,3 +439,78 @@ def test_stale_sensor_measurement_fails_closed_even_if_its_topic_is_refreshed():
         sample(sample_age_sec=0.7), now=0.0)
     assert decision.state == 'STOPPING'
     assert decision.stop_requested
+
+
+def test_dynamic_stopping_distance_increases_with_speed_and_latency():
+    slow = SpeedController(SpeedConfig(
+        perception_control_latency_sec=0.2, person_stop_margin_m=0.2)).update(
+            sample(nearest_person_m=1.0, person_distance_valid=True,
+                   current_speed_mps=0.2, current_speed_valid=True), now=0.0)
+    fast = SpeedController(SpeedConfig(
+        perception_control_latency_sec=0.6, person_stop_margin_m=0.5)).update(
+            sample(nearest_person_m=1.0, person_distance_valid=True,
+                   current_speed_mps=0.6, current_speed_valid=True), now=0.0)
+
+    assert fast.stop_requested
+    assert fast.dynamic_stop_distance_m > slow.dynamic_stop_distance_m
+
+
+def test_approaching_person_trend_raises_stop_distance_using_new_samples_only():
+    controller = SpeedController(SpeedConfig(
+        perception_control_latency_sec=0.4, person_stop_margin_m=0.9,
+        person_slow_buffer_m=1.5, max_person_approach_speed_mps=1.0))
+    first = controller.update(sample(nearest_person_m=2.0, person_distance_valid=True,
+        person_distance_timestamp_sec=0.0, current_speed_mps=0.3, current_speed_valid=True), now=0.0)
+    second = controller.update(sample(now=0.1, nearest_person_m=1.9,
+        person_distance_valid=True, person_distance_timestamp_sec=0.1,
+        current_speed_mps=0.3, current_speed_valid=True), now=0.1)
+    repeated = controller.update(sample(now=0.2, nearest_person_m=1.9,
+        person_distance_valid=True, person_distance_timestamp_sec=0.1,
+        current_speed_mps=0.3, current_speed_valid=True), now=0.2)
+    near = controller.update(sample(now=0.3, nearest_person_m=1.8,
+        person_distance_valid=True, person_distance_timestamp_sec=0.2,
+        current_speed_mps=0.3, current_speed_valid=True), now=0.3)
+
+    assert first.dynamic_stop_distance_m < second.dynamic_stop_distance_m
+    assert repeated.approach_speed_mps == second.approach_speed_mps
+    assert near.stop_requested
+    assert near.state == 'STOPPING'
+    assert near.reason == '近距离人员停车'
+
+
+def test_invalid_or_empty_person_observation_clears_approach_history():
+    controller = SpeedController()
+    controller.update(sample(now=1.0, nearest_person_m=2.0, person_distance_valid=True,
+        person_distance_timestamp_sec=1.0), now=1.0)
+    approaching = controller.update(sample(now=1.1, nearest_person_m=1.8,
+        person_distance_valid=True, person_distance_timestamp_sec=1.1), now=1.1)
+    empty = controller.update(sample(now=1.2, nearest_person_m=None,
+        person_distance_valid=False, person_observation_state='NO_PERSON_OBSERVED',
+        people_valid=True, person_distance_timestamp_sec=1.2), now=1.2)
+
+    assert approaching.approach_speed_mps > 0
+    assert empty.approach_speed_mps == 0
+
+
+def test_regressed_person_timestamp_clears_approach_estimate():
+    controller = SpeedController()
+    controller.update(sample(now=1.0, nearest_person_m=2.0, person_distance_valid=True,
+        person_distance_timestamp_sec=1.0), now=1.0)
+    approaching = controller.update(sample(now=1.1, nearest_person_m=1.8,
+        person_distance_valid=True, person_distance_timestamp_sec=1.1), now=1.1)
+    regressed = controller.update(sample(now=1.2, nearest_person_m=1.9,
+        person_distance_valid=True, person_distance_timestamp_sec=1.05), now=1.2)
+
+    assert approaching.approach_speed_mps > 0
+    assert regressed.approach_speed_mps == 0
+
+
+def test_dynamic_stop_configuration_rejects_invalid_latency_margin_and_speed():
+    import pytest
+
+    for values in ({'perception_control_latency_sec': 0},
+                   {'person_stop_margin_m': -0.1},
+                   {'max_person_approach_speed_mps': float('inf')},
+                   {'person_slow_buffer_m': 0}):
+        with pytest.raises(ValueError):
+            SpeedConfig(**values)

@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "scenario": "approaching",
+  "layout": "official",
+  "source": "gazebo_model_states_and_set_entity_state",
+  "started_unix_sec": 1795286536.0496964,
+  "started_monotonic_sec": 58329.222805323,
+  "movement_started_monotonic_sec": 58437.662933002,
+  "movement_ended_monotonic_sec": 58438.64163842,
+  "duration_sec": 109.68468545900396,
+  "seed": 0,
+  "speed_mps": 0.25,
+  "update_hz": 5.0,
+  "end_distance_m": 0.65,
+  "removed_previous_models": [
+    "phase25_person_01"
+  ],
+  "commanded_model_poses_world": [
+    {
+      "name": "phase25_person_01",
+      "x": 0.9282442090138856,
+      "y": -8.668751827678285,
+      "yaw": 2.8881658476838163,
+      "gazebo_readback_x": 0.928244,
+      "gazebo_readback_y": -8.66875,
+      "readback_source": "gazebo_model_states"
+    }
+  ],
+  "robot_pose_world_at_spawn": {
+    "x": -3.428020971747605,
+    "y": -7.5404993404729375,
+    "yaw": -0.25342680590597666
+  },
+  "gazebo_model_state_samples": [
+    {
+      "elapsed_sec": 0.001427475996024441,
+      "time_monotonic_sec": 58437.664360478,
+      "name": "phase25_person_01",
+      "x": 0.928244,
+      "y": -8.66875,
+      "yaw": 2.88817,
+      "commanded_x": 0.9282435744511449,
+      "commanded_y": -8.668751663329477
+    },
+    {
+      "elapsed_sec": 0.2191463709968957,
+      "time_monotonic_sec": 58437.882079373,
+      "name": "phase25_person_01",
+      "x": 0.8794062909344904,
+      "y": -8.656103033296723,
+      "yaw": 2.8881658476838163,
+      "commanded_x": 0.8794062909344904,
+      "commanded_y": -8.656103033296723
+    },
+    {
+      "elapsed_sec": 0.47150118200079305,
+      "time_monotonic_sec": 58438.134434184,
+      "name": "phase25_person_01",
+      "x": 0.8267424894946835,
+      "y": -8.642463352860704,
+      "yaw": 2.8881658476838163,
+      "commanded_x": 0.8267424894946835,
+      "commanded_y": -8.642463352860704
+    },
+    {
+      "elapsed_sec": 0.7257635799978743,
+      "time_monotonic_sec": 58438.388696582,
+      "name": "phase25_person_01",
+      "x": 0.7656692257246497,
+      "y": -8.626645660665426,
+      "yaw": 2.8881658476838163,
+      "commanded_x": 0.7656692257246497,
+      "commanded_y": -8.626645660665426
+    },
+    {
+      "elapsed_sec": 0.9787017350026872,
+      "time_monotonic_sec": 58438.641634737,
+      "name": "phase25_person_01",
+      "x": 0.7040884202750849,
+      "y": -8.610696517527993,
+      "yaw": 2.8881658476838163,
+      "commanded_x": 0.7040884202750849,
+      "commanded_y": -8.610696517527993
+    }
+  ],
+  "model_asset": "simulation/models/person_mannequin/model.sdf",
+  "ground_truth_note": "轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。",
+  "navigation_trigger": {
+    "task_id": "f9a37faa9d0a437380b3b27c4a8e2b9b",
+    "target": "zone_4",
+    "status": "going",
+    "odom_speed_mps": 0.06811209733695976,
+    "navigation_age_sec": 0.1408536160015501,
+    "odom_age_sec": 5.131799844093621e-05
+  },
+  "gazebo_ground_truth_path_length_m_by_person": {
+    "phase25_person_01": 0.23155114070011013
+  },
+  "ended_monotonic_sec": 58438.907491426,
+  "stopped_by_actual_safety_status": true,
+  "removed_after": [
+    "phase25_person_01"
+  ]
+}

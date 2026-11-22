@@ -22,8 +22,13 @@ FIELDS = [
     'time_utc', 'time_monotonic_sec', 'experiment_id', 'navigation_session_id',
     'navigation_task_id', 'navigation_target', 'navigation_status',
     'tour_state', 'speed_controller_state', 'target_speed_mps',
+    'dynamic_stop_distance_m', 'approach_speed_mps',
+    'current_robot_speed_mps', 'current_robot_speed_source',
     'cmd_vel_nav_linear_x', 'cmd_vel_linear_x', 'odom_linear_x', 'odom_angular_z',
-    'people_count', 'person_observation_state', 'nearest_person_m',
+    'people_count', 'raw_person_observation_state', 'visitor_count',
+    'visitor_count_valid', 'person_observation_state',
+    'person_observation_valid', 'person_distance_valid', 'speed_input_valid',
+    'nearest_person_m',
     'obstacle_distance_m', 'vision_inference_age_sec', 'perception_age_sec',
     'fusion_valid', 'perception_error',
     'stop_requested', 'stop_confirmed', 'control_reason',
@@ -176,6 +181,11 @@ class Phase2Recorder(Node):
                 'control_reason': value.get('reason', ''),
                 'navigation_session_id': value.get('navigation_session_id', ''),
                 'actual_speed_source': value.get('actual_speed_source'),
+                'dynamic_stop_distance_m': value.get('dynamic_stop_distance_m'),
+                'approach_speed_mps': value.get('approach_speed_mps'),
+                'current_robot_speed_mps': value.get('current_robot_speed_mps'),
+                'current_robot_speed_source': value.get('current_robot_speed_source'),
+                'speed_input_valid': value.get('input_valid'),
             })
         except (ValueError, TypeError):
             self._set('speed', {'speed_controller_state': 'STATUS_PARSE_ERROR'})
@@ -214,8 +224,11 @@ class Phase2Recorder(Node):
     def _perception(self, message):
         self._set('perception', {
             'navigation_session_id': message.navigation_session_id,
-            'people_count': message.people_count,
+            'visitor_count': message.people_count,
+            'visitor_count_valid': bool(message.people_valid),
             'person_observation_state': message.person_observation_state,
+            'person_observation_valid': bool(message.person_observation_valid),
+            'person_distance_valid': bool(message.person_distance_valid),
             'nearest_person_m': message.nearest_person_m if message.person_distance_valid else None,
             'obstacle_distance_m': message.obstacle_distance_m if message.obstacle_distance_valid else None,
             'perception_age_sec': float(message.sample_age_sec),
@@ -226,7 +239,7 @@ class Phase2Recorder(Node):
     def _people(self, message):
         self._set('people', {
             'people_count': message.people_count,
-            'person_observation_state': message.observation_state,
+            'raw_person_observation_state': message.observation_state,
             'detection_confidences_json': json.dumps(
                 [round(float(item.confidence), 6) for item in message.detections]),
         })

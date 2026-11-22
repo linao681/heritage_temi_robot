@@ -138,6 +138,27 @@ def test_sample_timestamp_tracks_oldest_sensor_sample_using_monotonic_age():
     assert value['sample_timestamp_monotonic_sec'] == 0.0
 
 
+def test_nonheartbeat_visitor_and_navigation_events_do_not_age_motion_inputs():
+    fusion = ready_fusion(max_sample_age_sec=0.5)
+    fusion.update_people({
+        'source': 'temi_rgbd', 'valid': True, 'people_count': 1,
+        'person_distance_valid': True, 'nearest_person_m': 0.8,
+    }, now=0.5)
+    fusion.update_scan([2.0, 1.4, 2.3], -0.3, 0.2, 0.08, 10.0, now=0.5)
+    fusion.update_robot({'connected': True, 'frame_id': 'map', 'x': 1.0,
+                         'y': 2.0, 'yaw': 0.0}, now=0.5)
+    fusion.update_tour('NAVIGATING', now=0.5)
+    fusion.update_safety_stop(False, now=0.5)
+
+    value = fusion.snapshot(now=0.6)
+
+    assert not value['valid']
+    assert not value['people_valid']
+    assert value['person_observation_valid']
+    assert value['sample_age_sec'] == pytest.approx(0.1)
+    assert value['sample_timestamp_monotonic_sec'] == pytest.approx(0.5)
+
+
 def test_laser_uses_only_front_sector_and_filters_nonfinite_and_out_of_range_values():
     fusion = PerceptionFusion(front_half_angle_rad=0.4, scan_min_valid_samples=2)
     fusion.update_scan([0.2, 2.0, 1.2, 1.1, float('inf'), 0.1],

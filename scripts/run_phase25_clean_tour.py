@@ -108,6 +108,7 @@ class TourEvidence(Node):
         signature = (
             bool(message.valid), message.error, int(message.people_count),
             message.person_observation_state, bool(message.person_distance_valid),
+            bool(message.person_observation_valid), bool(message.people_valid),
             round(float(message.nearest_person_m), 1) if message.person_distance_valid else None,
             round(float(message.obstacle_distance_m), 1) if message.obstacle_distance_valid else None,
             bool(message.safety_stop), bool(message.stop_confirmed),
@@ -118,7 +119,10 @@ class TourEvidence(Node):
             self.perception_events.append({
                 'time_monotonic_sec': self._timestamp(), 'valid': bool(message.valid),
                 'error': message.error, 'people_count': int(message.people_count),
+                'people_valid': bool(message.people_valid),
+                'sample_age_sec': float(message.sample_age_sec),
                 'person_observation_state': message.person_observation_state,
+                'person_observation_valid': bool(message.person_observation_valid),
                 'person_distance_valid': bool(message.person_distance_valid),
                 'nearest_person_m': (float(message.nearest_person_m)
                                      if message.person_distance_valid else None),
@@ -240,6 +244,178 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
+def validate_dynamic_scenario_evidence(truth, perception_events, speed_events,
+                                       navigation_events):
+    start = truth.get('movement_started_monotonic_sec')
+    end = truth.get('movement_ended_monotonic_sec')
+    if (not isinstance(start, (int, float)) or not isinstance(end, (int, float)) or
+            not math.isfinite(start) or not math.isfinite(end) or end < start):
+        raise AssertionError('动态场景缺少有效的 Gazebo 人物移动时间窗口')
+    path_lengths = truth.get('gazebo_ground_truth_path_length_m_by_person', {})
+    moved = {name: distance for name, distance in path_lengths.items()
+             if isinstance(distance, (int, float)) and math.isfinite(distance) and
+             distance >= 0.05}
+    if not moved:
+        raise AssertionError('Gazebo 真值未证实人物在实验窗口内移动')
+
+    detections = [event for event in perception_events
+                  if start <= event.get('time_monotonic_sec', -1) <= end and
+                  event.get('person_distance_valid') is True and
+                  event.get('person_observation_valid', True) is True and
+                  event.get('person_observation_state', 'PERSON_DISTANCE_VALID') != 'SENSOR_INVALID' and
+                  isinstance(event.get('nearest_person_m'), (int, float)) and
+                  math.isfinite(event['nearest_person_m'])]
+    if not detections:
+        raise AssertionError('人物移动窗口内没有有效的人员距离通道观测')
+
+    person_distance_slow_responses = []
+    person_distance_stop_responses = []
+    laser_obstacle_responses = []
+    ambiguous_safety_responses = []
+    multi_source_stop_responses = []
+    for event in speed_events:
+        if not start <= event.get('time_monotonic_sec', -1) <= end:
+            continue
+        status = event.get('status', {})
+        reason = status.get('reason', '')
+        if status.get('input_valid') is not True:
+            continue
+        has_nearby_distance = any(
+            abs(event['time_monotonic_sec'] - detection['time_monotonic_sec']) <= 2.0
+            for detection in detections)
+        if (status.get('state') == 'SLOW' and
+                reason == '接近游客，按距离减速' and has_nearby_distance):
+            person_distance_slow_responses.append(event)
+        elif (status.get('state') in ('STOPPING', 'STOPPED') and
+              reason == '人员与障碍物近距离停车'):
+            multi_source_stop_responses.append(event)
+        elif (status.get('state') in ('STOPPING', 'STOPPED') and
+              reason == '近距离人员停车' and has_nearby_distance):
+            person_distance_stop_responses.append(event)
+        elif (status.get('state') == 'SLOW' and reason == '前方障碍，按距离减速'):
+            laser_obstacle_responses.append(event)
+        elif (status.get('state') in ('STOPPING', 'STOPPED') and
+              reason == '近距离障碍物停车'):
+            laser_obstacle_responses.append(event)
+        elif (status.get('state') in ('STOPPING', 'STOPPED') and '安全停车条件' in reason):
+            ambiguous_safety_responses.append(event)
+    navigation_responses = [event for event in navigation_events
+                            if start <= event.get('time_monotonic_sec', -1) <= end and
+                            event.get('status') == 'reposing']
+    if (not person_distance_slow_responses and not person_distance_stop_responses and
+            not laser_obstacle_responses and not ambiguous_safety_responses and
+            not multi_source_stop_responses and not navigation_responses):
+        raise AssertionError('人物移动窗口内没有可归因的限速、停车或 Nav2 避障响应')
+    person_distance_responses = (person_distance_slow_responses +
+                                 person_distance_stop_responses)
+    risk_only = not person_distance_responses and not navigation_responses
+    if person_distance_stop_responses and person_distance_slow_responses:
+        attribution = 'PERSON_DISTANCE_SLOWING_AND_STOP'
+    elif person_distance_stop_responses:
+        attribution = 'PERSON_DISTANCE_STOP'
+    elif person_distance_slow_responses:
+        attribution = 'PERSON_DISTANCE_SLOWING_ONLY'
+    elif navigation_responses:
+        attribution = 'NAV2_AVOIDANCE'
+    elif multi_source_stop_responses:
+        attribution = 'PERSON_AND_LIDAR_STOP'
+    elif laser_obstacle_responses:
+        attribution = 'LIDAR_OBSTACLE_RESPONSE'
+    else:
+        attribution = 'SAFETY_SOURCE_AMBIGUOUS'
+    return {
+        'movement_window_monotonic_sec': [start, end],
+        'gazebo_moved_models': moved,
+        'valid_person_distance_channel_observations': len(detections),
+        'valid_aggregate_fusion_observations': sum(
+            event.get('valid') is True for event in detections),
+        'person_distance_control_responses': len(person_distance_responses),
+        'person_distance_slow_responses': len(person_distance_slow_responses),
+        'person_distance_stop_responses': len(person_distance_stop_responses),
+        'laser_obstacle_control_responses': len(laser_obstacle_responses),
+        'ambiguous_safety_stop_responses': len(ambiguous_safety_responses),
+        'multi_source_stop_responses': len(multi_source_stop_responses),
+        'navigation_avoidance_responses': len(navigation_responses),
+        'status': 'PASS_WITH_RISK' if risk_only else 'PASS',
+        'response_attribution': attribution,
+    }
+
+
+def validate_leaving_recovery_evidence(truth, speed_events, stop_events,
+                                       navigation_events, perception_events=()):
+    start = truth['movement_started_monotonic_sec']
+    end = truth['movement_ended_monotonic_sec']
+    person_stop = next((event for event in speed_events
+                        if start <= event.get('time_monotonic_sec', -1) <= end and
+                        event.get('status', {}).get('state') in ('STOPPING', 'STOPPED') and
+                        event.get('status', {}).get('navigation_session_id')), None)
+    if person_stop is None:
+        raise AssertionError('E06 未记录带导航 UUID 的停车请求')
+    stop_time = person_stop['time_monotonic_sec']
+    status = person_stop.get('status', {})
+    nearby_person = next((event for event in perception_events
+                          if abs(event.get('time_monotonic_sec', -1) - stop_time) <= 1.0 and
+                          event.get('person_distance_valid') is True and
+                          isinstance(event.get('nearest_person_m'), (int, float)) and
+                          math.isfinite(event['nearest_person_m']) and
+                          0.0 < event['nearest_person_m'] <= 1.2), None)
+    direct_person_stop = (status.get('reason') == '近距离危险停车' and
+                          status.get('input_valid') is not False and nearby_person is not None)
+    fail_closed_stop = (status.get('input_valid') is False and
+                        status.get('reason') == '感知数据无效或过期' and
+                        nearby_person is not None)
+    if not direct_person_stop and not fail_closed_stop:
+        raise AssertionError('E06 停车缺少近距离人员测距证据或停车原因不明确')
+    old_session = person_stop['status'].get('navigation_session_id')
+    target = next((event.get('target') for event in reversed(navigation_events)
+                   if event.get('task_id') == old_session and event.get('target') and
+                   event.get('time_monotonic_sec', 0) <= stop_time), None)
+    if not target:
+        raise AssertionError('E06 无法把停车会话关联到原导航目标')
+
+    confirmed = next((event for event in stop_events
+                      if event.get('navigation_session_id') == old_session and
+                      event.get('state') == 'STOP_CONFIRMED' and event.get('valid') is True and
+                      event.get('time_monotonic_sec', 0) >= stop_time), None)
+    if confirmed is None:
+        raise AssertionError('E06 缺少同一 UUID 的新鲜停车确认')
+
+    recovery = next((event for event in speed_events
+                     if event.get('time_monotonic_sec', 0) > confirmed['time_monotonic_sec'] and
+                     (event.get('status', {}).get('state') == 'RECOVERING' or
+                      event.get('status', {}).get('resume_requested') is True)), None)
+    if recovery is None:
+        raise AssertionError('E06 停车确认后没有记录自动恢复请求')
+    resumed = next((event for event in navigation_events
+                    if event.get('time_monotonic_sec', 0) > recovery['time_monotonic_sec'] and
+                    event.get('status') == 'start' and event.get('target') == target and
+                    event.get('task_id') and event.get('task_id') != old_session), None)
+    if resumed is None:
+        raise AssertionError('E06 未以新导航 UUID 恢复原目标')
+    cleared = next((event for event in stop_events
+                    if event.get('navigation_session_id') in (old_session, resumed['task_id']) and
+                    event.get('state') == 'CLEAR' and event.get('valid') is True and
+                    event.get('time_monotonic_sec', 0) > confirmed['time_monotonic_sec'] and
+                    event.get('time_monotonic_sec', 0) <= resumed['time_monotonic_sec'] + 1.0), None)
+    if cleared is None:
+        raise AssertionError('E06 恢复窗口内没有观察到有效 CLEAR 状态')
+    clear_after_resume = cleared['time_monotonic_sec'] > resumed['time_monotonic_sec']
+    return {
+        'status': ('PASS_WITH_RISK' if fail_closed_stop or clear_after_resume
+                   else 'PASS'),
+        'stop_cause': ('FAIL_CLOSED_WITH_NEAR_PERSON_OBSERVATION' if fail_closed_stop
+                       else 'PERSON_DISTANCE_THRESHOLD'),
+        'near_person_distance_m': nearby_person['nearest_person_m'],
+        'stop_session_id': old_session, 'target': target,
+        'stop_confirmed_at_monotonic_sec': confirmed['time_monotonic_sec'],
+        'safety_cleared_at_monotonic_sec': cleared['time_monotonic_sec'],
+        'clear_after_resume': clear_after_resume,
+        'recovery_requested_at_monotonic_sec': recovery['time_monotonic_sec'],
+        'resumed_session_id': resumed['task_id'],
+        'resumed_at_monotonic_sec': resumed['time_monotonic_sec'],
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--experiment-id', default='E01')
@@ -248,9 +424,18 @@ def main():
     parser.add_argument('--output-dir', type=Path)
     parser.add_argument('--question', default='潮州音乐有哪些类型？')
     parser.add_argument('--exhibit', default='exhibit_05')
+    parser.add_argument('--dynamic-scenario',
+                        choices=('none', 'crossing', 'approaching', 'leaving'), default='none',
+                        help='与真实导航路段联动的 Gazebo 动态人物实验')
+    parser.add_argument('--scenario-target', default='zone_4')
+    parser.add_argument('--person-speed-mps', type=float, default=0.25)
+    parser.add_argument('--scenario-end-distance-m', type=float, default=1.4)
     args = parser.parse_args()
     if (not math.isfinite(args.timeout_sec) or args.timeout_sec <= 0 or
-            not math.isfinite(args.visitor_timeout_sec) or args.visitor_timeout_sec <= 0):
+            not math.isfinite(args.visitor_timeout_sec) or args.visitor_timeout_sec <= 0 or
+            not math.isfinite(args.person_speed_mps) or args.person_speed_mps <= 0 or
+            not math.isfinite(args.scenario_end_distance_m) or
+            not 0.5 <= args.scenario_end_distance_m <= 4.5):
         parser.error('timeout 参数必须是有限正数')
     domain = int(__import__('os').environ.get('ROS_DOMAIN_ID', '-1'))
     if (__import__('os').environ.get('ROS_LOCALHOST_ONLY') != '1' or
@@ -262,6 +447,9 @@ def main():
     record_file = out / 'experiment_data.csv'
     rclpy.init(args=None)
     node = TourEvidence()
+    scenario_process = None
+    scenario_log = None
+    scenario_truth = out / 'scenario' / 'truth.json'
     recorder = subprocess.Popen([
         sys.executable, str(ROOT / 'scripts/record_phase2_topics.py'),
         '--duration-sec', str(min(args.timeout_sec + 60.0, 3600.0)), '--hz', '10',
@@ -289,12 +477,46 @@ def main():
         result['start_service'] = trigger(node, node.trigger_clients['start'], 'start')
         spin_until(node, lambda: node.tour.get('state') == 'WAITING_CONSENT', 30,
                    '进入等待游客同意状态')
+        if args.dynamic_scenario != 'none':
+            scenario_truth.parent.mkdir(parents=True, exist_ok=True)
+            scenario_log = (out / 'scenario' / 'scenario.log').open('w', encoding='utf-8')
+            scenario_ready = out / 'scenario' / 'ready'
+            scenario_command = [
+                sys.executable, str(ROOT / 'scripts/spawn_people_scenario.py'),
+                '--scenario', args.dynamic_scenario,
+                '--wait-for-navigation-target', args.scenario_target,
+                '--navigation-timeout-sec', str(args.timeout_sec),
+                '--ready-file', str(scenario_ready),
+                '--speed-mps', str(args.person_speed_mps), '--start-delay-sec', '0',
+                '--end-distance-m', str(args.scenario_end_distance_m),
+                '--remove-after', '--truth-output', str(scenario_truth),
+            ]
+            if args.dynamic_scenario == 'approaching':
+                scenario_command.append('--stop-on-safety-stop')
+            scenario_process = subprocess.Popen(
+                scenario_command, cwd=ROOT, stdout=scenario_log, stderr=subprocess.STDOUT)
+            result['dynamic_scenario'] = {
+                'scenario': args.dynamic_scenario, 'target': args.scenario_target,
+                'person_speed_mps': args.person_speed_mps,
+                'end_distance_m': args.scenario_end_distance_m,
+                'truth_output': str(scenario_truth),
+                'trigger': 'child ready before consent; matching navigation UUID/target plus fresh moving odom',
+            }
+            spin_until(node, lambda: scenario_ready.is_file() or
+                       scenario_process.poll() is not None,
+                       min(15.0, args.timeout_sec), '动态人物进程已准备好监听导航')
+            if scenario_process.poll() is not None:
+                log = (out / 'scenario' / 'scenario.log').read_text(encoding='utf-8')
+                raise RuntimeError(f'动态人物进程未能准备就绪：{log[-1500:]}')
         result['consent_service'] = trigger(node, node.trigger_clients['accept'], 'accept')
         asked = False
         paused_since = None
         deadline = time.monotonic() + args.timeout_sec
         while rclpy.ok() and time.monotonic() < deadline:
             rclpy.spin_once(node, timeout_sec=0.1)
+            if scenario_process is not None and scenario_process.poll() not in (None, 0):
+                log = (out / 'scenario' / 'scenario.log').read_text(encoding='utf-8')
+                raise RuntimeError(f'动态人物场景失败，退出码 {scenario_process.returncode}: {log[-1500:]}')
             if (not asked and node.tour.get('state') == 'QA' and
                     node.tour.get('qa_waiting') is True):
                 if not node.question.wait_for_service(timeout_sec=5.0):
@@ -323,6 +545,26 @@ def main():
         else:
             raise TimeoutError('完整导览未在总时限内结束')
         final = dict(node.tour)
+        if scenario_process is not None:
+            try:
+                scenario_exit = scenario_process.wait(timeout=30.0)
+            except subprocess.TimeoutExpired as exc:
+                scenario_process.send_signal(signal.SIGINT)
+                scenario_process.wait(timeout=10.0)
+                raise TimeoutError('动态人物场景在导览结束后仍未完成') from exc
+            if scenario_truth.is_file():
+                result['dynamic_scenario']['truth'] = json.loads(scenario_truth.read_text(encoding='utf-8'))
+            if scenario_exit != 0 or result['dynamic_scenario'].get('truth', {}).get('status') != 'PASS':
+                raise RuntimeError('动态人物模型/位姿回读未得到 PASS 真值记录')
+            result['dynamic_scenario']['response_evidence'] = (
+                validate_dynamic_scenario_evidence(
+                    result['dynamic_scenario']['truth'], node.perception_events,
+                    node.speed_events, node.navigation))
+            if args.dynamic_scenario == 'leaving':
+                result['dynamic_scenario']['recovery_evidence'] = (
+                    validate_leaving_recovery_evidence(
+                        result['dynamic_scenario']['truth'], node.speed_events,
+                        node.stops, node.navigation, node.perception_events))
         result.update({'final_status': final, 'actual_route': final.get('visited', []),
                        'qa_result': final.get('qa_result'),
                        'navigation_events': node.navigation,
@@ -384,7 +626,13 @@ def main():
                item['stationary_window_sec_before_complete'] < 0.45
                for item in arrival_evidence):
             raise AssertionError('存在展区或出口导航完成时未能从里程计观察到停车窗口的站点')
-        result['status'] = 'PASS'
+        response_status = (result.get('dynamic_scenario', {}).get('response_evidence', {})
+                           .get('status'))
+        recovery_status = (result.get('dynamic_scenario', {}).get('recovery_evidence', {})
+                           .get('status'))
+        result['status'] = ('PASS_WITH_RISK'
+                            if 'PASS_WITH_RISK' in (response_status, recovery_status)
+                            else 'PASS')
     except Exception as exc:
         error = f'{type(exc).__name__}: {exc}'
         result['status'] = 'FAIL'
@@ -403,6 +651,15 @@ def main():
             'perception_events': node.perception_events,
             'gazebo_robot_last_pose': node.gazebo,
         })
+        if scenario_process is not None and scenario_process.poll() is None:
+            scenario_process.send_signal(signal.SIGINT)
+            try:
+                scenario_process.wait(timeout=10.0)
+            except subprocess.TimeoutExpired:
+                scenario_process.kill()
+                scenario_process.wait(timeout=3.0)
+        if scenario_log is not None:
+            scenario_log.close()
         write_json(out / 'report.json', result)
         write_json(out / 'events.json', {
             'tour': node.events, 'navigation': node.navigation,
@@ -411,7 +668,7 @@ def main():
             'gazebo_robot_last_pose': node.gazebo,
         })
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
         if recorder.poll() is None:
             recorder.send_signal(signal.SIGINT)
             try:
@@ -421,7 +678,7 @@ def main():
                 recorder.wait()
     print(json.dumps({'status': result['status'], 'report': str(out / 'report.json'),
                       'error': error}, ensure_ascii=False))
-    return 0 if result['status'] == 'PASS' else 1
+    return 0 if result['status'] in ('PASS', 'PASS_WITH_RISK') else 1
 
 
 if __name__ == '__main__':

@@ -178,7 +178,8 @@ class PerceptionFusion:
     def snapshot(self, now):
         cfg = self.config
         ages = []
-        for sample in (self._visitor, self._people):
+        # Visitor counts and navigation transitions are not motion-sensor heartbeats.
+        for sample in (self._people, self._robot, self._tour, self._safety_stop):
             if sample is not None:
                 ages.append(max(0.0, now - sample['at']))
         if self._scan_at is not None:

@@ -14,7 +14,9 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 from spawn_people_scenario import (ground_truth_path_lengths, scenario_anchor,
                                    scene_positions, trajectory_duration,
                                    trajectory_position, write_truth_record,
-                                   PeopleScenario)
+                                   PeopleScenario, navigation_heading)
+from run_phase25_clean_tour import TourEvidence, validate_dynamic_scenario_evidence
+from run_phase25_clean_tour import validate_leaving_recovery_evidence
 
 
 def test_local_person_model_has_camera_visible_geometry_and_collisions():
@@ -50,7 +52,7 @@ def test_official_scenarios_cover_empty_single_group_near_and_crossing():
     assert len(scene_positions('group', wait)) == 3
     assert math.isclose(scene_positions('near', wait)[0][0] - wait['x'], 1.05)
     crossing = scene_positions('crossing', wait)[0]
-    assert crossing[:2] == (-9.6, -9.2)
+    assert crossing[:2] == (-8.5, -9.5)
 
 
 def test_people_scenarios_follow_current_robot_heading():
@@ -63,6 +65,13 @@ def test_people_scenarios_follow_current_robot_heading():
     assert math.isclose(single[1], 5.0, abs_tol=1e-9)
     assert math.isclose(near[0], 1.0, abs_tol=1e-9)
     assert math.isclose(near[1], 3.05, abs_tol=1e-9)
+
+
+def test_approaching_scenario_heading_tracks_active_navigation_goal():
+    robot = {'x': 1.0, 'y': 2.0, 'yaw': 0.0}
+    goal = {'x': 1.0, 'y': 5.0}
+
+    assert navigation_heading(robot, goal) == pytest.approx(math.pi / 2)
 
 
 def test_dynamic_people_scenarios_anchor_on_live_robot_while_gate_stays_at_wait():
@@ -106,10 +115,10 @@ def test_crossing_trajectory_changes_lateral_position_while_holding_forward_rang
 
     end = trajectory_position('crossing', start, robot, 1.0, person_index=0)
 
-    assert start[0] == pytest.approx(2.4)
-    assert start[1] == pytest.approx(-1.2)
-    assert end[0] == pytest.approx(2.4)
-    assert end[1] == pytest.approx(1.2)
+    assert start[0] == pytest.approx(3.5)
+    assert start[1] == pytest.approx(-1.5)
+    assert end[0] == pytest.approx(3.5)
+    assert end[1] == pytest.approx(1.5)
 
 
 def test_leaving_trajectory_increases_separation_from_the_robot():
@@ -207,3 +216,353 @@ def test_scenario_started_mid_navigation_learns_session_from_clear_status():
         navigation_session_id='session-1'))
 
     assert node.safety_stop_requested is True
+
+
+def test_model_pose_rejects_stale_model_states():
+    node = object.__new__(PeopleScenario)
+    node._model_states = {'phase25_person_01': SimpleNamespace(position=SimpleNamespace(x=1.0, y=2.0),
+        orientation=SimpleNamespace(x=0.0, y=0.0, z=0.0, w=1.0))}
+    node._model_states_received_at = 0.0
+
+    assert node.model_pose('phase25_person_01') is None
+
+
+def test_navigation_gate_requires_matching_active_target_and_fresh_motion():
+    now = __import__('time').monotonic()
+    node = object.__new__(PeopleScenario)
+    node._latest_navigation = {'task_id': 'nav-4', 'target': 'zone_4', 'status': 'going'}
+    node._navigation_received_at = now
+    node._odom_speed_mps = 0.2
+    node._odom_received_at = now
+
+    assert node.navigation_snapshot('zone_4', now=now)['task_id'] == 'nav-4'
+    assert node.navigation_snapshot('zone_3', now=now) is None
+    node._odom_received_at = now - 1.0
+    assert node.navigation_snapshot('zone_4', now=now) is None
+
+
+def test_move_waits_for_gazebo_readback_at_the_requested_pose(monkeypatch):
+    node = object.__new__(PeopleScenario)
+    observed = []
+    node._call = lambda _client, request: observed.append(request.state.pose.position.x)
+    node._set_state = object()
+    node.wait_for_model_pose = lambda name, expected=None, **kwargs: observed.append(
+        (name, expected, kwargs.get('tolerance_m')))
+
+    node.move('phase25_person_01', 1.2, -0.4, 0.0)
+
+    assert observed[0] == pytest.approx(1.2)
+    assert observed[1] == ('phase25_person_01', (1.2, -0.4), 0.02)
+
+
+def test_dynamic_scenario_evidence_requires_real_motion_detection_and_response():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    perception = [{
+        'time_monotonic_sec': 10.8, 'valid': True, 'people_count': 1,
+        'person_distance_valid': True, 'nearest_person_m': 1.7,
+    }]
+    speed = [{
+        'time_monotonic_sec': 11.0,
+        'status': {'state': 'SLOW', 'reason': '接近游客，按距离减速',
+                   'input_valid': True},
+    }]
+
+    evidence = validate_dynamic_scenario_evidence(truth, perception, speed, [])
+
+    assert evidence['gazebo_moved_models'] == {'phase25_person_01': 0.8}
+    assert evidence['valid_person_distance_channel_observations'] == 1
+    assert evidence['valid_aggregate_fusion_observations'] == 1
+    assert evidence['person_distance_control_responses'] == 1
+    assert evidence['person_distance_slow_responses'] == 1
+    assert evidence['person_distance_stop_responses'] == 0
+    assert evidence['status'] == 'PASS'
+
+
+def test_close_laser_stop_is_not_attributed_to_person_distance():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    perception = [{
+        'time_monotonic_sec': 10.8, 'valid': True, 'people_count': 1,
+        'person_distance_valid': True, 'nearest_person_m': 1.7,
+    }]
+    speed = [{
+        'time_monotonic_sec': 11.0,
+        'status': {'state': 'STOPPING', 'reason': '近距离障碍物停车',
+                   'input_valid': True},
+    }]
+
+    evidence = validate_dynamic_scenario_evidence(truth, perception, speed, [])
+
+    assert evidence['person_distance_control_responses'] == 0
+    assert evidence['person_distance_stop_responses'] == 0
+    assert evidence['laser_obstacle_control_responses'] == 1
+    assert evidence['status'] == 'PASS_WITH_RISK'
+
+
+def test_person_distance_stop_is_recorded_separately_from_slowing():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    perception = [{
+        'time_monotonic_sec': 10.8, 'valid': True, 'people_count': 1,
+        'person_distance_valid': True, 'nearest_person_m': 0.5,
+    }]
+    speed = [{
+        'time_monotonic_sec': 11.0,
+        'status': {'state': 'STOPPING', 'reason': '近距离人员停车',
+                   'input_valid': True},
+    }]
+
+    evidence = validate_dynamic_scenario_evidence(truth, perception, speed, [])
+
+    assert evidence['person_distance_control_responses'] == 1
+    assert evidence['person_distance_slow_responses'] == 0
+    assert evidence['person_distance_stop_responses'] == 1
+
+
+def test_dynamic_scenario_evidence_keeps_distance_channel_when_group_count_is_invalid():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    perception = [{
+        'time_monotonic_sec': 10.8, 'valid': False, 'people_count': 0,
+        'person_observation_state': 'PERSON_DISTANCE_VALID',
+        'person_observation_valid': True, 'person_distance_valid': True,
+        'nearest_person_m': 1.7, 'sample_age_sec': 0.3,
+    }]
+    speed = [{
+        'time_monotonic_sec': 11.0,
+        'status': {'state': 'SLOW', 'reason': '前方障碍，按距离减速',
+                   'input_valid': True},
+    }]
+
+    evidence = validate_dynamic_scenario_evidence(truth, perception, speed, [])
+
+    assert evidence['valid_person_distance_channel_observations'] == 1
+    assert evidence['valid_aggregate_fusion_observations'] == 0
+    assert evidence['status'] == 'PASS_WITH_RISK'
+
+
+def test_dynamic_scenario_evidence_rejects_missing_robot_response():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    perception = [{
+        'time_monotonic_sec': 10.8, 'valid': True, 'people_count': 1,
+        'person_distance_valid': True, 'nearest_person_m': 1.7,
+    }]
+
+    speed = [{
+        'time_monotonic_sec': 11.0, 'status': {
+            'state': 'STOPPING', 'reason': '感知数据无效或过期',
+            'stop_requested': True, 'input_valid': False},
+    }]
+    with pytest.raises(AssertionError, match='没有可归因的限速、停车或 Nav2 避障响应'):
+        validate_dynamic_scenario_evidence(truth, perception, speed, [])
+
+
+def test_dynamic_scenario_evidence_rejects_missing_fused_distance():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    speed = [{
+        'time_monotonic_sec': 11.0,
+        'status': {'state': 'SLOW', 'reason': '接近游客，按距离减速',
+                   'input_valid': True},
+    }]
+
+    with pytest.raises(AssertionError, match='没有有效的人员距离通道观测'):
+        validate_dynamic_scenario_evidence(truth, [], speed, [])
+
+
+def test_dynamic_scenario_evidence_downgrades_unattributed_lidar_response():
+    truth = {
+        'movement_started_monotonic_sec': 10.0,
+        'movement_ended_monotonic_sec': 12.0,
+        'gazebo_ground_truth_path_length_m_by_person': {'phase25_person_01': 0.8},
+    }
+    perception = [{
+        'time_monotonic_sec': 10.8, 'valid': True, 'people_count': 1,
+        'person_distance_valid': True, 'nearest_person_m': 1.7,
+    }]
+    speed = [{
+        'time_monotonic_sec': 11.0,
+        'status': {'state': 'SLOW', 'reason': '前方障碍，按距离减速',
+                   'input_valid': True},
+    }]
+
+    evidence = validate_dynamic_scenario_evidence(truth, perception, speed, [])
+
+    assert evidence['status'] == 'PASS_WITH_RISK'
+    assert evidence['response_attribution'] == 'LIDAR_OBSTACLE_RESPONSE'
+    assert evidence['laser_obstacle_control_responses'] == 1
+
+
+def test_tour_evidence_records_independent_person_and_visitor_validity():
+    evidence = object.__new__(TourEvidence)
+    evidence._timestamp = lambda: 10.8
+    evidence._last_perception_signature = None
+    evidence.perception_events = []
+    message = SimpleNamespace(
+        valid=False, error='stable visitor count invalid', people_count=0,
+        people_valid=False, sample_age_sec=0.3,
+        person_observation_state='PERSON_DISTANCE_VALID',
+        person_observation_valid=True, person_distance_valid=True,
+        nearest_person_m=1.7, obstacle_distance_valid=True,
+        obstacle_distance_m=1.1, safety_stop=False, stop_confirmed=False,
+        navigating=True, explaining=False, navigation_error=False,
+        navigation_session_id='session-a',
+    )
+
+    TourEvidence._perception(evidence, message)
+
+    event = evidence.perception_events[0]
+    assert event['valid'] is False
+    assert event['people_valid'] is False
+    assert event['person_observation_valid'] is True
+    assert event['person_distance_valid'] is True
+    assert event['nearest_person_m'] == 1.7
+
+
+def test_leaving_scenario_requires_confirmed_clear_and_new_navigation_uuid():
+    truth = {'movement_started_monotonic_sec': 10.0,
+             'movement_ended_monotonic_sec': 20.0}
+    speed = [
+        {'time_monotonic_sec': 10.2, 'status': {
+            'state': 'STOPPING', 'reason': '近距离危险停车',
+            'navigation_session_id': 'old-session'}},
+        {'time_monotonic_sec': 11.8, 'status': {
+            'state': 'RECOVERING', 'resume_requested': True}},
+    ]
+    stops = [
+        {'time_monotonic_sec': 10.6, 'state': 'STOP_CONFIRMED',
+         'navigation_session_id': 'old-session', 'valid': True},
+        {'time_monotonic_sec': 11.5, 'state': 'CLEAR',
+         'navigation_session_id': 'old-session', 'valid': True},
+    ]
+    navigation = [
+        {'time_monotonic_sec': 9.9, 'task_id': 'old-session',
+         'target': 'zone_4', 'status': 'going'},
+        {'time_monotonic_sec': 12.0, 'task_id': 'new-session',
+         'target': 'zone_4', 'status': 'start'},
+    ]
+    perception = [
+        {'time_monotonic_sec': 10.3, 'valid': True, 'people_count': 1,
+         'person_distance_valid': True, 'nearest_person_m': 0.8},
+    ]
+
+    evidence = validate_leaving_recovery_evidence(
+        truth, speed, stops, navigation, perception)
+
+    assert evidence['target'] == 'zone_4'
+    assert evidence['resumed_session_id'] == 'new-session'
+    assert evidence['status'] == 'PASS'
+
+
+def test_leaving_scenario_accepts_fail_closed_stop_with_near_person_and_recovery_evidence():
+    truth = {'movement_started_monotonic_sec': 10.0,
+             'movement_ended_monotonic_sec': 20.0}
+    speed = [
+        {'time_monotonic_sec': 10.2, 'status': {
+            'state': 'STOPPING', 'reason': '感知数据无效或过期',
+            'input_valid': False, 'navigation_session_id': 'old-session'}},
+        {'time_monotonic_sec': 11.8, 'status': {
+            'state': 'RECOVERING', 'resume_requested': True}},
+    ]
+    stops = [
+        {'time_monotonic_sec': 10.6, 'state': 'STOP_CONFIRMED',
+         'navigation_session_id': 'old-session', 'valid': True},
+        {'time_monotonic_sec': 12.1, 'state': 'CLEAR',
+         'navigation_session_id': 'new-session', 'valid': True},
+    ]
+    navigation = [
+        {'time_monotonic_sec': 9.9, 'task_id': 'old-session',
+         'target': 'zone_4', 'status': 'going'},
+        {'time_monotonic_sec': 12.0, 'task_id': 'new-session',
+         'target': 'zone_4', 'status': 'start'},
+    ]
+    perception = [
+        {'time_monotonic_sec': 10.25, 'valid': False, 'people_count': 0,
+         'person_distance_valid': True, 'nearest_person_m': 0.86},
+    ]
+
+    evidence = validate_leaving_recovery_evidence(
+        truth, speed, stops, navigation, perception)
+
+    assert evidence['status'] == 'PASS_WITH_RISK'
+    assert evidence['stop_cause'] == 'FAIL_CLOSED_WITH_NEAR_PERSON_OBSERVATION'
+    assert evidence['clear_after_resume'] is True
+    assert evidence['resumed_session_id'] == 'new-session'
+
+
+def test_leaving_scenario_rejects_fail_closed_stop_without_near_person_measurement():
+    truth = {'movement_started_monotonic_sec': 10.0,
+             'movement_ended_monotonic_sec': 20.0}
+    speed = [
+        {'time_monotonic_sec': 10.2, 'status': {
+            'state': 'STOPPING', 'reason': '感知数据无效或过期',
+            'input_valid': False, 'navigation_session_id': 'old-session'}},
+        {'time_monotonic_sec': 11.8, 'status': {
+            'state': 'RECOVERING', 'resume_requested': True}},
+    ]
+    stops = [
+        {'time_monotonic_sec': 10.6, 'state': 'STOP_CONFIRMED',
+         'navigation_session_id': 'old-session', 'valid': True},
+        {'time_monotonic_sec': 11.5, 'state': 'CLEAR',
+         'navigation_session_id': 'old-session', 'valid': True},
+    ]
+    navigation = [
+        {'time_monotonic_sec': 9.9, 'task_id': 'old-session',
+         'target': 'zone_4', 'status': 'going'},
+        {'time_monotonic_sec': 12.0, 'task_id': 'new-session',
+         'target': 'zone_4', 'status': 'start'},
+    ]
+
+    with pytest.raises(AssertionError, match='近距离人员测距证据'):
+        validate_leaving_recovery_evidence(truth, speed, stops, navigation, [])
+
+
+def test_leaving_scenario_rejects_reuse_of_old_navigation_uuid():
+    truth = {'movement_started_monotonic_sec': 10.0,
+             'movement_ended_monotonic_sec': 20.0}
+    speed = [
+        {'time_monotonic_sec': 10.2, 'status': {
+            'state': 'STOPPING', 'reason': '近距离危险停车',
+            'navigation_session_id': 'old-session'}},
+        {'time_monotonic_sec': 11.8, 'status': {'state': 'RECOVERING'}},
+    ]
+    stops = [
+        {'time_monotonic_sec': 10.6, 'state': 'STOP_CONFIRMED',
+         'navigation_session_id': 'old-session', 'valid': True},
+        {'time_monotonic_sec': 11.5, 'state': 'CLEAR',
+         'navigation_session_id': 'old-session', 'valid': True},
+    ]
+    navigation = [
+        {'time_monotonic_sec': 9.9, 'task_id': 'old-session',
+         'target': 'zone_4', 'status': 'going'},
+        {'time_monotonic_sec': 12.0, 'task_id': 'old-session',
+         'target': 'zone_4', 'status': 'start'},
+    ]
+    perception = [
+        {'time_monotonic_sec': 10.3, 'valid': True, 'people_count': 1,
+         'person_distance_valid': True, 'nearest_person_m': 0.8},
+    ]
+
+    with pytest.raises(AssertionError, match='新导航 UUID'):
+        validate_leaving_recovery_evidence(
+            truth, speed, stops, navigation, perception)

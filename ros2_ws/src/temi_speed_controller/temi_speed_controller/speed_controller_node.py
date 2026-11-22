@@ -5,6 +5,7 @@ import time
 
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.node import Node
+from nav_msgs.msg import Odometry
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from temi_interfaces.msg import NavigationStatus, PerceptionInput
@@ -45,12 +46,22 @@ class SpeedControllerNode(Node):
         self._resume_future = None
         self._resume_requested_at = None
         self._simulated_speed = 0.0
+        self._odom_speed_mps = None
+        self._odom_received_at = None
         self._last_tick = time.monotonic()
         self._status = self.create_publisher(String, 'heritage/speed_control/status', 10)
         self._commands = self.create_publisher(String, 'heritage/speed_control/commands', 10)
         self.create_subscription(String, 'heritage/speed_control/input', self._on_input, 10)
         self.create_subscription(PerceptionInput, 'heritage/perception/fused', self._on_fused_input, 10)
+        self.create_subscription(Odometry, 'odom', self._on_odom, 10)
         self.create_timer(0.1, self._tick, callback_group=self._group)
+
+    def _on_odom(self, message):
+        linear = message.twist.twist.linear
+        speed = math.hypot(linear.x, linear.y)
+        if math.isfinite(speed):
+            self._odom_speed_mps = speed
+            self._odom_received_at = time.monotonic()
 
     def _reset_error(self, _request, response):
         self._policy.reset_error()
@@ -81,7 +92,8 @@ class SpeedControllerNode(Node):
                              'position_valid', 'communication_valid')
             if any(type(value.get(key)) is not bool for key in required_bool):
                 return
-            for key in ('nearest_person_m', 'crowd_density', 'obstacle_distance_m', 'sample_age_sec'):
+            for key in ('nearest_person_m', 'crowd_density', 'obstacle_distance_m', 'sample_age_sec',
+                        'person_distance_timestamp_sec'):
                 item = value.get(key)
                 if item is not None and (type(item) not in (int, float) or not math.isfinite(item)):
                     return
@@ -115,12 +127,13 @@ class SpeedControllerNode(Node):
                                     confirmed_session_id and
                                     confirmed_session_id == self._last_navigation_session_id)
         source = message.source
-        source_allowed = message.valid and perception_source_allowed(
+        source_allowed = perception_source_allowed(
             source, mock_mode=self._mock_mode,
             allow_simulated_sources=self._allow_simulated_sources)
         self._input = {
             'source': source, 'source_allowed': source_allowed,
             'sample_age_sec': float(message.sample_age_sec), 'received_at': time.monotonic(),
+            'person_distance_timestamp_sec': float(message.sample_timestamp_monotonic_sec),
             'nearest_person_m': float(message.nearest_person_m) if message.person_distance_valid else None,
             'crowd_density': float(message.crowd_density) if message.crowd_density_valid else None,
             'obstacle_distance_m': float(message.obstacle_distance_m) if message.obstacle_distance_valid else None,
@@ -216,6 +229,12 @@ class SpeedControllerNode(Node):
         now = time.monotonic()
         raw = self._input or {}
         age = now - raw.get('received_at', -math.inf)
+        odom_age = now - self._odom_received_at if self._odom_received_at is not None else math.inf
+        odom_valid = odom_age <= 0.5
+        person_observation_valid = raw.get('person_observation_valid')
+        if type(person_observation_valid) is not bool:
+            person_observation_valid = (raw.get('person_distance_valid') is True or
+                                        raw.get('person_observation_state') == 'NO_PERSON_OBSERVED')
         inputs = SpeedInputs(
             now=raw.get('received_at', -math.inf),
             nearest_person_m=raw.get('nearest_person_m'), crowd_density=raw.get('crowd_density'),
@@ -228,13 +247,15 @@ class SpeedControllerNode(Node):
             navigation_session_id=raw.get('navigation_session_id', ''),
             manual_stop=raw.get('manual_stop', False), sample_age_sec=raw.get('sample_age_sec', math.inf),
             source_allowed=raw.get('source_allowed', False),
-            people_valid=bool(raw.get('people_valid', False) and raw.get(
-                'person_observation_valid', raw.get('person_distance_valid', False))),
+            people_valid=person_observation_valid,
             person_distance_valid=raw.get('person_distance_valid', False),
             crowd_density_valid=raw.get('crowd_density_valid', False),
             obstacle_distance_valid=raw.get('obstacle_distance_valid', False),
             safety_stop_valid=raw.get('safety_stop_valid', False),
-            person_observation_state=raw.get('person_observation_state', 'PERSON_DISTANCE_VALID'))
+            person_observation_state=raw.get('person_observation_state', 'PERSON_DISTANCE_VALID'),
+            person_distance_timestamp_sec=raw.get('person_distance_timestamp_sec'),
+            current_speed_mps=self._odom_speed_mps if odom_valid else None,
+            current_speed_valid=odom_valid)
         decision = self._policy.update(inputs, now)
         if self._tour_state == 'NAVIGATING':
             self._resume_requested_at = None
@@ -271,10 +292,14 @@ class SpeedControllerNode(Node):
             'stop_requested': decision.stop_requested, 'stop_confirmed': self._stop_confirmed,
             'reason': decision.reason, 'navigation_session_id': decision.navigation_session_id,
             'command_status': outcome, 'input_age_sec': age,
+            'dynamic_stop_distance_m': decision.dynamic_stop_distance_m,
+            'approach_speed_mps': decision.approach_speed_mps,
+            'current_robot_speed_mps': self._odom_speed_mps if odom_valid else None,
+            'current_robot_speed_source': 'odom' if odom_valid else 'configured_default_estimate',
             'input_source': raw.get('source', ''),
-            'input_valid': bool(raw.get('source_allowed', False) and raw.get('people_valid', False) and
-                                raw.get('person_observation_valid', raw.get('person_distance_valid', False)) and
+            'input_valid': bool(raw.get('source_allowed', False) and person_observation_valid and
                                 raw.get('obstacle_distance_valid', False) and raw.get('safety_stop_valid', False)),
+            'visitor_count_valid': bool(raw.get('people_valid', False)),
             'crowd_density_valid': bool(raw.get('crowd_density_valid', False)),
             'nearest_person_m': raw.get('nearest_person_m'), 'crowd_density': raw.get('crowd_density'),
             'obstacle_distance_m': raw.get('obstacle_distance_m'), 'group_state': raw.get('group_state', 'unknown')}
