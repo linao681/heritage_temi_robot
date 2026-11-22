@@ -1,0 +1,135 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-19-50-23-571643-linao-P15-24-44073
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [map_server-1]: process started with pid [44077]
+[INFO] [amcl-2]: process started with pid [44079]
+[INFO] [lifecycle_manager-3]: process started with pid [44081]
+[INFO] [controller_server-4]: process started with pid [44083]
+[INFO] [smoother_server-5]: process started with pid [44085]
+[INFO] [planner_server-6]: process started with pid [44087]
+[INFO] [behavior_server-7]: process started with pid [44089]
+[INFO] [bt_navigator-8]: process started with pid [44091]
+[INFO] [waypoint_follower-9]: process started with pid [44093]
+[INFO] [velocity_smoother-10]: process started with pid [44095]
+[INFO] [lifecycle_manager-11]: process started with pid [44097]
+[lifecycle_manager-3] [INFO] [1795348224.095907196] [lifecycle_manager_localization]: Creating
+[smoother_server-5] [INFO] [1795348224.097882567] [smoother_server]: 
+[smoother_server-5] 	smoother_server lifecycle node launched. 
+[smoother_server-5] 	Waiting on external lifecycle transitions to activate
+[smoother_server-5] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[lifecycle_manager-3] [INFO] [1795348224.100987293] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[smoother_server-5] [INFO] [1795348224.101714201] [smoother_server]: Creating smoother server
+[lifecycle_manager-11] [INFO] [1795348224.112141512] [lifecycle_manager_navigation]: Creating
+[lifecycle_manager-11] [INFO] [1795348224.117115599] [lifecycle_manager_navigation]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[amcl-2] [INFO] [1795348224.120871318] [amcl]: 
+[amcl-2] 	amcl lifecycle node launched. 
+[amcl-2] 	Waiting on external lifecycle transitions to activate
+[amcl-2] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-2] [INFO] [1795348224.121641441] [amcl]: Creating
+[velocity_smoother-10] [INFO] [1795348224.124344216] [velocity_smoother]: 
+[velocity_smoother-10] 	velocity_smoother lifecycle node launched. 
+[velocity_smoother-10] 	Waiting on external lifecycle transitions to activate
+[velocity_smoother-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[waypoint_follower-9] [INFO] [1795348224.131726365] [waypoint_follower]: 
+[waypoint_follower-9] 	waypoint_follower lifecycle node launched. 
+[waypoint_follower-9] 	Waiting on external lifecycle transitions to activate
+[waypoint_follower-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-1] [INFO] [1795348224.133398358] [map_server]: 
+[map_server-1] 	map_server lifecycle node launched. 
+[map_server-1] 	Waiting on external lifecycle transitions to activate
+[map_server-1] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-1] [INFO] [1795348224.133526615] [map_server]: Creating
+[waypoint_follower-9] [INFO] [1795348224.133614172] [waypoint_follower]: Creating
+[controller_server-4] [INFO] [1795348224.143481110] [controller_server]: 
+[controller_server-4] 	controller_server lifecycle node launched. 
+[controller_server-4] 	Waiting on external lifecycle transitions to activate
+[controller_server-4] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-4] [INFO] [1795348224.148483411] [controller_server]: Creating controller server
+[behavior_server-7] [INFO] [1795348224.152172564] [behavior_server]: 
+[behavior_server-7] 	behavior_server lifecycle node launched. 
+[behavior_server-7] 	Waiting on external lifecycle transitions to activate
+[behavior_server-7] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-6] [INFO] [1795348224.156107101] [planner_server]: 
+[planner_server-6] 	planner_server lifecycle node launched. 
+[planner_server-6] 	Waiting on external lifecycle transitions to activate
+[planner_server-6] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-6] [INFO] [1795348224.161953078] [planner_server]: Creating
+[bt_navigator-8] [INFO] [1795348224.192991378] [bt_navigator]: 
+[bt_navigator-8] 	bt_navigator lifecycle node launched. 
+[bt_navigator-8] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-8] [INFO] [1795348224.193498213] [bt_navigator]: Creating
+[controller_server-4] [INFO] [1795348224.195093768] [local_costmap.local_costmap]: 
+[controller_server-4] 	local_costmap lifecycle node launched. 
+[controller_server-4] 	Waiting on external lifecycle transitions to activate
+[controller_server-4] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-4] [INFO] [1795348224.195817367] [local_costmap.local_costmap]: Creating Costmap
+[lifecycle_manager-3] [INFO] [1795348224.223323544] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-3] [INFO] [1795348224.223382145] [lifecycle_manager_localization]: [34m[1mConfiguring map_server[0m[0m
+[map_server-1] [INFO] [1795348224.223717602] [map_server]: Configuring
+[map_server-1] [INFO] [1795348224.223816467] [map_io]: Loading yaml file: /tmp/heritage-nav2-4zj9ipmy/official.yaml
+[map_server-1] [INFO] [1795348224.224210918] [map_io]: resolution: 0.05
+[map_server-1] [INFO] [1795348224.224231567] [map_io]: origin[0]: -18.575
+[map_server-1] [INFO] [1795348224.224243390] [map_io]: origin[1]: -12.125
+[map_server-1] [INFO] [1795348224.224253062] [map_io]: origin[2]: 0
+[map_server-1] [INFO] [1795348224.224263128] [map_io]: free_thresh: 0.196
+[map_server-1] [INFO] [1795348224.224272840] [map_io]: occupied_thresh: 0.65
+[map_server-1] [INFO] [1795348224.224282993] [map_io]: mode: trinary
+[map_server-1] [INFO] [1795348224.224293598] [map_io]: negate: 0
+[map_server-1] [INFO] [1795348224.224568543] [map_io]: Loading image_file: /tmp/heritage-nav2-4zj9ipmy/official.pgm
+[planner_server-6] [INFO] [1795348224.232629722] [global_costmap.global_costmap]: 
+[planner_server-6] 	global_costmap lifecycle node launched. 
+[planner_server-6] 	Waiting on external lifecycle transitions to activate
+[planner_server-6] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-6] [INFO] [1795348224.233441826] [global_costmap.global_costmap]: Creating Costmap
+[lifecycle_manager-11] [INFO] [1795348224.261189143] [lifecycle_manager_navigation]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-11] [INFO] [1795348224.261243617] [lifecycle_manager_navigation]: [34m[1mConfiguring controller_server[0m[0m
+[controller_server-4] [INFO] [1795348224.261923603] [controller_server]: Configuring controller interface
+[controller_server-4] [INFO] [1795348224.262271616] [controller_server]: getting goal checker plugins..
+[controller_server-4] [INFO] [1795348224.262838299] [controller_server]: Controller frequency set to 20.0000Hz
+[controller_server-4] [INFO] [1795348224.262887205] [local_costmap.local_costmap]: Configuring
+[controller_server-4] [INFO] [1795348224.273432218] [local_costmap.local_costmap]: Using plugin "voxel_layer"
+[controller_server-4] [INFO] [1795348224.277848880] [local_costmap.local_costmap]: Subscribed to Topics: scan
+[map_server-1] [INFO] [1795348224.280942349] [map_io]: Read map /tmp/heritage-nav2-4zj9ipmy/official.pgm: 743 X 485 map @ 0.05 m/cell
+[lifecycle_manager-3] [INFO] [1795348224.289004026] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-2] [INFO] [1795348224.289302072] [amcl]: Configuring
+[amcl-2] [INFO] [1795348224.289394211] [amcl]: initTransforms
+[controller_server-4] [INFO] [1795348224.292186291] [local_costmap.local_costmap]: Initialized plugin "voxel_layer"
+[controller_server-4] [INFO] [1795348224.292226500] [local_costmap.local_costmap]: Using plugin "inflation_layer"
+[controller_server-4] [INFO] [1795348224.293837423] [local_costmap.local_costmap]: Initialized plugin "inflation_layer"
+[amcl-2] [INFO] [1795348224.306707222] [amcl]: initPubSub
+[controller_server-4] [INFO] [1795348224.307288962] [controller_server]: Created progress_checker : progress_checker of type nav2_controller::SimpleProgressChecker
+[controller_server-4] [INFO] [1795348224.309151093] [controller_server]: Created goal checker : general_goal_checker of type nav2_controller::SimpleGoalChecker
+[controller_server-4] [INFO] [1795348224.310242620] [controller_server]: Controller Server has general_goal_checker  goal checkers available.
+[controller_server-4] [INFO] [1795348224.312085344] [controller_server]: Created controller : FollowPath of type dwb_core::DWBLocalPlanner
+[controller_server-4] [INFO] [1795348224.313752324] [controller_server]: Setting transform_tolerance to 0.200000
+[amcl-2] [INFO] [1795348224.317934887] [amcl]: Subscribed to map topic.
+[controller_server-4] [INFO] [1795348224.326457110] [controller_server]: Using critic "RotateToGoal" (dwb_critics::RotateToGoalCritic)
+[controller_server-4] [INFO] [1795348224.326697760] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.326760515] [controller_server]: Using critic "Oscillation" (dwb_critics::OscillationCritic)
+[controller_server-4] [INFO] [1795348224.326925262] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.326988053] [controller_server]: Using critic "BaseObstacle" (dwb_critics::BaseObstacleCritic)
+[controller_server-4] [INFO] [1795348224.327086560] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.327156434] [controller_server]: Using critic "GoalAlign" (dwb_critics::GoalAlignCritic)
+[controller_server-4] [INFO] [1795348224.327329645] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.327395486] [controller_server]: Using critic "PathAlign" (dwb_critics::PathAlignCritic)
+[controller_server-4] [INFO] [1795348224.327527836] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.327578798] [controller_server]: Using critic "PathDist" (dwb_critics::PathDistCritic)
+[controller_server-4] [INFO] [1795348224.327676546] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.327724316] [controller_server]: Using critic "GoalDist" (dwb_critics::GoalDistCritic)
+[controller_server-4] [INFO] [1795348224.327809212] [controller_server]: Critic plugin initialized
+[controller_server-4] [INFO] [1795348224.327820987] [controller_server]: Controller Server has FollowPath  controllers available.
+[lifecycle_manager-3] [INFO] [1795348224.328993567] [lifecycle_manager_localization]: [34m[1mActivating map_server[0m[0m
+[map_server-1] [INFO] [1795348224.331273384] [map_server]: Activating
+[map_server-1] [INFO] [1795348224.333681384] [map_server]: Creating bond (map_server) to lifecycle manager.
+[amcl-2] [INFO] [1795348224.334377283] [amcl]: Received a 743 X 485 map @ 0.050 m/pix
+[controller_server-4] [WARN] [1795348224.438442803] [controller_server.rclcpp]: failed to send response to /controller_server/change_state (timeout): client will not receive response, at ./src/rmw_response.cpp:154, at ./src/rcl/service.c:314
+[lifecycle_manager-3] [INFO] [1795348224.440139159] [lifecycle_manager_localization]: Server map_server connected with bond.
+[lifecycle_manager-3] [INFO] [1795348224.440185833] [lifecycle_manager_localization]: [34m[1mActivating amcl[0m[0m
+[amcl-2] [INFO] [1795348224.440498936] [amcl]: Activating
+[amcl-2] [INFO] [1795348224.440556368] [amcl]: initialPoseReceived
+[amcl-2] [INFO] [1795348224.440677283] [amcl]: Setting pose (0.600000): -12.654 -7.902 0.000
+[amcl-2] [INFO] [1795348224.441791923] [amcl]: Creating bond (amcl) to lifecycle manager.
+[amcl-2] [INFO] [1795348224.492333370] [amcl]: createLaserObject
+[lifecycle_manager-3] [INFO] [1795348224.551542561] [lifecycle_manager_localization]: Server amcl connected with bond.
+[lifecycle_manager-3] [INFO] [1795348224.551595117] [lifecycle_manager_localization]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-3] [INFO] [1795348224.551618533] [lifecycle_manager_localization]: [34m[1mCreating bond timer...[0m[0m

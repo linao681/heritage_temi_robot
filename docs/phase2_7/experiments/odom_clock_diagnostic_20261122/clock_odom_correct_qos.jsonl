@@ -1,0 +1,16 @@
+{"elapsed_wall_sec": 0.0, "ros_clock_sec": 0.8, "odom_stamp_sec": null, "clock_minus_odom_sec": null, "odom_rx_age_sec": null}
+{"elapsed_wall_sec": 0.52, "ros_clock_sec": 1.3, "odom_stamp_sec": 1.389, "clock_minus_odom_sec": -0.08899999999999997, "odom_rx_age_sec": 5.3518000640906394e-05}
+{"elapsed_wall_sec": 1.03, "ros_clock_sec": 1.8, "odom_stamp_sec": 1.899, "clock_minus_odom_sec": -0.09899999999999998, "odom_rx_age_sec": 6.352699710987508e-05}
+{"elapsed_wall_sec": 1.53, "ros_clock_sec": 2.4, "odom_stamp_sec": 2.375, "clock_minus_odom_sec": 0.02499999999999991, "odom_rx_age_sec": 0.027266785997198895}
+{"elapsed_wall_sec": 2.03, "ros_clock_sec": 2.9, "odom_stamp_sec": 2.885, "clock_minus_odom_sec": 0.015000000000000124, "odom_rx_age_sec": 0.014852181004243903}
+{"elapsed_wall_sec": 2.53, "ros_clock_sec": 3.4, "odom_stamp_sec": 3.395, "clock_minus_odom_sec": 0.004999999999999893, "odom_rx_age_sec": 0.004694969989941455}
+{"elapsed_wall_sec": 3.04, "ros_clock_sec": 3.9, "odom_stamp_sec": 3.871, "clock_minus_odom_sec": 0.028999999999999915, "odom_rx_age_sec": 0.026470582000911236}
+{"elapsed_wall_sec": 3.55, "ros_clock_sec": 4.4, "odom_stamp_sec": 4.415, "clock_minus_odom_sec": -0.01499999999999968, "odom_rx_age_sec": 6.070999370422214e-05}
+{"elapsed_wall_sec": 4.06, "ros_clock_sec": 4.9, "odom_stamp_sec": 4.925, "clock_minus_odom_sec": -0.024999999999999467, "odom_rx_age_sec": 9.236398909706622e-05}
+{"elapsed_wall_sec": 4.57, "ros_clock_sec": 5.4, "odom_stamp_sec": 5.4350000000000005, "clock_minus_odom_sec": -0.03500000000000014, "odom_rx_age_sec": 9.470200166106224e-05}
+{"elapsed_wall_sec": 5.09, "ros_clock_sec": 5.9, "odom_stamp_sec": 5.945, "clock_minus_odom_sec": -0.04499999999999993, "odom_rx_age_sec": 7.824899512343109e-05}
+{"elapsed_wall_sec": 5.6, "ros_clock_sec": 6.4, "odom_stamp_sec": 6.455, "clock_minus_odom_sec": -0.054999999999999716, "odom_rx_age_sec": 6.95249909767881e-05}
+{"elapsed_wall_sec": 6.12, "ros_clock_sec": 6.9, "odom_stamp_sec": 6.965, "clock_minus_odom_sec": -0.0649999999999995, "odom_rx_age_sec": 6.329600000753999e-05}
+{"elapsed_wall_sec": 6.63, "ros_clock_sec": 7.4, "odom_stamp_sec": 7.475, "clock_minus_odom_sec": -0.07499999999999929, "odom_rx_age_sec": 9.920299635268748e-05}
+{"elapsed_wall_sec": 7.14, "ros_clock_sec": 7.9, "odom_stamp_sec": 7.985, "clock_minus_odom_sec": -0.08499999999999996, "odom_rx_age_sec": 9.359000250697136e-05}
+{"elapsed_wall_sec": 7.65, "ros_clock_sec": 8.4, "odom_stamp_sec": 8.495, "clock_minus_odom_sec": -0.09499999999999886, "odom_rx_age_sec": 8.768399129621685e-05}

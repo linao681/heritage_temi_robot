@@ -1,5 +1,6 @@
 """Map localization and Nav2 for the currently running simulated hall."""
 import json
+import math
 from pathlib import Path
 import shutil
 import tempfile
@@ -14,8 +15,22 @@ from launch.substitutions import LaunchConfiguration
 ROOT = Path(__file__).resolve().parent
 
 
+def apply_speed_limit(params, max_linear_speed_mps):
+    try:
+        speed = float(max_linear_speed_mps)
+    except (TypeError, ValueError) as error:
+        raise ValueError('max_linear_speed_mps must be a finite number') from error
+    if not math.isfinite(speed) or not 0.0 < speed <= 1.0:
+        raise ValueError('max_linear_speed_mps must be in (0, 1.0]')
+    controller = params['controller_server']['ros__parameters']['FollowPath']
+    controller.update(max_vel_x=speed, max_speed_xy=speed)
+    params['velocity_smoother']['ros__parameters']['max_velocity'][0] = speed
+    return params
+
+
 def setup(context):
     layout = LaunchConfiguration('layout').perform(context)
+    max_linear_speed_mps = LaunchConfiguration('max_linear_speed_mps').perform(context)
     if layout not in ('official', 'adaptive'):
         raise ValueError('invalid layout')
     goal = json.loads((ROOT / 'generated' / f'{layout}_goals.json').read_text())['goals']['wait']
@@ -28,9 +43,7 @@ def setup(context):
     for costmap in ('local_costmap', 'global_costmap'):
         config = params[costmap][costmap]['ros__parameters']
         config.update(robot_base_frame='base_footprint', robot_radius=0.34)
-    controller = params['controller_server']['ros__parameters']['FollowPath']
-    controller.update(max_vel_x=0.35, max_speed_xy=0.35)
-    params['velocity_smoother']['ros__parameters']['max_velocity'][0] = 0.35
+    apply_speed_limit(params, max_linear_speed_mps)
     # launch 的配置文件留在独立临时目录，避免覆盖用户配置。
     folder = Path(tempfile.mkdtemp(prefix='heritage-nav2-'))
     config_path = folder / 'nav2.yaml'
@@ -47,4 +60,5 @@ def setup(context):
 
 def generate_launch_description():
     return LaunchDescription([DeclareLaunchArgument('layout', default_value='official'),
+                              DeclareLaunchArgument('max_linear_speed_mps', default_value='0.35'),
                               OpaqueFunction(function=setup)])

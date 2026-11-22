@@ -1,0 +1,50 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_readiness_poll_retries_a_slow_ros_preflight _______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73168ecb5d80>
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-106/test_readiness_poll_retries_a_0')
+
+    def test_readiness_poll_retries_a_slow_ros_preflight(monkeypatch, tmp_path):
+        import run_phase27_experiment as runner
+    
+        responses = iter([
+            runner.subprocess.TimeoutExpired(cmd='phase25_preflight', timeout=4.0),
+            runner.subprocess.CompletedProcess(
+                args=['phase25_preflight'], returncode=0, stdout='{"ready": true}', stderr=''),
+        ])
+    
+        def run_probe(*_args, **_kwargs):
+            result = next(responses)
+            if isinstance(result, BaseException):
+                raise result
+            return result
+    
+        monkeypatch.setattr(runner.subprocess, 'run', run_probe)
+        monkeypatch.setattr(runner.time, 'sleep', lambda _seconds: None)
+        process = SimpleNamespace(poll=lambda: None)
+    
+>       result = runner._wait_for_system_ready(
+            process, tmp_path / 'system.log', tmp_path, {}, timeout_sec=2.0)
+
+tests/test_phase27_experiment_runner.py:145: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_phase27_experiment.py:302: in _wait_for_system_ready
+    probe = subprocess.run(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_args = (['/home/linao/heritage_workspace/heritage_temi_robot/.venv/bin/python', '/tmp/pytest-of-linao/pytest-106/test_readiness_poll_retries_a_0/scripts/phase25_preflight.py', '--timeout-sec', '2'],)
+_kwargs = {'capture_output': True, 'cwd': PosixPath('/tmp/pytest-of-linao/pytest-106/test_readiness_poll_retries_a_0'), 'env': {}, 'text': True, ...}
+result = TimeoutExpired()
+
+    def run_probe(*_args, **_kwargs):
+        result = next(responses)
+        if isinstance(result, BaseException):
+>           raise result
+E           subprocess.TimeoutExpired: Command 'phase25_preflight' timed out after 4.0 seconds
+
+tests/test_phase27_experiment_runner.py:138: TimeoutExpired
+=========================== short test summary info ============================
+FAILED tests/test_phase27_experiment_runner.py::test_readiness_poll_retries_a_slow_ros_preflight
+1 failed, 21 deselected in 0.08s
+exit_code=1

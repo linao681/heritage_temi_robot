@@ -1,5 +1,23 @@
 # 项目状态
 
+## 阶段2.7当前状态（2026-11-22）
+
+执行记录见[阶段2.7最终报告](phase2_7/final_report.md)、[验证矩阵](phase2_7/validation_matrix.md)和[证据索引](phase2_7/competition/evidence_index.md)。ROS2 七包构建通过；全 `tests` 目录最新回归 487 passed、0 failed、0 skipped。Domain 230 运行前后为空，未使用 Domain 226。
+
+| 项目 | 当前结果 |
+|---|---|
+| 原 S01 | 前期多次准备失败；1.4 m 目标运行以 `PREDICTED_GEOMETRY_RISK` 中止，保留为 FAIL |
+| 安全终点动态导览 | 3.5 m 目标、人物侧向离开的两轮 Gazebo 运行完成五区和出口路线，7/7 目标；整体 PASS_WITH_RISK，0.3 m/s 干扰前标定窗口未达标 |
+| E06 恢复 | 两轮旧 UUID 停车后均以新 UUID 继续同一 zone_1，恢复证据复核均 PASS；仍没有7类多轮稳定性结论 |
+| E02/E04横穿/E07 | 未运行；不得用两轮相同配置安全终点或相机烟雾替代 |
+| 速度矩阵/重复导览/性能 | S02–S04、7轮统计、60秒性能及前后优化对照未完成 |
+| 相机 A–D | 独立 Gazebo RGB/Depth/CameraInfo/TF 冒烟通过；无带人 YOLOX/RGB-D准确度比较 |
+| 可视化 | 现有三维页面保留；真实记录回放、模式标识和完整感知面板未完成 |
+| 实体 temi | 无设备，未执行，`HARDWARE_REQUIRED` |
+| Git | 基线 `057761908e386f3d0ba7a779d61b860a15debbda`；改动留在工作树，未提交、未推送 |
+
+安全终点运行的几何间隙是 URDF/SDF 外接圆代理，接触观测为 null；问答使用 Mock Speak Action，不代表真实音频。自动测试、Gazebo 仿真与实体安全验证分别记录。最新构建和测试日志、SHA256 见阶段2.7最终报告。
+
 ## 阶段2.5当前状态（2026-11-22）
 
 阶段2.5仿真开发与验收记录见[阶段2.5报告](phase2_5_report.md)。本阶段在 `59d41bf` 基线之上完成动态人物与游客辅助相关实现、ROS2隔离启动脚本、五区闭环复测和数据分析。改动尚未提交或推送。

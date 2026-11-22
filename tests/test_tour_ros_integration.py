@@ -3,6 +3,7 @@
 import asyncio
 from dataclasses import replace
 import json
+import os
 from pathlib import Path
 from threading import Event, Thread
 import time
@@ -39,7 +40,7 @@ def rig(monkeypatch, tmp_path):
     from heritage_tour_manager.tour_config import TourConfig
 
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '227')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '227'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
     root = Path(__file__).resolve().parents[1]
     system = root / 'config/system.yaml'

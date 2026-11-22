@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/spawn_people_scenario.py", line 698, in main
+    time.sleep(interval)
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/spawn_people_scenario.py", line 783, in <module>
+    main()
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/spawn_people_scenario.py", line 779, in main
+    rclpy.shutdown()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 130, in shutdown
+    _shutdown(context=context)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/utilities.py", line 58, in shutdown
+    return context.shutdown()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/context.py", line 102, in shutdown
+    self.__context.shutdown()
+rclpy._rclpy_pybind11.RCLError: failed to shutdown: rcl_shutdown already called on the given context, at ./src/rcl/init.c:241

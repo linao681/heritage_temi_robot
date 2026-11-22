@@ -15,12 +15,15 @@ sys.path.insert(0, str(ROOT / 'ros2_ws/src/temi_speed_controller'))
 def test_fused_input_source_allowance_is_independent_of_visitor_count_validity():
     from temi_interfaces.msg import PerceptionInput
     from temi_speed_controller.speed_controller_node import SpeedControllerNode
+    from temi_speed_controller.speed_policy import SpeedController
 
     node = object.__new__(SpeedControllerNode)
     node._mock_mode = False
     node._allow_simulated_sources = True
     node._last_navigation_session_id = ''
     node._stop_confirmed = False
+    node._policy = SpeedController()
+    node._input = None
     message = PerceptionInput(
         source='gazebo_sensor_fusion', valid=False, sample_age_sec=0.1,
         navigation_session_id='nav-live', people_valid=False,
@@ -37,7 +40,7 @@ def test_fused_input_source_allowance_is_independent_of_visitor_count_validity()
 
 def test_visitor_depth_lidar_and_navigation_reach_speed_policy(monkeypatch, tmp_path):
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '230')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '230'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
 
     import rclpy

@@ -1,0 +1,54 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________________ test_analysis_cli_writes_valid_json_report __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-120/test_analysis_cli_writes_valid0')
+
+    def test_analysis_cli_writes_valid_json_report(tmp_path):
+        truth, report, rows = sample_inputs()
+        truth['status'] = 'PASS'
+        truth_path = tmp_path / 'truth.json'
+        report_path = tmp_path / 'report.json'
+        csv_path = tmp_path / 'topics.csv'
+        output_dir = tmp_path / 'analysis'
+        truth_path.write_text(json.dumps(truth), encoding='utf-8')
+        report_path.write_text(json.dumps(report), encoding='utf-8')
+        csv_path.write_text(
+            'time_monotonic_sec,current_robot_speed_mps\n' +
+            ''.join(f"{row['time_monotonic_sec']},{row['current_robot_speed_mps']}\n"
+                    for row in rows), encoding='utf-8')
+    
+        assert main([
+            '--truth', str(truth_path), '--report', str(report_path), '--csv', str(csv_path),
+            '--target-robot-speed-mps', '0.3', '--output-dir', str(output_dir),
+        ]) == 0
+    
+>       saved = json.loads((output_dir / 'analysis.json').read_text(encoding='utf-8'))
+
+tests/test_phase27_analysis.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7fcb20e201c0>
+s = '{\n  "analysis_status": "PASS",\n  "data_sources": {\n    "positions": "Gazebo /model_states readback",\n    "robot_s...ps count as one observation for freshness analysis."\n  ],\n  "analyzed_utc": "2026-11-22T05:05:39.040906+00:00"\n}\\n'
+_w = <built-in method match of re.Pattern object at 0x7fcb20f458a0>
+
+    def decode(self, s, _w=WHITESPACE.match):
+        """Return the Python representation of ``s`` (a ``str`` instance
+        containing a JSON document).
+    
+        """
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+        end = _w(s, end).end()
+        if end != len(s):
+>           raise JSONDecodeError("Extra data", s, end)
+E           json.decoder.JSONDecodeError: Extra data: line 121 column 2 (char 3364)
+
+/usr/lib/python3.10/json/decoder.py:340: JSONDecodeError
+----------------------------- Captured stdout call -----------------------------
+{"analysis_status": "PASS", "analysis_file": "/tmp/pytest-of-linao/pytest-120/test_analysis_cli_writes_valid0/analysis/analysis.json"}
+=========================== short test summary info ============================
+FAILED tests/test_phase27_analysis.py::test_analysis_cli_writes_valid_json_report
+1 failed in 0.05s

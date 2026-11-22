@@ -1,0 +1,15 @@
+run_id,experiment_id,attempt_status,analysis_status,stage,tour_state,route_completed_targets,error_or_limit,evidence_dir,counted_as_full_tour
+20261122T024323Z-S01-r001,S01,FAIL,,system_readiness_or_preflight,,,,docs/phase2_7/experiments/S01/20261122T024323Z-S01-r001,false
+20261122T024634Z-S01-r001,S01,FAIL,,system_readiness_or_preflight,,,,docs/phase2_7/experiments/S01/20261122T024634Z-S01-r001,false
+20261122T025608Z-S01-r001,S01,FAIL,,system_readiness_or_preflight,,,,docs/phase2_7/experiments/S01/20261122T025608Z-S01-r001,false
+20261122T035032Z-S01-r001,S01,FAIL,,tour_start_or_recovery_gate,,,TimeoutError: 等待超时：相机稳定检测到至少一位参观者,docs/phase2_7/experiments/S01/20261122T035032Z-S01-r001,false
+20261122T035911Z-S01-r001,S01,FAIL,,tour_start_or_recovery_gate,,,RuntimeError: start 未接受：start: 当前状态不允许,docs/phase2_7/experiments/S01/20261122T035911Z-S01-r001,false
+20261122T040328Z-S01-r001,S01,FAIL,,tour_start_or_recovery_gate,,,TimeoutError: 等待超时：进入等待游客同意状态,docs/phase2_7/experiments/S01/20261122T040328Z-S01-r001,false
+20261122T041835Z-S01-r001,S01,FAIL,,scenario_motion_or_risk_abort,,,RuntimeError: PREDICTED_GEOMETRY_RISK,docs/phase2_7/experiments/S01/20261122T041835Z-S01-r001,false
+20261122T042258Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,FAIL,,tour_start_or_recovery_gate,,,RuntimeError: 安全暂停后未自动恢复：导航安全停车,docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T042258Z-S01-SAFE-ENDPOINT-r001,false
+20261122T043735Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,FAIL,,scenario_motion_or_risk_abort,,,RuntimeError: OBSERVED_GEOMETRY_OVERLAP,docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T043735Z-S01-SAFE-ENDPOINT-r001,false
+20261122T044704Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,PASS_WITH_RISK,PASS_WITH_RISK,full_tour_completed,COMPLETED,7,,docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T044704Z-S01-SAFE-ENDPOINT-r001,true
+20261122T101456Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,FAIL,,system_readiness_or_preflight,,,,docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101456Z-S01-SAFE-ENDPOINT-r001,false
+20261122T101559Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,FAIL,,tour_start_or_recovery_gate,,,RuntimeError: Unable to convert call argument to Python object (compile in debug mode for details),docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101559Z-S01-SAFE-ENDPOINT-r001,false
+20261122T101631Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,FAIL,,system_readiness_or_preflight,,,,docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101631Z-S01-SAFE-ENDPOINT-r001,false
+20261122T101824Z-S01-SAFE-ENDPOINT-r001,S01-SAFE-ENDPOINT,PASS_WITH_RISK,PASS_WITH_RISK,full_tour_completed,COMPLETED,7,,docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101824Z-S01-SAFE-ENDPOINT-r001,true

@@ -13,7 +13,9 @@ from rclpy.parameter import Parameter
 from rclpy.action import ActionClient
 from rclpy.node import Node
 from temi_interfaces.msg import SafetyStopStatus
-from tf2_ros import Buffer, TransformListener
+from tf2_ros import Buffer, TransformException, TransformListener
+
+_ODOM_FUTURE_STAMP_TOLERANCE_SEC = 0.15
 
 
 def arrival_stop_confirmed(stable_since, last_sample, now,
@@ -42,6 +44,8 @@ class Nav2Transport(Node):
         self.create_subscription(Odometry, 'odom', self._odom, 10)
         self._mutex = Lock()
         self._last_odom = 0.0
+        self._last_odom_stamp_ns = 0
+        self._odom_initial_age = math.inf
         self._linear = self._angular = float('inf')
         self._arrival_stable_since = None
         self._pending = self._goal = self._result = None
@@ -54,29 +58,67 @@ class Nav2Transport(Node):
         self._stop_reason = '无停车请求'
         self._stop_action_terminal = False
         self._stop_stable_since = None
+        self._stop_was_confirmed = False
         self._stop_status = self.create_publisher(
             SafetyStopStatus, 'heritage/safety_stop/status', 10)
         self.create_timer(0.1, self._publish_stop_status)
 
     def _odom(self, msg):
         with self._mutex:
-            self._last_odom = time.monotonic()
+            now = time.monotonic()
+            if self._stop_state == 'STOP_CONFIRMED':
+                self._stop_was_confirmed = True
+            stamp = msg.header.stamp
+            stamp_ns = stamp.sec * 10**9 + stamp.nanosec
+            age_ns = self.get_clock().now().nanoseconds - stamp_ns
+            if (stamp_ns <= self._last_odom_stamp_ns or
+                    not -_ODOM_FUTURE_STAMP_TOLERANCE_SEC * 1e9 <= age_ns <= 500_000_000):
+                self._last_odom = 0.0
+                self._linear = self._angular = math.inf
+                self._arrival_stable_since = self._stop_stable_since = None
+                if self._stop_state == 'STOP_CONFIRMED':
+                    self._stop_state = 'STOPPING'
+                    self._stop_reason = '里程计样本过期或倒序，等待重新静止确认'
+                return
+            gap = self._odom_age(now) > 0.5
+            if gap:
+                self._arrival_stable_since = self._stop_stable_since = None
+            self._last_odom_stamp_ns = stamp_ns
+            self._odom_initial_age = max(0.0, age_ns / 1e9)
+            self._last_odom = now
             self._linear = math.hypot(msg.twist.twist.linear.x, msg.twist.twist.linear.y)
             self._angular = abs(msg.twist.twist.angular.z)
-            if self._linear < 0.02 and self._angular < 0.05:
+            stationary = self._linear < 0.02 and self._angular < 0.05
+            if stationary:
                 self._arrival_stable_since = self._arrival_stable_since or self._last_odom
             else:
                 self._arrival_stable_since = None
-            if self._stop_state == 'STOPPING':
-                if self._linear < 0.02 and self._angular < 0.05:
+            if self._stop_was_confirmed and not stationary:
+                self._stop_state = 'STOP_FAILED'
+                self._stop_stable_since = None
+                self._stop_reason = '停车确认后速度反馈再次显示机器人运动'
+                self._unsafe = True
+            elif self._stop_state == 'STOPPING':
+                if stationary:
                     self._stop_stable_since = self._stop_stable_since or self._last_odom
                 else:
                     self._stop_stable_since = None
-            elif (self._stop_state == 'STOP_CONFIRMED' and
-                  (self._linear >= 0.02 or self._angular >= 0.05)):
-                self._stop_state = 'STOP_FAILED'
-                self._stop_reason = '停车确认后速度反馈再次显示机器人运动'
-                self._unsafe = True
+            elif self._stop_state == 'STOP_CONFIRMED' and gap:
+                self._stop_state = 'STOPPING'
+                self._stop_reason = '里程计断流，等待重新静止确认'
+                self._stop_stable_since = now
+            if (self._stop_state == 'STOPPING' and self._stop_action_terminal and
+                    arrival_stop_confirmed(self._stop_stable_since, now, now)):
+                self._stop_state = 'STOP_CONFIRMED'
+                self._stop_was_confirmed = True
+                self._stop_reason = 'Nav2 Action 终止且新鲜里程计重新连续静止 0.5 秒'
+
+    def _odom_age(self, now):
+        received_age = now - self._last_odom if self._last_odom else math.inf
+        stamp_age = (self.get_clock().now().nanoseconds - self._last_odom_stamp_ns) / 1e9
+        return (max(received_age + self._odom_initial_age, max(0.0, stamp_age))
+                if received_age >= 0 and
+                stamp_age >= -_ODOM_FUTURE_STAMP_TOLERANCE_SEC else math.inf)
 
     def set_navigation_session_id(self, session_id):
         if not isinstance(session_id, str) or not session_id.strip():
@@ -91,11 +133,12 @@ class Nav2Transport(Node):
                 self._stop_reason = '当前导航会话未请求停车'
                 self._stop_action_terminal = False
                 self._stop_stable_since = None
+                self._stop_was_confirmed = False
 
     def _publish_stop_status(self):
         now = time.monotonic()
         with self._mutex:
-            age = now - self._last_odom if self._last_odom else math.inf
+            age = self._odom_age(now)
             state = self._stop_state
             stable = (now - self._stop_stable_since
                       if self._stop_stable_since is not None else 0.0)
@@ -126,12 +169,27 @@ class Nav2Transport(Node):
 
     def ready(self):
         with self._mutex:
-            fresh = time.monotonic() - self._last_odom < 2
+            fresh = self._odom_age(time.monotonic()) <= 0.5
         return bool(not self._unsafe and fresh and self.client.server_is_ready() and
-                    self.buffer.can_transform('map', 'base_footprint', rclpy.time.Time()))
+                    self._fresh_transform() is not None)
+
+    def _fresh_transform(self):
+        try:
+            value = self.buffer.lookup_transform('map', 'base_footprint', rclpy.time.Time())
+        except TransformException:
+            return None
+        stamp = value.header.stamp
+        stamp_ns = stamp.sec * 10**9 + stamp.nanosec
+        age_ns = self.get_clock().now().nanoseconds - stamp_ns
+        return (value if stamp_ns > 0 and
+                -_ODOM_FUTURE_STAMP_TOLERANCE_SEC * 1e9 <= age_ns <= 500_000_000
+                else None)
 
     def snapshot(self):
-        t = self.buffer.lookup_transform('map', 'base_footprint', rclpy.time.Time()).transform
+        value = self._fresh_transform()
+        if value is None:
+            return None
+        t = value.transform
         q = t.rotation
         with self._mutex:
             moving = self._linear >= 0.02 or self._angular >= 0.05
@@ -153,7 +211,7 @@ class Nav2Transport(Node):
             now = time.monotonic()
             with self._mutex:
                 confirmed = arrival_stop_confirmed(
-                    self._arrival_stable_since, self._last_odom, now)
+                    self._arrival_stable_since, self._last_odom, now) and self._odom_age(now) <= 0.5
             if confirmed:
                 return True
             await asyncio.sleep(0.05)
@@ -213,46 +271,57 @@ class Nav2Transport(Node):
         velocities = list(smoother_response.values[0].double_array_value)
         old_smoother = list(velocities)
         velocities[0] = float(target_speed_mps)
-        controller_params = [
-            Parameter('FollowPath.max_vel_x', value=float(target_speed_mps)).to_parameter_msg(),
-            Parameter('FollowPath.max_speed_xy', value=float(target_speed_mps)).to_parameter_msg(),
-        ]
-        controller_result, smoother_result = await asyncio.gather(
-            self._future(self._controller_set.call_async(SetParameters.Request(parameters=controller_params)), 3.0),
-            self._future(self._smoother_set.call_async(SetParameters.Request(parameters=[
-                Parameter('max_velocity', value=velocities).to_parameter_msg()])), 3.0),
-        )
-        if (len(controller_result.results) != len(controller_params) or
-                len(smoother_result.results) != 1 or
-                not all(item.successful for item in controller_result.results) or
-                not all(item.successful for item in smoother_result.results)):
-            await asyncio.gather(
+        async def write_params(controller, smoother):
+            return await asyncio.gather(
                 self._future(self._controller_set.call_async(SetParameters.Request(parameters=[
-                    Parameter('FollowPath.max_vel_x', value=old_controller[0]).to_parameter_msg(),
-                    Parameter('FollowPath.max_speed_xy', value=old_controller[1]).to_parameter_msg()])), 3.0),
+                    Parameter('FollowPath.max_vel_x', value=controller[0]).to_parameter_msg(),
+                    Parameter('FollowPath.max_speed_xy', value=controller[1]).to_parameter_msg()])), 3.0),
                 self._future(self._smoother_set.call_async(SetParameters.Request(parameters=[
-                    Parameter('max_velocity', value=old_smoother).to_parameter_msg()])), 3.0),
+                    Parameter('max_velocity', value=smoother).to_parameter_msg()])), 3.0),
                 return_exceptions=True,
             )
-            return False
-        verify_controller, verify_smoother = await asyncio.gather(
-            self._future(self._controller_get.call_async(GetParameters.Request(
-                names=['FollowPath.max_vel_x', 'FollowPath.max_speed_xy'])), 3.0),
-            self._future(self._smoother_get.call_async(GetParameters.Request(
-                names=['max_velocity'])), 3.0),
-        )
-        actual_controller = [value.double_value for value in verify_controller.values]
-        actual_smoother = (list(verify_smoother.values[0].double_array_value)
-                           if verify_smoother.values else [])
-        return (len(actual_controller) == 2 and len(actual_smoother) == len(velocities) and
-                all(math.isclose(value, target_speed_mps, rel_tol=0.0, abs_tol=1e-4)
-                    for value in actual_controller) and
-                math.isclose(actual_smoother[0], target_speed_mps, rel_tol=0.0, abs_tol=1e-4))
+
+        def applied(responses):
+            return all(not isinstance(response, BaseException) and len(response.results) == count and
+                       all(item.successful for item in response.results)
+                       for response, count in zip(responses, (2, 1)))
+
+        async def readback_matches(controller, smoother):
+            try:
+                verify_controller, verify_smoother = await asyncio.gather(
+                    self._future(self._controller_get.call_async(GetParameters.Request(
+                        names=['FollowPath.max_vel_x', 'FollowPath.max_speed_xy'])), 3.0),
+                    self._future(self._smoother_get.call_async(smoother_request), 3.0),
+                )
+            except Exception:
+                return False
+            actual_controller = [value.double_value for value in verify_controller.values]
+            actual_smoother = (list(verify_smoother.values[0].double_array_value)
+                               if verify_smoother.values else [])
+            return (len(actual_controller) == len(controller) and len(actual_smoother) == len(smoother) and
+                    all(math.isclose(actual, expected, rel_tol=0.0, abs_tol=1e-4)
+                        for actual, expected in zip(actual_controller + actual_smoother,
+                                                    controller + smoother)))
+
+        requested = [float(target_speed_mps)] * 2
+        result = await write_params(requested, velocities)
+        if applied(result) and await readback_matches(requested, velocities):
+            return True
+        restored = await write_params(old_controller, old_smoother)
+        if (not applied(restored) or not await readback_matches(old_controller, old_smoother) or
+                any(isinstance(item, BaseException) for item in result)):
+            self._unsafe = True  # Late writes can outlive a timeout; do not trust subsequent motion.
+        return False
 
     async def stop(self):
         async with self._stop_lock:
             self._abort = True
             with self._mutex:
+                if (self._stop_state == 'STOP_CONFIRMED' and self._stop_action_terminal and
+                        self._stop_session_id == self._navigation_session_id and
+                        self._odom_age(time.monotonic()) <= 0.5 and
+                        arrival_stop_confirmed(self._stop_stable_since, self._last_odom, time.monotonic())):
+                    return True
                 self._stop_session_id = self._navigation_session_id
                 self._stop_state = 'STOP_REQUESTED'
                 self._stop_reason = 'Nav2 停车请求已提交'
@@ -284,25 +353,20 @@ class Nav2Transport(Node):
                     with self._mutex:
                         self._stop_state = 'STOPPING'
                         self._stop_reason = '没有活动 Nav2 Action，等待里程计连续静止确认'
-                stable_since = None
                 deadline = time.monotonic() + 5
                 while time.monotonic() < deadline:
                     with self._mutex:
-                        still = (time.monotonic()-self._last_odom < 0.5 and
-                                 self._linear < 0.02 and self._angular < 0.05)
-                    if still:
-                        stable_since = stable_since or time.monotonic()
-                        if time.monotonic()-stable_since >= 0.5:
-                            with self._mutex:
-                                self._stop_state = 'STOP_CONFIRMED'
-                                self._stop_action_terminal = True
-                                self._stop_stable_since = stable_since
-                                self._stop_reason = 'Nav2 Action 终止且新鲜里程计连续静止 0.5 秒'
+                        now = time.monotonic()
+                        if (self._odom_age(now) <= 0.5 and
+                                arrival_stop_confirmed(self._stop_stable_since, self._last_odom, now)):
+                            self._stop_state = 'STOP_CONFIRMED'
+                            self._stop_was_confirmed = True
+                            self._stop_action_terminal = True
+                            self._stop_reason = 'Nav2 Action 终止且新鲜里程计连续静止 0.5 秒'
                             self._pending = self._goal = self._result = None
                             return True
-                    else:
-                        stable_since = None
                     await asyncio.sleep(0.05)
+                raise TimeoutError('没有足够的新鲜静止里程计')
             except Exception as error:
                 with self._mutex:
                     self._stop_state = 'STOP_FAILED'

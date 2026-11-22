@@ -1,0 +1,2 @@
+{"status": "FAIL", "error": "TimeoutExpired: Command '['/home/linao/heritage_workspace/heritage_temi_robot/.venv/bin/python', '/home/linao/heritage_workspace/heritage_temi_robot/scripts/phase25_preflight.py', '--timeout-sec', '2']' timed out after 4.0 seconds"}
+exit_code=2

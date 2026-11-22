@@ -92,6 +92,8 @@ class SpeedInputs:
     person_distance_timestamp_sec: float | None = None
     current_speed_mps: float | None = None
     current_speed_valid: bool = False
+    current_angular_speed_rps: float = 0.0
+    auto_resume_permitted: bool = True
 
 
 @dataclass(frozen=True)
@@ -106,6 +108,8 @@ class SpeedDecision:
     resume_requested: bool = False
     dynamic_stop_distance_m: float = 0.0
     approach_speed_mps: float = 0.0
+    recovery_clear_since: float | None = None
+    stopped_session_id: str = ''
 
 
 class SpeedController:
@@ -121,16 +125,19 @@ class SpeedController:
         self._last_speed = None
         self._last_command_at = -math.inf
         self._last_session = ''
+        self._retired_sessions = set()
         self._confirmed_session = ''
         self._stop_sent = False
         self._last_update = None
-        self._resume_sent = False
+        self._last_sample_at = None
         self._last_person_sample = None
         self._approach_speed_mps = 0.0
+        self.recovery_person_minimum_m = self.config.stop_person_distance_m + self.config.clear_distance_hysteresis_m
 
     def report_stop_result(self, success: bool):
         """停车接口失败时锁存错误，不能把尚未确认的停车当作完成。"""
         if not success:
+            self._clear_since = None
             self._error_latched = True
             self._stop_sent = True
             self.state, self.reason = 'ERROR', '停车请求未成功确认'
@@ -160,23 +167,51 @@ class SpeedController:
         self._stop_sent = False
         self._last_speed = None
         self._last_command_at = -math.inf
-        self._last_session = ''
         self._confirmed_session = ''
+        self._clear_since = None
         self.state = 'IDLE'
         self.reason = '人工复位'
 
+    def reject_resume(self, session_id):
+        if self.state == 'RECOVERING' and session_id == self._last_session:
+            self.interrupt_recovery()
+
+    def interrupt_recovery(self):
+        if self._clear_since is not None and self.state == 'RECOVERING':
+            self.state, self.reason = 'WAITING', '恢复资格已撤销'
+        self._clear_since = None
+
     def update(self, inputs: SpeedInputs, now: float) -> SpeedDecision:
         cfg = self.config
-        dt = 0.0 if self._last_update is None else max(0.0, now - self._last_update)
+        elapsed = 0.0 if self._last_update is None else now - self._last_update
+        dt = max(0.0, elapsed)
         self._last_update = now
+        sample_at = inputs.person_distance_timestamp_sec
+        last_sample_at = self._last_sample_at
+        clock_regressed = elapsed < 0
+        sample_ordered = sample_at is None or (
+            type(sample_at) in (int, float) and math.isfinite(sample_at) and
+            0 <= now - sample_at <= cfg.input_timeout_sec and
+            (last_sample_at is None or sample_at >= last_sample_at))
+        if sample_ordered and sample_at is not None and not clock_regressed:
+            self._last_sample_at = sample_at
+        interrupted = (clock_regressed or not sample_ordered or elapsed > cfg.input_timeout_sec or
+            (sample_ordered and sample_at is not None and last_sample_at is not None and
+             sample_at - last_sample_at > cfg.input_timeout_sec))
+        if interrupted:
+            self.interrupt_recovery()
+        if inputs.navigation_session_id in self._retired_sessions:
+            self._clear_since = None
+            return self._decision(None, False, False, inputs, now)
         new_session = bool(inputs.navigation_session_id and inputs.navigation_session_id != self._last_session)
         if new_session:
+            if self._last_session:
+                self._retired_sessions.add(self._last_session)
             self._last_session = inputs.navigation_session_id
             self._confirmed_session = ''
             self._last_speed = None
             self._last_command_at = -math.inf
             self._stop_sent = False
-            self._resume_sent = False
             recovering = self.state == 'RECOVERING'
             if not recovering:
                 self.state = 'NORMAL'
@@ -204,6 +239,7 @@ class SpeedController:
             if stop: self._stop_sent = True
             return self._decision(None, False, stop, inputs, now)
         if self._manual_latched or not inputs.communication_valid or not inputs.position_valid or inputs.navigation_error:
+            self._clear_since = None
             self._error_latched = True
             self.state, self.reason = 'ERROR', ('人工停止' if self._manual_latched else
                 '通信异常' if not inputs.communication_valid else '定位异常' if not inputs.position_valid else '导航异常')
@@ -225,7 +261,8 @@ class SpeedController:
                          type(inputs.crowd_density) in (int, float) and
                          math.isfinite(inputs.crowd_density) and 0 <= inputs.crowd_density <= 1)
         density_unknown = not inputs.crowd_density_valid and inputs.crowd_density is None
-        sensors_valid = (type(inputs.sample_age_sec) in (int, float) and math.isfinite(inputs.sample_age_sec) and
+        sensors_valid = (sample_ordered and not clock_regressed and
+                         type(inputs.sample_age_sec) in (int, float) and math.isfinite(inputs.sample_age_sec) and
                          inputs.sample_age_sec >= 0 and inputs.sample_age_sec + max(0.0, now - inputs.now) <= cfg.input_timeout_sec and now >= inputs.now and
                          inputs.source_allowed and person_observation_valid and
                          inputs.obstacle_distance_valid and inputs.safety_stop_valid and
@@ -233,6 +270,7 @@ class SpeedController:
                          math.isfinite(inputs.obstacle_distance_m) and inputs.obstacle_distance_m >= 0 and
                          (density_valid or density_unknown))
         if not sensors_valid:
+            self._clear_since = None
             self._clear_person_approach()
             self.state, self.reason = 'STOPPING', '感知数据无效或过期'
             stop = not self._stop_sent and not stop_confirmed
@@ -247,11 +285,9 @@ class SpeedController:
         if self.state == 'STOPPED':
             self.state, self.reason = 'WAITING', '停车已确认，等待恢复条件'
         if not inputs.navigating:
-            if self.state == 'RECOVERING':
-                return self._decision(None, False, False, inputs, now)
             if self.state == 'STOPPING' and not stop_confirmed:
                 return self._decision(None, False, False, inputs, now)
-            if self.state != 'WAITING':
+            if self.state not in ('WAITING', 'RECOVERING'):
                 self.state, self.reason = 'IDLE', '当前无导航任务'
                 return self._decision(None, False, False, inputs, now)
 
@@ -264,6 +300,7 @@ class SpeedController:
             robot_speed ** 2 / (2.0 * cfg.deceleration_limit_mps2) +
             approach_speed * (latency + braking_time) + cfg.person_stop_margin_m)
         person_stop_distance = max(cfg.stop_person_distance_m, dynamic_stop_distance)
+        self.recovery_person_minimum_m = person_stop_distance + cfg.clear_distance_hysteresis_m
         person_slow_distance = max(cfg.slow_person_distance_m,
                                    person_stop_distance + cfg.person_slow_buffer_m)
         person_stop = (person_distance_valid and
@@ -276,6 +313,7 @@ class SpeedController:
             self._lost_since = None
         group_wait = self._lost_since is not None and now - self._lost_since >= cfg.lost_group_stop_sec
         if hard_stop or group_wait:
+            self._clear_since = None
             if inputs.safety_stop:
                 stop_reason = '安全停车条件'
             elif inputs.explaining:
@@ -304,10 +342,13 @@ class SpeedController:
                                   dynamic_stop_distance=dynamic_stop_distance,
                                   approach_speed=approach_speed)
 
-        if self.state in ('STOPPED', 'WAITING'):
+        if self.state in ('STOPPED', 'WAITING') or (self.state == 'RECOVERING' and not inputs.navigating):
             person_clear = no_person_observed or (person_distance_valid and
                 inputs.nearest_person_m > person_stop_distance + cfg.clear_distance_hysteresis_m)
-            clear = (person_clear and
+            stationary = (inputs.current_speed_valid and inputs.current_speed_mps is not None and
+                          0 <= inputs.current_speed_mps < 0.02 and
+                          0 <= inputs.current_angular_speed_rps < 0.05)
+            clear = (inputs.auto_resume_permitted and stop_confirmed and stationary and person_clear and
                      inputs.obstacle_distance_m > cfg.stop_obstacle_distance_m + cfg.clear_distance_hysteresis_m and
                      inputs.group_state != 'lost' and not inputs.safety_stop and not inputs.explaining)
             if not clear:
@@ -322,10 +363,10 @@ class SpeedController:
                 return self._decision(None, False, False, inputs, now,
                                       dynamic_stop_distance=dynamic_stop_distance,
                                       approach_speed=approach_speed)
+            resume = self.state != 'RECOVERING'
             self.state, self.reason = 'RECOVERING', '安全条件恢复；请求导览状态机重新导航'
             self._stop_sent = False
-            self._resume_sent = True
-            return self._decision(None, False, False, inputs, now, resume=True,
+            return self._decision(None, False, False, inputs, now, resume=resume,
                                   dynamic_stop_distance=dynamic_stop_distance,
                                   approach_speed=approach_speed)
 
@@ -418,4 +459,5 @@ class SpeedController:
             self._last_speed, self._last_command_at = target, now
         return SpeedDecision(self.state, target, send, stop, self.reason,
                              inputs.navigation_session_id, command_id, resume,
-                             dynamic_stop_distance, approach_speed)
+                             dynamic_stop_distance, approach_speed, self._clear_since,
+                             self._last_session if self._clear_since is not None else '')

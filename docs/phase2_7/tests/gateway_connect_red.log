@@ -1,0 +1,49 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_backend_connect_retries_transient_nav2_readiness _____________
+
+    def test_backend_connect_retries_transient_nav2_readiness():
+        class RecoveringTransport(Transport):
+            def __init__(self):
+                super().__init__()
+                self.ready_checks = 0
+    
+            def ready(self):
+                self.ready_checks += 1
+                return self.ready_checks >= 3
+    
+        async def scenario():
+            transport = RecoveringTransport()
+            backend = Nav2Backend(transport, {})
+    
+            result = await backend.connect()
+    
+            assert result.success
+            assert backend.connected
+            assert transport.ready_checks >= 3
+    
+>       asyncio.run(scenario())
+
+tests/test_nav2_backend.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def scenario():
+        transport = RecoveringTransport()
+        backend = Nav2Backend(transport, {})
+    
+        result = await backend.connect()
+    
+>       assert result.success
+E       AssertionError: assert False
+E        +  where False = TaskResult(success=False, message='Nav2 未就绪').success
+
+tests/test_nav2_backend.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_nav2_backend.py::test_backend_connect_retries_transient_nav2_readiness
+1 failed, 11 deselected in 0.10s
+exit_code=1

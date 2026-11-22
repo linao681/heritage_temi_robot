@@ -1,0 +1,101 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+___________ test_camera_variant_updates_the_shared_urdf_description ____________
+
+    def test_camera_variant_updates_the_shared_urdf_description():
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+    
+>       description = hall_launch.configure_camera(urdf, height_m=0.70,
+                                                   pitch_down_deg=10.0)
+E       AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:19: AttributeError
+____ test_camera_optical_axis_pitch_is_verified_from_generated_tf_rotation _____
+
+    def test_camera_optical_axis_pitch_is_verified_from_generated_tf_rotation():
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+>       description = hall_launch.configure_camera(urdf, height_m=0.55,
+                                                   pitch_down_deg=10.0)
+E       AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:28: AttributeError
+________ test_default_camera_variant_preserves_height_and_forward_axis _________
+
+    def test_default_camera_variant_preserves_height_and_forward_axis():
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+    
+>       description = hall_launch.configure_camera(urdf, height_m=0.55,
+                                                   pitch_down_deg=0.0)
+E       AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:40: AttributeError
+____________ test_camera_variant_rejects_unsupported_pose[nan-0.0] _____________
+
+height = nan, pitch = 0.0
+
+    @pytest.mark.parametrize('height,pitch', [
+        (float('nan'), 0.0), (0.0, 0.0), (0.55, float('inf')), (0.55, 91.0),
+    ])
+    def test_camera_variant_rejects_unsupported_pose(height, pitch):
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+    
+        with pytest.raises(ValueError):
+>           hall_launch.configure_camera(urdf, height_m=height, pitch_down_deg=pitch)
+E           AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:55: AttributeError
+____________ test_camera_variant_rejects_unsupported_pose[0.0-0.0] _____________
+
+height = 0.0, pitch = 0.0
+
+    @pytest.mark.parametrize('height,pitch', [
+        (float('nan'), 0.0), (0.0, 0.0), (0.55, float('inf')), (0.55, 91.0),
+    ])
+    def test_camera_variant_rejects_unsupported_pose(height, pitch):
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+    
+        with pytest.raises(ValueError):
+>           hall_launch.configure_camera(urdf, height_m=height, pitch_down_deg=pitch)
+E           AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:55: AttributeError
+____________ test_camera_variant_rejects_unsupported_pose[0.55-inf] ____________
+
+height = 0.55, pitch = inf
+
+    @pytest.mark.parametrize('height,pitch', [
+        (float('nan'), 0.0), (0.0, 0.0), (0.55, float('inf')), (0.55, 91.0),
+    ])
+    def test_camera_variant_rejects_unsupported_pose(height, pitch):
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+    
+        with pytest.raises(ValueError):
+>           hall_launch.configure_camera(urdf, height_m=height, pitch_down_deg=pitch)
+E           AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:55: AttributeError
+___________ test_camera_variant_rejects_unsupported_pose[0.55-91.0] ____________
+
+height = 0.55, pitch = 91.0
+
+    @pytest.mark.parametrize('height,pitch', [
+        (float('nan'), 0.0), (0.0, 0.0), (0.55, float('inf')), (0.55, 91.0),
+    ])
+    def test_camera_variant_rejects_unsupported_pose(height, pitch):
+        urdf = (ROOT / 'simulation/robot/heritage_robot.urdf').read_text()
+    
+        with pytest.raises(ValueError):
+>           hall_launch.configure_camera(urdf, height_m=height, pitch_down_deg=pitch)
+E           AttributeError: module 'heritage_hall_launch' has no attribute 'configure_camera'
+
+tests/test_phase27_camera_config.py:55: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_phase27_camera_config.py::test_camera_variant_updates_the_shared_urdf_description
+FAILED tests/test_phase27_camera_config.py::test_camera_optical_axis_pitch_is_verified_from_generated_tf_rotation
+FAILED tests/test_phase27_camera_config.py::test_default_camera_variant_preserves_height_and_forward_axis
+FAILED tests/test_phase27_camera_config.py::test_camera_variant_rejects_unsupported_pose[nan-0.0]
+FAILED tests/test_phase27_camera_config.py::test_camera_variant_rejects_unsupported_pose[0.0-0.0]
+FAILED tests/test_phase27_camera_config.py::test_camera_variant_rejects_unsupported_pose[0.55-inf]
+FAILED tests/test_phase27_camera_config.py::test_camera_variant_rejects_unsupported_pose[0.55-91.0]
+7 failed in 0.20s
+exit_code=1

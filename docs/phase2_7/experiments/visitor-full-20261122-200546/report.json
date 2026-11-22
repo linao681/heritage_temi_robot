@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "operator_mode": "scripted simulated consent and regroup confirmation",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "error": "[Errno 104] Connection reset by peer",
+  "events": [],
+  "elapsed_sec": 200.71715558399956
+}

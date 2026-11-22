@@ -1,0 +1,5 @@
+[INFO] [1795342567.980323555] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 18:16:25,434 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 18:16:25,434 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 18:16:25,457 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-22 18:16:55,459 INFO heritage_tour_manager.tour_manager: IDLE: 游客未在期限内同意

@@ -1,5 +1,6 @@
 """ROS2 自定义接口的实际 Python 类型和通信验收测试。"""
 
+import os
 import time
 
 from rclpy.serialization import deserialize_message, serialize_message
@@ -107,7 +108,7 @@ def test_ros_node_publishes_and_receives_custom_message(monkeypatch, tmp_path):
     """创建真实 ROS2 节点和通信实体，确认类型支持可用。"""
     # 测试自身也必须限制通信范围，避免使用开发者的日常 ROS Domain。
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '231')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '231'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
 
     import rclpy

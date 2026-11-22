@@ -1,7 +1,13 @@
 import sys
+import math
+from types import SimpleNamespace
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'ros2_ws/src/temi_speed_controller'))
+from temi_speed_controller import speed_controller_node
+from temi_speed_controller.speed_controller_node import SpeedControllerNode
 from temi_speed_controller.speed_policy import (SpeedConfig, SpeedController, SpeedInputs,
     perception_source_allowed)
 
@@ -14,6 +20,50 @@ def sample(**changes):
                   navigation_session_id='active', sample_age_sec=0.0)
     values.update(changes)
     return SpeedInputs(**values)
+
+
+def odom_message(stamp_sec, stamp_nanosec):
+    return SimpleNamespace(
+        header=SimpleNamespace(stamp=SimpleNamespace(sec=stamp_sec, nanosec=stamp_nanosec)),
+        twist=SimpleNamespace(twist=SimpleNamespace(
+            linear=SimpleNamespace(x=0.0, y=0.0),
+            angular=SimpleNamespace(z=0.0))),
+    )
+
+
+def speed_node_for_odom(monkeypatch, ros_time_ns=100 * 10**9):
+    node = SpeedControllerNode.__new__(SpeedControllerNode)
+    node._policy = SimpleNamespace(interruptions=0)
+    node._policy.interrupt_recovery = lambda: setattr(
+        node._policy, 'interruptions', node._policy.interruptions + 1)
+    node._odom_received_at = None
+    node._odom_stamp_ns = 0
+    node._odom_source_age_at_receive = math.inf
+    monkeypatch.setattr(speed_controller_node.time, 'monotonic', lambda: 10.0)
+    monkeypatch.setattr(SpeedControllerNode, 'get_clock', lambda _self: SimpleNamespace(
+        now=lambda: SimpleNamespace(nanoseconds=ros_time_ns)))
+    return node
+
+
+def test_speed_controller_keeps_freshness_for_bounded_future_odom_stamp(monkeypatch):
+    node = speed_node_for_odom(monkeypatch)
+
+    node._on_odom(odom_message(100, 100_000_000))
+
+    assert node._odom_received_at == 10.0
+    assert node._odom_source_age_at_receive == 0.0
+    assert node._odom_age(10.2) == pytest.approx(0.2)
+    assert node._policy.interruptions == 0
+
+
+def test_speed_controller_rejects_future_odom_stamp_beyond_clock_skew_bound(monkeypatch):
+    node = speed_node_for_odom(monkeypatch)
+
+    node._on_odom(odom_message(100, 200_000_000))
+
+    assert node._odom_received_at is None
+    assert math.isinf(node._odom_age(10.2))
+    assert node._policy.interruptions == 1
 
 
 def test_open_area_uses_configured_open_speed():
@@ -330,11 +380,15 @@ def test_waiting_for_confirmed_stop_can_resume_only_after_stable_clear_period():
     assert waiting.state == 'STOPPED'
     clearing = controller.update(sample(now=0.2, stop_confirmed=True,
                                        stop_confirmed_session_id='active', navigating=False,
-                                       obstacle_distance_m=0.75), now=0.2)
+                                       obstacle_distance_m=0.75, current_speed_mps=0.0,
+                                       current_speed_valid=True), now=0.2)
     assert clearing.state == 'WAITING' and not clearing.resume_requested
+    controller.update(sample(now=0.7, stop_confirmed=True, stop_confirmed_session_id='active',
+                             navigating=False, current_speed_mps=0.0, current_speed_valid=True), now=0.7)
     resumed = controller.update(sample(now=1.3, stop_confirmed=True,
                                       stop_confirmed_session_id='active', navigating=False,
-                                      obstacle_distance_m=0.75), now=1.3)
+                                      obstacle_distance_m=0.75, current_speed_mps=0.0,
+                                      current_speed_valid=True), now=1.3)
     assert resumed.state == 'RECOVERING'
     assert resumed.resume_requested
     new_goal = controller.update(sample(now=1.4, navigation_session_id='new-goal'), now=1.4)
@@ -358,11 +412,16 @@ def test_stable_obstacle_clearance_above_stop_plus_hysteresis_can_resume():
                              stop_confirmed_session_id='active', navigating=False), now=0.1)
 
     controller.update(sample(now=0.2, obstacle_distance_m=0.662, stop_confirmed=True,
-                             stop_confirmed_session_id='active', navigating=False), now=0.2)
+                             stop_confirmed_session_id='active', navigating=False,
+                             current_speed_mps=0.0, current_speed_valid=True), now=0.2)
+    controller.update(sample(now=0.7, obstacle_distance_m=0.662, stop_confirmed=True,
+                             stop_confirmed_session_id='active', navigating=False,
+                             current_speed_mps=0.0, current_speed_valid=True), now=0.7)
     recovered = controller.update(sample(now=1.3, obstacle_distance_m=0.662,
                                           stop_confirmed=True,
                                           stop_confirmed_session_id='active',
-                                          navigating=False), now=1.3)
+                                          navigating=False, current_speed_mps=0.0,
+                                          current_speed_valid=True), now=1.3)
 
     assert recovered.state == 'RECOVERING'
     assert recovered.resume_requested

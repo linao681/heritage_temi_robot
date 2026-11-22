@@ -1,0 +1,128 @@
+version: 1
+layout: official
+defaults:
+  route: [wait, zone_1, zone_2, zone_3, zone_4, zone_5, exit]
+  timeouts:
+    preflight_sec: 240
+    tour_sec: 1200
+    visitor_sec: 90
+    shutdown_sec: 20
+  seed: 31
+  actor_motion:
+    continue_after_robot_stop: true
+    stop_at_target: true
+    movement_speed_mps: 0.1
+    target_distance_m: 1.4
+    hold_at_target_sec: 2.0
+    leave_after_hold: true
+    leave_distance_m: 3.1
+    hold_clear_sec: 1.0
+experiments:
+  - id: S01
+    scenario: approaching
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+    actor_motion:
+      continue_after_robot_stop: true
+      stop_at_target: true
+      movement_speed_mps: 0.1
+      target_distance_m: 1.4
+      hold_at_target_sec: 2.0
+      leave_after_hold: true
+      leave_distance_m: 3.1
+      hold_clear_sec: 1.0
+
+  - id: S01-SAFE-ENDPOINT
+    scenario: approaching
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+    actor_motion:
+      continue_after_robot_stop: true
+      stop_at_target: true
+      movement_speed_mps: 0.1
+      target_distance_m: 3.5
+      hold_at_target_sec: 2.0
+      leave_after_hold: true
+      leave_distance_m: 3.1
+      leave_direction: left
+      hold_clear_sec: 1.0
+
+  - id: S02
+    scenario: approaching
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+    actor_motion:
+      continue_after_robot_stop: true
+      stop_at_target: true
+      movement_speed_mps: 0.5
+      target_distance_m: 0.6
+      hold_at_target_sec: 2.0
+      leave_after_hold: true
+      leave_distance_m: 3.9
+      hold_clear_sec: 1.0
+
+  - id: S03
+    scenario: approaching
+    scenario_target: zone_1
+    robot_speed_mps: 0.5
+    actor_motion:
+      continue_after_robot_stop: true
+      stop_at_target: true
+      movement_speed_mps: 0.25
+      target_distance_m: 0.6
+      hold_at_target_sec: 2.0
+      leave_after_hold: true
+      leave_distance_m: 3.9
+      hold_clear_sec: 1.0
+
+  - id: S04
+    scenario: approaching
+    scenario_target: zone_1
+    robot_speed_mps: 0.7
+    actor_motion:
+      continue_after_robot_stop: true
+      stop_at_target: true
+      movement_speed_mps: 0.25
+      target_distance_m: 0.6
+      hold_at_target_sec: 2.0
+      leave_after_hold: true
+      leave_distance_m: 3.9
+      hold_clear_sec: 1.0
+
+  - id: E06-SAFE
+    scenario: approaching
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+    actor_motion:
+      continue_after_robot_stop: true
+      stop_at_target: true
+      movement_speed_mps: 0.1
+      target_distance_m: 1.4
+      hold_at_target_sec: 2.0
+      leave_after_hold: true
+      leave_distance_m: 3.1
+      hold_clear_sec: 3.0
+
+  - id: CAM-A
+    scenario: camera_a
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+
+  - id: CAM-B
+    scenario: camera_b
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+    camera_height_m: 0.55
+    camera_pitch_down_deg: 10.0
+
+  - id: CAM-C
+    scenario: camera_c
+    scenario_target: zone_1
+    robot_speed_mps: 0.3
+    camera_height_m: 0.70
+    camera_pitch_down_deg: 0.0
+
+  - id: CAM-D
+    scenario: camera_d
+    scenario_target: zone_1
+    robot_speed_mps: 0.3

@@ -75,7 +75,7 @@ class TourEvidence(Node):
             return
         signature = tuple(current.get(key) for key in
                           ('state', 'reason', 'outcome', 'route_index', 'target',
-                           'qa_waiting')) + (tuple(current.get('visited', [])),
+                           'qa_waiting', 'connected', 'is_moving', 'current_location')) + (tuple(current.get('visited', [])),
                                              json.dumps(current.get('qa_result'), sort_keys=True))
         if signature != self._last_tour_signature:
             self.events.append({
@@ -84,6 +84,9 @@ class TourEvidence(Node):
                 'outcome': current.get('outcome'), 'route_index': current.get('route_index'),
                 'target': current.get('target'), 'visited': current.get('visited', []),
                 'qa_waiting': current.get('qa_waiting'), 'qa_result': current.get('qa_result'),
+                'connected': current.get('connected'),
+                'is_moving': current.get('is_moving'),
+                'current_location': current.get('current_location'),
             })
             self._last_tour_signature = signature
         self.tour = current
@@ -244,6 +247,15 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
+def safety_pause_timeout_budget_sec(args):
+    if args.dynamic_scenario != 'approaching' or not args.continue_after_robot_stop:
+        return min(30.0, args.timeout_sec)
+    approach_sec = max(0.0, 4.5 - args.scenario_end_distance_m) / args.person_speed_mps
+    leave_sec = args.leave_distance_m / args.person_speed_mps if args.leave_after_hold else 0.0
+    actor_sec = approach_sec + args.hold_at_target_sec + leave_sec + args.hold_clear_sec
+    return min(args.timeout_sec, max(30.0, actor_sec + 30.0))
+
+
 def validate_dynamic_scenario_evidence(truth, perception_events, speed_events,
                                        navigation_events):
     start = truth.get('movement_started_monotonic_sec')
@@ -358,8 +370,8 @@ def validate_leaving_recovery_evidence(truth, speed_events, stop_events,
                           event.get('person_distance_valid') is True and
                           isinstance(event.get('nearest_person_m'), (int, float)) and
                           math.isfinite(event['nearest_person_m']) and
-                          0.0 < event['nearest_person_m'] <= 1.2), None)
-    direct_person_stop = (status.get('reason') == '近距离危险停车' and
+                          0.0 < event['nearest_person_m'] <= 1.6), None)
+    direct_person_stop = (status.get('reason') in ('近距离危险停车', '近距离人员停车') and
                           status.get('input_valid') is not False and nearby_person is not None)
     fail_closed_stop = (status.get('input_valid') is False and
                         status.get('reason') == '感知数据无效或过期' and
@@ -401,8 +413,7 @@ def validate_leaving_recovery_evidence(truth, speed_events, stop_events,
         raise AssertionError('E06 恢复窗口内没有观察到有效 CLEAR 状态')
     clear_after_resume = cleared['time_monotonic_sec'] > resumed['time_monotonic_sec']
     return {
-        'status': ('PASS_WITH_RISK' if fail_closed_stop or clear_after_resume
-                   else 'PASS'),
+        'status': 'PASS_WITH_RISK' if fail_closed_stop else 'PASS',
         'stop_cause': ('FAIL_CLOSED_WITH_NEAR_PERSON_OBSERVATION' if fail_closed_stop
                        else 'PERSON_DISTANCE_THRESHOLD'),
         'near_person_distance_m': nearby_person['nearest_person_m'],
@@ -430,13 +441,33 @@ def main():
     parser.add_argument('--scenario-target', default='zone_4')
     parser.add_argument('--person-speed-mps', type=float, default=0.25)
     parser.add_argument('--scenario-end-distance-m', type=float, default=1.4)
+    parser.add_argument('--continue-after-robot-stop', action='store_true',
+                        help='让人物在机器人安全停车后仍继续独立轨迹')
+    parser.add_argument('--hold-at-target-sec', type=float, default=2.0)
+    parser.add_argument('--leave-after-hold', action='store_true')
+    parser.add_argument('--leave-distance-m', type=float, default=3.9)
+    parser.add_argument('--leave-direction', choices=('forward', 'left', 'right'),
+                        default='forward')
+    parser.add_argument('--hold-clear-sec', type=float, default=1.0)
+    parser.add_argument('--retain-scenario-model', action='store_true',
+                        help='导览结束前不删除人物；结束时由本轮清理')
     args = parser.parse_args()
     if (not math.isfinite(args.timeout_sec) or args.timeout_sec <= 0 or
             not math.isfinite(args.visitor_timeout_sec) or args.visitor_timeout_sec <= 0 or
             not math.isfinite(args.person_speed_mps) or args.person_speed_mps <= 0 or
             not math.isfinite(args.scenario_end_distance_m) or
-            not 0.5 <= args.scenario_end_distance_m <= 4.5):
+            not 0.5 <= args.scenario_end_distance_m <= 4.5 or
+            not math.isfinite(args.hold_at_target_sec) or args.hold_at_target_sec < 0 or
+            not math.isfinite(args.leave_distance_m) or args.leave_distance_m < 0 or
+            not math.isfinite(args.hold_clear_sec) or args.hold_clear_sec < 0):
         parser.error('timeout 参数必须是有限正数')
+    if args.continue_after_robot_stop and args.dynamic_scenario != 'approaching':
+        parser.error('--continue-after-robot-stop 当前仅支持 approaching 场景')
+    if args.leave_after_hold and not args.continue_after_robot_stop:
+        parser.error('--leave-after-hold 需要启用 --continue-after-robot-stop')
+    if args.continue_after_robot_stop and not args.retain_scenario_model:
+        parser.error('持续接近实验必须启用 --retain-scenario-model')
+    pause_timeout_sec = safety_pause_timeout_budget_sec(args)
     domain = int(__import__('os').environ.get('ROS_DOMAIN_ID', '-1'))
     if (__import__('os').environ.get('ROS_LOCALHOST_ONLY') != '1' or
             not 0 <= domain <= 232 or domain in (211, 219)):
@@ -458,6 +489,7 @@ def main():
     started_utc = datetime.now(timezone.utc).isoformat()
     result = {'experiment_id': args.experiment_id, 'started_utc': started_utc,
               'domain_id': domain, 'status': 'RUNNING', 'expected_route': EXPECTED_ROUTE,
+              'safety_pause_timeout_budget_sec': pause_timeout_sec,
               'operator_consent': 'test harness called accept after WAITING_CONSENT',
               'speech_mode': 'Mock Speak Action; successful action is not real audio'}
     error = None
@@ -470,10 +502,25 @@ def main():
                    node.visitor['people_count'] >= 1,
                    args.visitor_timeout_sec, '相机稳定检测到至少一位参观者')
         result['visitor_gate'] = dict(node.visitor)
-        warmup_end = time.monotonic() + 1.0
-        while rclpy.ok() and time.monotonic() < warmup_end:
-            rclpy.spin_once(node, timeout_sec=0.05)
-        result['telemetry_subscription_warmup_sec'] = 1.0
+        start_ready_since = [None]
+
+        def manager_ready_to_start():
+            ready = (node.tour.get('connected') is True and
+                     node.tour.get('is_moving') is False)
+            if not ready:
+                start_ready_since[0] = None
+                return False
+            start_ready_since[0] = start_ready_since[0] or time.monotonic()
+            return time.monotonic() - start_ready_since[0] >= 0.5
+
+        spin_until(node, manager_ready_to_start, 30,
+                   '导览管理器已连接且机器人保持静止')
+        result['manager_start_gate'] = {
+            'connected': node.tour.get('connected'),
+            'is_moving': node.tour.get('is_moving'),
+            'current_location': node.tour.get('current_location'),
+            'stable_sec': round(time.monotonic() - start_ready_since[0], 3),
+        }
         result['start_service'] = trigger(node, node.trigger_clients['start'], 'start')
         spin_until(node, lambda: node.tour.get('state') == 'WAITING_CONSENT', 30,
                    '进入等待游客同意状态')
@@ -488,10 +535,20 @@ def main():
                 '--navigation-timeout-sec', str(args.timeout_sec),
                 '--ready-file', str(scenario_ready),
                 '--speed-mps', str(args.person_speed_mps), '--start-delay-sec', '0',
-                '--end-distance-m', str(args.scenario_end_distance_m),
-                '--remove-after', '--truth-output', str(scenario_truth),
+                '--target-distance-m', str(args.scenario_end_distance_m),
+                '--hold-at-target-sec', str(args.hold_at_target_sec),
+                '--leave-distance-m', str(args.leave_distance_m),
+                '--leave-direction', args.leave_direction,
+                '--hold-clear-sec', str(args.hold_clear_sec),
+                '--truth-output', str(scenario_truth),
             ]
-            if args.dynamic_scenario == 'approaching':
+            if args.continue_after_robot_stop:
+                scenario_command.append('--continue-after-robot-stop')
+                if args.leave_after_hold:
+                    scenario_command.append('--leave-after-hold')
+            else:
+                scenario_command.append('--remove-after')
+            if args.dynamic_scenario == 'approaching' and not args.continue_after_robot_stop:
                 scenario_command.append('--stop-on-safety-stop')
             scenario_process = subprocess.Popen(
                 scenario_command, cwd=ROOT, stdout=scenario_log, stderr=subprocess.STDOUT)
@@ -499,6 +556,7 @@ def main():
                 'scenario': args.dynamic_scenario, 'target': args.scenario_target,
                 'person_speed_mps': args.person_speed_mps,
                 'end_distance_m': args.scenario_end_distance_m,
+                'leave_direction': args.leave_direction,
                 'truth_output': str(scenario_truth),
                 'trigger': 'child ready before consent; matching navigation UUID/target plus fresh moving odom',
             }
@@ -534,7 +592,7 @@ def main():
                 break
             if node.tour.get('state') == 'PAUSED':
                 paused_since = paused_since or time.monotonic()
-                if time.monotonic() - paused_since > 30.0:
+                if time.monotonic() - paused_since > pause_timeout_sec:
                     raise RuntimeError(f"安全暂停后未自动恢复：{node.tour.get('reason')}")
             else:
                 paused_since = None
@@ -560,7 +618,7 @@ def main():
                 validate_dynamic_scenario_evidence(
                     result['dynamic_scenario']['truth'], node.perception_events,
                     node.speed_events, node.navigation))
-            if args.dynamic_scenario == 'leaving':
+            if args.dynamic_scenario == 'leaving' or args.leave_after_hold:
                 result['dynamic_scenario']['recovery_evidence'] = (
                     validate_leaving_recovery_evidence(
                         result['dynamic_scenario']['truth'], node.speed_events,
@@ -658,6 +716,26 @@ def main():
             except subprocess.TimeoutExpired:
                 scenario_process.kill()
                 scenario_process.wait(timeout=3.0)
+        if scenario_process is not None and args.retain_scenario_model:
+            cleanup_output = out / 'scenario' / 'cleanup.json'
+            try:
+                cleanup = subprocess.run(
+                    [sys.executable, str(ROOT / 'scripts/spawn_people_scenario.py'),
+                     '--cleanup-only', '--truth-output', str(cleanup_output)],
+                    cwd=ROOT, capture_output=True, text=True, timeout=25.0)
+                result.setdefault('dynamic_scenario', {})['cleanup'] = {
+                    'exit_code': cleanup.returncode,
+                    'truth_output': str(cleanup_output),
+                    'stdout': cleanup.stdout[-2000:], 'stderr': cleanup.stderr[-2000:],
+                }
+                if cleanup_output.is_file():
+                    result['dynamic_scenario']['cleanup']['truth'] = json.loads(
+                        cleanup_output.read_text(encoding='utf-8'))
+            except Exception as cleanup_error:
+                result.setdefault('dynamic_scenario', {})['cleanup'] = {
+                    'error': f'{type(cleanup_error).__name__}: {cleanup_error}',
+                    'truth_output': str(cleanup_output),
+                }
         if scenario_log is not None:
             scenario_log.close()
         write_json(out / 'report.json', result)

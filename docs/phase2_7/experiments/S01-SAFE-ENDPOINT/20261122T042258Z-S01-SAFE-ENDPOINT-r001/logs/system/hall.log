@@ -1,0 +1,38 @@
+[INFO] [launch]: All log files can be found below /tmp/phase27-safe-endpoint-roslog/2026-11-22-12-23-03-808258-linao-P15-24-440186
+[INFO] [launch]: Default logging verbosity is set to INFO
+Gazebo and robot_state_publisher share generated URDF: /tmp/heritage-camera-duwk7r4e/heritage_robot.urdf
+[INFO] [gzserver-1]: process started with pid [440288]
+[INFO] [robot_state_publisher-2]: process started with pid [440290]
+[INFO] [spawn_entity.py-3]: process started with pid [440292]
+[robot_state_publisher-2] [INFO] [1795321384.533819539] [robot_state_publisher]: got segment base_footprint
+[robot_state_publisher-2] [INFO] [1795321384.533887513] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-2] [INFO] [1795321384.533899938] [robot_state_publisher]: got segment caster
+[robot_state_publisher-2] [INFO] [1795321384.533903644] [robot_state_publisher]: got segment depth_camera_link
+[robot_state_publisher-2] [INFO] [1795321384.533906651] [robot_state_publisher]: got segment depth_camera_optical_frame
+[robot_state_publisher-2] [INFO] [1795321384.533910043] [robot_state_publisher]: got segment display_link
+[robot_state_publisher-2] [INFO] [1795321384.533912919] [robot_state_publisher]: got segment front_caster
+[robot_state_publisher-2] [INFO] [1795321384.533915692] [robot_state_publisher]: got segment laser_link
+[robot_state_publisher-2] [INFO] [1795321384.533918428] [robot_state_publisher]: got segment left_wheel
+[robot_state_publisher-2] [INFO] [1795321384.533921095] [robot_state_publisher]: got segment right_wheel
+[spawn_entity.py-3] [INFO] [1795321385.104093351] [spawn_entity]: Spawn Entity started
+[spawn_entity.py-3] [INFO] [1795321385.104436692] [spawn_entity]: Loading entity published on topic robot_description
+[spawn_entity.py-3] [INFO] [1795321385.107427290] [spawn_entity]: Waiting for entity xml on robot_description
+[spawn_entity.py-3] [INFO] [1795321385.120556008] [spawn_entity]: Waiting for service /spawn_entity, timeout = 30
+[spawn_entity.py-3] [INFO] [1795321385.121052421] [spawn_entity]: Waiting for service /spawn_entity
+[gzserver-1] [INFO] [1795321386.623365176] [gazebo.gazebo_ros_state]: Publishing states of gazebo models at [/gazebo/model_states]
+[gzserver-1] [INFO] [1795321386.625804883] [gazebo.gazebo_ros_state]: Publishing states of gazebo links at [/gazebo/link_states]
+[spawn_entity.py-3] [INFO] [1795321386.627931365] [spawn_entity]: Calling service /spawn_entity
+[gzserver-1] [INFO] [1795321387.456117070] [depth_camera_ros]: Publishing camera info to [/depth_camera/camera_info]
+[gzserver-1] [INFO] [1795321387.456786894] [depth_camera_ros]: Publishing depth camera info to [/camera/depth/camera_info]
+[gzserver-1] [INFO] [1795321387.457242383] [depth_camera_ros]: Publishing pointcloud to [/depth_camera/points]
+[spawn_entity.py-3] [INFO] [1795321387.462147209] [spawn_entity]: Spawn status: SpawnEntity: Successfully spawned entity [heritage_robot]
+[gzserver-1] [INFO] [1795321387.602963686] [drive]: Wheel pair 1 separation set to [0.380000m]
+[gzserver-1] [INFO] [1795321387.603736600] [drive]: Wheel pair 1 diameter set to [0.200000m]
+[gzserver-1] [INFO] [1795321387.605775732] [drive]: Subscribed to [/cmd_vel]
+[gzserver-1] [INFO] [1795321387.612742748] [drive]: Advertise odometry on [/odom]
+[gzserver-1] [INFO] [1795321387.621037717] [drive]: Publishing odom transforms between [odom] and [base_footprint]
+[gzserver-1] [INFO] [1795321387.621102295] [drive]: Publishing wheel transforms between [base_footprint], [left_wheel_joint] and [right_wheel_joint]
+[INFO] [spawn_entity.py-3]: process has finished cleanly [pid 440292]
+[robot_state_publisher-2] [INFO] [1795321451.686101279] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 440290]
+[INFO] [gzserver-1]: process has finished cleanly [pid 440288]

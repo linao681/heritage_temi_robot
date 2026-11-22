@@ -1,0 +1,5 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-19-55-18-435315-linao-P15-24-46636
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [46694]
+[speed_controller-1] [ERROR] [1795348534.015847026] [temi_speed_controller]: 调速接口未完成: {"command_id": "acd180cc7f52451799a162131850de3a", "status": "error", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "Nav2 限速参数未确认或会话已失效", "navigation_session_id": "5498d863127a4afb84d450ec634e8039"}
+[speed_controller-1] [WARN] [1795348544.299909456] [temi_speed_controller]: 请求导航停止: 安全停车条件

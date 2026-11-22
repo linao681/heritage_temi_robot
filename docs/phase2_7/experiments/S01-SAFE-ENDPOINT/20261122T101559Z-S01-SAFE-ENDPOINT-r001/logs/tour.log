@@ -1,0 +1,2 @@
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101559Z-S01-SAFE-ENDPOINT-r001/tour/experiment_data.csv", "rows": 7, "duration_sec": 0.755}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101559Z-S01-SAFE-ENDPOINT-r001/tour/report.json", "error": "RuntimeError: Unable to convert call argument to Python object (compile in debug mode for details)"}

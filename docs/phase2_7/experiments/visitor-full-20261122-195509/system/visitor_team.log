@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/gazebo_visitor_team.py", line 243, in <module>
+    publisher.publish(String(data=json.dumps(status)))
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/gazebo_visitor_team.py", line 181, in main
+    while target > member['progress']:
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/spawn_people_scenario.py", line 188, in wait_for_model_pose
+    if self._get_entity_state.wait_for_service(timeout_sec=2.0):
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/client.py", line 180, in wait_for_service
+    return self.service_is_ready()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/client.py", line 160, in service_is_ready
+    return self.__client.service_server_is_available()
+rclpy._rclpy_pybind11.RCLError: failed to check service availability: rcl node's context is invalid, at ./src/rcl/node.c:428

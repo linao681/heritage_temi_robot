@@ -1,5 +1,6 @@
 """Start Gazebo-only adapter for an already running local simulation."""
 import argparse
+import asyncio
 import json
 import os
 from pathlib import Path
@@ -8,6 +9,7 @@ from threading import Event, Thread
 import time
 
 import rclpy
+from std_msgs.msg import String
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.signals import SignalHandlerOptions
 from temi_bridge.nav2_backend import Nav2Backend
@@ -20,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--layout', choices=['official', 'adaptive'], default='official')
+    parser.add_argument('--presentation', action='store_true')
     parser.add_argument('--domain-id', type=int,
                         default=int(os.environ.get('ROS_DOMAIN_ID', '211')))
     args = parser.parse_args()
@@ -56,7 +59,16 @@ def main():
             return 1
         if 'temi_gateway' in transport.get_node_names():
             raise RuntimeError('已有 temi_gateway，禁止重复启动')
-        gateway = TemiGatewayNode(Nav2Backend(transport, goals, waypoints))
+        backend = Nav2Backend(transport, goals, waypoints)
+        if args.presentation:
+            speech = transport.create_publisher(String, 'heritage/simulation/speech', 10)
+            original_speak = backend.speak
+            async def presentation_speak(text, *, task_id, feedback=None):
+                speech.publish(String(data=json.dumps({'text': text, 'task_id': task_id, 'mode': 'simulated_speech'})))
+                await asyncio.sleep(min(10.0, max(4.0, len(text)/5)))
+                return await original_speak(text, task_id=task_id, feedback=feedback)
+            backend.speak = presentation_speak
+        gateway = TemiGatewayNode(backend)
         executor.add_node(gateway)
         print('Gazebo Nav2 网关就绪（播报为无音频模拟）', flush=True)
         while not stop.wait(0.2):

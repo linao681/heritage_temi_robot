@@ -1,0 +1,83 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+______ test_initial_linear_speed_cap_updates_controller_and_smoother_only ______
+
+    def test_initial_linear_speed_cap_updates_controller_and_smoother_only():
+        params = nav_params()
+    
+>       result = navigation_launch.apply_speed_limit(params, 0.7)
+E       AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:30: AttributeError
+_______________ test_default_speed_cap_remains_point_three_five ________________
+
+    def test_default_speed_cap_remains_point_three_five():
+>       params = navigation_launch.apply_speed_limit(nav_params(), 0.35)
+E       AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:39: AttributeError
+_________ test_speed_cap_rejects_non_finite_or_unsupported_values[nan] _________
+
+value = nan
+
+    @pytest.mark.parametrize('value', [float('nan'), float('inf'), 0.0, -0.1, 1.5])
+    def test_speed_cap_rejects_non_finite_or_unsupported_values(value):
+        with pytest.raises(ValueError):
+>           navigation_launch.apply_speed_limit(nav_params(), value)
+E           AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:48: AttributeError
+_________ test_speed_cap_rejects_non_finite_or_unsupported_values[inf] _________
+
+value = inf
+
+    @pytest.mark.parametrize('value', [float('nan'), float('inf'), 0.0, -0.1, 1.5])
+    def test_speed_cap_rejects_non_finite_or_unsupported_values(value):
+        with pytest.raises(ValueError):
+>           navigation_launch.apply_speed_limit(nav_params(), value)
+E           AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:48: AttributeError
+_________ test_speed_cap_rejects_non_finite_or_unsupported_values[0.0] _________
+
+value = 0.0
+
+    @pytest.mark.parametrize('value', [float('nan'), float('inf'), 0.0, -0.1, 1.5])
+    def test_speed_cap_rejects_non_finite_or_unsupported_values(value):
+        with pytest.raises(ValueError):
+>           navigation_launch.apply_speed_limit(nav_params(), value)
+E           AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:48: AttributeError
+________ test_speed_cap_rejects_non_finite_or_unsupported_values[-0.1] _________
+
+value = -0.1
+
+    @pytest.mark.parametrize('value', [float('nan'), float('inf'), 0.0, -0.1, 1.5])
+    def test_speed_cap_rejects_non_finite_or_unsupported_values(value):
+        with pytest.raises(ValueError):
+>           navigation_launch.apply_speed_limit(nav_params(), value)
+E           AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:48: AttributeError
+_________ test_speed_cap_rejects_non_finite_or_unsupported_values[1.5] _________
+
+value = 1.5
+
+    @pytest.mark.parametrize('value', [float('nan'), float('inf'), 0.0, -0.1, 1.5])
+    def test_speed_cap_rejects_non_finite_or_unsupported_values(value):
+        with pytest.raises(ValueError):
+>           navigation_launch.apply_speed_limit(nav_params(), value)
+E           AttributeError: module 'heritage_navigation_launch' has no attribute 'apply_speed_limit'
+
+tests/test_phase27_nav_speed_cap.py:48: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_phase27_nav_speed_cap.py::test_initial_linear_speed_cap_updates_controller_and_smoother_only
+FAILED tests/test_phase27_nav_speed_cap.py::test_default_speed_cap_remains_point_three_five
+FAILED tests/test_phase27_nav_speed_cap.py::test_speed_cap_rejects_non_finite_or_unsupported_values[nan]
+FAILED tests/test_phase27_nav_speed_cap.py::test_speed_cap_rejects_non_finite_or_unsupported_values[inf]
+FAILED tests/test_phase27_nav_speed_cap.py::test_speed_cap_rejects_non_finite_or_unsupported_values[0.0]
+FAILED tests/test_phase27_nav_speed_cap.py::test_speed_cap_rejects_non_finite_or_unsupported_values[-0.1]
+FAILED tests/test_phase27_nav_speed_cap.py::test_speed_cap_rejects_non_finite_or_unsupported_values[1.5]
+7 failed in 0.06s
+exit_code=1

@@ -1,0 +1,28 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+__________ test_odom_accepts_bounded_future_stamp_skew_from_sim_clock __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x778a88b1fdf0>
+
+    def test_odom_accepts_bounded_future_stamp_skew_from_sim_clock(monkeypatch):
+        transport = transport_state()
+        transport._stop_state = 'CLEAR'
+        transport._stop_stable_since = transport._arrival_stable_since = None
+        monkeypatch.setattr(nav2_transport.time, 'monotonic', lambda: 10.1)
+        monkeypatch.setattr(Nav2Transport, 'get_clock', lambda _: SimpleNamespace(
+            now=lambda: SimpleNamespace(nanoseconds=100 * 10**9)))
+        message = SimpleNamespace(header=transform_at(100.1).header,
+            twist=SimpleNamespace(twist=SimpleNamespace(
+                linear=SimpleNamespace(x=0., y=0.), angular=SimpleNamespace(z=0.))))
+    
+        transport._odom(message)
+    
+>       assert transport._last_odom == 10.1
+E       assert 0.0 == 10.1
+E        +  where 0.0 = <temi_bridge.nav2_transport.Nav2Transport object at 0x778a88b1fdc0>._last_odom
+
+tests/test_nav2_arrival_stop.py:118: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_nav2_arrival_stop.py::test_odom_accepts_bounded_future_stamp_skew_from_sim_clock
+1 failed, 1 passed, 10 deselected in 0.56s
+exit_code=1

@@ -1,0 +1,30 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_analysis_matches_speed_controller_stop_request_inside_actor_window ____
+
+    def test_analysis_matches_speed_controller_stop_request_inside_actor_window():
+        truth, report, rows = sample_inputs()
+        report['perception_events'].insert(0, {
+            'time_monotonic_sec': 9.5, 'person_observation_state': 'PERSONS_DETECTED',
+            'person_observation_valid': True, 'person_distance_valid': True,
+            'nearest_person_m': 4.0,
+        })
+        report['stop_status_events'] = [
+            event for event in report['stop_status_events'] if event['state'] != 'STOP_REQUESTED'
+        ]
+        report['speed_controller_events'] = [
+            {'time_monotonic_sec': 9.0, 'status': {
+                'stop_requested': True, 'navigation_session_id': 'old'}},
+            {'time_monotonic_sec': 12.5, 'status': {
+                'stop_requested': True, 'navigation_session_id': 'old'}},
+        ]
+    
+        result = analyze_experiment(truth, report, rows, target_robot_speed_mps=0.3)
+    
+>       assert result['first_visual_detection']['time_monotonic_sec'] == 10.5
+E       assert 9.5 == 10.5
+
+tests/test_phase27_analysis.py:165: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase27_analysis.py::test_analysis_matches_speed_controller_stop_request_inside_actor_window
+1 failed in 0.03s

@@ -1,6 +1,7 @@
 """真实 ROS2 Topic 回环：仅匿名模拟人数，不启动机器人。"""
 
 import json
+import os
 import time
 
 import rclpy
@@ -13,7 +14,7 @@ def test_mock_visitor_topics_and_stale_recovery(monkeypatch, tmp_path):
     from visitor_perception.visitor_monitor import VisitorConfig
 
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '232')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '232'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
     rclpy.init(args=[])
     monitor = VisitorPerceptionNode(VisitorConfig(stale_timeout_sec=1.0))

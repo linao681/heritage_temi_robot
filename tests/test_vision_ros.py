@@ -2,6 +2,7 @@
 
 from dataclasses import replace
 import json
+import os
 from pathlib import Path
 import subprocess
 from threading import Thread
@@ -23,7 +24,7 @@ from visitor_perception.visitor_monitor import VisitorConfig
 
 def prepare(monkeypatch, tmp_path):
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '220')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '220'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
 
 

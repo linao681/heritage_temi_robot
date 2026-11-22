@@ -1,0 +1,25 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_________ test_transport_accepts_tf_with_bounded_future_sim_clock_skew _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ef9b4313bb0>
+
+    def test_transport_accepts_tf_with_bounded_future_sim_clock_skew(monkeypatch):
+        transport = transport_state()
+        monkeypatch.setattr(nav2_transport.time, 'monotonic', lambda: 10.1)
+        monkeypatch.setattr(Nav2Transport, 'get_clock', lambda _: SimpleNamespace(
+            now=lambda: SimpleNamespace(nanoseconds=100 * 10**9)))
+        transport.client = SimpleNamespace(server_is_ready=lambda: True)
+        transport.buffer = SimpleNamespace(can_transform=lambda *_: True,
+                                           lookup_transform=lambda *_: transform_at(100.1))
+    
+>       assert transport.ready()
+E       assert False
+E        +  where False = <bound method Nav2Transport.ready of <temi_bridge.nav2_transport.Nav2Transport object at 0x7ef9c12e8a00>>()
+E        +    where <bound method Nav2Transport.ready of <temi_bridge.nav2_transport.Nav2Transport object at 0x7ef9c12e8a00>> = <temi_bridge.nav2_transport.Nav2Transport object at 0x7ef9c12e8a00>.ready
+
+tests/test_nav2_arrival_stop.py:68: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_nav2_arrival_stop.py::test_transport_accepts_tf_with_bounded_future_sim_clock_skew
+1 failed, 1 passed, 12 deselected in 0.57s
+exit_code=1

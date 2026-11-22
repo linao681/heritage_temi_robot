@@ -1,0 +1,105 @@
+{
+  "experiment_id": "S01",
+  "started_utc": "2026-11-22T03:59:48.020965+00:00",
+  "domain_id": 228,
+  "status": "FAIL",
+  "expected_route": [
+    "wait",
+    "zone_1",
+    "zone_2",
+    "zone_3",
+    "zone_4",
+    "zone_5",
+    "exit"
+  ],
+  "operator_consent": "test harness called accept after WAITING_CONSENT",
+  "speech_mode": "Mock Speak Action; successful action is not real audio",
+  "visitor_gate": {
+    "valid": true,
+    "people_count": 1,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "camera",
+    "stable": true,
+    "stable_fresh": true,
+    "sample_timestamp_monotonic_sec": 91781.171488545,
+    "sample_age_sec": 0.20158517999516334
+  },
+  "telemetry_subscription_warmup_sec": 1.0,
+  "error": "RuntimeError: start 未接受：start: 当前状态不允许",
+  "ended_utc": "2026-11-22T03:59:49.713526+00:00",
+  "tour_events": [
+    {
+      "time_monotonic_sec": 91781.372170681,
+      "kind": "tour_status",
+      "state": "IDLE",
+      "reason": "等待游客",
+      "outcome": "idle",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null
+    }
+  ],
+  "navigation_events": [],
+  "stop_status_events": [
+    {
+      "time_monotonic_sec": 91781.227112752,
+      "state": "CLEAR",
+      "navigation_session_id": "",
+      "reason": "无停车请求",
+      "valid": true,
+      "action_terminal": false,
+      "linear_speed_mps": 3.6298009945312515e-05,
+      "angular_speed_rps": 1.0404663044027984e-05,
+      "odom_age_sec": 0.009204553440213203,
+      "stopped_duration_sec": 0.0
+    }
+  ],
+  "odom_samples": 36,
+  "speed_controller_events": [
+    {
+      "time_monotonic_sec": 91781.269827362,
+      "status": {
+        "state": "IDLE",
+        "reason": "当前无导航任务",
+        "navigation_session_id": "",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": null,
+        "command_status": "not_sent",
+        "input_valid": true
+      }
+    }
+  ],
+  "perception_events": [
+    {
+      "time_monotonic_sec": 91781.835186504,
+      "valid": false,
+      "error": "机器人通信状态无效或过期; 机器人定位状态无效",
+      "people_count": 1,
+      "people_valid": true,
+      "sample_age_sec": 0.6013261675834656,
+      "person_observation_state": "PERSON_DISTANCE_VALID",
+      "person_observation_valid": true,
+      "person_distance_valid": true,
+      "nearest_person_m": 2.8500237464904785,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 2.7409234046936035,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": false,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": ""
+    }
+  ],
+  "gazebo_robot_last_pose": {
+    "time_monotonic_sec": 91782.845616324,
+    "robot_x": -12.653897773560454,
+    "robot_y": -7.902129684473541,
+    "person_count": 1
+  }
+}

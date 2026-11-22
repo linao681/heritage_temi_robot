@@ -1,0 +1,1970 @@
+{
+  "analysis_status": "PASS_WITH_RISK",
+  "data_sources": {
+    "positions": "Gazebo /model_states readback",
+    "robot_speed": "record_phase2_topics.csv current_robot_speed_mps",
+    "safety_events": "TourEvidence stop_status_events"
+  },
+  "movement_started_monotonic_sec": 94646.735414627,
+  "movement_ended_monotonic_sec": 94690.882519826,
+  "first_visual_detection": {
+    "time_monotonic_sec": 94648.922432993,
+    "valid": true,
+    "error": "",
+    "people_count": 1,
+    "people_valid": true,
+    "sample_age_sec": 0.493399977684021,
+    "person_observation_state": "PERSON_DISTANCE_VALID",
+    "person_observation_valid": true,
+    "person_distance_valid": true,
+    "nearest_person_m": 3.8633406162261963,
+    "obstacle_distance_valid": true,
+    "obstacle_distance_m": 3.581407308578491,
+    "safety_stop": false,
+    "stop_confirmed": false,
+    "navigating": true,
+    "explaining": false,
+    "navigation_error": false,
+    "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+  },
+  "first_rgbd_distance": {
+    "time_monotonic_sec": 94648.217647635,
+    "valid": false,
+    "error": "稳定游客人数数据无效、过期或断流",
+    "people_count": 0,
+    "people_valid": false,
+    "sample_age_sec": 0.41148316860198975,
+    "person_observation_state": "PERSON_DISTANCE_VALID",
+    "person_observation_valid": true,
+    "person_distance_valid": true,
+    "nearest_person_m": 4.096022129058838,
+    "obstacle_distance_valid": true,
+    "obstacle_distance_m": 3.3523659706115723,
+    "safety_stop": false,
+    "stop_confirmed": false,
+    "navigating": true,
+    "explaining": false,
+    "navigation_error": false,
+    "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+  },
+  "first_person_slow": {
+    "time_monotonic_sec": 94653.891320962,
+    "status": {
+      "state": "SLOW",
+      "reason": "接近游客，按距离减速",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e",
+      "stop_requested": false,
+      "stop_confirmed": false,
+      "resume_requested": false,
+      "target_speed_mps": 0.41898170829808806,
+      "command_status": "not_sent",
+      "input_valid": true
+    }
+  },
+  "stop_request": {
+    "time_monotonic_sec": 94655.49204118,
+    "state": "STOP_REQUESTED",
+    "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e",
+    "source": "speed_controller",
+    "valid": true
+  },
+  "stop_response": {
+    "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e",
+    "response_sec": 0.9006465650018072,
+    "request_distance_m": 1.308645737976642,
+    "confirmed_distance_m": 1.203445697763613,
+    "minimum_center_distance_m": 0.9922528604894333,
+    "failure_reason": null
+  },
+  "speed_condition": {
+    "target_mps": 0.3,
+    "median_mps": 1.9806078915961768e-05,
+    "sample_count": 20,
+    "window_coverage_sec": 1.9025490000058198,
+    "tolerance_mps": 0.05,
+    "met": false
+  },
+  "minimum_distances_by_actor_phase": {
+    "APPROACH": {
+      "minimum_center_distance_m": 1.1817942690708647,
+      "minimum_geometry_gap_m": 0.3645150484572861,
+      "sample_count": 41
+    },
+    "HOLD_TARGET": {
+      "minimum_center_distance_m": 1.1588913433392471,
+      "minimum_geometry_gap_m": 0.34161212272566854,
+      "sample_count": 10
+    },
+    "LEAVE": {
+      "minimum_center_distance_m": 0.9922528604894333,
+      "minimum_geometry_gap_m": 0.1747193458667158,
+      "sample_count": 128
+    },
+    "HOLD_CLEAR": {
+      "minimum_center_distance_m": 7.6506097766666885,
+      "minimum_geometry_gap_m": 6.8108773014456,
+      "sample_count": 6
+    }
+  },
+  "unique_observation_timestamps": 3234,
+  "contact_observed": null,
+  "geometry_risk": null,
+  "timeline": [
+    {
+      "time_monotonic_sec": 94646.735566164,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.498024742494695,
+      "geometry_gap_m": 3.6807455218811165,
+      "robot_speed_mps": 0.09533907499384398,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94646.991756761,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.46139125914631,
+      "geometry_gap_m": 3.644112038532731,
+      "robot_speed_mps": 0.24654273446207733,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94647.236469192,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.401153132926056,
+      "geometry_gap_m": 3.583873912312477,
+      "robot_speed_mps": 0.2828575478326357,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94647.500073938,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.3293090122765,
+      "geometry_gap_m": 3.5120297916629215,
+      "robot_speed_mps": 0.2787754985928761,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94647.747698279,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.245121623426967,
+      "geometry_gap_m": 3.4278424028133885,
+      "robot_speed_mps": 0.2893689825960721,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94648.009277617,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.1567849968241015,
+      "geometry_gap_m": 3.339505776210523,
+      "robot_speed_mps": 0.2795409892566024,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94648.26622762,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 4.060964016408459,
+      "geometry_gap_m": 3.2436847957948802,
+      "robot_speed_mps": 0.28940417884553427,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94648.493794049,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.977383503292275,
+      "geometry_gap_m": 3.1601042826786965,
+      "robot_speed_mps": 0.28942260553223614,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94648.729952725,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.8811252257056807,
+      "geometry_gap_m": 3.063846005092102,
+      "robot_speed_mps": 0.2937890343986057,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94648.980604442,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.7840362658951987,
+      "geometry_gap_m": 2.96675704528162,
+      "robot_speed_mps": 0.29379022684067807,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94649.229741321,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.6885820970023455,
+      "geometry_gap_m": 2.871302876388767,
+      "robot_speed_mps": 0.27433186496539547,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94649.450442703,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.607356875075258,
+      "geometry_gap_m": 2.790077654461679,
+      "robot_speed_mps": 0.2921562255000869,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94649.702915197,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.513511884513681,
+      "geometry_gap_m": 2.696232663900102,
+      "robot_speed_mps": 0.2944886145396525,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94649.955855825,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.415874794216588,
+      "geometry_gap_m": 2.5985955736030095,
+      "robot_speed_mps": 0.2994495674398888,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94650.205963131,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.318191364025402,
+      "geometry_gap_m": 2.5009121434118233,
+      "robot_speed_mps": 0.29051648856176726,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94650.456689525,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.2205908462462176,
+      "geometry_gap_m": 2.403311625632639,
+      "robot_speed_mps": 0.2948871585358838,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94650.715726425,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.1247008330273673,
+      "geometry_gap_m": 2.3074216124137887,
+      "robot_speed_mps": 0.2940708471444642,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94650.962898824,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 3.027534446797498,
+      "geometry_gap_m": 2.2102552261839192,
+      "robot_speed_mps": 0.2943533712190654,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94651.219816464,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.931980631432548,
+      "geometry_gap_m": 2.1147014108189692,
+      "robot_speed_mps": 0.29417520196610464,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94651.473926352,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.8352840941020796,
+      "geometry_gap_m": 2.018004873488501,
+      "robot_speed_mps": 0.2734969103649685,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94651.689415445,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.751230643002278,
+      "geometry_gap_m": 1.9339514223886995,
+      "robot_speed_mps": 0.29132263915999934,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94651.93754358,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.657823137175934,
+      "geometry_gap_m": 1.8405439165623556,
+      "robot_speed_mps": 0.2942730922059817,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94652.151463125,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.5742595525258016,
+      "geometry_gap_m": 1.756980331912223,
+      "robot_speed_mps": 0.2942787845980132,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94652.39581626,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.4810751205420307,
+      "geometry_gap_m": 1.6637958999284521,
+      "robot_speed_mps": 0.29339223454193747,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94652.61616682,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.3979007571670623,
+      "geometry_gap_m": 1.5806215365534837,
+      "robot_speed_mps": 0.29477317757119786,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94652.85753379,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.304482614078308,
+      "geometry_gap_m": 1.4872033934647293,
+      "robot_speed_mps": 0.2937879491393835,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94653.111615601,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.206943331345388,
+      "geometry_gap_m": 1.3896641107318093,
+      "robot_speed_mps": 0.293791644611812,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94653.364676084,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.1082769721464207,
+      "geometry_gap_m": 1.2909977515328421,
+      "robot_speed_mps": 0.2951742151673648,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94653.623523231,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 2.0116596122542583,
+      "geometry_gap_m": 1.1943803916406797,
+      "robot_speed_mps": 0.290990945846392,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94653.871235858,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.915479574070472,
+      "geometry_gap_m": 1.0982003534568934,
+      "robot_speed_mps": 0.2945749645987967,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94654.122447814,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.821388326864536,
+      "geometry_gap_m": 1.0041091062509573,
+      "robot_speed_mps": 0.2905697389070176,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94654.337466797,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.7416306438170126,
+      "geometry_gap_m": 0.9243514232034341,
+      "robot_speed_mps": 0.2906392171946502,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94654.597961478,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.6533985104179518,
+      "geometry_gap_m": 0.8361192898043733,
+      "robot_speed_mps": 0.2798554845235248,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94654.849296782,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.561974376903516,
+      "geometry_gap_m": 0.7446951562899374,
+      "robot_speed_mps": 0.29744244415713894,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94655.098547132,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.4711446849712277,
+      "geometry_gap_m": 0.6538654643576493,
+      "robot_speed_mps": 0.29827909394791935,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94655.31773394,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.39432661562095,
+      "geometry_gap_m": 0.5770473950073715,
+      "robot_speed_mps": 0.3003602026590826,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94655.575795958,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.308645737976642,
+      "geometry_gap_m": 0.4913665173630636,
+      "robot_speed_mps": 0.2934262945291961,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94655.830448373,
+      "stage": "BRAKING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.2525775322665245,
+      "geometry_gap_m": 0.43529831165294597,
+      "robot_speed_mps": 0.05098328446690264,
+      "safety_state": "STOPPING",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94656.0778441,
+      "stage": "BRAKING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.2275195033173365,
+      "geometry_gap_m": 0.410240282703758,
+      "robot_speed_mps": 0.000521397360446165,
+      "safety_state": "STOPPING",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94656.299667815,
+      "stage": "BRAKING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.203445697763613,
+      "geometry_gap_m": 0.3861664771500344,
+      "robot_speed_mps": 0.0067636768025530185,
+      "safety_state": "STOPPING",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94656.540303561,
+      "stage": "MOVING",
+      "actor_phase": "APPROACH",
+      "center_distance_m": 1.1817942690708647,
+      "geometry_gap_m": 0.3645150484572861,
+      "robot_speed_mps": 0.004443602295547882,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94656.759933096,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.159013823159052,
+      "geometry_gap_m": 0.3417346025454735,
+      "robot_speed_mps": 0.0025579101021826465,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94656.960189329,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.159013823159052,
+      "geometry_gap_m": 0.3417346025454735,
+      "robot_speed_mps": 0.0025579101021826465,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94657.160572301,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.159013823159052,
+      "geometry_gap_m": 0.3417346025454735,
+      "robot_speed_mps": 0.0025579101021826465,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94657.366140666,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1589913456230998,
+      "geometry_gap_m": 0.3417121250095212,
+      "robot_speed_mps": 0.002558469409371084,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94657.566325388,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1589913456230998,
+      "geometry_gap_m": 0.3417121250095212,
+      "robot_speed_mps": 0.002558469409371084,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94657.766579169,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1589913456230998,
+      "geometry_gap_m": 0.3417121250095212,
+      "robot_speed_mps": 0.002558469409371084,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94657.971293657,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1589453483261258,
+      "geometry_gap_m": 0.34166612771254723,
+      "robot_speed_mps": 0.001136380671920321,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94658.172389862,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1589453483261258,
+      "geometry_gap_m": 0.34166612771254723,
+      "robot_speed_mps": 0.001136380671920321,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94658.372772078,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1589453483261258,
+      "geometry_gap_m": 0.34166612771254723,
+      "robot_speed_mps": 0.001136380671920321,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94658.578454344,
+      "stage": "STOP_CONFIRMED_HOLD",
+      "actor_phase": "HOLD_TARGET",
+      "center_distance_m": 1.1588913433392471,
+      "geometry_gap_m": 0.34161212272566854,
+      "robot_speed_mps": 0.001356163719273799,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94658.787159368,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1588694131342112,
+      "geometry_gap_m": 0.3415901925206326,
+      "robot_speed_mps": 0.0011365549407882634,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94659.043376923,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1653072629754853,
+      "geometry_gap_m": 0.3415901925206326,
+      "robot_speed_mps": 0.0005240023538149438,
+      "safety_state": "STOP_CONFIRMED",
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e"
+    },
+    {
+      "time_monotonic_sec": 94659.272464305,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1709485856568806,
+      "geometry_gap_m": 0.34802804236190665,
+      "robot_speed_mps": 0.00256128973638055,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94659.504192856,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1423502283784959,
+      "geometry_gap_m": 0.32507100776491726,
+      "robot_speed_mps": 0.2422816387699453,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94659.716992128,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1069443880999237,
+      "geometry_gap_m": 0.2896651674863451,
+      "robot_speed_mps": 0.28400884008466193,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94659.969936318,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0656521136872343,
+      "geometry_gap_m": 0.24837289307365576,
+      "robot_speed_mps": 0.29406173416499226,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94660.223053273,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0340808112938185,
+      "geometry_gap_m": 0.21680159068023988,
+      "robot_speed_mps": 0.2955962271469087,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94660.478967265,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0114107411364326,
+      "geometry_gap_m": 0.194131520522854,
+      "robot_speed_mps": 0.2880107711836683,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94660.736886565,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 0.9977859835595061,
+      "geometry_gap_m": 0.18050676294592752,
+      "robot_speed_mps": 0.2722785868663622,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94660.988091559,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 0.9922528604894333,
+      "geometry_gap_m": 0.1749736398758547,
+      "robot_speed_mps": 0.2930676802653899,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94661.246540425,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 0.9941883231139922,
+      "geometry_gap_m": 0.1747193458667158,
+      "robot_speed_mps": 0.29035690666786185,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94661.475035977,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0056176226222715,
+      "geometry_gap_m": 0.1769091025004136,
+      "robot_speed_mps": 0.2916462046298452,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94661.70920628,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0160439178260119,
+      "geometry_gap_m": 0.18833840200869292,
+      "robot_speed_mps": 0.2930442191727467,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94661.929568192,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.031393142359742,
+      "geometry_gap_m": 0.1987646972124333,
+      "robot_speed_mps": 0.2930414863505689,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94662.166528907,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0469686436973058,
+      "geometry_gap_m": 0.21411392174616342,
+      "robot_speed_mps": 0.29304423737849317,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94662.384717801,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0675219538147465,
+      "geometry_gap_m": 0.22968942308372722,
+      "robot_speed_mps": 0.27435739748407617,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94662.62835458,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.0863645412195873,
+      "geometry_gap_m": 0.25024273320116786,
+      "robot_speed_mps": 0.290446411213019,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94662.884579113,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.107606835824555,
+      "geometry_gap_m": 0.26908532060600865,
+      "robot_speed_mps": 0.29352419465940827,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94663.131711773,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1308111679900488,
+      "geometry_gap_m": 0.2903276152109764,
+      "robot_speed_mps": 0.2945184970951986,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94663.392299331,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1539043204327517,
+      "geometry_gap_m": 0.31353194737647017,
+      "robot_speed_mps": 0.2952269756601844,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94663.614371255,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1783468962622832,
+      "geometry_gap_m": 0.3366250998191731,
+      "robot_speed_mps": 0.2766826615687537,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94663.848766632,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.1969829970895292,
+      "geometry_gap_m": 0.36106767564870457,
+      "robot_speed_mps": 0.2711238150411921,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94664.108538375,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.2152540798223235,
+      "geometry_gap_m": 0.37970377647595055,
+      "robot_speed_mps": 0.2914925170762855,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94664.35446402,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.2349310915854057,
+      "geometry_gap_m": 0.39797485920874487,
+      "robot_speed_mps": 0.2946823369250622,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94664.570797936,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.2544473766303312,
+      "geometry_gap_m": 0.4176518709718272,
+      "robot_speed_mps": 0.2990052536460089,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94664.824410822,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.2706136701401214,
+      "geometry_gap_m": 0.43716815601675274,
+      "robot_speed_mps": 0.29761239686505103,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94665.037576376,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.2932743134207934,
+      "geometry_gap_m": 0.4533344495265429,
+      "robot_speed_mps": 0.27351211889419996,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94665.288097159,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.3142555459456318,
+      "geometry_gap_m": 0.47599509280721486,
+      "robot_speed_mps": 0.27417643111822815,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94665.542571905,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.341746842920867,
+      "geometry_gap_m": 0.49697632533205327,
+      "robot_speed_mps": 0.2936524879625861,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94665.797590551,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.3713630603210971,
+      "geometry_gap_m": 0.5244676223072885,
+      "robot_speed_mps": 0.2730141499376261,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94666.053228096,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.4047540439652375,
+      "geometry_gap_m": 0.5540838397075186,
+      "robot_speed_mps": 0.29189272176815517,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94666.303142281,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.4411426614204537,
+      "geometry_gap_m": 0.587474823351659,
+      "robot_speed_mps": 0.26932106163838004,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94666.521977641,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.4756533404640986,
+      "geometry_gap_m": 0.6238634408068752,
+      "robot_speed_mps": 0.29305156073276223,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94666.76232339,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.513442859917728,
+      "geometry_gap_m": 0.6583741198505201,
+      "robot_speed_mps": 0.2930510325914782,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94667.017457603,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.5548045056372868,
+      "geometry_gap_m": 0.6961636393041496,
+      "robot_speed_mps": 0.2780940289540317,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94667.267918924,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.5990077940070837,
+      "geometry_gap_m": 0.7375252850237083,
+      "robot_speed_mps": 0.29389450397342193,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94667.488278434,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.639160940414953,
+      "geometry_gap_m": 0.7817285733935052,
+      "robot_speed_mps": 0.26896355955086126,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94667.732814806,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.6842085120469126,
+      "geometry_gap_m": 0.8218817198013745,
+      "robot_speed_mps": 0.29305172609506464,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94667.996107624,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.732537972206273,
+      "geometry_gap_m": 0.8669292914333341,
+      "robot_speed_mps": 0.29315035475150475,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94668.245834877,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.7832135536165545,
+      "geometry_gap_m": 0.9152587515926945,
+      "robot_speed_mps": 0.2722902384116037,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94668.494622057,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.8331520979733018,
+      "geometry_gap_m": 0.965934333002976,
+      "robot_speed_mps": 0.2901292585914236,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94668.754344629,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.8830069888369045,
+      "geometry_gap_m": 1.0158728773597232,
+      "robot_speed_mps": 0.29305120596430806,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94669.016552364,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.9340553834429404,
+      "geometry_gap_m": 1.065727768223326,
+      "robot_speed_mps": 0.273320021883213,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94669.261095245,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 1.9864678331210468,
+      "geometry_gap_m": 1.1167761628293618,
+      "robot_speed_mps": 0.29305018143927664,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94669.512534717,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.038630747501436,
+      "geometry_gap_m": 1.1691886125074682,
+      "robot_speed_mps": 0.2928183764145087,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94669.762990705,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.0924315648073564,
+      "geometry_gap_m": 1.2213515268878572,
+      "robot_speed_mps": 0.2935383730692872,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94669.983120486,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.1382120748332056,
+      "geometry_gap_m": 1.2751523441937778,
+      "robot_speed_mps": 0.29980201769076287,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94670.233699325,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.1838108414858,
+      "geometry_gap_m": 1.320932854219627,
+      "robot_speed_mps": 0.23500914717939958,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94670.48342919,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.2288682902933212,
+      "geometry_gap_m": 1.3665316208722214,
+      "robot_speed_mps": 0.21337677294868163,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94670.736590817,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.2708838926829067,
+      "geometry_gap_m": 1.4115890696797426,
+      "robot_speed_mps": 0.17523263995112195,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94670.95625479,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.3055119660304517,
+      "geometry_gap_m": 1.453604672069328,
+      "robot_speed_mps": 0.17522400791113155,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94671.195351807,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.332421493783426,
+      "geometry_gap_m": 1.4882327454168731,
+      "robot_speed_mps": 0.05088847838562612,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94671.415071631,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.348362986841371,
+      "geometry_gap_m": 1.5151422731698472,
+      "robot_speed_mps": 0.02829806703248854,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94671.658171659,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.3598802195716746,
+      "geometry_gap_m": 1.5310837662277925,
+      "robot_speed_mps": 0.015965007908631822,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94671.909659402,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.3730502819822568,
+      "geometry_gap_m": 1.542600998958096,
+      "robot_speed_mps": 0.004833330112620128,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94672.153192971,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.3871274639181577,
+      "geometry_gap_m": 1.5557710613686782,
+      "robot_speed_mps": 0.0010154753979923757,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94672.369639823,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.401058526640267,
+      "geometry_gap_m": 1.569848243304579,
+      "robot_speed_mps": 0.0012947221341589178,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94672.616204533,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.413022362299123,
+      "geometry_gap_m": 1.5837793060266883,
+      "robot_speed_mps": 0.005749336909150686,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94672.879502398,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.4271880389343314,
+      "geometry_gap_m": 1.5957431416855443,
+      "robot_speed_mps": 0.008829504394377949,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94673.127407863,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.4426102294210237,
+      "geometry_gap_m": 1.6099088183207528,
+      "robot_speed_mps": 0.0028870710996897514,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94673.378819574,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.457471371668462,
+      "geometry_gap_m": 1.625331008807445,
+      "robot_speed_mps": 0.00321892326326989,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94673.632185182,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.4726963983139294,
+      "geometry_gap_m": 1.6401921510548836,
+      "robot_speed_mps": 0.00787875793605513,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94673.883708571,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.4887497711352617,
+      "geometry_gap_m": 1.6554171777003508,
+      "robot_speed_mps": 0.0041660150691973504,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94674.13611946,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.5046163028304145,
+      "geometry_gap_m": 1.6714705505216831,
+      "robot_speed_mps": 0.004751977003422672,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94674.355128618,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.520975087526472,
+      "geometry_gap_m": 1.6873370822168359,
+      "robot_speed_mps": 0.004751440788503443,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94674.600304545,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.5353661567812,
+      "geometry_gap_m": 1.7036958669128932,
+      "robot_speed_mps": 1.0788320945293343e-08,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94674.856290486,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.551607809406028,
+      "geometry_gap_m": 1.7180869361676212,
+      "robot_speed_mps": 2.5490152152584437e-09,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "b87d0b3078564615a36e2af390964441"
+    },
+    {
+      "time_monotonic_sec": 94675.103073312,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.574009951547074,
+      "geometry_gap_m": 1.7343285887924496,
+      "robot_speed_mps": 0.06863763426720296,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94675.319551479,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.6289987643180743,
+      "geometry_gap_m": 1.7567307309334952,
+      "robot_speed_mps": 0.17302019679979386,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94675.564407071,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.713462481538306,
+      "geometry_gap_m": 1.8117195437044957,
+      "robot_speed_mps": 0.2892551962806658,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94675.815870519,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.8006510594051575,
+      "geometry_gap_m": 1.8961832609247273,
+      "robot_speed_mps": 0.2894412796916216,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94676.061012756,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.888548132635435,
+      "geometry_gap_m": 1.9833718387915789,
+      "robot_speed_mps": 0.2832459870169408,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94676.315109138,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 2.976406739634176,
+      "geometry_gap_m": 2.0712689120218566,
+      "robot_speed_mps": 0.2889442066146343,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94676.566546854,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.064603733586732,
+      "geometry_gap_m": 2.1591275190205974,
+      "robot_speed_mps": 0.2909579492082058,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94676.787881648,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.139928125293095,
+      "geometry_gap_m": 2.2473245129731536,
+      "robot_speed_mps": 0.2952899834417511,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94677.024633808,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.227340352340084,
+      "geometry_gap_m": 2.3226489046795162,
+      "robot_speed_mps": 0.28355313272642446,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94677.237506285,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.300686081967345,
+      "geometry_gap_m": 2.4100611317265055,
+      "robot_speed_mps": 0.2902237029480066,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94677.49281036,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.3872254933372843,
+      "geometry_gap_m": 2.4834068613537665,
+      "robot_speed_mps": 0.29572095336090815,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94677.748924792,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.4781121898076917,
+      "geometry_gap_m": 2.5699462727237057,
+      "robot_speed_mps": 0.290141405268827,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94677.965837092,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.554624211016742,
+      "geometry_gap_m": 2.660832969194113,
+      "robot_speed_mps": 0.2823428180109267,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94678.210910183,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.6418416247979635,
+      "geometry_gap_m": 2.7373449904031633,
+      "robot_speed_mps": 0.29064717633894727,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94678.466709059,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.7311785340018013,
+      "geometry_gap_m": 2.824562404184385,
+      "robot_speed_mps": 0.2909445894460162,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94678.721345134,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.8212631195839366,
+      "geometry_gap_m": 2.9138993133882227,
+      "robot_speed_mps": 0.27817345896512863,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94678.942078636,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.8967050618238086,
+      "geometry_gap_m": 3.003983898970358,
+      "robot_speed_mps": 0.2827706905474036,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94679.180715904,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 3.9830162097578214,
+      "geometry_gap_m": 3.07942584121023,
+      "robot_speed_mps": 0.28386028369266086,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94679.394464609,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.057037124600765,
+      "geometry_gap_m": 3.165736989144243,
+      "robot_speed_mps": 0.2894936476180487,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94679.61167882,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.125093281774552,
+      "geometry_gap_m": 3.239757903987186,
+      "robot_speed_mps": 0.2847629217161244,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94679.852362329,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.209565092101358,
+      "geometry_gap_m": 3.307814061160973,
+      "robot_speed_mps": 0.287708241974997,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94680.076435482,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.279381395478501,
+      "geometry_gap_m": 3.3922858714877795,
+      "robot_speed_mps": 0.2570940257781917,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94680.323713036,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.360843342405588,
+      "geometry_gap_m": 3.4621021748649228,
+      "robot_speed_mps": 0.2855101485157284,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94680.574973171,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.447671892583481,
+      "geometry_gap_m": 3.5435641217920097,
+      "robot_speed_mps": 0.23618350257636378,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94680.828571731,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.533279227156731,
+      "geometry_gap_m": 3.630392671969902,
+      "robot_speed_mps": 0.2603982237122466,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94681.045322537,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.608302670687766,
+      "geometry_gap_m": 3.7160000065431524,
+      "robot_speed_mps": 0.2847663102885594,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94681.291448734,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.691644309597692,
+      "geometry_gap_m": 3.7910234500741873,
+      "robot_speed_mps": 0.2840756744108883,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94681.558614781,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.778371444284991,
+      "geometry_gap_m": 3.874365088984113,
+      "robot_speed_mps": 0.2546553115300415,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94681.81001603,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.867524205202024,
+      "geometry_gap_m": 3.9610922236714123,
+      "robot_speed_mps": 0.2881133741574863,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94682.025690317,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 4.943290467087379,
+      "geometry_gap_m": 4.050244984588446,
+      "robot_speed_mps": 0.2850958070673032,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94682.258040319,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.029389912016687,
+      "geometry_gap_m": 4.126011246473801,
+      "robot_speed_mps": 0.27806879898480447,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94682.524940232,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.1164397399448545,
+      "geometry_gap_m": 4.212110691403109,
+      "robot_speed_mps": 0.285165238669582,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94682.778232612,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.206107844133802,
+      "geometry_gap_m": 4.299160519331276,
+      "robot_speed_mps": 0.29022104718292613,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94682.998738259,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.2816030391778925,
+      "geometry_gap_m": 4.388828623520224,
+      "robot_speed_mps": 0.2790808914566221,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94683.242256524,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.368089722658776,
+      "geometry_gap_m": 4.464323818564314,
+      "robot_speed_mps": 0.28506703460892435,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94683.467401636,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.4428579481410795,
+      "geometry_gap_m": 4.550810502045198,
+      "robot_speed_mps": 0.28407566625611863,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94683.707669671,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.529044890543961,
+      "geometry_gap_m": 4.625578727527501,
+      "robot_speed_mps": 0.2850285508322125,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94683.964380135,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.616836735142402,
+      "geometry_gap_m": 4.711765669930383,
+      "robot_speed_mps": 0.25962972531098083,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94684.212474912,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.706805528786795,
+      "geometry_gap_m": 4.799557514528824,
+      "robot_speed_mps": 0.28445099529057366,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94684.467879581,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.796374001279012,
+      "geometry_gap_m": 4.889526308173217,
+      "robot_speed_mps": 0.2844090454038447,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94684.721620839,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.885238860175987,
+      "geometry_gap_m": 4.9790947806654335,
+      "robot_speed_mps": 0.2841788928553495,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94684.973797443,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 5.974472151869739,
+      "geometry_gap_m": 5.0679596395624085,
+      "robot_speed_mps": 0.2891590777109186,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94685.230905401,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.0630320069662496,
+      "geometry_gap_m": 5.15719293125616,
+      "robot_speed_mps": 0.2565401547018557,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94685.486368883,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.153037061193551,
+      "geometry_gap_m": 5.245752786352671,
+      "robot_speed_mps": 0.2840768595178067,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94685.742348471,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.243977788800625,
+      "geometry_gap_m": 5.335757840579973,
+      "robot_speed_mps": 0.2853905411537255,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94685.956439017,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.321007678475062,
+      "geometry_gap_m": 5.426698568187047,
+      "robot_speed_mps": 0.2850220422429584,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94686.193395051,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.408935147723687,
+      "geometry_gap_m": 5.503728457861484,
+      "robot_speed_mps": 0.2842805112926823,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94686.447872017,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.499789269076651,
+      "geometry_gap_m": 5.591655927110109,
+      "robot_speed_mps": 0.27961031354301924,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94686.7031888,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.591644597729496,
+      "geometry_gap_m": 5.682510048463073,
+      "robot_speed_mps": 0.2740884461884389,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94686.958869153,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.684952525253237,
+      "geometry_gap_m": 5.774365377115918,
+      "robot_speed_mps": 0.2849535899214928,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94687.206829096,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.778325892307859,
+      "geometry_gap_m": 5.867673304639659,
+      "robot_speed_mps": 0.28765631290007165,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94687.462839867,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.871097531363863,
+      "geometry_gap_m": 5.961046671694281,
+      "robot_speed_mps": 0.2870403986424091,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94687.721671156,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 6.964646662631249,
+      "geometry_gap_m": 6.053818310750285,
+      "robot_speed_mps": 0.2905507563403029,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94687.979968806,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.057986204388534,
+      "geometry_gap_m": 6.1473674420176705,
+      "robot_speed_mps": 0.2811143553176209,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94688.224344685,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.149523479602471,
+      "geometry_gap_m": 6.240706983774956,
+      "robot_speed_mps": 0.2685998414867805,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94688.479924873,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.239528189392254,
+      "geometry_gap_m": 6.332244258988893,
+      "robot_speed_mps": 0.2869926538550101,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94688.70607306,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.315639515105947,
+      "geometry_gap_m": 6.422248968778676,
+      "robot_speed_mps": 0.29369805161953066,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94688.93950951,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.4007335344997776,
+      "geometry_gap_m": 6.498360294492369,
+      "robot_speed_mps": 0.2930656504886643,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94689.18382142,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.482050721388882,
+      "geometry_gap_m": 6.583454313886199,
+      "robot_speed_mps": 0.2885872018234391,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94689.406179045,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.5508974823646335,
+      "geometry_gap_m": 6.664771500775304,
+      "robot_speed_mps": 0.28357643203955446,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94689.650399513,
+      "stage": "ACTOR_LEAVING",
+      "actor_phase": "LEAVE",
+      "center_distance_m": 7.628156522059178,
+      "geometry_gap_m": 6.733618261751055,
+      "robot_speed_mps": 0.2862712643183232,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94689.860795405,
+      "stage": "RECOVERED",
+      "actor_phase": "HOLD_CLEAR",
+      "center_distance_m": 7.6506097766666885,
+      "geometry_gap_m": 6.8108773014456,
+      "robot_speed_mps": 0.29056677955718996,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94690.071365859,
+      "stage": "RECOVERED",
+      "actor_phase": "HOLD_CLEAR",
+      "center_distance_m": 7.6726187776730015,
+      "geometry_gap_m": 6.83333055605311,
+      "robot_speed_mps": 0.28322435713091515,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94690.277379132,
+      "stage": "RECOVERED",
+      "actor_phase": "HOLD_CLEAR",
+      "center_distance_m": 7.694551338819134,
+      "geometry_gap_m": 6.855339557059423,
+      "robot_speed_mps": 0.28364133960168203,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94690.477730303,
+      "stage": "RECOVERED",
+      "actor_phase": "HOLD_CLEAR",
+      "center_distance_m": 7.694551338819134,
+      "geometry_gap_m": 6.877272118205556,
+      "robot_speed_mps": 0.28364133960168203,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94690.678106847,
+      "stage": "RECOVERED",
+      "actor_phase": "HOLD_CLEAR",
+      "center_distance_m": 7.694551338819134,
+      "geometry_gap_m": 6.877272118205556,
+      "robot_speed_mps": 0.28364133960168203,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    },
+    {
+      "time_monotonic_sec": 94690.882503476,
+      "stage": "RECOVERED",
+      "actor_phase": "HOLD_CLEAR",
+      "center_distance_m": 7.798628594068092,
+      "geometry_gap_m": 6.877272118205556,
+      "robot_speed_mps": 0.28364133960168203,
+      "safety_state": "CLEAR",
+      "navigation_session_id": "30465d08544e49e68e2c08bbf5517c75"
+    }
+  ],
+  "limitations": [
+    "Circumscribed-circle geometry is a conservative proxy, not contact sensing.",
+    "A missing STOP_CONFIRMED yields null response time; it is not inferred from zero cmd_vel.",
+    "Repeated timestamps count as one observation for freshness analysis."
+  ],
+  "analyzed_utc": "2026-11-22T09:47:43.149366+00:00"
+}

@@ -1,0 +1,10 @@
+[INFO] [1795348519.180256918] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 19:55:25,736 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 19:55:25,738 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 19:55:31,760 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-22 19:55:33,858 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定导览路线
+2026-11-22 19:55:33,859 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往入口待命点
+2026-11-22 19:55:33,952 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解入口待命点
+2026-11-22 19:55:38,176 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 19:55:45,093 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 19:57:02,636 INFO heritage_tour_manager.tour_manager: IDLE: 用户取消导览

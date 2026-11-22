@@ -1,0 +1,9 @@
+{
+  "map": "simulation/generated/official.pgm",
+  "resolution_m": 0.05,
+  "corridor": "S01-SAFE-ENDPOINT lateral-left departure",
+  "sample_count": 32,
+  "envelope_radius_m": 0.55,
+  "minimum_occupancy_value": 254,
+  "all_samples_free": true
+}

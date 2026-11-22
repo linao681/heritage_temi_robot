@@ -1,0 +1,85 @@
+..............FF...............                                          [100%]
+=================================== FAILURES ===================================
+____ test_safety_stop_after_navigation_terminal_still_matches_last_session _____
+
+    def test_safety_stop_after_navigation_terminal_still_matches_last_session():
+        node = object.__new__(PeopleScenario)
+        node.active_navigation_session_id = ''
+        node.safety_stop_requested = False
+    
+        node._on_navigation_status(SimpleNamespace(status='going', task_id='session-1'))
+        node._on_navigation_status(SimpleNamespace(status='aborted', task_id='session-1'))
+>       node._on_safety_stop(SimpleNamespace(
+            source='gazebo_nav2_transport', valid=True, state='STOPPING',
+            navigation_session_id='session-1'))
+
+tests/test_gazebo_people_scenario.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <spawn_people_scenario.PeopleScenario object at 0x7d5cf551fac0>
+message = namespace(source='gazebo_nav2_transport', valid=True, state='STOPPING', navigation_session_id='session-1')
+
+    def _on_safety_stop(self, message):
+        session_id = message.navigation_session_id
+        if (message.source != 'gazebo_nav2_transport' or not session_id):
+            return
+        if not hasattr(self, 'safety_events'):
+            self.safety_events = []
+        if not hasattr(self, '_last_safety_signature'):
+            self._last_safety_signature = None
+        signature = (message.state, session_id, bool(message.valid))
+        self.latest_safety_stop = {
+            'state': message.state, 'navigation_session_id': session_id,
+            'valid': bool(message.valid), 'received_monotonic_sec': time.monotonic(),
+        }
+        if signature != self._last_safety_signature:
+            self.safety_events.append({
+                **self.latest_safety_stop, 'source': message.source,
+>               'reason': message.reason,
+            })
+E           AttributeError: 'types.SimpleNamespace' object has no attribute 'reason'
+
+scripts/spawn_people_scenario.py:68: AttributeError
+____ test_scenario_started_mid_navigation_learns_session_from_clear_status _____
+
+    def test_scenario_started_mid_navigation_learns_session_from_clear_status():
+        node = object.__new__(PeopleScenario)
+        node.active_navigation_session_id = ''
+        node.safety_stop_requested = False
+    
+>       node._on_safety_stop(SimpleNamespace(
+            source='gazebo_nav2_transport', valid=True, state='CLEAR',
+            navigation_session_id='session-1'))
+
+tests/test_gazebo_people_scenario.py:210: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <spawn_people_scenario.PeopleScenario object at 0x7d5cf87131c0>
+message = namespace(source='gazebo_nav2_transport', valid=True, state='CLEAR', navigation_session_id='session-1')
+
+    def _on_safety_stop(self, message):
+        session_id = message.navigation_session_id
+        if (message.source != 'gazebo_nav2_transport' or not session_id):
+            return
+        if not hasattr(self, 'safety_events'):
+            self.safety_events = []
+        if not hasattr(self, '_last_safety_signature'):
+            self._last_safety_signature = None
+        signature = (message.state, session_id, bool(message.valid))
+        self.latest_safety_stop = {
+            'state': message.state, 'navigation_session_id': session_id,
+            'valid': bool(message.valid), 'received_monotonic_sec': time.monotonic(),
+        }
+        if signature != self._last_safety_signature:
+            self.safety_events.append({
+                **self.latest_safety_stop, 'source': message.source,
+>               'reason': message.reason,
+            })
+E           AttributeError: 'types.SimpleNamespace' object has no attribute 'reason'
+
+scripts/spawn_people_scenario.py:68: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_gazebo_people_scenario.py::test_safety_stop_after_navigation_terminal_still_matches_last_session
+FAILED tests/test_gazebo_people_scenario.py::test_scenario_started_mid_navigation_learns_session_from_clear_status
+2 failed, 29 passed in 0.64s
+exit_code=1

@@ -1,0 +1,24 @@
+[INFO] [1795348874.574690814] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 20:01:20,949 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 20:01:20,949 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 20:01:26,972 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-22 20:01:29,085 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定导览路线
+2026-11-22 20:01:29,086 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往入口待命点
+2026-11-22 20:01:29,188 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解入口待命点
+2026-11-22 20:01:33,412 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:01:38,198 INFO heritage_tour_manager.tour_manager: PAUSED: 导航安全停车
+2026-11-22 20:01:40,794 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:01:52,512 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:01:55,619 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:02:00,532 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:02:03,638 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:02:07,098 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解非遗概览
+2026-11-22 20:02:11,314 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传统工艺
+2026-11-22 20:02:17,932 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:02:21,780 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传统工艺
+2026-11-22 20:02:51,582 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解传统工艺
+2026-11-22 20:02:55,601 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往代表作品
+2026-11-22 20:03:01,014 INFO heritage_tour_manager.tour_manager: PAUSED: 导航安全停车
+2026-11-22 20:03:03,398 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往代表作品
+2026-11-22 20:03:08,477 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:05:14,782 INFO heritage_tour_manager.tour_manager: IDLE: 用户取消导览

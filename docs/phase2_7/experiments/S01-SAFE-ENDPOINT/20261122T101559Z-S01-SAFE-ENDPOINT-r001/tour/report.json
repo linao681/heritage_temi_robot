@@ -1,0 +1,217 @@
+{
+  "experiment_id": "S01-SAFE-ENDPOINT",
+  "started_utc": "2026-11-22T10:16:24.294861+00:00",
+  "domain_id": 228,
+  "status": "FAIL",
+  "expected_route": [
+    "wait",
+    "zone_1",
+    "zone_2",
+    "zone_3",
+    "zone_4",
+    "zone_5",
+    "exit"
+  ],
+  "safety_pause_timeout_budget_sec": 74.0,
+  "operator_consent": "test harness called accept after WAITING_CONSENT",
+  "speech_mode": "Mock Speak Action; successful action is not real audio",
+  "visitor_gate": {
+    "valid": true,
+    "people_count": 1,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "camera",
+    "stable": true,
+    "stable_fresh": true,
+    "sample_timestamp_monotonic_sec": 2986.723404434,
+    "sample_age_sec": 0.14723735300003682
+  },
+  "manager_start_gate": {
+    "connected": true,
+    "is_moving": false,
+    "current_location": "",
+    "stable_sec": 0.534
+  },
+  "start_service": "start: 已接受",
+  "dynamic_scenario": {
+    "scenario": "approaching",
+    "target": "zone_1",
+    "person_speed_mps": 0.1,
+    "end_distance_m": 3.5,
+    "leave_direction": "left",
+    "truth_output": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101559Z-S01-SAFE-ENDPOINT-r001/tour/scenario/truth.json",
+    "trigger": "child ready before consent; matching navigation UUID/target plus fresh moving odom",
+    "cleanup": {
+      "exit_code": 0,
+      "truth_output": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01-SAFE-ENDPOINT/20261122T101559Z-S01-SAFE-ENDPOINT-r001/tour/scenario/cleanup.json",
+      "stdout": "{\"status\": \"PASS\", \"scenario\": \"empty\", \"layout\": \"official\", \"source\": \"gazebo_model_states_and_set_entity_state\", \"started_unix_sec\": 1795342585.9791343, \"started_monotonic_sec\": 2988.152012727, \"movement_started_monotonic_sec\": null, \"movement_ended_monotonic_sec\": null, \"duration_sec\": 1.231268608999926, \"seed\": 0, \"speed_mps\": 0.3, \"update_hz\": 5.0, \"end_distance_m\": 1.4, \"actor_motion\": {\"continue_after_robot_stop\": false, \"stop_at_target\": true, \"movement_speed_mps\": 0.3, \"target_distance_m\": 1.4, \"hold_at_target_sec\": 2.0, \"leave_after_hold\": false, \"leave_distance_m\": 3.9, \"leave_direction\": \"forward\", \"hold_clear_sec\": 1.0, \"pause_on_collision\": true, \"motion_phase_events\": [], \"contact_observed\": null}, \"removed_previous_models\": [\"phase25_person_01\"], \"commanded_model_poses_world\": [], \"robot_pose_world_at_spawn\": null, \"gazebo_model_state_samples\": [], \"model_asset\": \"simulation/models/person_mannequin/model.sdf\", \"ground_truth_note\": \"轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。\", \"cleanup_only\": true, \"removed_after\": [\"phase25_person_01\"], \"ended_monotonic_sec\": 2989.383281538}\n",
+      "stderr": "",
+      "truth": {
+        "status": "PASS",
+        "scenario": "empty",
+        "layout": "official",
+        "source": "gazebo_model_states_and_set_entity_state",
+        "started_unix_sec": 1795342585.9791343,
+        "started_monotonic_sec": 2988.152012727,
+        "movement_started_monotonic_sec": null,
+        "movement_ended_monotonic_sec": null,
+        "duration_sec": 1.231268608999926,
+        "seed": 0,
+        "speed_mps": 0.3,
+        "update_hz": 5.0,
+        "end_distance_m": 1.4,
+        "actor_motion": {
+          "continue_after_robot_stop": false,
+          "stop_at_target": true,
+          "movement_speed_mps": 0.3,
+          "target_distance_m": 1.4,
+          "hold_at_target_sec": 2.0,
+          "leave_after_hold": false,
+          "leave_distance_m": 3.9,
+          "leave_direction": "forward",
+          "hold_clear_sec": 1.0,
+          "pause_on_collision": true,
+          "motion_phase_events": [],
+          "contact_observed": null
+        },
+        "removed_previous_models": [
+          "phase25_person_01"
+        ],
+        "commanded_model_poses_world": [],
+        "robot_pose_world_at_spawn": null,
+        "gazebo_model_state_samples": [],
+        "model_asset": "simulation/models/person_mannequin/model.sdf",
+        "ground_truth_note": "轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。",
+        "cleanup_only": true,
+        "removed_after": [
+          "phase25_person_01"
+        ],
+        "ended_monotonic_sec": 2989.383281538
+      }
+    }
+  },
+  "error": "RuntimeError: Unable to convert call argument to Python object (compile in debug mode for details)",
+  "ended_utc": "2026-11-22T10:16:25.465714+00:00",
+  "tour_events": [
+    {
+      "time_monotonic_sec": 2987.071343808,
+      "kind": "tour_status",
+      "state": "IDLE",
+      "reason": "等待游客",
+      "outcome": "idle",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 2987.60925043,
+      "kind": "tour_status",
+      "state": "IDLE",
+      "reason": "开始新导览任务",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 2987.610849584,
+      "kind": "tour_status",
+      "state": "GREETING",
+      "reason": "迎宾",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 2987.632497755,
+      "kind": "tour_status",
+      "state": "WAITING_CONSENT",
+      "reason": "等待游客同意",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    }
+  ],
+  "navigation_events": [],
+  "stop_status_events": [
+    {
+      "time_monotonic_sec": 2986.920518378,
+      "state": "CLEAR",
+      "navigation_session_id": "",
+      "reason": "无停车请求",
+      "valid": true,
+      "action_terminal": false,
+      "linear_speed_mps": 3.3138646813313244e-06,
+      "angular_speed_rps": 8.534785592928529e-06,
+      "odom_age_sec": 0.02425847016274929,
+      "stopped_duration_sec": 0.0
+    }
+  ],
+  "odom_samples": 22,
+  "speed_controller_events": [
+    {
+      "time_monotonic_sec": 2987.115602217,
+      "status": {
+        "state": "IDLE",
+        "reason": "当前无导航任务",
+        "navigation_session_id": "",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": null,
+        "command_status": "not_sent",
+        "input_valid": true
+      }
+    }
+  ],
+  "perception_events": [
+    {
+      "time_monotonic_sec": 2986.934106116,
+      "valid": true,
+      "error": "",
+      "people_count": 1,
+      "people_valid": true,
+      "sample_age_sec": 0.4892389178276062,
+      "person_observation_state": "PERSON_DISTANCE_VALID",
+      "person_observation_valid": true,
+      "person_distance_valid": true,
+      "nearest_person_m": 2.8494248390197754,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 2.740926504135132,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": false,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": ""
+    }
+  ],
+  "gazebo_robot_last_pose": {
+    "time_monotonic_sec": 2987.616068236,
+    "robot_x": -12.653897773389176,
+    "robot_y": -7.902163809804309,
+    "person_count": 1
+  }
+}

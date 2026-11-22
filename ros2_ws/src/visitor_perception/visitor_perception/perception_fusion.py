@@ -28,12 +28,15 @@ class PerceptionFusion:
                                    scan_min_valid_samples, simulation_mode)
         self._visitor = None
         self._people = None
+        self._people_sample_time = None
         self._scan_at = None
+        self._scan_source_stamp = None
         self.obstacle_distance_m = None
         self._robot = None
         self._tour = None
         self._navigation = None
         self._safety_stop = None
+        self._last_stop_source_stamp = None
 
     @staticmethod
     def _finite(value):
@@ -80,7 +83,16 @@ class PerceptionFusion:
                          self._finite(density) and 0 <= density <= 1 and
                          source in ('temi_rgbd', 'gazebo_rgbd', 'mock', 'offline_video'))
         producer_age = value.get('sample_age_sec', 0.0)
-        received_at = now - producer_age if self._finite(producer_age) and producer_age >= 0 else now
+        age_valid = self._finite(producer_age) and producer_age >= 0
+        received_at = now - producer_age if age_valid else now
+        source_stamp = value.get('source_stamp')
+        sample_time = source_stamp if self._finite(source_stamp) and source_stamp > 0 else received_at
+        ordered = self._people_sample_time is None or sample_time >= self._people_sample_time
+        if age_valid and ordered:
+            self._people_sample_time = sample_time
+        else:
+            distance_valid = no_person = density_valid = False
+            state = 'SENSOR_INVALID'
         if not distance_valid and not no_person and state != 'SENSOR_INVALID':
             state = 'PERSON_DISTANCE_UNKNOWN'
         self._people = {'source': source, 'state': state,
@@ -90,9 +102,14 @@ class PerceptionFusion:
                         'density_valid': density_valid,
                         'crowd_density': float(density) if density_valid else None, 'at': received_at}
 
-    def update_scan(self, ranges, angle_min, angle_increment, range_min, range_max, now):
-        self._scan_at = now
+    def update_scan(self, ranges, angle_min, angle_increment, range_min, range_max, now, *, source_stamp=None):
         self.obstacle_distance_m = None
+        if ((self._scan_at is not None and now < self._scan_at) or
+                (source_stamp and self._scan_source_stamp and source_stamp < self._scan_source_stamp)):
+            return
+        self._scan_at = now
+        if source_stamp:
+            self._scan_source_stamp = source_stamp
         values = (angle_min, angle_increment, range_min, range_max)
         try:
             ranges = list(ranges)
@@ -153,10 +170,20 @@ class PerceptionFusion:
         recognized = state in ('CLEAR', 'STOP_REQUESTED', 'STOP_COMMAND_ACCEPTED',
                                'STOPPING', 'STOP_CONFIRMED', 'STOP_FAILED')
         valid = source_valid and recognized
+        source_age = value.get('source_age_sec', 0.0)
+        source_stamp = value.get('source_stamp')
+        valid = valid and self._finite(source_age) and 0 <= source_age <= 0.5
+        if source_stamp is not None:
+            ordered = (self._finite(source_stamp) and source_stamp > 0 and
+                       (self._last_stop_source_stamp is None or source_stamp > self._last_stop_source_stamp))
+            stamp_fresh = self._finite(source_age) and 0 <= source_age <= 0.5
+            valid = valid and ordered and stamp_fresh
+            if ordered and stamp_fresh:
+                self._last_stop_source_stamp = source_stamp
         confirmed = False
         if state == 'CLEAR':
             age = value.get('odom_age_sec')
-            valid = valid and self._finite(age) and 0 <= age <= 0.5
+            valid = valid and self._finite(age) and 0 <= age and self._finite(source_age) and 0 <= source_age + age <= 0.5
         elif state == 'STOP_CONFIRMED':
             linear = value.get('linear_speed_mps')
             angular = value.get('angular_speed_rps')
@@ -165,32 +192,37 @@ class PerceptionFusion:
             confirmed = (valid and bool(session_id) and value.get('action_terminal') is True and
                          self._finite(linear) and 0 <= linear < 0.02 and
                          self._finite(angular) and 0 <= angular < 0.05 and
-                         self._finite(age) and 0 <= age <= 0.5 and
+                         self._finite(age) and 0 <= age and self._finite(source_age) and
+                         0 <= source_age + age <= 0.5 and
                          self._finite(duration) and duration >= 0.5)
             valid = confirmed
         active = not (valid and state in ('CLEAR', 'STOP_CONFIRMED'))
         self._safety_stop = {
             'active': active, 'valid': valid, 'state': state if recognized else 'UNKNOWN',
             'stop_confirmed': confirmed, 'navigation_session_id': session_id if valid else '',
-            'at': now,
+            'at': now - source_age if self._finite(source_age) and source_age >= 0 else now,
+            'odom_age_sec': value.get('odom_age_sec') if state in ('CLEAR', 'STOP_CONFIRMED') and valid else None,
         }
 
     def snapshot(self, now):
         cfg = self.config
-        ages = []
+        timestamps = []
         # Visitor counts and navigation transitions are not motion-sensor heartbeats.
         for sample in (self._people, self._robot, self._tour, self._safety_stop):
             if sample is not None:
-                ages.append(max(0.0, now - sample['at']))
+                timestamps.append(sample['at'])
         if self._scan_at is not None:
-            ages.append(max(0.0, now - self._scan_at))
-        age = max(ages, default=cfg.max_sample_age_sec + 1.0)
+            timestamps.append(self._scan_at)
+        oldest_timestamp = min(timestamps, default=None)
+        age = max(0.0, now - oldest_timestamp) if oldest_timestamp is not None else cfg.max_sample_age_sec + 1.0
         scan_fresh = self._scan_at is not None and now >= self._scan_at and now - self._scan_at <= cfg.max_sample_age_sec
         visitor_fresh = self._visitor is not None and now >= self._visitor['at'] and now - self._visitor['at'] <= cfg.max_sample_age_sec
         people_fresh = self._people is not None and now >= self._people['at'] and now - self._people['at'] <= cfg.max_sample_age_sec
         robot_fresh = self._robot is not None and now >= self._robot['at'] and now - self._robot['at'] <= cfg.max_sample_age_sec
         tour_fresh = self._tour is not None and now >= self._tour['at'] and now - self._tour['at'] <= cfg.max_sample_age_sec
         safety_fresh = self._safety_stop is not None and now >= self._safety_stop['at'] and now - self._safety_stop['at'] <= cfg.max_sample_age_sec
+        if safety_fresh and self._safety_stop.get('odom_age_sec') is not None:
+            safety_fresh = now - self._safety_stop['at'] + self._safety_stop['odom_age_sec'] <= 0.5
 
         visitor_source = self._visitor['source'] if self._visitor else ''
         people_source = self._people['source'] if self._people else ''
@@ -248,7 +280,7 @@ class PerceptionFusion:
             errors.append('导航或机器人状态报告故障')
 
         age = min(max(age, 0.0), 1e6) if math.isfinite(age) else 1e6
-        sample_timestamp = max(0.0, now - age) if ages else 0.0
+        sample_timestamp = max(0.0, oldest_timestamp) if oldest_timestamp is not None else 0.0
         valid = not errors
         return {
             'source': 'gazebo_sensor_fusion' if cfg.simulation_mode else 'temi_sensor_fusion',

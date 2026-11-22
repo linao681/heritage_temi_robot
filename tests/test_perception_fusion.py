@@ -131,6 +131,50 @@ def test_empty_camera_observation_cannot_mask_invalid_laser():
     assert value['obstacle_distance_m'] is None
 
 
+def test_delayed_clear_person_observation_cannot_replace_newer_person():
+    fusion = ready_fusion(simulation_mode=True)
+    fusion.update_people({
+        'source': 'gazebo_rgbd', 'valid': True, 'person_distance_valid': True,
+        'nearest_person_m': 0.8, 'sample_age_sec': 0.01,
+    }, now=0.4)
+    fusion.update_people({
+        'source': 'gazebo_rgbd', 'valid': True, 'person_distance_valid': False,
+        'people_count': 0, 'observation_state': 'NO_PERSON_OBSERVED', 'sample_age_sec': 0.3,
+    }, now=0.5)
+    assert not fusion.snapshot(now=0.5)['person_observation_valid']
+
+
+def test_late_scan_does_not_make_previous_obstacle_safe():
+    fusion = ready_fusion()
+    fusion.update_scan([0.3, 0.3], -0.1, 0.2, 0.08, 10.0, now=0.4)
+    fusion.update_scan([3.0, 3.0], -0.1, 0.2, 0.08, 10.0, now=0.3)
+    assert not fusion.snapshot(now=0.5)['obstacle_distance_valid']
+
+
+def test_fresh_delivery_of_stale_stop_report_does_not_renew_confirmation():
+    fusion = ready_fusion(simulation_mode=True)
+    status = dict(source='gazebo_nav2_transport', valid=True, state='STOP_CONFIRMED',
+                  navigation_session_id='nav-current', action_terminal=True, linear_speed_mps=0.0,
+                  angular_speed_rps=0.0, odom_age_sec=0.01, stopped_duration_sec=0.8,
+                  source_stamp=100_000_000_000, source_age_sec=0.01)
+    fusion.update_safety_stop_status(status, now=0.2)
+    assert fusion.snapshot(now=0.2)['stop_confirmed']
+    fusion.update_safety_stop_status(status | {'source_stamp': 99_900_000_000,
+                                               'source_age_sec': 0.7}, now=0.3)
+    assert not fusion.snapshot(now=0.3)['stop_confirmed']
+
+
+def test_fused_publication_never_refreshes_old_stop_odom_age():
+    fusion = ready_fusion(simulation_mode=True)
+    status = dict(source='gazebo_nav2_transport', valid=True, state='STOP_CONFIRMED',
+                  navigation_session_id='nav-current', action_terminal=True, linear_speed_mps=0.0,
+                  angular_speed_rps=0.0, odom_age_sec=0.35, stopped_duration_sec=0.8,
+                  source_stamp=100_000_000_000, source_age_sec=0.04)
+    fusion.update_safety_stop_status(status, now=0.2)
+    assert fusion.snapshot(now=0.2)['stop_confirmed']
+    assert not fusion.snapshot(now=0.32)['stop_confirmed']
+
+
 def test_sample_timestamp_tracks_oldest_sensor_sample_using_monotonic_age():
     value = ready_fusion().snapshot(now=0.4)
 

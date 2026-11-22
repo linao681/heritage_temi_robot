@@ -1,0 +1,2 @@
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01/20261122T040328Z-S01-r001/tour/experiment_data.csv", "rows": 300, "duration_sec": 30.077}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01/20261122T040328Z-S01-r001/tour/report.json", "error": "TimeoutError: 等待超时：进入等待游客同意状态"}

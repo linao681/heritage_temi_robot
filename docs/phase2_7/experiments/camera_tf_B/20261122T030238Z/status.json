@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "exit_code": 0,
+  "scope": "Gazebo static TF smoke only; not camera detection comparison"
+}

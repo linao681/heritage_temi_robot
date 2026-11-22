@@ -1,0 +1,65 @@
+{
+  "success": true,
+  "scope": "camera geometry and actual RGB-D/CameraInfo smoke only; no YOLOX or actor comparison",
+  "expected": {
+    "height_m": 0.55,
+    "pitch_down_deg": 0.0
+  },
+  "received_counts": {
+    "rgb": 31,
+    "depth": 31,
+    "rgb_info": 31,
+    "depth_info": 31
+  },
+  "latest_samples": {
+    "depth": {
+      "width": 320,
+      "height": 240,
+      "encoding": "32FC1",
+      "step": 1280,
+      "frame_id": "depth_camera_optical_frame",
+      "stamp_ns": 3100000000,
+      "data_bytes": 307200
+    },
+    "depth_info": {
+      "width": 320,
+      "height": 240,
+      "frame_id": "depth_camera_optical_frame",
+      "stamp_ns": 3100000000,
+      "fx": 277.1273455955935,
+      "fy": 277.1273455955935,
+      "cx": 160.5,
+      "cy": 120.5
+    },
+    "rgb_info": {
+      "width": 320,
+      "height": 240,
+      "frame_id": "depth_camera_optical_frame",
+      "stamp_ns": 3100000000,
+      "fx": 277.1273455955935,
+      "fy": 277.1273455955935,
+      "cx": 160.5,
+      "cy": 120.5
+    },
+    "rgb": {
+      "width": 320,
+      "height": 240,
+      "encoding": "rgb8",
+      "step": 960,
+      "frame_id": "depth_camera_optical_frame",
+      "stamp_ns": 3100000000,
+      "data_bytes": 230400
+    }
+  },
+  "tf": {
+    "camera_mount_z_from_base_link_m": 0.45,
+    "camera_height_from_base_footprint_m": 0.55,
+    "optical_positive_z_axis_in_base": [
+      0.9999999999999997,
+      2.6794896523796297e-08,
+      2.679489619072939e-08
+    ]
+  },
+  "tf_error": null,
+  "wall_window_sec": 6.258373584001674
+}

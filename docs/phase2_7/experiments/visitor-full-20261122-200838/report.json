@@ -1,0 +1,25 @@
+{
+  "status": "FAIL",
+  "operator_mode": "scripted simulated consent and regroup confirmation",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "error": "仿真系统已退出，查看 system.log",
+  "events": [
+    {
+      "elapsed_sec": 15.605365523999353,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 23.76023588099997,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    }
+  ],
+  "elapsed_sec": 249.5814419599992
+}

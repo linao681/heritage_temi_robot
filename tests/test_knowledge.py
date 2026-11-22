@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 import pytest
 from heritage_knowledge.knowledge_store import load
 from heritage_knowledge.qa_engine import answer
@@ -41,7 +42,7 @@ def test_service_roundtrip(monkeypatch, tmp_path):
     import rclpy
     from temi_interfaces.srv import AskHeritage
     monkeypatch.setenv('ROS_LOCALHOST_ONLY','1')
-    monkeypatch.setenv('ROS_DOMAIN_ID','219')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '219'))
     monkeypatch.setenv('ROS_LOG_DIR',str(tmp_path))
     exe=ROOT/'ros2_ws/install/heritage_knowledge/lib/heritage_knowledge/knowledge_node'
     with (tmp_path/'node.log').open('w') as log:

@@ -1,0 +1,33 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_initial_visitor_records_a_real_static_gazebo_model ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-111/test_initial_visitor_records_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d132d69e170>
+
+    def test_initial_visitor_records_a_real_static_gazebo_model(tmp_path, monkeypatch):
+        import run_phase27_experiment as runner
+    
+        run_dir = tmp_path / 'run'
+        run_dir.mkdir()
+        called = {}
+    
+        def spawn(command, **kwargs):
+            called['command'] = command
+            called['kwargs'] = kwargs
+            truth_path = Path(command[command.index('--truth-output') + 1])
+            truth_path.parent.mkdir(parents=True, exist_ok=True)
+            truth_path.write_text(json.dumps({
+                'status': 'PASS', 'commanded_model_poses_world': [{'name': 'phase25_person_01'}],
+            }))
+            return runner.subprocess.CompletedProcess(command, 0, 'spawned\n', '')
+    
+        monkeypatch.setattr(runner.subprocess, 'run', spawn)
+>       evidence = runner.prepare_arrival_visitor(experiment(), run_dir, root=tmp_path, env={})
+E       AttributeError: module 'run_phase27_experiment' has no attribute 'prepare_arrival_visitor'
+
+tests/test_phase27_experiment_runner.py:170: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_phase27_experiment_runner.py::test_initial_visitor_records_a_real_static_gazebo_model
+1 failed, 23 deselected in 0.05s
+exit_code=1

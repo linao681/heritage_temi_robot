@@ -1,0 +1,10 @@
+{
+  "variant": "A",
+  "camera_height_m": 0.55,
+  "camera_pitch_down_deg": 0.0,
+  "layout": "official",
+  "scenario": "static Gazebo sensor smoke only",
+  "ros_domain_id": 230,
+  "gazebo_port": 11380,
+  "seed": 31
+}

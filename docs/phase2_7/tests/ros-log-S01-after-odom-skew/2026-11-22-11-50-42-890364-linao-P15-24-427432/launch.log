@@ -1,0 +1,9 @@
+1795319442.8913841 [INFO] [launch]: All log files can be found below /home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/tests/ros-log-S01-after-odom-skew/2026-11-22-11-50-42-890364-linao-P15-24-427432
+1795319442.8915241 [INFO] [launch]: Default logging verbosity is set to INFO
+1795319442.9804254 [INFO] [visitor_perception-1]: process started with pid [427507]
+1795319442.9806750 [INFO] [yolox_person_detector-2]: process started with pid [427510]
+1795319442.9808018 [INFO] [depth_association-3]: process started with pid [427512]
+1795319442.9809020 [INFO] [perception_fusion-4]: process started with pid [427514]
+1795319548.8119345 [ERROR] [perception_fusion-4]: process has died [pid 427514, exit code 1, cmd '/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/perception_fusion --ros-args --params-file /tmp/launch_params_g8uj18ps'].
+1795319548.9190185 [ERROR] [depth_association-3]: process has died [pid 427512, exit code 1, cmd '/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/depth_association --ros-args --params-file /tmp/launch_params_8wyq0flm'].
+1795319549.1228750 [ERROR] [yolox_person_detector-2]: process has died [pid 427510, exit code 1, cmd '/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/yolox_person_detector --ros-args --params-file /tmp/launch_params_wineed1a'].

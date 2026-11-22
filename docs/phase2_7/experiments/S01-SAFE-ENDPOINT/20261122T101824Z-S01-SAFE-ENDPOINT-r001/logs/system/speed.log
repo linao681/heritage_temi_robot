@@ -1,0 +1,7 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-18-18-34-410895-linao-P15-24-22325
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [22469]
+[speed_controller-1] [WARN] [1795342749.558184044] [temi_speed_controller]: 请求导航停止: 近距离人员停车
+[speed_controller-1] [WARN] [1795342793.118601435] [temi_speed_controller]: 请求导航停止: 感知数据无效或过期
+[speed_controller-1] [WARN] [1795342807.219781315] [temi_speed_controller]: 请求导航停止: 感知数据无效或过期
+[speed_controller-1] [WARN] [1795343037.423331499] [temi_speed_controller]: 请求导航停止: 感知数据无效或过期

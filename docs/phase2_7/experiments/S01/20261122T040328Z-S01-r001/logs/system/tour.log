@@ -1,0 +1,4 @@
+[INFO] [1795320218.319037205] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 12:04:09,224 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 12:04:09,227 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 12:04:09,233 INFO heritage_tour_manager.tour_manager: ERROR: 机器人通信中断，停止状态未确认

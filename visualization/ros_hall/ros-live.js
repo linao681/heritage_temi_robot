@@ -1,4 +1,4 @@
-// Read-only ROS pose overlay. The original standalone demo remains unchanged.
+// ROS live view with explicitly enabled tour controls.
 (() => {
  const banner=document.createElement('div');
  banner.style.cssText='position:fixed;z-index:99999;top:0;left:0;right:0;padding:8px;text-align:center;background:#6c3028;color:white;font:16px sans-serif';
@@ -7,6 +7,46 @@
  const answer=document.createElement('div');
  answer.style.cssText='position:fixed;z-index:99998;right:16px;top:55px;max-width:420px;padding:12px;background:#fff8e9;color:#30291f;border:1px solid #b79b73;border-radius:8px;font:15px sans-serif;white-space:pre-wrap;display:none';
  document.body.appendChild(answer);
+ const interaction=document.createElement('section');
+ interaction.style.cssText='position:fixed;z-index:99997;bottom:16px;right:16px;width:min(390px,90vw);padding:14px;background:#f7f1e5;border:1px solid #b79b73;border-radius:8px;color:#30291f;display:none;box-shadow:0 4px 20px #0002';
+ interaction.innerHTML='<h3 style="margin:0 0 8px">游客交互 · ROS 实时</h3><div id="ros-interaction-state"></div><div id="ros-interaction-actions" style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"></div><div id="ros-interaction-question" style="display:flex;gap:6px"><input aria-label="游客提问" maxlength="500" placeholder="例如：潮州音乐有哪些类型？" style="min-width:0;flex:1"><button>提问</button></div><p aria-live="polite" id="ros-interaction-feedback" style="margin:8px 0 0"></p>';
+ document.body.appendChild(interaction);
+ const actions=interaction.querySelector('#ros-interaction-actions');
+ const status=interaction.querySelector('#ros-interaction-state');
+ const questionBox=interaction.querySelector('#ros-interaction-question');
+ const input=questionBox.querySelector('input');
+ const feedback=interaction.querySelector('#ros-interaction-feedback');
+ const voiceButton=document.createElement('button');voiceButton.textContent='开启浏览器演示语音';interaction.appendChild(voiceButton);
+ let voiceEnabled=false,lastSpeechId=null;
+ voiceButton.onclick=()=>{voiceEnabled=!voiceEnabled;voiceButton.textContent=voiceEnabled?'关闭浏览器演示语音':'开启浏览器演示语音';if(!voiceEnabled)window.speechSynthesis?.cancel();};
+ let sending=false;
+ async function interact(action, question){
+  if(sending)return;
+  sending=true;feedback.textContent='等待 ROS 确认…';
+  try{
+   const response=await fetch('/api/interact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,question})});
+   const result=await response.json();
+   feedback.textContent=result.message||'未收到确认';
+   if(result.success&&action==='ask')input.value='';
+  }catch(e){feedback.textContent='连接失败，请查看当前状态后重试';}
+  finally{sending=false;}
+ }
+ questionBox.querySelector('button').onclick=()=>interact('ask',input.value);
+ const controls=[['start','接待游客'],['arm_visitor','等待游客到来'],['accept','同意导览'],['refuse','暂不需要'],['pause','暂停'],['resume','继续导览'],['straggle','队尾放慢'],['gather','提醒集合'],['finish_qa','结束问答'],['manual_takeover','人工接管'],['cancel','结束导览']];
+ for(const [action,label] of controls){const button=document.createElement('button');button.textContent=label;button.dataset.action=action;button.onclick=()=>interact(action);actions.appendChild(button);}
+ function updateInteraction(data){
+  const tour=data.tour, assist=tour?.visitor_assist||{};
+  interaction.style.display=data.interactive?'block':'none';
+  const live=Boolean(data.connected&&tour), state=tour?.state;
+  status.textContent=live?(tour.reason||state)+' · 团队确认人数 '+(assist.expected_count||0):'等待实时导览状态';
+  const allowed={arm_visitor:assist.can_arm,accept:state==='WAITING_CONSENT'&&(!assist.active||assist.can_accept),refuse:state==='WAITING_CONSENT',pause:['NAVIGATING','RETURNING','EXPLAINING','QA'].includes(state),resume:state==='PAUSED'&&(!assist.active||assist.can_resume),finish_qa:state==='QA'&&tour?.qa_waiting,manual_takeover:!['IDLE','COMPLETED','ERROR'].includes(state),cancel:!['IDLE','COMPLETED','ERROR'].includes(state)};
+  allowed.straggle=data.team?.count===3&&['NAVIGATING','RETURNING'].includes(state);
+  allowed.start=state==='IDLE'&&data.team?.count===3;
+  allowed.gather=data.team?.count===3;
+  if(data.team){status.textContent+=' · 队伍 '+data.team.state+' · 落后 '+(data.team.lag_m||0).toFixed(1)+' m';allowed.resume=allowed.resume&&data.team.gathered;}
+  actions.querySelectorAll('button').forEach(button=>button.disabled=!live||sending||!allowed[button.dataset.action]);
+  questionBox.querySelector('button').disabled=!live||sending||state!=='QA'||!tour?.qa_waiting;
+ }
  document.body.style.paddingTop='40px';
  for(const selector of ['.upgrade-controls','.toolbar','.event-bar','aside','.tour-strip','details.responsibility']) {
   const el=document.querySelector(selector); if(el) el.style.display='none';
@@ -16,15 +56,39 @@
  const hint=document.getElementById('scene-hint');
  if(hint) hint.textContent='拖动旋转 · 滚轮缩放 · 导览由 ROS 仿真启动，页面为只读展示';
  let selected=false;
+ let liveScene=null, liveVisitors=new Map();
+ function updateVisitors(poses){
+  if(!sceneReady)return;
+  if(scene!==liveScene){liveScene=scene;liveVisitors=new Map();}
+  const seen=new Set();
+  for(const p of poses||[]){
+   if(!p.id||![p.x,p.z,p.yaw].every(Number.isFinite))continue;
+   seen.add(p.id);
+   let model=liveVisitors.get(p.id);
+   if(!model){model=visitor(0xbd7352,1.65);liveVisitors.set(p.id,model);}
+   const delta=Math.hypot(p.x-model.position.x,p.z-model.position.z);
+   model.userData.liveTravel=(model.userData.liveTravel||0)+(model.visible?delta:0);
+   model.visible=true;model.position.set(p.x,0,p.z);model.rotation.y=p.yaw;
+   animateVisitor(model,model.userData.liveTravel,delta>.015,.2);
+  }
+  for(const [id,model] of liveVisitors)if(!seen.has(id))model.visible=false;
+  needsDraw=true;
+ }
  async function update(){
   try {
    const response=await fetch('/api/pose',{cache:'no-store'});
    const data=await response.json();
+   updateInteraction(data);
+   if(data.speech?.task_id&&data.speech.task_id!==lastSpeechId){
+    lastSpeechId=data.speech.task_id;
+    if(voiceEnabled&&window.speechSynthesis){const utterance=new SpeechSynthesisUtterance(data.speech.text);utterance.lang='zh-CN';speechSynthesis.cancel();speechSynthesis.speak(utterance);}
+   }
    if(!selected && data.layout && typeof switchMap==='function'){
     if(data.layout!==activeMap.id) switchMap(data.layout);
     selected=true;
    }
    if(!data.connected || !sceneReady){
+    updateVisitors(null);
     answer.style.display='none';
     banner.textContent='ROS 仿真联动：定位离线或数据过期（机器人位置暂停更新）';
     banner.style.background='#8a4923'; return;
@@ -32,14 +96,16 @@
    s.pos={x:data.x,z:data.z}; s.yaw=data.yaw;
    robot.position.set(data.x,0,data.z); robot.rotation.y=data.yaw;
    needsDraw=true;
+   updateVisitors(data.visitors);
    const route=data.route;
    const labels={NAVIGATING:'前往',ARRIVED:'已到达并停车',COMPLETED:'路线完成',ERROR:'导航异常'};
    const tour=data.tour;
    const qa=tour && tour.qa_result;
-   if(qa && qa.answer){
+   if(tour?.state==='QA' && qa && qa.answer){
     answer.textContent='问答结果（模拟播报，无真实音频）\n'+qa.answer+'\n来源：'+((qa.source||{}).url||'无');
     answer.style.display='block';
-   } else answer.style.display='none';
+   } else if(data.speech?.text){answer.textContent='机器人讲解（模拟播报）\n'+data.speech.text;answer.style.display='block';}
+   else answer.style.display='none';
    const tourLabels={IDLE:'待命',GREETING:'迎宾',WAITING_CONSENT:'等待游客同意',PLANNING:'规划路线',NAVIGATING:'前往展区',EXPLAINING:'模拟讲解',QA:'互动问答',RETURNING:'前往出口',PAUSED:'已暂停',COMPLETED:'导览完成',ERROR:'导览异常'};
    const detail=tour ? ' · '+(tourLabels[tour.state]||tour.state||'')+' · '+(tour.reason||'')+
      (tour.qa_waiting?' · 等待提问或结束问答':'') : route ? ' · '+(labels[route.state]||'')+' '+(route.name||'')+
@@ -50,9 +116,12 @@
      (speed.actual_speed_source==='simulation' && Number.isFinite(speed.simulated_actual_speed_mps)?
        ' · 模拟速度 '+speed.simulated_actual_speed_mps.toFixed(2)+' m/s':'')+
      (speed.reason?' · '+speed.reason:'') : '';
-   banner.textContent='ROS 仿真实时位置 · '+(data.layout==='official'?'官方展厅':'适配展厅')+detail+speedText;
+   const visitorsText=Array.isArray(data.visitors)?' · 场内游客 '+data.visitors.length+' 人（Gazebo 真值）':' · 游客位置暂无新鲜数据';
+   banner.textContent='ROS 仿真实时位置 · '+(data.layout==='official'?'官方展厅':'适配展厅')+detail+speedText+visitorsText;
    banner.style.background='#205d50';
   } catch(e) {
+   updateInteraction({interactive:interaction.style.display==='block',connected:false});
+   updateVisitors(null);
    answer.style.display='none';
    banner.textContent='ROS 仿真联动：连接中断（机器人位置暂停更新）';
    banner.style.background='#8a4923';

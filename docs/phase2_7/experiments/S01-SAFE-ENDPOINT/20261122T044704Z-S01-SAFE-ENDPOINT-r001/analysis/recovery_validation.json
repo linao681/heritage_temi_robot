@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "evidence": {
+    "status": "PASS",
+    "stop_cause": "PERSON_DISTANCE_THRESHOLD",
+    "near_person_distance_m": 1.5873311758041382,
+    "stop_session_id": "bc36466931b44206a9b7c7359f799a3e",
+    "target": "zone_1",
+    "stop_confirmed_at_monotonic_sec": 94656.392687745,
+    "safety_cleared_at_monotonic_sec": 94659.156739313,
+    "clear_after_resume": true,
+    "recovery_requested_at_monotonic_sec": 94658.989501859,
+    "resumed_session_id": "b87d0b3078564615a36e2af390964441",
+    "resumed_at_monotonic_sec": 94659.112159952
+  },
+  "source_files": {
+    "report_sha256": "46057d146c5bda284cd66f1c3e52cbfdab9e6c01a1fc8905f224b6024b96c9a8",
+    "truth_sha256": "6b0885141b6eb761d670c69a99a3e7460d4fd65fe5ef1eae897f2b9cbc48ffaa"
+  }
+}

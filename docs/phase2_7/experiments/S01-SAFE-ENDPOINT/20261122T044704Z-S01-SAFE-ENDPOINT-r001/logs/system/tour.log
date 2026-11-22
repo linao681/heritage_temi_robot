@@ -1,0 +1,26 @@
+[INFO] [1795322834.978454558] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 12:47:30,909 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 12:47:30,910 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 12:47:30,934 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-22 12:47:33,087 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定导览路线
+2026-11-22 12:47:33,089 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往入口待命点
+2026-11-22 12:47:33,186 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解入口待命点
+2026-11-22 12:47:33,211 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 12:47:43,247 INFO heritage_tour_manager.tour_manager: PAUSED: 导航安全停车
+2026-11-22 12:47:45,920 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 12:48:01,712 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解非遗概览
+2026-11-22 12:48:01,735 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传统工艺
+2026-11-22 12:48:42,520 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解传统工艺
+2026-11-22 12:48:42,549 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往代表作品
+2026-11-22 12:49:35,324 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解代表作品
+2026-11-22 12:49:35,346 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传承故事
+2026-11-22 12:50:22,316 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解传承故事
+2026-11-22 12:50:22,339 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往互动体验
+2026-11-22 12:50:39,134 INFO heritage_tour_manager.tour_manager: PAUSED: 导航安全停车
+2026-11-22 12:50:41,521 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往互动体验
+2026-11-22 12:51:31,127 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解互动体验
+2026-11-22 12:51:31,149 INFO heritage_tour_manager.tour_manager: QA: 互动等待，接受文字提问、人工结束或超时继续
+2026-11-22 12:51:31,155 INFO heritage_tour_manager.tour_manager: QA: 知识问答与播报
+2026-11-22 12:51:31,202 INFO heritage_tour_manager.tour_manager: RETURNING: 前往出口
+2026-11-22 12:52:51,863 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解出口
+2026-11-22 12:52:51,886 INFO heritage_tour_manager.tour_manager: COMPLETED: 完整导览已结束

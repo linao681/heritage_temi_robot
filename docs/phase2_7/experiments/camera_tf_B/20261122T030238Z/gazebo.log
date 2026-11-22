@@ -1,0 +1,42 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-11-02-39-470334-linao-P15-24-412520
+[INFO] [launch]: Default logging verbosity is set to INFO
+Gazebo and robot_state_publisher share generated URDF: /tmp/heritage-camera-y28w6lpn/heritage_robot.urdf
+[INFO] [gzserver-1]: process started with pid [412550]
+[INFO] [robot_state_publisher-2]: process started with pid [412552]
+[INFO] [spawn_entity.py-3]: process started with pid [412554]
+[robot_state_publisher-2] [INFO] [1795316560.149263672] [robot_state_publisher]: got segment base_footprint
+[robot_state_publisher-2] [INFO] [1795316560.149401872] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-2] [INFO] [1795316560.149415563] [robot_state_publisher]: got segment caster
+[robot_state_publisher-2] [INFO] [1795316560.149423361] [robot_state_publisher]: got segment depth_camera_link
+[robot_state_publisher-2] [INFO] [1795316560.149430656] [robot_state_publisher]: got segment depth_camera_optical_frame
+[robot_state_publisher-2] [INFO] [1795316560.149438133] [robot_state_publisher]: got segment display_link
+[robot_state_publisher-2] [INFO] [1795316560.149445383] [robot_state_publisher]: got segment front_caster
+[robot_state_publisher-2] [INFO] [1795316560.149452426] [robot_state_publisher]: got segment laser_link
+[robot_state_publisher-2] [INFO] [1795316560.149459362] [robot_state_publisher]: got segment left_wheel
+[robot_state_publisher-2] [INFO] [1795316560.149466138] [robot_state_publisher]: got segment right_wheel
+[spawn_entity.py-3] [INFO] [1795316560.616232932] [spawn_entity]: Spawn Entity started
+[spawn_entity.py-3] [INFO] [1795316560.616786064] [spawn_entity]: Loading entity published on topic robot_description
+[spawn_entity.py-3] [INFO] [1795316560.619040320] [spawn_entity]: Waiting for entity xml on robot_description
+[spawn_entity.py-3] [INFO] [1795316560.632617881] [spawn_entity]: Waiting for service /spawn_entity, timeout = 30
+[spawn_entity.py-3] [INFO] [1795316560.632875243] [spawn_entity]: Waiting for service /spawn_entity
+[robot_state_publisher-2] [INFO] [1795316560.856430458] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[gzserver-1] [INFO] [1795316560.856976939] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[gzserver-1] terminate called after throwing an instance of 'rclcpp::exceptions::RCLError'
+[gzserver-1]   what():  could not create publisher: rcl node's context is invalid, at ./src/rcl/node.c:428
+[spawn_entity.py-3] Traceback (most recent call last):
+[spawn_entity.py-3]   File "/opt/ros/humble/lib/gazebo_ros/spawn_entity.py", line 372, in <module>
+[spawn_entity.py-3]     main()
+[spawn_entity.py-3]   File "/opt/ros/humble/lib/gazebo_ros/spawn_entity.py", line 367, in main
+[spawn_entity.py-3]     exit_code = spawn_entity_node.run()
+[spawn_entity.py-3]   File "/opt/ros/humble/lib/gazebo_ros/spawn_entity.py", line 228, in run
+[spawn_entity.py-3]     success = self._spawn_entity(entity_xml, initial_pose, spawn_service_timeout)
+[spawn_entity.py-3]   File "/opt/ros/humble/lib/gazebo_ros/spawn_entity.py", line 277, in _spawn_entity
+[spawn_entity.py-3]     if client.wait_for_service(timeout_sec=timeout):
+[spawn_entity.py-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/client.py", line 180, in wait_for_service
+[spawn_entity.py-3]     return self.service_is_ready()
+[spawn_entity.py-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/client.py", line 160, in service_is_ready
+[spawn_entity.py-3]     return self.__client.service_server_is_available()
+[spawn_entity.py-3] rclpy._rclpy_pybind11.RCLError: failed to check service availability: rcl node's context is invalid, at ./src/rcl/node.c:428
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 412552]
+[ERROR] [spawn_entity.py-3]: process has died [pid 412554, exit code 1, cmd '/opt/ros/humble/lib/gazebo_ros/spawn_entity.py -entity heritage_robot -topic robot_description -x -12.653908843860373 -y -7.902236951471988 -z 0.02 --ros-args'].
+[ERROR] [gzserver-1]: process has died [pid 412550, exit code -6, cmd 'gzserver /home/linao/heritage_workspace/heritage_temi_robot/simulation/generated/official.world -slibgazebo_ros_init.so -slibgazebo_ros_factory.so -slibgazebo_ros_force_system.so'].

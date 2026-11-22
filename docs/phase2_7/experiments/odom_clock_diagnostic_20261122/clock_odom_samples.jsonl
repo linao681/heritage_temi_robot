@@ -1,0 +1,21 @@
+[WARN] [1795318859.997747967] [phase27_odom_clock_probe]: New publisher discovered on topic '/clock', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+{"elapsed_wall_sec": 0.02, "clock_sec": null, "odom_stamp_sec": null, "clock_minus_odom_sec": null, "odom_rx_age_sec": null}
+{"elapsed_wall_sec": 0.54, "clock_sec": null, "odom_stamp_sec": 1.589, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.769100294448435e-05}
+{"elapsed_wall_sec": 1.06, "clock_sec": null, "odom_stamp_sec": 2.099, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.904200275428593e-05}
+{"elapsed_wall_sec": 1.56, "clock_sec": null, "odom_stamp_sec": 2.609, "clock_minus_odom_sec": null, "odom_rx_age_sec": 4.938700294587761e-05}
+{"elapsed_wall_sec": 2.08, "clock_sec": null, "odom_stamp_sec": 3.119, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.71329952031374e-05}
+{"elapsed_wall_sec": 2.59, "clock_sec": null, "odom_stamp_sec": 3.629, "clock_minus_odom_sec": null, "odom_rx_age_sec": 6.239999493118376e-05}
+{"elapsed_wall_sec": 3.1, "clock_sec": null, "odom_stamp_sec": 4.139, "clock_minus_odom_sec": null, "odom_rx_age_sec": 5.997500556986779e-05}
+{"elapsed_wall_sec": 3.61, "clock_sec": null, "odom_stamp_sec": 4.649, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.0852999771013856e-05}
+{"elapsed_wall_sec": 4.12, "clock_sec": null, "odom_stamp_sec": 5.159, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.75969975721091e-05}
+{"elapsed_wall_sec": 4.63, "clock_sec": null, "odom_stamp_sec": 5.6690000000000005, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.4890996175818145e-05}
+{"elapsed_wall_sec": 5.14, "clock_sec": null, "odom_stamp_sec": 6.179, "clock_minus_odom_sec": null, "odom_rx_age_sec": 5.6128992582671344e-05}
+{"elapsed_wall_sec": 5.66, "clock_sec": null, "odom_stamp_sec": 6.689, "clock_minus_odom_sec": null, "odom_rx_age_sec": 2.9440008802339435e-05}
+{"elapsed_wall_sec": 6.17, "clock_sec": null, "odom_stamp_sec": 7.199, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.769299655687064e-05}
+{"elapsed_wall_sec": 6.67, "clock_sec": null, "odom_stamp_sec": 7.675, "clock_minus_odom_sec": null, "odom_rx_age_sec": 0.024597554001957178}
+{"elapsed_wall_sec": 7.18, "clock_sec": null, "odom_stamp_sec": 8.185, "clock_minus_odom_sec": null, "odom_rx_age_sec": 0.01391424699977506}
+{"elapsed_wall_sec": 7.68, "clock_sec": null, "odom_stamp_sec": 8.695, "clock_minus_odom_sec": null, "odom_rx_age_sec": 3.368098987266421e-05}
+{"elapsed_wall_sec": 8.18, "clock_sec": null, "odom_stamp_sec": 9.171, "clock_minus_odom_sec": null, "odom_rx_age_sec": 0.02939596600481309}
+{"elapsed_wall_sec": 8.69, "clock_sec": null, "odom_stamp_sec": 9.681000000000001, "clock_minus_odom_sec": null, "odom_rx_age_sec": 0.019292463999590836}
+{"elapsed_wall_sec": 9.19, "clock_sec": null, "odom_stamp_sec": 10.191, "clock_minus_odom_sec": null, "odom_rx_age_sec": 0.009269513000617735}
+{"elapsed_wall_sec": 9.69, "clock_sec": null, "odom_stamp_sec": 10.667, "clock_minus_odom_sec": null, "odom_rx_age_sec": 0.032583339998382144}

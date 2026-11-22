@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/gazebo_visitor_team.py", line 230, in <module>
+    main()
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/gazebo_visitor_team.py", line 202, in main
+    node.move(member['id'], *pose)
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/spawn_people_scenario.py", line 263, in move
+    self._call(self._set_state, SetEntityState.Request(state=state))
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/spawn_people_scenario.py", line 211, in _call
+    rclpy.spin_until_future_complete(self, future, timeout_sec=10.0)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 256, in spin_until_future_complete
+    executor.spin_until_future_complete(future, timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 349, in spin_until_future_complete
+    self.spin_once_until_future_complete(future, timeout_left)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 815, in spin_once_until_future_complete
+    self._spin_once_impl(timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 797, in _spin_once_impl
+    handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 780, in wait_for_ready_callbacks
+    return next(self._cb_iter)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 538, in _wait_for_ready_callbacks
+    timeout_timer = Timer(None, None, timeout_nsec, self._clock, context=self._context)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/timer.py", line 28, in __init__
+    self.__timer = _rclpy.Timer(
+rclpy._rclpy_pybind11.RCLError: failed to create timer: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/guard_condition.c:67

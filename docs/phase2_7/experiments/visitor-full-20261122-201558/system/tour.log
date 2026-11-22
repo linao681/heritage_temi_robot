@@ -1,0 +1,20 @@
+[INFO] [1795349766.861754082] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 20:16:13,417 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 20:16:13,420 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 20:16:19,445 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-22 20:16:21,549 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定导览路线
+2026-11-22 20:16:21,549 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往入口待命点
+2026-11-22 20:16:21,644 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解入口待命点
+2026-11-22 20:16:25,860 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:16:40,176 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:16:43,268 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:16:47,988 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:16:51,622 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-22 20:16:55,440 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解非遗概览
+2026-11-22 20:16:59,665 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传统工艺
+2026-11-22 20:17:06,223 INFO heritage_tour_manager.tour_manager: PAUSED: 游客掉队，等待重新集合
+2026-11-22 20:17:10,068 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传统工艺
+2026-11-22 20:17:40,421 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解传统工艺
+2026-11-22 20:17:44,439 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往代表作品
+2026-11-22 20:17:49,794 INFO heritage_tour_manager.tour_manager: PAUSED: 导航安全停车
+2026-11-22 20:20:15,286 INFO heritage_tour_manager.tour_manager: IDLE: 用户取消导览

@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "exit_code": 0,
+  "camera_result": "camera_result.json",
+  "scope": "camera geometry and actual RGB-D/CameraInfo smoke only; no YOLOX or actor comparison"
+}

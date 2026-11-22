@@ -1,0 +1,2 @@
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01/20261122T035032Z-S01-r001/tour/experiment_data.csv", "rows": 895, "duration_sec": 89.515}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01/20261122T035032Z-S01-r001/tour/report.json", "error": "TimeoutError: 等待超时：相机稳定检测到至少一位参观者"}

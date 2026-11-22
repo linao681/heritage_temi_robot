@@ -1,0 +1,67 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-20-11-16-283610-linao-P15-24-54874
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [54979]
+[INFO] [yolox_person_detector-2]: process started with pid [54981]
+[INFO] [depth_association-3]: process started with pid [54986]
+[INFO] [perception_fusion-4]: process started with pid [54994]
+[visitor_perception-1] [INFO] [1795349480.908706720] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 2, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 9883.058972802, 'sample_age_sec': 1.3561999367084354e-05}
+[depth_association-3] Traceback (most recent call last):
+[depth_association-3]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/depth_association", line 33, in <module>
+[depth_association-3]     sys.exit(load_entry_point('visitor-perception==0.1.0', 'console_scripts', 'depth_association')())
+[depth_association-3]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/python3.10/site-packages/visitor_perception/ros_depth_association.py", line 244, in main
+[depth_association-3]     rclpy.spin(node)
+[depth_association-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
+[depth_association-3]     executor.spin_once()
+[depth_association-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
+[depth_association-3]     self._spin_once_impl(timeout_sec)
+[depth_association-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 797, in _spin_once_impl
+[depth_association-3]     handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+[depth_association-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 780, in wait_for_ready_callbacks
+[depth_association-3]     return next(self._cb_iter)
+[depth_association-3]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 681, in _wait_for_ready_callbacks
+[depth_association-3]     raise ExternalShutdownException()
+[depth_association-3] rclpy.executors.ExternalShutdownException
+[perception_fusion-4] Traceback (most recent call last):
+[perception_fusion-4]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/perception_fusion", line 33, in <module>
+[perception_fusion-4]     sys.exit(load_entry_point('visitor-perception==0.1.0', 'console_scripts', 'perception_fusion')())
+[perception_fusion-4]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/python3.10/site-packages/visitor_perception/ros_perception_fusion.py", line 150, in main
+[perception_fusion-4]     rclpy.spin(node)
+[perception_fusion-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
+[perception_fusion-4]     executor.spin_once()
+[perception_fusion-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
+[perception_fusion-4]     self._spin_once_impl(timeout_sec)
+[perception_fusion-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 797, in _spin_once_impl
+[perception_fusion-4]     handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+[perception_fusion-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 780, in wait_for_ready_callbacks
+[perception_fusion-4]     return next(self._cb_iter)
+[perception_fusion-4]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 681, in _wait_for_ready_callbacks
+[perception_fusion-4]     raise ExternalShutdownException()
+[perception_fusion-4] rclpy.executors.ExternalShutdownException
+[yolox_person_detector-2] Traceback (most recent call last):
+[yolox_person_detector-2]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/yolox_person_detector", line 33, in <module>
+[yolox_person_detector-2]     sys.exit(load_entry_point('visitor-perception==0.1.0', 'console_scripts', 'yolox_person_detector')())
+[yolox_person_detector-2]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/python3.10/site-packages/visitor_perception/ros_person_detector.py", line 91, in main
+[yolox_person_detector-2]     rclpy.spin(node)
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
+[yolox_person_detector-2]     executor.spin_once()
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
+[yolox_person_detector-2]     self._spin_once_impl(timeout_sec)
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 805, in _spin_once_impl
+[yolox_person_detector-2]     raise handler.exception()
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/task.py", line 272, in _execute_coroutine_step
+[yolox_person_detector-2]     result = coro.send(None)
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 488, in handler
+[yolox_person_detector-2]     await call_coroutine(entity, arg)
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 407, in _execute_subscription
+[yolox_person_detector-2]     await await_or_execute(sub.callback, msg)
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 110, in await_or_execute
+[yolox_person_detector-2]     return callback(*args)
+[yolox_person_detector-2]   File "/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/python3.10/site-packages/visitor_perception/ros_person_detector.py", line 83, in _on_image
+[yolox_person_detector-2]     self._detections.publish(output)
+[yolox_person_detector-2]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/publisher.py", line 70, in publish
+[yolox_person_detector-2]     self.__publisher.publish(msg)
+[yolox_person_detector-2] rclpy._rclpy_pybind11.RCLError: Failed to publish: publisher's context is invalid, at ./src/rcl/publisher.c:389
+[ERROR] [perception_fusion-4]: process has died [pid 54994, exit code 1, cmd '/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/perception_fusion --ros-args --params-file /tmp/launch_params_o6xusc1p'].
+[ERROR] [depth_association-3]: process has died [pid 54986, exit code 1, cmd '/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/depth_association --ros-args --params-file /tmp/launch_params_iu418pb2'].
+[ERROR] [yolox_person_detector-2]: process has died [pid 54981, exit code 1, cmd '/home/linao/heritage_workspace/heritage_temi_robot/ros2_ws/install/visitor_perception/lib/visitor_perception/yolox_person_detector --ros-args --params-file /tmp/launch_params_j1zlq9vh'].
+[visitor_perception-1] [INFO] [1795349636.791060397] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 10037.812704516, 'sample_age_sec': 1.150405607999346}

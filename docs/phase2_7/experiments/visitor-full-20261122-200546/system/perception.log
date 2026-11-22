@@ -1,0 +1,8 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-20-05-54-024138-linao-P15-24-51824
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [51938]
+[INFO] [yolox_person_detector-2]: process started with pid [51941]
+[INFO] [depth_association-3]: process started with pid [51943]
+[INFO] [perception_fusion-4]: process started with pid [51947]
+[visitor_perception-1] [INFO] [1795349156.820254017] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 9558.963236476, 'sample_age_sec': 1.2100999811082147e-05}
+[visitor_perception-1] [INFO] [1795349327.012787925] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 9728.073490468, 'sample_age_sec': 1.1058377740009746}

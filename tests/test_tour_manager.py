@@ -101,6 +101,122 @@ def test_configuration_contains_all_eight_waypoints_and_guide_fields():
     assert config.safe_return_location == config.route[0].temi_location
 
 
+@pytest.mark.parametrize('pause_source', ['manual', 'team', 'safety'])
+def test_automatic_resume_only_accepts_current_safety_pause_and_not_pending_cancel(pause_source):
+    async def scenario():
+        manager, _, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.state.value == 'NAVIGATING')
+            pause = {'manual': manager.pause, 'team': manager.visitor_lost,
+                     'safety': lambda: manager.safety_pause('session-a')}[pause_source]
+            assert pause()
+            await wait_until(lambda: manager.state.value == 'PAUSED' and not manager.is_moving)
+            assert not manager.resume_safety('session-b', lambda: True)
+            assert not manager.resume_safety('session-a', lambda: False)
+            if pause_source == 'safety':
+                assert not manager.resume()
+                assert manager.resume_safety('session-a', lambda: True)
+            assert manager.cancel()
+            assert not manager.resume_safety('session-a', lambda: True)
+            calls = len(driver.navigation_calls)
+            await wait_until(lambda: not manager.running)
+            assert len(driver.navigation_calls) == calls
+        finally:
+            await end_rig(manager, monitor)
+
+    asyncio.run(scenario())
+
+
+def test_safety_qualification_is_checked_again_at_resume_consumption():
+    async def scenario():
+        manager, _, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.state.value == 'NAVIGATING')
+            assert manager.safety_pause('session-a')
+            await wait_until(lambda: manager.state.value == 'PAUSED' and not manager.is_moving)
+            checked = asyncio.Event()
+            calls = len(driver.navigation_calls)
+            checks = 0
+
+            def guard():
+                nonlocal checks
+                checks += 1
+                if checks > 1:
+                    checked.set()
+                return checks == 1
+
+            assert manager.resume_safety('session-a', guard)
+            await checked.wait()
+            assert manager.state.value == 'PAUSED'
+            assert len(driver.navigation_calls) == calls
+        finally:
+            await end_rig(manager, monitor)
+
+    asyncio.run(scenario())
+
+
+def test_cancel_queued_at_resumed_navigation_transition_prevents_goal_submission():
+    async def scenario():
+        manager, _, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.state.value == 'NAVIGATING')
+            assert manager.safety_pause('session-a')
+            await wait_until(lambda: manager.state.value == 'PAUSED' and not manager.is_moving)
+            goal_count = len(driver.navigation_calls)
+            loop = asyncio.get_running_loop()
+
+            def on_change(status):
+                if status['state'] == 'NAVIGATING':
+                    loop.call_soon(manager.cancel)
+
+            manager.on_change = on_change
+            assert manager.resume_safety('session-a', lambda: True)
+            await wait_until(lambda: not manager.running)
+            assert len(driver.navigation_calls) == goal_count
+            assert manager.outcome == 'canceled'
+        finally:
+            await end_rig(manager, monitor)
+
+    asyncio.run(scenario())
+
+
+def test_recovery_guard_revoked_at_resumed_transition_keeps_original_pause():
+    async def scenario():
+        manager, _, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.state.value == 'NAVIGATING')
+            assert manager.safety_pause('session-a')
+            await wait_until(lambda: manager.state.value == 'PAUSED' and not manager.is_moving)
+            goal_count = len(driver.navigation_calls)
+            loop = asyncio.get_running_loop()
+            qualified = [True]
+            revoked = asyncio.Event()
+
+            def revoke():
+                qualified[0] = False
+                revoked.set()
+
+            def on_change(status):
+                if status['state'] == 'NAVIGATING':
+                    loop.call_soon(revoke)
+
+            manager.on_change = on_change
+            assert manager.resume_safety('session-a', lambda: qualified[0])
+            await revoked.wait()
+            await wait_until(lambda: manager.state.value == 'PAUSED' or len(driver.navigation_calls) > goal_count)
+            assert len(driver.navigation_calls) == goal_count
+            assert manager.status()['paused_session_id'] == 'session-a'
+            assert manager.status()['pause_source'] == 'safety'
+        finally:
+            await end_rig(manager, monitor)
+
+    asyncio.run(scenario())
+
+
 @pytest.mark.parametrize('found', [True, False])
 def test_qa_question_speaks_and_then_completes(found):
     async def scenario():

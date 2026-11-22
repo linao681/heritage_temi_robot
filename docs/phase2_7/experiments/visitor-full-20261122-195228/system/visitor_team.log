@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/gazebo_visitor_team.py", line 230, in <module>
+    'blocked': blocked, 'members': [dict(m) for m in members],
+  File "/home/linao/heritage_workspace/heritage_temi_robot/scripts/gazebo_visitor_team.py", line 221, in main
+    if not pause_future.result().success:
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/publisher.py", line 70, in publish
+    self.__publisher.publish(msg)
+rclpy._rclpy_pybind11.RCLError: Failed to publish: publisher's context is invalid, at ./src/rcl/publisher.c:389

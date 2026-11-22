@@ -1,0 +1,30 @@
+
+=== sample 1 ===
+/assisted_teleop [nav2_msgs/action/AssistedTeleop]
+/backup [nav2_msgs/action/BackUp]
+/compute_path_through_poses [nav2_msgs/action/ComputePathThroughPoses]
+/compute_path_to_pose [nav2_msgs/action/ComputePathToPose]
+/drive_on_heading [nav2_msgs/action/DriveOnHeading]
+/follow_path [nav2_msgs/action/FollowPath]
+/follow_waypoints [nav2_msgs/action/FollowWaypoints]
+/navigate_through_poses [nav2_msgs/action/NavigateThroughPoses]
+/navigate_to_pose [nav2_msgs/action/NavigateToPose]
+/smooth_path [nav2_msgs/action/SmoothPath]
+/spin [nav2_msgs/action/Spin]
+/temi/navigate_to [temi_interfaces/action/NavigateTo]
+/temi/speak [temi_interfaces/action/Speak]
+/wait [nav2_msgs/action/Wait]
+/amcl
+/bt_navigator
+/bt_navigator_navigate_through_poses_rclcpp_node
+/bt_navigator_navigate_to_pose_rclcpp_node
+/controller_server
+/heritage_nav2_transport
+/temi_gateway
+active [3]
+
+=== sample 2 ===
+Node not found
+
+=== sample 3 ===
+Node not found

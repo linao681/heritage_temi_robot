@@ -1,0 +1,4 @@
+python 3.10.12
+pytest 6.2.5
+websockets 16.1.1
+rclpy /opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py

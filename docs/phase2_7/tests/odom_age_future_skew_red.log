@@ -1,0 +1,26 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+___________ test_odom_age_uses_receipt_age_for_bounded_future_stamps ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74feb9f27790>
+
+    def test_odom_age_uses_receipt_age_for_bounded_future_stamps(monkeypatch):
+        transport = transport_state()
+        transport._last_odom_stamp_ns = 100_100_000_000
+        transport._odom_initial_age = 0.0
+        monkeypatch.setattr(nav2_transport.time, 'monotonic', lambda: 10.2)
+        monkeypatch.setattr(Nav2Transport, 'get_clock', lambda _: SimpleNamespace(
+            now=lambda: SimpleNamespace(nanoseconds=100 * 10**9)))
+    
+>       assert transport._odom_age(10.2) == pytest.approx(0.2)
+E       assert inf == 0.2 ± 2.0e-07
+E        +  where inf = <bound method Nav2Transport._odom_age of <temi_bridge.nav2_transport.Nav2Transport object at 0x74fec7e148e0>>(10.2)
+E        +    where <bound method Nav2Transport._odom_age of <temi_bridge.nav2_transport.Nav2Transport object at 0x74fec7e148e0>> = <temi_bridge.nav2_transport.Nav2Transport object at 0x74fec7e148e0>._odom_age
+E        +  and   0.2 ± 2.0e-07 = <function approx at 0x74fec8e2b0a0>(0.2)
+E        +    where <function approx at 0x74fec8e2b0a0> = pytest.approx
+
+tests/test_nav2_arrival_stop.py:175: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_nav2_arrival_stop.py::test_odom_age_uses_receipt_age_for_bounded_future_stamps
+1 failed, 1 passed, 14 deselected in 0.54s
+exit_code=1

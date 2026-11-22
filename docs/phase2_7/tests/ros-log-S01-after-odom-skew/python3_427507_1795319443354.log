@@ -1,0 +1,1 @@
+[INFO] [1795319549.572245412] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 91341.556504797, 'sample_age_sec': 1.1681717159954133}

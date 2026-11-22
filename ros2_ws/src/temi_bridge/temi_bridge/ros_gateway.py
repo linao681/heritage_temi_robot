@@ -1,7 +1,7 @@
 """ROS2 接口与统一机器人后端之间的网关；不直接调用 Android SDK。"""
 
 import asyncio
-from concurrent.futures import TimeoutError
+from concurrent.futures import Future, TimeoutError
 from dataclasses import dataclass, field
 from functools import partial
 import math
@@ -35,6 +35,7 @@ class TemiGatewayNode(Node):
         self._lock = Lock()
         self._active: dict[str, _Reservation] = {}
         self._stopping = False
+        self._stop_waiter = None
         self._closed = False
         self._loop = asyncio.new_event_loop()
         self._thread = Thread(target=self._loop.run_forever, name='temi-backend', daemon=True)
@@ -244,20 +245,24 @@ class TemiGatewayNode(Node):
             response.message = 'stop 必须为 true'
             return response
         with self._lock:
-            if self._stopping:
-                response.success = False
-                response.message = '正在处理另一 STOP 请求，尚无停止确认'
-                return response
-            self._stopping = True
-            if 'navigation' in self._active:
-                self._active['navigation'].blocked.set()
-        try:
-            result = self._submit(self._backend.stop).result()
-        except Exception as error:
-            result = TaskResult(False, str(error) or '无法确认停止')
-        finally:
+            owner = not self._stopping
+            if owner:
+                self._stopping = True
+                self._stop_waiter = Future()
+                if 'navigation' in self._active:
+                    self._active['navigation'].blocked.set()
+            waiter = self._stop_waiter
+        if owner:
+            try:
+                result = self._submit(self._backend.stop).result()
+            except Exception as error:
+                result = TaskResult(False, str(error) or '无法确认停止')
             with self._lock:
+                waiter.set_result(result)
                 self._stopping = False
+                self._stop_waiter = None
+        else:
+            result = waiter.result()
         response.success = result.success
         response.message = result.message
         return response

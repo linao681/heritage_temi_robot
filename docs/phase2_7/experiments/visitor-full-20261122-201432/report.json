@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "operator_mode": "scripted simulated consent and regroup confirmation",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "error": "仿真系统已退出，查看 system.log",
+  "events": [],
+  "elapsed_sec": 64.09783204700034
+}

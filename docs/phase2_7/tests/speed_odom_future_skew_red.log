@@ -1,0 +1,20 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_____ test_speed_controller_keeps_freshness_for_bounded_future_odom_stamp ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0e8fb4d390>
+
+    def test_speed_controller_keeps_freshness_for_bounded_future_odom_stamp(monkeypatch):
+        node = speed_node_for_odom(monkeypatch)
+    
+        node._on_odom(odom_message(100, 100_000_000))
+    
+>       assert node._odom_received_at == 10.0
+E       assert None == 10.0
+E        +  where None = <temi_speed_controller.speed_controller_node.SpeedControllerNode object at 0x7f0e8fef6a70>._odom_received_at
+
+tests/test_speed_controller.py:49: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_speed_controller.py::test_speed_controller_keeps_freshness_for_bounded_future_odom_stamp
+1 failed, 1 passed, 45 deselected in 0.29s
+exit_code=1

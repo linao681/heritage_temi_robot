@@ -32,6 +32,7 @@ class OperationResult:
     success: bool
     message: str
     termination_confirmed: bool = True
+    submitted: bool = True
 
 
 class TourRobot(Protocol):
@@ -52,7 +53,8 @@ class _LowBattery(Exception):
 class TourManager:
     """全部控制及运行方法由同一 asyncio loop 串行执行。"""
 
-    _PRIORITY = {'pause': 1, 'low': 2, 'cancel': 3, 'manual': 4, 'critical': 5, 'disconnect': 6}
+    _PRIORITY = {'safety_pause': 0, 'team_pause': 1, 'pause': 2, 'low': 3,
+                 'cancel': 4, 'manual': 5, 'critical': 6, 'disconnect': 7}
 
     def __init__(self, robot: TourRobot, config: TourConfig,
                  on_change: Callable[[dict], None] | None = None, qa_lookup=None):
@@ -76,6 +78,10 @@ class TourManager:
         self._control_event = asyncio.Event()
         self._consent_event = asyncio.Event()
         self._resume_event = asyncio.Event()
+        self._pause_source = ''
+        self._paused_session_id = ''
+        self._pending_safety_session_id = ''
+        self._recovery_guard: Callable[[], bool] | None = None
         self._qa_event = asyncio.Event()
         self._accepted = False
         self._returning_low = False
@@ -105,6 +111,8 @@ class TourManager:
             'state': self.state.value, 'reason': self.reason, 'outcome': self.outcome,
             'route_index': self.route_index, 'visited': list(self.visited),
             'target': self.target,
+            'pause_source': self._pause_source,
+            'paused_session_id': self._paused_session_id,
             'current_location': self.current_location, 'connected': self.connected,
             'battery_percentage': self.battery_percentage, 'is_moving': self.is_moving,
             'error_count': self.error_count, 'elapsed_sec': round(elapsed, 3),
@@ -144,6 +152,8 @@ class TourManager:
         self._qa_question = self._qa_result = None
         self._visitor_guard = visitor_guard
         self._control = None
+        self._pause_source = self._paused_session_id = self._pending_safety_session_id = ''
+        self._recovery_guard = None
         for event in (self._control_event, self._consent_event, self._resume_event, self._qa_event):
             event.clear()
         self._transition(TourState.IDLE, '开始新导览任务')
@@ -171,20 +181,59 @@ class TourManager:
         return True
 
     def pause(self) -> bool:
+        if self.state is TourState.PAUSED and self._pause_source == 'safety':
+            return self._request('pause', '用户暂停')
         return self.state is not TourState.PAUSED and self._request('pause', '用户暂停')
 
+    def safety_pause(self, session_id: str) -> bool:
+        if (not session_id or self.state not in (TourState.NAVIGATING, TourState.RETURNING) or
+                not self._request('safety_pause', '导航安全停车')):
+            return False
+        self._pending_safety_session_id = session_id
+        return True
+
     def visitor_lost(self) -> bool:
-        accepted = self.state is not TourState.PAUSED and self._request('pause', '游客掉队，等待重新集合')
+        accepted = ((self.state is not TourState.PAUSED or self._pause_source == 'safety') and
+                    self._request('team_pause', '游客掉队，等待重新集合'))
         if accepted:
             self.error_count += 1
         return accepted
 
     def resume(self) -> bool:
-        if self.state is not TourState.PAUSED or not self.connected or self.is_moving:
-            return False
-        if not self._visitor_ready_to_resume():
+        if not self._can_resume() or self._pause_source == 'safety':
             return False
         self._resume_event.set()
+        return True
+
+    def resume_safety(self, session_id: str, guard: Callable[[], bool]) -> bool:
+        if (not self._can_resume() or self._pause_source != 'safety' or
+                session_id != self._paused_session_id or not guard()):
+            return False
+        self._recovery_guard = guard
+        self._resume_event.set()
+        return True
+
+    def _can_resume(self) -> bool:
+        return (self.running and self.state is TourState.PAUSED and self._control is None and
+                not self._resume_event.is_set() and self.connected and not self.is_moving and
+                self._visitor_ready_to_resume())
+
+    def navigation_send_permitted(self, *, consume=True):
+        """Validate the current control and recovery immediately before goal submission."""
+        if self._control is not None:
+            return False
+        if self._pause_source != 'safety':
+            return True
+        if (not self._resume_event.is_set() or not self.connected or self.is_moving or
+                not self._visitor_ready_to_resume() or self._recovery_guard is None or
+                not self._recovery_guard()):
+            self._pending_safety_session_id = self._paused_session_id
+            self._request('safety_pause', '恢复资格已撤销，继续等待安全条件')
+            return False
+        if consume:
+            self._pause_source = self._paused_session_id = ''
+            self._recovery_guard = None
+            self._resume_event.clear()
         return True
 
     def _visitor_ready_to_resume(self) -> bool:
@@ -272,8 +321,13 @@ class TourManager:
                 command, reason = self._control
             self._control = None
             self._control_event.clear()
-            if command == 'pause':
+            if command in ('pause', 'safety_pause', 'team_pause'):
                 self._resume_event.clear()
+                self._recovery_guard = None
+                self._pause_source = {'pause': 'manual', 'team_pause': 'team',
+                                      'safety_pause': 'safety'}[command]
+                self._paused_session_id = (self._pending_safety_session_id
+                                           if command == 'safety_pause' else '')
                 self._transition(TourState.PAUSED, reason)
                 # 等待显式恢复，低电量、取消、人工接管与断线仍可中断暂停。
                 while True:
@@ -285,11 +339,21 @@ class TourManager:
                         for task in (resume, other):
                             task.cancel()
                         await asyncio.gather(resume, other, return_exceptions=True)
-                    if self._control is not None or (self._resume_event.is_set() and
-                                                     self._visitor_ready_to_resume()):
+                    if self._control is not None or (
+                            self._resume_event.is_set() and self.connected and not self.is_moving and
+                            self._visitor_ready_to_resume() and
+                            (self._pause_source != 'safety' or
+                             self._recovery_guard is not None and self._recovery_guard())):
                         break
                     # 恢复请求与感知失效竞态：旧请求必须丢弃，不等待数据变好后自动执行。
                     self._resume_event.clear()
+                    self._recovery_guard = None
+                if self._control is None and self._pause_source == 'safety':
+                    # Keep the exact paused session and qualification until the
+                    # operation coroutine is about to send the resumed goal.
+                    return
+                self._pause_source = self._paused_session_id = ''
+                self._recovery_guard = None
             elif command == 'low':
                 raise _LowBattery(reason)
             elif command in ('disconnect', 'critical'):
@@ -305,16 +369,29 @@ class TourManager:
         while True:
             await self._checkpoint()
             self._transition(state, reason)
-            task = asyncio.create_task(operation())
+            operation_started = False
+
+            async def begin_operation():
+                nonlocal operation_started
+                # A control queued after the transition can run before the child task.
+                deferred_gate = motion and getattr(self.robot, 'navigation_send_guard', None) is not None
+                if not self.navigation_send_permitted(consume=not deferred_gate):
+                    return None
+                operation_started = True
+                return await operation()
+
+            task = asyncio.create_task(begin_operation())
             interrupt = asyncio.create_task(self._control_event.wait())
             try:
                 await asyncio.wait({task, interrupt}, return_when=asyncio.FIRST_COMPLETED)
                 if self._control is not None:
                     stop_result = None
                     was_done = task.done()
-                    finished_successfully = (was_done and not task.cancelled() and
+                    never_submitted = (was_done and not task.cancelled() and task.exception() is None and
+                                       isinstance(task.result(), OperationResult) and not task.result().submitted)
+                    finished_successfully = (operation_started and was_done and not task.cancelled() and
                                              task.exception() is None and task.result().success)
-                    if (motion and not finished_successfully) or self.is_moving:
+                    if (motion and operation_started and not never_submitted and not finished_successfully) or self.is_moving:
                         stop_result = await self.robot.stop()
                     if not task.done():
                         task.cancel()
@@ -324,7 +401,7 @@ class TourManager:
                     if isinstance(settled, Exception):
                         raise _TourEnd(TourState.ERROR, 'error', '任务终止未确认: ' + str(settled))
                     if isinstance(settled, OperationResult) and (
-                            not settled.termination_confirmed or (was_done and not settled.success)):
+                            not settled.termination_confirmed or (was_done and not settled.success and settled.submitted)):
                         raise _TourEnd(TourState.ERROR, 'error', '中断前任务失败或终止未确认: ' + settled.message)
                     await self._checkpoint(stopped=stop_result is not None)
                     continue

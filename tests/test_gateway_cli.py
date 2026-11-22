@@ -16,7 +16,7 @@ from temi_interfaces.srv import StopRobot
 
 def test_gateway_process_commands_and_sigterm_shutdown(monkeypatch, tmp_path):
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '228')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '228'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
     root = Path(__file__).resolve().parents[1]
     entrypoint = root / 'ros2_ws/install/temi_bridge/lib/temi_bridge/temi_gateway'

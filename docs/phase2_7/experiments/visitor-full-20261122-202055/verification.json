@@ -1,0 +1,96 @@
+{
+  "status": "PASS_WITH_RISK",
+  "raw_report_status": "PASS",
+  "elapsed_sec": 504.83967388699966,
+  "route": [
+    "wait",
+    "zone_1",
+    "zone_2",
+    "zone_3",
+    "zone_4",
+    "zone_5",
+    "exit"
+  ],
+  "qa_result": {
+    "found": true,
+    "entry_id": "music_types",
+    "answer": "潮州音乐大致分为广场乐和室内乐。",
+    "source": {
+      "name": "中国非物质文化遗产网·潮州音乐",
+      "url": "https://www.ihchina.cn/project_details/12553/",
+      "checked": "2026-11-20"
+    },
+    "spoken": true
+  },
+  "visitor_path_lengths_m": {
+    "phase25_person_06": 83.40558990693319,
+    "phase25_person_07": 82.29597599001796,
+    "phase25_person_08": 91.14615001679509
+  },
+  "min_sampled_center_distances_m": {
+    "robot_visitor": 1.2703538626227553,
+    "visitor_visitor": 0.9010885567227126
+  },
+  "resumption_checks": [
+    {
+      "target": "zone_1",
+      "last_observed_active_session_before_pause": "079c0334ec93484a9d4d0034a9af10bb",
+      "first_observed_different_session_after_confirmation": "ab9669d298854ea7a3427f7031399942",
+      "new_session_same_target": true,
+      "pre_confirmation_sample_count": 5,
+      "pre_confirmation_stopped": true
+    },
+    {
+      "target": "zone_1",
+      "last_observed_active_session_before_pause": "ab9669d298854ea7a3427f7031399942",
+      "first_observed_different_session_after_confirmation": "6fd8dd647e1b400aa204ea1909a32dec",
+      "new_session_same_target": true,
+      "pre_confirmation_sample_count": 5,
+      "pre_confirmation_stopped": true
+    },
+    {
+      "target": "zone_2",
+      "last_observed_active_session_before_pause": "2b2a480740ec407e8dd915a01dca7414",
+      "first_observed_different_session_after_confirmation": "255337b719fe49d28f5ea80baa89c7cd",
+      "new_session_same_target": true,
+      "pre_confirmation_sample_count": 5,
+      "pre_confirmation_stopped": true
+    },
+    {
+      "target": "zone_3",
+      "last_observed_active_session_before_pause": "14b2c2acd15a41e29bd8c9ba4704da24",
+      "first_observed_different_session_after_confirmation": "66f7f3cdccd94734bd11567afa854b3c",
+      "new_session_same_target": true,
+      "pre_confirmation_sample_count": 5,
+      "pre_confirmation_stopped": true
+    },
+    {
+      "target": "zone_3",
+      "last_observed_active_session_before_pause": "66f7f3cdccd94734bd11567afa854b3c",
+      "first_observed_different_session_after_confirmation": "953806038f1e48fc98e1726302ba98c3",
+      "new_session_same_target": true,
+      "pre_confirmation_sample_count": 5,
+      "pre_confirmation_stopped": true
+    },
+    {
+      "target": "zone_3",
+      "last_observed_active_session_before_pause": "953806038f1e48fc98e1726302ba98c3",
+      "first_observed_different_session_after_confirmation": "9aeccd53996643a2ad1b49887516c4b1",
+      "new_session_same_target": true,
+      "pre_confirmation_sample_count": 5,
+      "pre_confirmation_stopped": true
+    }
+  ],
+  "limitations": [
+    "Gazebo scripted actors; group status is not visual tracking",
+    "Consent and regroup confirmation are scripted operator actions",
+    "Timed simulated speech; browser TTS requires manual activation and voice support",
+    "Sampled center distances are not contact sensing or hardware safety certification"
+  ],
+  "source_sha256": {
+    "report.json": "975aae4fcd0a8e51ff98dcf1a95ef52914b9566c52d8823de5b9011b1c250be0",
+    "live_evidence.jsonl": "4fafd3bbd60d93f945c4580d0a5dc88554d92f25dee746d2e1fffe664f54943f",
+    "system/visitor_team.jsonl": "98d1788fe343d7421f9eecd38f75faf8bb4600b95a6ae0783183040d36068ffb",
+    "system/preflight.json": "f83ebe782b08bf3a77bc8480d484f15ae88e7b71021051107c244d27087a525b"
+  }
+}

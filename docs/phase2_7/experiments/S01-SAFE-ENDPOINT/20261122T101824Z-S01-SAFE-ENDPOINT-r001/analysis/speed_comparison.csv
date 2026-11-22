@@ -1,0 +1,2 @@
+target_robot_speed_mps,median_robot_speed_mps,speed_condition_met,stop_response_sec,minimum_center_distance_m,analysis_status
+0.3,3.6298060270232256e-05,False,0.9968124259999058,0.988938946963028,PASS_WITH_RISK

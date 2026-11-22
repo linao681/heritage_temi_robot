@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "operator_mode": "scripted simulated consent and regroup confirmation",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "error": "start: {'success': False, 'message': 'start: 当前状态不允许'}",
+  "events": [
+    {
+      "elapsed_sec": 13.549404651999794,
+      "action": "start",
+      "result": {
+        "success": false,
+        "message": "start: 当前状态不允许"
+      }
+    }
+  ],
+  "elapsed_sec": 13.549443215999418
+}

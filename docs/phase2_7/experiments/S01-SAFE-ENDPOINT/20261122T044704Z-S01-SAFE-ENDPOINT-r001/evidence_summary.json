@@ -1,0 +1,139 @@
+{
+  "experiment_id": "S01-SAFE-ENDPOINT",
+  "run_id": "20261122T044704Z-S01-SAFE-ENDPOINT-r001",
+  "status": "PASS",
+  "analysis_status": "PASS_WITH_RISK",
+  "recovery_validation_status": "PASS",
+  "domain_id": 228,
+  "config": {
+    "robot_speed_mps": 0.3,
+    "actor_speed_mps": 0.1,
+    "target_distance_m": 3.5,
+    "leave_direction": "left",
+    "leave_distance_m": 3.1
+  },
+  "tour": {
+    "state": "COMPLETED",
+    "route": [
+      "wait",
+      "zone_1",
+      "zone_2",
+      "zone_3",
+      "zone_4",
+      "zone_5",
+      "exit"
+    ],
+    "elapsed_sec": 320.976,
+    "navigation_task_count": 9,
+    "completed_navigation_targets": 7,
+    "qa": {
+      "found": true,
+      "entry_id": "music_types",
+      "answer": "潮州音乐大致分为广场乐和室内乐。",
+      "source": {
+        "name": "中国非物质文化遗产网·潮州音乐",
+        "url": "https://www.ihchina.cn/project_details/12553/",
+        "checked": "2026-11-20"
+      },
+      "spoken": true
+    },
+    "speech_mode": "Mock Speak Action; successful action is not real audio"
+  },
+  "actor_truth": {
+    "status": "PASS",
+    "movement_duration_sec": 46.0381344310008,
+    "gazebo_path_length_m": {
+      "phase25_person_01": 4.099988606738097
+    },
+    "phases": [
+      "WAIT_NAV",
+      "APPROACH",
+      "HOLD_TARGET",
+      "LEAVE",
+      "HOLD_CLEAR"
+    ],
+    "min_center_distance_by_phase_m": {
+      "APPROACH": 1.1817942690708647,
+      "HOLD_TARGET": 1.1588913433392471,
+      "LEAVE": 0.9922528604894333,
+      "HOLD_CLEAR": 7.6506097766666885
+    },
+    "min_geometry_gap_by_phase_m": {
+      "APPROACH": 0.3645150484572861,
+      "HOLD_TARGET": 0.34161212272566854,
+      "LEAVE": 0.1747193458667158,
+      "HOLD_CLEAR": 6.8108773014456
+    },
+    "robot_stop_confirmed_distance_m": 1.1817942690708647,
+    "geometry_risk": null,
+    "contact_observed": null
+  },
+  "analysis": {
+    "first_visual_sec": 94648.922432993,
+    "first_rgbd_sec": 94648.217647635,
+    "first_person_slow_sec": 94653.891320962,
+    "stop_response": {
+      "navigation_session_id": "bc36466931b44206a9b7c7359f799a3e",
+      "response_sec": 0.9006465650018072,
+      "request_distance_m": 1.308645737976642,
+      "confirmed_distance_m": 1.203445697763613,
+      "minimum_center_distance_m": 0.9922528604894333,
+      "failure_reason": null
+    },
+    "speed_condition": {
+      "target_mps": 0.3,
+      "median_mps": 1.9806078915961768e-05,
+      "sample_count": 20,
+      "window_coverage_sec": 1.9025490000058198,
+      "tolerance_mps": 0.05,
+      "met": false
+    },
+    "timeline_stage_counts": {
+      "ACTOR_LEAVING": 128,
+      "BRAKING": 3,
+      "MOVING": 38,
+      "RECOVERED": 6,
+      "STOP_CONFIRMED_HOLD": 10
+    }
+  },
+  "recovery_validation": {
+    "status": "PASS",
+    "stop_cause": "PERSON_DISTANCE_THRESHOLD",
+    "near_person_distance_m": 1.5873311758041382,
+    "stop_session_id": "bc36466931b44206a9b7c7359f799a3e",
+    "target": "zone_1",
+    "stop_confirmed_at_monotonic_sec": 94656.392687745,
+    "safety_cleared_at_monotonic_sec": 94659.156739313,
+    "clear_after_resume": true,
+    "recovery_requested_at_monotonic_sec": 94658.989501859,
+    "resumed_session_id": "b87d0b3078564615a36e2af390964441",
+    "resumed_at_monotonic_sec": 94659.112159952
+  },
+  "limitations": [
+    "safe-endpoint variant differs from original S01 target distance",
+    "0.3 m/s pre-interference calibration did not meet the 2-second speed condition",
+    "Gazebo geometry proxy only; contact sensing unavailable",
+    "Mock Speak Action; no real audio",
+    "simulation only; no physical temi validation"
+  ],
+  "sha256": {
+    "manifest.json": "0db5403feb365a6bbe43a6a88cbf5af633b0b4ed8d2f4e54fe5a86554d9b436f",
+    "config.yaml": "cf3eae4e7e746926457e3e0ee64cf13855b72f97c54e5098a32afaebbf0fbc8e",
+    "preflight.json": "ca665d1d8fb4cf15c6e035f54541e4fb0cea990fd570723fad4183ee1dc022ca",
+    "status.json": "e09eb1aede06e53b42292a05cab0ce8a321f383abd9447ed9b8b52f7bb803dda",
+    "tour/report.json": "46057d146c5bda284cd66f1c3e52cbfdab9e6c01a1fc8905f224b6024b96c9a8",
+    "tour/scenario/truth.json": "6b0885141b6eb761d670c69a99a3e7460d4fd65fe5ef1eae897f2b9cbc48ffaa",
+    "tour/experiment_data.csv": "703de38700058605e1a0e2eb9e54ca64bc4b87b0c36b7ce4d8c854cc0a538258",
+    "tour/events.json": "50059a150415e4796d9a5b41026012f2686919f0c7e6f1b3981c84db36ab3bc8",
+    "analysis/report_with_recovery_validation.json": "6b9ccc5e9166a137907028dbf6d58981812f1dbac853c2f10f3981eb19076410",
+    "analysis/recovery_validation.json": "7e40e6f0811f5fffb7a7a82a4d4f0401a755009f281ccf43e7e0dbc903694478",
+    "analysis/analysis.json": "338e0d942c44ea52ca856577165999f95802b5025703d4321e92c49770509f50",
+    "analysis/phase_timeline.csv": "c07430d4dc74256d5799ad9893d2bdcaecdb75522d98be021efc31b0395d7e52",
+    "analysis/speed_comparison.csv": "82576fa3de6d5de01125ef084ba76abd7141274f85d1f33a744d96dd534a7acb",
+    "analysis/distance_speed.svg": "5f89a6219175dd698ff367b657666b81dcbc1fdd0a4f31e5e272e0c016d36883",
+    "logs/tour.log": "aa84a003fa9e9e7120a506930b0652fc235871bab15e4cd14743fdd2aef0a3b9",
+    "logs/system/tour.log": "4e0eb9353ea855f3e8978ef1c5ae45faa5aed245ef5b95ba3d6bd0f0d617ebea",
+    "logs/system/navigation.log": "3c0117416ee273725418cc4dd8600c9dc70f1ffb70c78acf2d64890daefb32df",
+    "logs/system/speed.log": "e73b6f7139e21cb37a601311c3610359ae66fe2ce838d1e1325ffcac25f3291b"
+  }
+}

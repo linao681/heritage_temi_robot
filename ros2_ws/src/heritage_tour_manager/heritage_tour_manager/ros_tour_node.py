@@ -4,6 +4,8 @@ import asyncio
 from concurrent.futures import TimeoutError as ThreadTimeoutError
 from functools import partial
 import json
+import math
+import time
 from threading import Lock, Thread
 
 from action_msgs.msg import GoalStatus
@@ -14,7 +16,7 @@ from rclpy.node import Node
 from std_msgs.msg import Int32, String
 from std_srvs.srv import Trigger
 from temi_interfaces.action import NavigateTo, Speak
-from temi_interfaces.msg import RobotStatus
+from temi_interfaces.msg import NavigationStatus, PerceptionInput, RobotStatus
 from temi_interfaces.srv import StopRobot, AskHeritage, SubmitQuestion
 
 from .tour_config import TourConfig
@@ -51,6 +53,7 @@ class _RosTourRobot:
         self._speech = ActionClient(node, Speak, 'temi/speak', callback_group=group)
         self._stop_client = node.create_client(StopRobot, 'temi/stop', callback_group=group)
         self._cleanup = {}
+        self.navigation_send_guard = None
 
     async def _settle_goal(self, acceptance, goal, result):
         """取消时 Goal 可能尚未被接受；收到迟到的接受响应也必须取消它。"""
@@ -97,6 +100,9 @@ class _RosTourRobot:
                     return OperationResult(False, '上一 Action 尚未确认终止', False)
                 self._cleanup.pop(client)
             await _wait_ready(client.server_is_ready, min(deadline, loop.time() + communication))
+            if (client is self._navigation and self.navigation_send_guard is not None and
+                    not self.navigation_send_guard()):
+                return OperationResult(False, '导航资格已撤销，未提交 ROS Action', submitted=False)
             acceptance = client.send_goal_async(request)
             goal = await _wait_future(acceptance, min(deadline, loop.time() + communication))
             if not goal.accepted:
@@ -170,12 +176,21 @@ class HeritageTourNode(Node):
                                              callback_group=ReentrantCallbackGroup())
         self._last_telemetry = None
         self._last_snapshot = None
+        self._navigation_session_id = ''
+        self._retired_sessions = set()
+        self._fused = None
+        self._speed_recovery = None
+        self._used_recovery_decisions = set()
+        self._recovery_interrupted_at = -math.inf
         self._assist = None
         if config.visitor_assist_enabled:
             self._expected_count = self.create_publisher(Int32, 'heritage/visitor/expected_count', 10)
         self._thread.start()
         asyncio.run_coroutine_threadsafe(self._initialize(), self._loop).result()
         self.create_subscription(RobotStatus, 'temi/robot_status', self._on_robot_status, 10)
+        self.create_subscription(NavigationStatus, 'temi/navigation_status', self._on_navigation, 20)
+        self.create_subscription(PerceptionInput, 'heritage/perception/fused', self._on_fused, 10)
+        self.create_subscription(String, 'heritage/speed_control/status', self._on_speed, 10)
         interval = min(0.2, config.communication_timeout_sec / 2)
         if self._assist is not None:
             interval = min(interval, config.visitor_status_timeout_sec / 2)
@@ -184,12 +199,17 @@ class HeritageTourNode(Node):
         control_group = MutuallyExclusiveCallbackGroup()
         self.create_service(SubmitQuestion, 'heritage/tour/ask', self._on_question,
                             callback_group=control_group)
+        self._sim_team = None
+        self._sim_team_received = 0.0
+        self.create_subscription(String, 'heritage/simulation/team_status', self._on_sim_team, 10)
         controls = {
             'start': self._manager.start,
             'accept': partial(self._manager.consent, True),
             'refuse': partial(self._manager.consent, False),
             'pause': self._manager.pause,
+            'pause_safety': self._pause_safety,
             'resume': self._manager.resume,
+            'resume_safety': self._resume_safety,
             'cancel': self._manager.cancel,
             'visitor_lost': self._manager.visitor_lost,
             'manual_takeover': self._manager.manual_takeover,
@@ -205,6 +225,7 @@ class HeritageTourNode(Node):
     async def _initialize(self):
         self._manager = TourManager(self._robot, self._config, on_change=self._publish,
                                     qa_lookup=self._lookup_question)
+        self._robot.navigation_send_guard = self._manager.navigation_send_permitted
         if self._config.visitor_assist_enabled:
             self._assist = VisitorAssist(self._manager,
                                          lambda count: self._expected_count.publish(Int32(data=count)),
@@ -213,6 +234,7 @@ class HeritageTourNode(Node):
     def _publish(self, status):
         try:
             if self.context.ok():
+                status['recovery_ack_id'] = self._recovery_ack(status)
                 if self._assist is not None:
                     self._assist.sync_terminal()
                     status['visitor_assist'] = self._assist.snapshot()
@@ -231,8 +253,123 @@ class HeritageTourNode(Node):
             'current_location': status.current_location, 'is_moving': status.is_moving,
         }, status.header.frame_id)
 
+    def _on_navigation(self, message):
+        self._schedule(self._update_navigation, message.status, message.task_id)
+
+    def _update_navigation(self, state, session_id):
+        if state in ('start', 'calculating', 'going', 'reposing'):
+            if session_id and session_id not in self._retired_sessions:
+                if self._navigation_session_id and self._navigation_session_id != session_id:
+                    self._retired_sessions.add(self._navigation_session_id)
+                self._navigation_session_id = session_id
+        elif session_id and session_id == self._navigation_session_id:
+            self._retired_sessions.add(session_id)
+            self._navigation_session_id = ''
+
+    def _on_fused(self, message):
+        self._schedule(self._update_fused, message, time.monotonic())
+
+    def _update_fused(self, message, received_at):
+        previous = self._fused
+        ordered = previous is None or (
+            message.sample_timestamp_monotonic_sec >= previous[0].sample_timestamp_monotonic_sec)
+        self._fused = (message, received_at, ordered)
+        if previous and not ordered:
+            self._fused = (previous[0], received_at, False)
+        evidence = self._speed_recovery[0] if self._speed_recovery is not None else None
+        if (not ordered or not message.valid or message.safety_stop or message.group_state == 'lost' or
+                isinstance(evidence, dict) and not self._recovery_sample_clear(
+                    message, evidence, received_at)):
+            self._recovery_interrupted_at = received_at
+
+    def _on_speed(self, message):
+        try:
+            value = json.loads(message.data)
+        except (TypeError, ValueError):
+            value = None
+        evidence = value.get('recovery') if isinstance(value, dict) and value.get('recovery_eligible') is True else None
+        self._schedule(self._update_recovery, evidence, time.monotonic())
+
+    def _update_recovery(self, evidence, received_at):
+        self._speed_recovery = (evidence, received_at)
+
+    def _pause_safety(self):
+        return self._manager.safety_pause(self._navigation_session_id)
+
+    @staticmethod
+    def _recovery_sample_clear(sample, evidence, now):
+        limit = evidence.get('input_timeout_sec')
+        person = evidence.get('minimum_person_distance_m')
+        laser = evidence.get('minimum_laser_distance_m')
+        if any(type(value) not in (int, float) or not math.isfinite(value)
+               for value in (limit, person, laser)):
+            return False
+        person_clear = ((sample.person_distance_valid and math.isfinite(sample.nearest_person_m) and
+                         sample.nearest_person_m > person) or
+                        sample.person_observation_state == 'NO_PERSON_OBSERVED')
+        return (sample.valid and sample.position_valid and sample.communication_valid and
+                sample.safety_stop_valid and not sample.safety_stop and not sample.navigation_error and
+                not sample.navigating and not sample.explaining and sample.group_state != 'lost' and
+                sample.stop_confirmed and sample.stop_confirmed_session_id == evidence.get('stopped_session_id') and
+                sample.person_observation_valid and person_clear and
+                sample.obstacle_distance_valid and math.isfinite(sample.obstacle_distance_m) and
+                sample.obstacle_distance_m > laser and
+                0 <= sample.sample_age_sec <= limit and
+                0 <= now - sample.sample_timestamp_monotonic_sec <= limit)
+
+    def _recovery_ack(self, status, *, consuming=False):
+        if self._speed_recovery is None or self._fused is None:
+            return ''
+        evidence, received_at = self._speed_recovery
+        eligible_states = ('PAUSED', 'NAVIGATING', 'RETURNING') if consuming else ('PAUSED',)
+        if (not isinstance(evidence, dict) or status['state'] not in eligible_states or
+                status['pause_source'] != 'safety' or not status['connected'] or status['is_moving'] or
+                not isinstance(evidence.get('decision_id'), str) or not evidence['decision_id'] or
+                not status['paused_session_id'] or
+                status['paused_session_id'] != evidence.get('stopped_session_id') or
+                status['target'] != evidence.get('original_target') or
+                evidence.get('manual_latched') is not False or evidence.get('error_latched') is not False):
+            return ''
+        fields = ('evidence_at', 'evidence_sample_id', 'sample_age_sec', 'clear_since', 'hold_sec',
+                  'odom_age_sec', 'position_age_sec', 'input_timeout_sec',
+                  'minimum_person_distance_m', 'minimum_laser_distance_m')
+        if any(type(evidence.get(key)) not in (int, float) or not math.isfinite(evidence[key])
+               for key in fields):
+            return ''
+        now = time.monotonic()
+        sample, sample_received_at, ordered = self._fused
+        observation_age = now - evidence['evidence_at']
+        timeout = evidence['input_timeout_sec']
+        if (not ordered or not 0 <= now - received_at <= 0.5 or
+                not 0 <= now - sample_received_at <= 0.5 or not 0 <= observation_age <= 0.5 or
+                self._last_telemetry is None or not 0 <= now - self._last_telemetry <= 0.5 or
+                not 0 <= evidence['odom_age_sec'] + observation_age <= 0.5 or
+                not 0 <= evidence['sample_age_sec'] + observation_age <= timeout or
+                not 0 <= evidence['position_age_sec'] + observation_age <= timeout or
+                evidence['clear_since'] < self._recovery_interrupted_at or
+                not 0 < evidence['hold_sec'] <= evidence['evidence_at'] - evidence['clear_since'] or
+                not 0 <= now - sample.sample_timestamp_monotonic_sec <= timeout or
+                not 0 <= sample.sample_age_sec + now - sample_received_at <= timeout or
+                sample.sample_timestamp_monotonic_sec < evidence['evidence_sample_id']):
+            return ''
+        if not self._recovery_sample_clear(sample, evidence, now):
+            return ''
+        return evidence['decision_id']
+
+    def _resume_safety(self):
+        status = self._manager.status()
+        decision_id = self._recovery_ack(status)
+        if (not decision_id or decision_id in self._used_recovery_decisions or
+                not self._manager.resume_safety(status['paused_session_id'],
+                    lambda: self._recovery_ack(self._manager.status(), consuming=True) == decision_id)):
+            return False
+        self._used_recovery_decisions.add(decision_id)
+        return True
+
     def _update_robot_status(self, snapshot, frame):
         self._last_telemetry = self._loop.time()
+        if snapshot['is_moving'] or not snapshot['connected']:
+            self._recovery_interrupted_at = time.monotonic()
         self._last_snapshot = snapshot
         self._manager.update_robot_status(**snapshot)
         if self._assist is not None:
@@ -291,7 +428,22 @@ class HeritageTourNode(Node):
             response.message = '提问确认超时'
         return response
 
+    def _on_sim_team(self, message):
+        try:
+            value = json.loads(message.data)
+            if value.get('source') == 'gazebo_scripted_actors':
+                self._sim_team = value
+                self._sim_team_received = time.monotonic()
+        except (ValueError, AttributeError):
+            pass
+
     def _on_control(self, name, action, request, response):
+        team = self._sim_team
+        if (name == 'resume' and team is not None and
+                (time.monotonic()-self._sim_team_received > 1.0 or not team.get('gathered'))):
+            response.success = False
+            response.message = '游客尚未集合或队伍状态过期，保持暂停'
+            return response
         with self._lock:
             if self._closed:
                 response.message = '导览节点已关闭'

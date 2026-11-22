@@ -1,0 +1,4 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-22-19-52-35-624247-linao-P15-24-45238
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [45290]
+[speed_controller-1] [WARN] [1795348388.427979659] [temi_speed_controller]: 请求导航停止: 安全停车条件

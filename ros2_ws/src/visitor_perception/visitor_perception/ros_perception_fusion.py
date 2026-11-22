@@ -2,13 +2,19 @@
 import json
 import time
 
+from rclpy.clock import Clock, ClockType
 from rclpy.node import Node
+from rclpy.parameter import Parameter
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import String
 from temi_interfaces.msg import (NavigationStatus, PerceptionInput, PersonDetectionArray,
                                  RobotStatus, SafetyStopStatus)
 
 from .perception_fusion import PerceptionFusion
+
+
+def _stamp_ns(stamp):
+    return stamp.sec * 10**9 + stamp.nanosec
 
 
 class PerceptionFusionNode(Node):
@@ -18,11 +24,14 @@ class PerceptionFusionNode(Node):
         self.declare_parameter('front_half_angle_rad', 0.5235987756)
         self.declare_parameter('scan_min_valid_samples', 1)
         self.declare_parameter('simulation_mode', simulation_mode)
+        simulation = self.get_parameter('simulation_mode').value
+        if simulation:
+            self.set_parameters([Parameter('use_sim_time', value=True)])
         self._fusion = PerceptionFusion(
             max_sample_age_sec=self.get_parameter('max_sample_age_sec').value,
             front_half_angle_rad=self.get_parameter('front_half_angle_rad').value,
             scan_min_valid_samples=self.get_parameter('scan_min_valid_samples').value,
-            simulation_mode=self.get_parameter('simulation_mode').value,
+            simulation_mode=simulation,
         )
         self._publisher = self.create_publisher(PerceptionInput, 'heritage/perception/fused', 10)
         self.create_subscription(String, 'heritage/visitor/status', self._visitor, 10)
@@ -33,7 +42,7 @@ class PerceptionFusionNode(Node):
         self.create_subscription(String, 'heritage/tour/status', self._tour, 10)
         self.create_subscription(SafetyStopStatus, 'heritage/safety_stop/status',
                                  self._safety_stop_status, 10)
-        self.create_timer(0.1, self._publish)
+        self.create_timer(0.1, self._publish, clock=Clock(clock_type=ClockType.STEADY_TIME))
 
     def _visitor(self, message):
         try:
@@ -48,6 +57,7 @@ class PerceptionFusionNode(Node):
             'observation_state': message.observation_state,
             'people_count': message.people_count,
             'sample_age_sec': message.sample_age_sec,
+            'source_stamp': _stamp_ns(message.header.stamp),
             'person_distance_valid': message.person_distance_valid,
             'nearest_person_m': message.nearest_person_m,
             'crowd_density_valid': message.crowd_density_valid,
@@ -56,7 +66,8 @@ class PerceptionFusionNode(Node):
 
     def _scan(self, message):
         self._fusion.update_scan(message.ranges, message.angle_min, message.angle_increment,
-                                 message.range_min, message.range_max, time.monotonic())
+                                 message.range_min, message.range_max, time.monotonic(),
+                                 source_stamp=_stamp_ns(message.header.stamp))
 
     def _robot(self, message):
         self._fusion.update_robot({
@@ -77,7 +88,8 @@ class PerceptionFusionNode(Node):
             self._fusion.update_tour('', time.monotonic())
 
     def _safety_stop_status(self, message):
-        self._fusion.update_safety_stop_status({
+        stamp_ns = _stamp_ns(message.header.stamp)
+        evidence = {
             'source': message.source, 'valid': message.valid, 'state': message.state,
             'navigation_session_id': message.navigation_session_id,
             'action_terminal': message.action_terminal,
@@ -85,7 +97,13 @@ class PerceptionFusionNode(Node):
             'angular_speed_rps': message.angular_speed_rps,
             'odom_age_sec': message.odom_age_sec,
             'stopped_duration_sec': message.stopped_duration_sec,
-        }, time.monotonic())
+        }
+        # A legacy unstamped CLEAR may still describe an unblocked navigation, but
+        # only a stamped and fresh STOP report can provide recovery qualification.
+        if stamp_ns or message.state != 'CLEAR':
+            evidence.update(source_stamp=stamp_ns,
+                            source_age_sec=(self.get_clock().now().nanoseconds - stamp_ns) / 1e9)
+        self._fusion.update_safety_stop_status(evidence, time.monotonic())
 
     def _publish(self):
         value = self._fusion.snapshot(time.monotonic())

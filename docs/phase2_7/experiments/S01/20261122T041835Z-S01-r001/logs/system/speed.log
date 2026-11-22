@@ -1,0 +1,4 @@
+[INFO] [launch]: All log files can be found below /tmp/phase27-s01-final-roslog/2026-11-22-12-18-45-063822-linao-P15-24-439043
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [439117]
+[speed_controller-1] [WARN] [1795321156.205240487] [temi_speed_controller]: 请求导航停止: 近距离人员停车

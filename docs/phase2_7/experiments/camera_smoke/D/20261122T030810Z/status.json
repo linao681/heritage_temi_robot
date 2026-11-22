@@ -1,0 +1,6 @@
+{
+  "status": "FAIL",
+  "exit_code": 1,
+  "camera_result": "camera_result.json",
+  "scope": "camera geometry and RGB-D/CameraInfo smoke only; no YOLOX or actor comparison"
+}

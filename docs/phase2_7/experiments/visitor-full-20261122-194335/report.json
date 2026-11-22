@@ -1,0 +1,25 @@
+{
+  "status": "FAIL",
+  "operator_mode": "scripted simulated consent and regroup confirmation",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "error": "故障需人工检查：前往非遗概览 / 故障锁存，等待人工复位",
+  "events": [
+    {
+      "elapsed_sec": 13.557810901998891,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 21.705676390000008,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    }
+  ],
+  "elapsed_sec": 39.33881773899884
+}

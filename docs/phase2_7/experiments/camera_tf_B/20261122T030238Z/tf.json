@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "target_frame": "base_link",
+  "source_frame": "depth_camera_optical_frame",
+  "source_stamp_ns": 0,
+  "optical_positive_z_axis_in_base": [
+    0.9848077576650924,
+    2.6387821927542632e-08,
+    -0.1736481512791086
+  ],
+  "expected_direction": "forward and down by about 10 degrees"
+}

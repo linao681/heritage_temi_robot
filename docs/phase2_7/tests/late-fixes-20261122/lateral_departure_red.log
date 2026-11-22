@@ -1,0 +1,50 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_actor_can_leave_laterally_and_hold_in_the_clear_area ___________
+
+    def test_actor_can_leave_laterally_and_hold_in_the_clear_area():
+        config = actor_config(speed_mps=0.1, target_distance_m=3.5,
+                              leave_distance_m=3.1, leave_direction='left')
+        anchor = (0.0, 0.0, 0.0)
+    
+        leaving = actor_step(config, 13.0, anchor)
+        clear = actor_step(config, 43.5, anchor)
+    
+        assert leaving['phase'] == 'LEAVE'
+>       assert leaving['pose'][0] == pytest.approx(3.5)
+E       assert 3.6 == 3.5 ± 3.5e-06
+E        +  where 3.5 ± 3.5e-06 = <function approx at 0x785df52532e0>(3.5)
+E        +    where <function approx at 0x785df52532e0> = pytest.approx
+
+tests/test_phase27_actor_motion.py:68: AssertionError
+____________ test_actor_rejects_non_finite_and_unsafe_configuration ____________
+
+    def test_actor_rejects_non_finite_and_unsafe_configuration():
+        with pytest.raises(ValueError):
+            actor_step(actor_config(speed_mps=float('nan')), 0.0, (0.0, 0.0, 0.0))
+        with pytest.raises(ValueError):
+            actor_step(actor_config(target_distance_m=-0.1), 0.0, (0.0, 0.0, 0.0))
+        with pytest.raises(ValueError):
+            actor_step(actor_config(), float('inf'), (0.0, 0.0, 0.0))
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_phase27_actor_motion.py:82: Failed
+_ test_phase27_config_accepts_lateral_actor_departure_and_rejects_unknown_direction _
+
+    def test_phase27_config_accepts_lateral_actor_departure_and_rejects_unknown_direction():
+        validated = validate_experiment(experiment(actor_motion={
+            'continue_after_robot_stop': True, 'leave_after_hold': True,
+            'movement_speed_mps': 0.1, 'leave_direction': 'left',
+        }))
+    
+        assert validated['actor_motion']['leave_direction'] == 'left'
+>       with pytest.raises(ValueError, match='leave_direction'):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_phase27_experiment_runner.py:52: Failed
+=========================== short test summary info ============================
+FAILED tests/test_phase27_actor_motion.py::test_actor_can_leave_laterally_and_hold_in_the_clear_area
+FAILED tests/test_phase27_actor_motion.py::test_actor_rejects_non_finite_and_unsafe_configuration
+FAILED tests/test_phase27_experiment_runner.py::test_phase27_config_accepts_lateral_actor_departure_and_rejects_unknown_direction
+3 failed in 0.09s

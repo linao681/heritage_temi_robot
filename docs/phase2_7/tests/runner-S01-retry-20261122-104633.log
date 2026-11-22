@@ -1,0 +1,2 @@
+{"status": "FAIL", "error": "TimeoutError: system readiness timed out after 240.0s; see /home/linao/heritage_workspace/heritage_temi_robot/docs/phase2_7/experiments/S01/20261122T024634Z-S01-r001/logs/system_start.log"}
+exit_code=2

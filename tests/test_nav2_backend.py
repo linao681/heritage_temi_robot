@@ -27,6 +27,29 @@ class Transport:
         return {'x': 0.0, 'y': 0.0, 'yaw': 0.0, 'moving': False}
 
 
+def test_backend_connect_retries_transient_nav2_readiness():
+    class RecoveringTransport(Transport):
+        def __init__(self):
+            super().__init__()
+            self.ready_checks = 0
+
+        def ready(self):
+            self.ready_checks += 1
+            return self.ready_checks >= 3
+
+    async def scenario():
+        transport = RecoveringTransport()
+        backend = Nav2Backend(transport, {})
+
+        result = await backend.connect()
+
+        assert result.success
+        assert backend.connected
+        assert transport.ready_checks >= 3
+
+    asyncio.run(scenario())
+
+
 def test_nav2_backend_binds_gateway_task_id_to_transport_safety_state():
     class SessionTransport(Transport):
         def __init__(self):
@@ -123,4 +146,167 @@ def test_cancelling_navigation_stops_transport_and_unlocks():
         assert transport.cancelled and not backend.active
         assert events[-1].status == 'cancelled'
         assert events[-1].task_id == 'a'
+    asyncio.run(scenario())
+
+
+def test_concurrent_stop_requests_share_the_same_confirmation():
+    class SlowStop(Transport):
+        async def stop(self):
+            self.started.set()
+            await self.finished.wait()
+            self.cancelled = True
+            return True
+
+    async def scenario():
+        transport = SlowStop()
+        backend = Nav2Backend(transport, {})
+        await backend.connect()
+        first = asyncio.create_task(backend.stop())
+        await transport.started.wait()
+        second = asyncio.create_task(backend.stop())
+        transport.finished.set()
+        assert (await first).success
+        assert (await second).success
+
+    asyncio.run(scenario())
+
+
+def test_backend_does_not_replay_task_id_after_reconnect():
+    async def scenario():
+        transport = Transport()
+        transport.finished.set()
+        backend = Nav2Backend(transport, {'zone': {'x': 1., 'y': 2., 'yaw': 0.}})
+        await backend.connect()
+        assert (await backend.navigate_to('zone', 2, task_id='retired')).success
+        assert (await backend.disconnect()).success
+        await backend.connect()
+        assert not (await backend.navigate_to('zone', 2, task_id='retired')).success
+        assert len(transport.destinations) == 1
+
+    asyncio.run(scenario())
+
+
+def test_new_uuid_waits_for_old_speed_transaction_and_stale_reply_is_rejected():
+    class SlowParameters(Transport):
+        def __init__(self):
+            super().__init__()
+            self.writing = asyncio.Event()
+            self.release_write = asyncio.Event()
+
+        async def set_speed(self, speed):
+            self.writing.set()
+            await self.release_write.wait()
+            return True
+
+    async def scenario():
+        transport = SlowParameters()
+        backend = Nav2Backend(transport, {'zone': {'x': 1., 'y': 2., 'yaw': 0.}})
+        assert (await backend.connect()).success
+        first = asyncio.create_task(backend.navigate_to('zone', 5, task_id='old'))
+        await transport.started.wait()
+        write = asyncio.create_task(backend.set_navigation_speed(
+            0.4, command_id='cmd', navigation_session_id='old', control_reason='test'))
+        await transport.writing.wait()
+        assert (await backend.stop()).success
+        assert not (await first).success
+        transport.started.clear()
+        entered = asyncio.Event()
+
+        async def resume():
+            entered.set()
+            return await backend.navigate_to('zone', 5, task_id='new')
+
+        next_nav = asyncio.create_task(resume())
+        await entered.wait()
+        assert backend.navigation_task_id == ''
+        assert len(transport.destinations) == 1
+        transport.release_write.set()
+        assert not (await write).success
+        assert (await next_nav).success
+        assert len(transport.destinations) == 2
+
+    asyncio.run(scenario())
+
+
+def test_stop_while_new_goal_waits_on_parameter_transaction_cancels_that_goal():
+    class DelayedParameters(Transport):
+        def __init__(self):
+            super().__init__()
+            self.writing = asyncio.Event()
+            self.release_write = asyncio.Event()
+
+        async def set_speed(self, speed):
+            self.writing.set()
+            await self.release_write.wait()
+            return True
+
+    async def scenario():
+        transport = DelayedParameters()
+        backend = Nav2Backend(transport, {'zone': {'x': 1., 'y': 2., 'yaw': 0.}})
+        await backend.connect()
+        first = asyncio.create_task(backend.navigate_to('zone', 5, task_id='old'))
+        await transport.started.wait()
+        write = asyncio.create_task(backend.set_navigation_speed(
+            0.4, command_id='cmd', navigation_session_id='old', control_reason='test'))
+        await transport.writing.wait()
+        await backend.stop()
+        await first
+        entered = asyncio.Event()
+
+        async def resume():
+            entered.set()
+            return await backend.navigate_to('zone', 5, task_id='new')
+
+        queued = asyncio.create_task(resume())
+        await entered.wait()
+        assert (await backend.stop()).success
+        transport.release_write.set()
+        await write
+        assert not (await queued).success
+        assert len(transport.destinations) == 1
+
+    asyncio.run(scenario())
+
+
+def test_cancelled_speed_caller_keeps_parameter_transaction_serialized_until_settlement():
+    class DelayedService(Transport):
+        def __init__(self):
+            super().__init__()
+            self.writing = asyncio.Event()
+            self.release_write = asyncio.Event()
+            self.settled = asyncio.Event()
+
+        async def set_speed(self, speed):
+            # Once submitted, the ROS service can complete even if the caller
+            # cancels its local coroutine. Model that external operation.
+            async def service_write():
+                self.writing.set()
+                await self.release_write.wait()
+                self.settled.set()
+
+            await asyncio.shield(asyncio.create_task(service_write()))
+            return True
+
+    async def scenario():
+        transport = DelayedService()
+        backend = Nav2Backend(transport, {'zone': {'x': 1., 'y': 2., 'yaw': 0.}})
+        await backend.connect()
+        original = asyncio.create_task(backend.navigate_to('zone', 5, task_id='original'))
+        await transport.started.wait()
+        caller = asyncio.create_task(backend.set_navigation_speed(
+            0.4, command_id='cmd', navigation_session_id='original', control_reason='test'))
+        await transport.writing.wait()
+        caller.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await caller
+        assert (await backend.stop()).success
+        assert not (await original).success
+        assert not transport.settled.is_set()
+        assert backend._speed_lock.locked()
+        queued = asyncio.create_task(backend.navigate_to('zone', 5, task_id='new'))
+        transport.release_write.set()
+        assert (await queued).success
+        assert transport.settled.is_set()
+        assert len(transport.destinations) == 2
+
     asyncio.run(scenario())

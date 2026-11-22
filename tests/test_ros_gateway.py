@@ -1,6 +1,7 @@
 """通过真实 ROS2 客户端验证 Gateway 与虚拟机器人的集成。"""
 
 import asyncio
+import os
 import time
 from threading import Event, Thread
 from types import SimpleNamespace
@@ -30,12 +31,34 @@ def wait_result(future, timeout=5.0):
     return future.result()
 
 
+def test_concurrent_stops_wait_for_the_same_confirmation(rig):
+    from concurrent.futures import ThreadPoolExecutor
+    original = rig.backend.stop
+    entered = Event()
+    calls = []
+    async def delayed_stop():
+        calls.append(1)
+        entered.set()
+        await asyncio.sleep(.25)
+        return await original()
+    rig.backend.stop = delayed_stop
+    def stop():
+        return rig.gateway._stop_robot(StopRobot.Request(stop=True), StopRobot.Response())
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        first = pool.submit(stop)
+        assert entered.wait(2)
+        second = pool.submit(stop)
+        assert first.result(timeout=5).success
+        assert second.result(timeout=5).success
+    assert len(calls) == 1
+
+
 @pytest.fixture
 def rig(monkeypatch, tmp_path):
     from temi_bridge.ros_gateway import TemiGatewayNode
 
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '230')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '230'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
     rclpy.init(args=[])
     backend = MockTemiBackend(MockConfig(
@@ -221,7 +244,7 @@ def test_feedback_publication_error_does_not_interrupt_navigation(rig, monkeypat
     assert not rig.snapshots[-1].is_moving and rig.snapshots[-1].x == 1.0
 
 
-def test_duplicate_stop_service_returns_without_waiting_for_active_stop(rig, monkeypatch):
+def test_duplicate_stop_service_waits_for_active_stop_confirmation(rig, monkeypatch):
     started = Event()
     release = asyncio.Event()
     original_stop = rig.backend.stop
@@ -238,11 +261,13 @@ def test_duplicate_stop_service_returns_without_waiting_for_active_stop(rig, mon
     first = rig.stop.call_async(StopRobot.Request(stop=True))
     try:
         assert started.wait(timeout=2.0)
-        second = wait_result(rig.stop.call_async(StopRobot.Request(stop=True)), timeout=1.0)
-        assert not second.success and not first.done()
+        second = rig.stop.call_async(StopRobot.Request(stop=True))
+        time.sleep(.15)
+        assert not second.done() and not first.done()
     finally:
         rig.gateway._loop.call_soon_threadsafe(release.set)
     assert wait_result(first).success
+    assert wait_result(second).success
     assert wait_result(nav.get_result_async()).status == GoalStatus.STATUS_ABORTED
     assert wait_result(speech.get_result_async()).status == GoalStatus.STATUS_SUCCEEDED
 

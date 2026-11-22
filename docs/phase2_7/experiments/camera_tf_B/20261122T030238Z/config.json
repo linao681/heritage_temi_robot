@@ -1,0 +1,8 @@
+{
+  "status_scope": "Gazebo static TF smoke only; not camera detection comparison",
+  "layout": "official",
+  "camera_height_m": 0.55,
+  "camera_pitch_down_deg": 10.0,
+  "ros_domain_id": 230,
+  "gazebo_master_uri": "http://127.0.0.1:11372"
+}

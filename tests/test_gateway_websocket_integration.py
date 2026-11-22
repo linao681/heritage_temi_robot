@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import os
 from threading import Thread
 
 import rclpy
@@ -18,7 +19,7 @@ from temi_bridge.websocket_backend import WebSocketConfig, WebSocketTemiBackend
 
 def test_ros_to_websocket_navigation_roundtrip(monkeypatch, tmp_path):
     monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
-    monkeypatch.setenv('ROS_DOMAIN_ID', '229')
+    monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '229'))
     monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
     rclpy.init(args=[])
     token = 'loopback-integration-token'

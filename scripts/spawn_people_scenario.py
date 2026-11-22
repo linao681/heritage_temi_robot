@@ -12,7 +12,9 @@ from gazebo_msgs.srv import DeleteEntity, GetEntityState, SetEntityState, SpawnE
 from geometry_msgs.msg import Pose
 from nav_msgs.msg import Odometry
 from rclpy.node import Node
+from std_srvs.srv import Trigger
 from temi_interfaces.msg import NavigationStatus, SafetyStopStatus
+from phase27_scenario import actor_step, collision_envelopes, swept_gap
 
 ROOT = Path(__file__).resolve().parents[1]
 PREFIX = 'phase25_person_'
@@ -36,6 +38,10 @@ class PeopleScenario(Node):
         self._navigation_received_at = 0.0
         self._odom_speed_mps = None
         self._odom_received_at = 0.0
+        self.latest_safety_stop = None
+        self.safety_events = []
+        self._last_safety_signature = None
+        self._pause_tour = self.create_client(Trigger, 'heritage/tour/pause')
         self.create_subscription(ModelStates, '/gazebo/model_states', self._on_model_states, 10)
         self.create_subscription(NavigationStatus, 'temi/navigation_status',
                                  self._on_navigation_status, 10)
@@ -47,6 +53,22 @@ class PeopleScenario(Node):
         session_id = message.navigation_session_id
         if (message.source != 'gazebo_nav2_transport' or not session_id):
             return
+        if not hasattr(self, 'safety_events'):
+            self.safety_events = []
+        if not hasattr(self, '_last_safety_signature'):
+            self._last_safety_signature = None
+        signature = (message.state, session_id, bool(message.valid))
+        self.latest_safety_stop = {
+            'state': message.state, 'navigation_session_id': session_id,
+            'valid': bool(message.valid), 'received_monotonic_sec': time.monotonic(),
+        }
+        if signature != self._last_safety_signature:
+            self.safety_events.append({
+                **self.latest_safety_stop, 'source': message.source,
+                'reason': getattr(message, 'reason', ''),
+            })
+            self.safety_events = self.safety_events[-256:]
+            self._last_safety_signature = signature
         if message.state == 'CLEAR':
             if message.valid:
                 self.active_navigation_session_id = session_id
@@ -59,6 +81,38 @@ class PeopleScenario(Node):
                              'STOP_CONFIRMED', 'STOP_FAILED'):
             self.active_navigation_session_id = session_id
             self.safety_stop_requested = True
+
+    def request_business_pause(self, timeout_sec=8.0):
+        """Request Tour Manager pause and wait for matching real stop evidence."""
+        result = {'service': 'heritage/tour/pause', 'requested': True,
+                  'response_received': False, 'stop_confirmed': False}
+        if not self._pause_tour.wait_for_service(timeout_sec=2.0):
+            result['error'] = 'pause service unavailable'
+            return result
+        future = self._pause_tour.call_async(Trigger.Request())
+        rclpy.spin_until_future_complete(self, future, timeout_sec=3.0)
+        if not future.done() or future.exception():
+            result['error'] = 'pause service timed out or failed'
+            return result
+        response = future.result()
+        result.update(response_received=True, accepted=bool(response.success),
+                      message=response.message)
+        deadline = time.monotonic() + timeout_sec
+        while rclpy.ok() and time.monotonic() < deadline:
+            stop = self.latest_safety_stop
+            odom_age = time.monotonic() - self._odom_received_at
+            if (stop and stop['state'] == 'STOP_CONFIRMED' and stop['valid'] and
+                    stop['navigation_session_id'] == self.active_navigation_session_id and
+                    time.monotonic() - stop['received_monotonic_sec'] <= 0.5 and
+                    self._odom_speed_mps is not None and self._odom_speed_mps < 0.02 and
+                    0.0 <= odom_age <= 0.5):
+                result.update(stop_confirmed=True, stopped_session_id=
+                              stop['navigation_session_id'], odom_speed_mps=
+                              self._odom_speed_mps, odom_age_sec=odom_age)
+                break
+            rclpy.spin_once(self, timeout_sec=0.05)
+        result['safety_events'] = list(self.safety_events)
+        return result
 
     def _on_navigation_status(self, message):
         self._latest_navigation = {
@@ -322,12 +376,26 @@ def main():
     parser.add_argument('--scenario', choices=(
         'empty', 'single', 'single_static', 'group', 'group_static', 'near',
         'approaching', 'crossing', 'leaving', 'group_straggler', 'crowded', 'clear'),
-        required=True)
+        default='empty')
+    parser.add_argument('--cleanup-only', action='store_true',
+                        help='仅清理本项目固定前缀的人形模型并退出')
     parser.add_argument('--duration-sec', type=float,
                         help='动态轨迹运行时长；省略时按 --speed-mps 和轨迹长度计算')
     parser.add_argument('--speed-mps', type=float, default=0.3)
     parser.add_argument('--end-distance-m', type=float, default=1.4,
                         help='approaching 场景终点；0.65 m 用于危险距离试验')
+    parser.add_argument('--target-distance-m', type=float,
+                        help='阶段2.7人物终点中心距；仅以接近开始时机器人位置为锚点')
+    parser.add_argument('--continue-after-robot-stop', action='store_true',
+                        help='机器人停车事件不冻结人物运动；仅供阶段2.7受控实验')
+    parser.add_argument('--hold-at-target-sec', type=float, default=2.0)
+    parser.add_argument('--leave-after-hold', action='store_true')
+    parser.add_argument('--leave-distance-m', type=float, default=3.9,
+                        help='从接近终点向外离开的距离；默认回到初始可通行点')
+    parser.add_argument('--leave-direction', choices=('forward', 'left', 'right'),
+                        default='forward', help='离开时沿路线前方或横向空闲方向移动')
+    parser.add_argument('--hold-clear-sec', type=float, default=1.0)
+    parser.add_argument('--geometry-margin-m', type=float, default=0.10)
     parser.add_argument('--update-hz', type=float, default=5.0)
     parser.add_argument('--start-delay-sec', type=float, default=2.0)
     parser.add_argument('--seed', type=int, default=0)
@@ -342,12 +410,24 @@ def main():
                         help='收到实际 Nav2 停车状态后立即冻结人物轨迹')
     parser.add_argument('--truth-output', type=Path)
     args = parser.parse_args()
+    if args.target_distance_m is not None:
+        args.end_distance_m = args.target_distance_m
+    if args.cleanup_only and args.scenario != 'empty':
+        parser.error('--cleanup-only 不能与动态场景同时使用')
+    if args.leave_after_hold and not args.continue_after_robot_stop:
+        parser.error('--leave-after-hold 需要显式启用 --continue-after-robot-stop')
+    if args.continue_after_robot_stop and args.stop_on_safety_stop:
+        parser.error('--continue-after-robot-stop 与 --stop-on-safety-stop 互斥')
     if (not math.isfinite(args.speed_mps) or args.speed_mps <= 0 or
             not math.isfinite(args.update_hz) or not 1.0 <= args.update_hz <= 20.0 or
             not math.isfinite(args.start_delay_sec) or args.start_delay_sec < 0 or
             (args.duration_sec is not None and
              (not math.isfinite(args.duration_sec) or args.duration_sec <= 0)) or
-            not math.isfinite(args.navigation_timeout_sec) or args.navigation_timeout_sec <= 0):
+            not math.isfinite(args.navigation_timeout_sec) or args.navigation_timeout_sec <= 0 or
+            not math.isfinite(args.hold_at_target_sec) or args.hold_at_target_sec < 0 or
+            not math.isfinite(args.leave_distance_m) or args.leave_distance_m < 0 or
+            not math.isfinite(args.hold_clear_sec) or args.hold_clear_sec < 0 or
+            not math.isfinite(args.geometry_margin_m) or args.geometry_margin_m < 0):
         parser.error('speed、update-hz、start-delay 和 duration 参数无效')
     if (not math.isfinite(args.end_distance_m) or
             not 0.5 <= args.end_distance_m <= 4.5):
@@ -376,6 +456,21 @@ def main():
         'duration_sec': 0.0,
         'seed': args.seed, 'speed_mps': args.speed_mps, 'update_hz': args.update_hz,
         'end_distance_m': args.end_distance_m,
+        'actor_motion': {
+            'continue_after_robot_stop': bool(args.continue_after_robot_stop),
+            'stop_at_target': True, 'movement_speed_mps': args.speed_mps,
+            'target_distance_m': args.end_distance_m,
+            'hold_at_target_sec': args.hold_at_target_sec,
+            'leave_after_hold': bool(args.leave_after_hold),
+            'leave_distance_m': args.leave_distance_m,
+            'leave_direction': args.leave_direction,
+            'hold_clear_sec': args.hold_clear_sec,
+            'pause_on_collision': True,
+            'motion_phase_events': ([{'phase': 'WAIT_NAV',
+                                      'time_monotonic_sec': started_monotonic}]
+                                    if args.wait_for_navigation_target else []),
+            'contact_observed': None,
+        },
         'removed_previous_models': removed, 'commanded_model_poses_world': models,
         'robot_pose_world_at_spawn': robot_pose, 'gazebo_model_state_samples': path,
         'model_asset': 'simulation/models/person_mannequin/model.sdf',
@@ -384,6 +479,14 @@ def main():
     try:
         removed = node.clear_existing()
         record['removed_previous_models'] = removed
+        if args.cleanup_only:
+            record.update({'status': 'PASS', 'cleanup_only': True,
+                           'removed_after': removed,
+                           'duration_sec': time.monotonic() - started_monotonic,
+                           'ended_monotonic_sec': time.monotonic()})
+            write_truth_record(output, record)
+            print(json.dumps(record, ensure_ascii=False))
+            return
         if args.ready_file:
             args.ready_file.parent.mkdir(parents=True, exist_ok=True)
             args.ready_file.write_text('ready\n', encoding='utf-8')
@@ -401,6 +504,19 @@ def main():
                 scenario_robot_pose['yaw'] = navigation_heading(robot_pose, target_goal)
                 record['trajectory_heading_rad'] = scenario_robot_pose['yaw']
                 record['trajectory_heading_source'] = 'active_navigation_goal_bearing'
+        phase27_motion = (args.scenario == 'approaching' and
+                          args.continue_after_robot_stop)
+        if phase27_motion:
+            robot_radius, actor_radius, envelope_source = collision_envelopes(
+                ROOT / 'simulation/robot/heritage_robot.urdf',
+                ROOT / 'simulation/models/person_mannequin/model.sdf')
+            record['geometry_envelope'] = {
+                'robot_radius_m': robot_radius, 'actor_radius_m': actor_radius,
+                'margin_m': args.geometry_margin_m, 'source': envelope_source,
+                'assumption': 'conservative planar circumscribed circles from URDF/SDF collision shapes; contact sensing unavailable',
+            }
+        else:
+            robot_radius = actor_radius = None
         positions = scene_positions(
             args.scenario, scenario_anchor(args.scenario, wait, scenario_robot_pose),
             seed=args.seed)
@@ -417,6 +533,16 @@ def main():
             default=0.0)
         duration = (args.duration_sec if args.duration_sec is not None else
                     natural_duration if moving else 5.0)
+        if phase27_motion and args.duration_sec is None:
+            start_distance = math.hypot(positions[0][0] - scenario_robot_pose['x'],
+                                        positions[0][1] - scenario_robot_pose['y'])
+            duration = ((start_distance - args.end_distance_m) / args.speed_mps +
+                        args.hold_at_target_sec +
+                        (args.leave_distance_m / args.speed_mps
+                         if args.leave_after_hold else 0.0) +
+                        args.hold_clear_sec)
+            if duration <= 0.0:
+                raise ValueError('阶段2.7人物运动时长必须为正数')
         deadline = time.monotonic() + args.start_delay_sec
         while rclpy.ok() and time.monotonic() < deadline:
             rclpy.spin_once(node, timeout_sec=0.05)
@@ -424,33 +550,191 @@ def main():
             start = time.monotonic()
             record['movement_started_monotonic_sec'] = start
             interval = 1.0 / args.update_hz
-            while rclpy.ok():
-                if args.stop_on_safety_stop and node.safety_stop_requested:
-                    stopped_by_safety = True
-                    break
-                elapsed = min(time.monotonic() - start, duration)
-                progress = min(1.0, elapsed / duration)
-                for index, model in enumerate(models):
-                    x, y, yaw = trajectory_position(
-                        args.scenario, (model['x'], model['y'], model['yaw']),
-                        scenario_robot_pose, progress, person_index=index,
-                        end_distance_m=args.end_distance_m)
-                    if progress > 0:
-                        node.move(model['name'], x, y, yaw)
-                    actual = node.wait_for_model_pose(model['name'])
-                    sampled_at = time.monotonic()
-                    path.append({'elapsed_sec': sampled_at - start,
-                                 'time_monotonic_sec': sampled_at,
-                                 'name': model['name'], 'x': actual['x'],
-                                 'y': actual['y'], 'yaw': actual['yaw'],
-                                 'commanded_x': x, 'commanded_y': y})
+            if phase27_motion:
+                model = models[0]
+                anchor = (scenario_robot_pose['x'], scenario_robot_pose['y'],
+                          scenario_robot_pose.get('yaw', 0.0))
+                actor_config = {
+                    'speed_mps': args.speed_mps,
+                    'start_distance_m': math.hypot(model['x'] - anchor[0],
+                                                   model['y'] - anchor[1]),
+                    'target_distance_m': args.end_distance_m,
+                    'hold_at_target_sec': args.hold_at_target_sec,
+                    'leave_after_hold': args.leave_after_hold,
+                    'leave_distance_m': args.leave_distance_m,
+                    'leave_direction': args.leave_direction,
+                    'hold_clear_sec': args.hold_clear_sec,
+                }
+                record['actor_motion']['start_anchor_world'] = list(anchor)
+                record['actor_motion']['start_distance_m'] = actor_config['start_distance_m']
+                record['actor_motion'].setdefault('motion_phase_events', [])
+                record['actor_motion']['minimum_center_distance_m_by_phase'] = {}
+                record['actor_motion']['minimum_geometry_gap_m_by_phase'] = {}
+                record['actor_motion']['robot_stop_confirmed_distance_m'] = None
+                record['actor_motion']['minimum_center_distance_after_stop_m'] = None
+                record['actor_motion']['safety_stop_events'] = node.safety_events
+                record['actor_motion']['geometry_risk'] = None
+                previous_actor = node.wait_for_model_pose(model['name'])
+                previous_robot = node.current_pose()
+                current_phase = None
+                complete = False
+                while rclpy.ok():
+                    elapsed = time.monotonic() - start
+                    if elapsed > duration + interval:
+                        record['actor_motion']['timeout'] = True
+                        break
+                    step = actor_step(actor_config, elapsed, anchor)
+                    robot_now = node.current_pose()
+                    commanded = step['pose']
+                    geometry_gap = swept_gap(
+                        (previous_actor['x'], previous_actor['y'], previous_actor['yaw']),
+                        commanded,
+                        {'previous': previous_robot, 'current': robot_now},
+                        {'robot_radius_m': robot_radius,
+                         'actor_radius_m': actor_radius,
+                         'margin_m': args.geometry_margin_m})
+                    if step['phase'] != current_phase:
+                        current_phase = step['phase']
+                        record['actor_motion']['motion_phase_events'].append({
+                            'phase': current_phase,
+                            'time_monotonic_sec': time.monotonic(),
+                            'robot_stop_requested': node.safety_stop_requested,
+                        })
+                    if geometry_gap <= 0.0:
+                        pause = node.request_business_pause()
+                        record['actor_motion']['geometry_risk'] = {
+                            'kind': 'predicted_geometry_risk',
+                            'time_monotonic_sec': time.monotonic(),
+                            'phase': current_phase,
+                            'predicted_gap_m': geometry_gap,
+                            'previous_verified_actor_pose': previous_actor,
+                            'not_executed_actor_pose': list(commanded),
+                            'robot_previous_pose': previous_robot,
+                            'robot_current_pose': robot_now,
+                            'business_pause': pause,
+                            'contact_observed': None,
+                        }
+                        record['actor_motion']['motion_phase_events'].append({
+                            'phase': 'ABORTED', 'time_monotonic_sec': time.monotonic(),
+                            'reason': 'PREDICTED_GEOMETRY_RISK',
+                        })
+                        record['abort_reason'] = 'PREDICTED_GEOMETRY_RISK'
+                        record['actor_motion']['contact_observed'] = None
+                        break
+
+                    if math.hypot(commanded[0] - previous_actor['x'],
+                                  commanded[1] - previous_actor['y']) > 1e-4:
+                        actual = node.move(model['name'], *commanded)
+                    else:
+                        actual = node.wait_for_model_pose(model['name'])
+                    robot_after = node.current_pose()
+                    observed_gap = swept_gap(
+                        (previous_actor['x'], previous_actor['y'], previous_actor['yaw']),
+                        (actual['x'], actual['y'], actual['yaw']),
+                        {'previous': previous_robot, 'current': robot_after},
+                        {'robot_radius_m': robot_radius,
+                         'actor_radius_m': actor_radius,
+                         'margin_m': args.geometry_margin_m})
+                    center_distance = math.hypot(actual['x'] - robot_after['x'],
+                                                 actual['y'] - robot_after['y'])
+                    sample_time = time.monotonic()
+                    stop = node.latest_safety_stop or {}
+                    stop_age = (sample_time - stop.get('received_monotonic_sec')
+                                if stop.get('received_monotonic_sec') is not None else math.inf)
+                    matching_fresh_stop = (
+                        stop.get('state') == 'STOP_CONFIRMED' and
+                        stop.get('valid') is True and
+                        stop.get('navigation_session_id') == node.active_navigation_session_id and
+                        0.0 <= stop_age <= 0.5)
+                    sample = {
+                        'elapsed_sec': sample_time - start,
+                        'time_monotonic_sec': sample_time,
+                        'name': model['name'], 'x': actual['x'], 'y': actual['y'],
+                        'yaw': actual['yaw'], 'commanded_x': commanded[0],
+                        'commanded_y': commanded[1], 'actor_phase': current_phase,
+                        'robot_x': robot_after['x'], 'robot_y': robot_after['y'],
+                        'center_distance_m': center_distance,
+                        'geometry_gap_m': observed_gap,
+                        'geometry_risk_gap_m': observed_gap,
+                        'odom_speed_mps': node._odom_speed_mps,
+                        'odom_age_sec': (sample_time - node._odom_received_at
+                                         if node._odom_received_at else None),
+                        'safety_state': stop.get('state'),
+                        'navigation_session_id': stop.get('navigation_session_id'),
+                        'safety_sample_age_sec': (stop_age if math.isfinite(stop_age) else None),
+                    }
+                    path.append(sample)
                     record['gazebo_model_state_samples'] = path
-                if progress >= 1.0:
-                    break
-                if args.stop_on_safety_stop and node.safety_stop_requested:
-                    stopped_by_safety = True
-                    break
-                time.sleep(interval)
+                    center_minima = record['actor_motion']['minimum_center_distance_m_by_phase']
+                    gap_minima = record['actor_motion']['minimum_geometry_gap_m_by_phase']
+                    center_minima[current_phase] = min(
+                        center_minima.get(current_phase, math.inf), center_distance)
+                    gap_minima[current_phase] = min(
+                        gap_minima.get(current_phase, math.inf), observed_gap)
+                    if (matching_fresh_stop and
+                            record['actor_motion']['robot_stop_confirmed_distance_m'] is None):
+                        record['actor_motion']['robot_stop_confirmed_distance_m'] = center_distance
+                    if node.safety_stop_requested and matching_fresh_stop:
+                        prior = record['actor_motion']['minimum_center_distance_after_stop_m']
+                        record['actor_motion']['minimum_center_distance_after_stop_m'] = (
+                            center_distance if prior is None else min(prior, center_distance))
+                    if observed_gap <= 0.0:
+                        pause = node.request_business_pause()
+                        record['actor_motion']['geometry_risk'] = {
+                            'kind': 'observed_geometry_overlap',
+                            'time_monotonic_sec': sample_time,
+                            'phase': current_phase, 'observed_gap_m': observed_gap,
+                            'robot_pose': robot_after, 'actor_pose': actual,
+                            'business_pause': pause, 'contact_observed': None,
+                        }
+                        record['actor_motion']['motion_phase_events'].append({
+                            'phase': 'ABORTED', 'time_monotonic_sec': sample_time,
+                            'reason': 'OBSERVED_GEOMETRY_OVERLAP',
+                        })
+                        record['abort_reason'] = 'OBSERVED_GEOMETRY_OVERLAP'
+                        record['actor_motion']['contact_observed'] = None
+                        break
+                    previous_actor, previous_robot = actual, robot_after
+                    if step['finished']:
+                        complete = True
+                        record['actor_motion']['finished_phase'] = current_phase
+                        break
+                    time.sleep(interval)
+                record['actor_motion']['completed'] = complete
+                record['actor_motion']['actor_retained_at_end'] = True
+                if record.get('abort_reason'):
+                    raise RuntimeError(record['abort_reason'])
+                if not complete:
+                    raise TimeoutError('人物阶段未能在配置时限内完成')
+                stopped_by_safety = node.safety_stop_requested
+            else:
+                while rclpy.ok():
+                    if args.stop_on_safety_stop and node.safety_stop_requested:
+                        stopped_by_safety = True
+                        break
+                    elapsed = min(time.monotonic() - start, duration)
+                    progress = min(1.0, elapsed / duration)
+                    for index, model in enumerate(models):
+                        x, y, yaw = trajectory_position(
+                            args.scenario, (model['x'], model['y'], model['yaw']),
+                            scenario_robot_pose, progress, person_index=index,
+                            end_distance_m=args.end_distance_m)
+                        if progress > 0:
+                            node.move(model['name'], x, y, yaw)
+                        actual = node.wait_for_model_pose(model['name'])
+                        sampled_at = time.monotonic()
+                        path.append({'elapsed_sec': sampled_at - start,
+                                     'time_monotonic_sec': sampled_at,
+                                     'name': model['name'], 'x': actual['x'],
+                                     'y': actual['y'], 'yaw': actual['yaw'],
+                                     'commanded_x': x, 'commanded_y': y})
+                        record['gazebo_model_state_samples'] = path
+                    if progress >= 1.0:
+                        break
+                    if args.stop_on_safety_stop and node.safety_stop_requested:
+                        stopped_by_safety = True
+                        break
+                    time.sleep(interval)
             record['movement_ended_monotonic_sec'] = time.monotonic()
         elif duration > 0:
             end = time.monotonic() + duration
@@ -483,10 +767,14 @@ def main():
         record.update({'status': 'FAIL', 'duration_sec': time.monotonic() - started_monotonic,
                        'ended_monotonic_sec': time.monotonic(),
                        'error': f'{type(error).__name__}: {error}'})
-        try:
-            record['failed_cleanup_removed'] = node.clear_existing()
-        except Exception as cleanup_error:
-            record['failed_cleanup_error'] = f'{type(cleanup_error).__name__}: {cleanup_error}'
+        if record.get('abort_reason'):
+            record['failed_cleanup_removed'] = []
+            record['actor_retained_for_risk_review'] = True
+        else:
+            try:
+                record['failed_cleanup_removed'] = node.clear_existing()
+            except Exception as cleanup_error:
+                record['failed_cleanup_error'] = f'{type(cleanup_error).__name__}: {cleanup_error}'
         write_truth_record(output, record)
         print(json.dumps(record, ensure_ascii=False))
         raise
