@@ -4,6 +4,8 @@ import json
 import math
 import os
 import signal
+
+import numpy as np
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
@@ -11,8 +13,13 @@ import time
 
 import rclpy
 from rclpy.executors import SingleThreadedExecutor
+from rclpy.qos import qos_profile_sensor_data
 from tf2_ros import Buffer, TransformListener
 from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import CameraInfo, Image, LaserScan
+from temi_interfaces.msg import PerceptionInput
 from gazebo_msgs.msg import ModelStates
 try:
     from .route_status import fresh_status
@@ -51,6 +58,78 @@ def visitor_poses(names, poses):
     return result
 
 
+
+def snapshot_payload(value, received_at, now, max_age_sec):
+    age = None if received_at is None else now - received_at
+    fresh = value is not None and age is not None and 0 <= age <= max_age_sec
+    return {'fresh': fresh, 'age_sec': age, 'value': value if fresh else None}
+
+
+def scan_summary(ranges, *, angle_min, angle_increment, range_min, range_max):
+    valid = [(index, float(value)) for index, value in enumerate(ranges)
+             if math.isfinite(value) and range_min <= value <= range_max]
+    if not valid:
+        return {'valid': False, 'minimum_distance_m': None,
+                'bearing_rad': None, 'valid_sample_count': 0}
+    index, distance = min(valid, key=lambda item: item[1])
+    return {'valid': True, 'minimum_distance_m': distance,
+            'bearing_rad': angle_min + index * angle_increment,
+            'valid_sample_count': len(valid)}
+
+
+def depth_image_summary(message):
+    frame_id = message.header.frame_id
+    total = int(message.width) * int(message.height)
+    result = {'valid': False, 'frame_id': frame_id, 'valid_pixels': 0,
+              'total_pixels': total, 'valid_fraction': 0.0,
+              'minimum_m': None, 'median_m': None}
+    if message.encoding != '32FC1':
+        result['reason'] = 'unsupported_encoding'
+        return result
+    row_bytes = int(message.width) * 4
+    if (message.width <= 0 or message.height <= 0 or message.step < row_bytes or
+            len(message.data) < message.step * message.height):
+        result['reason'] = 'invalid_step_or_data_length'
+        return result
+    dtype = np.dtype('>f4' if message.is_bigendian else '<f4')
+    raw = bytes(message.data)
+    try:
+        image = np.ndarray((message.height, message.width), dtype=dtype,
+                           buffer=raw, strides=(message.step, 4))
+    except (TypeError, ValueError):
+        result['reason'] = 'invalid_step_or_data_length'
+        return result
+    samples = image[np.isfinite(image) & (image > 0)].astype(np.float64, copy=False)
+    if not samples.size:
+        result['reason'] = 'no_valid_depth_samples'
+        return result
+    result.update(valid=True, valid_pixels=int(samples.size),
+                  valid_fraction=float(samples.size / total),
+                  minimum_m=float(samples.min()), median_m=float(np.median(samples)))
+    return result
+
+
+def transform_summary(*, target_frame, source_frame, translation, rotation,
+                      stamp_ns, current_ros_time_ns, max_age_sec=2.0):
+    values = tuple(float(value) for value in (*translation, *rotation))
+    finite = all(math.isfinite(value) for value in values)
+    x, y, z, qx, qy, qz, qw = values
+    norm = math.sqrt(qx*qx + qy*qy + qz*qz + qw*qw)
+    is_static = int(stamp_ns) == 0
+    age = None if is_static else (int(current_ros_time_ns) - int(stamp_ns)) / 1e9
+    age_valid = is_static or (age is not None and 0 <= age <= max_age_sec)
+    valid = finite and norm > 1e-6 and age_valid
+    if valid:
+        qx, qy, qz, qw = (component / norm for component in (qx, qy, qz, qw))
+        yaw = math.atan2(2 * (qw*qz + qx*qy), 1 - 2 * (qy*qy + qz*qz))
+    else:
+        yaw = None
+    return {'valid': valid, 'target_frame': target_frame, 'source_frame': source_frame,
+            'translation_m': {'x': x, 'y': y, 'z': z} if finite else None,
+            'yaw_rad': yaw, 'age_sec': age, 'is_static': is_static,
+            'reason': '' if valid else 'invalid_or_stale_transform'}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--layout', choices=['official', 'adaptive'], default='official')
@@ -79,12 +158,99 @@ def main():
     node.visitor_snapshot = ([], 0.0)
     node.team_snapshot = (None, 0.0)
     node.speech_snapshot = (None, 0.0)
+    node.track_snapshot = (None, None)
+    node.vision_team_snapshot = (None, None)
+    node.rgb_info_snapshot = (None, None)
+    node.depth_info_snapshot = (None, None)
+    node.depth_image_snapshot = (None, None)
+    node.scan_snapshot = (None, None)
+    node.fused_snapshot = (None, None)
+    node.cmd_vel_snapshot = (None, None)
+    node.odom_snapshot = (None, None)
+    def receive_tracks(message):
+        try:
+            value = json.loads(message.data)
+            if isinstance(value, dict) and isinstance(value.get('tracks'), list):
+                node.track_snapshot = (value, time.monotonic())
+        except (TypeError, ValueError):
+            pass
+    def receive_vision_team(message):
+        try:
+            value = json.loads(message.data)
+            if isinstance(value, dict):
+                node.vision_team_snapshot = (value, time.monotonic())
+        except (TypeError, ValueError):
+            pass
+    def receive_camera_info(kind):
+        def receive(message):
+            now = time.monotonic()
+            value = {'frame_id': message.header.frame_id, 'width': message.width,
+                     'height': message.height, 'fx': message.k[0], 'fy': message.k[4],
+                     'valid': bool(message.width > 0 and message.height > 0 and
+                                   math.isfinite(message.k[0]) and math.isfinite(message.k[4]) and
+                                   message.k[0] > 0 and message.k[4] > 0)}
+            if kind == 'rgb': node.rgb_info_snapshot = (value, now)
+            else: node.depth_info_snapshot = (value, now)
+        return receive
+    def receive_depth_image(message):
+        node.depth_image_snapshot = (depth_image_summary(message), time.monotonic())
+
+    def receive_scan(message):
+        value = scan_summary(message.ranges, angle_min=message.angle_min,
+                             angle_increment=message.angle_increment,
+                             range_min=message.range_min, range_max=message.range_max)
+        value.update({'frame_id': message.header.frame_id,
+                      'stamp_ns': message.header.stamp.sec * 1_000_000_000 + message.header.stamp.nanosec})
+        node.scan_snapshot = (value, time.monotonic())
+    def receive_fused(message):
+        value = {'source': message.source, 'valid': bool(message.valid),
+                 'sample_age_sec': float(message.sample_age_sec), 'error': message.error,
+                 'warning': message.warning, 'people_count': int(message.people_count),
+                 'expected_count': int(message.expected_count),
+                 'person_observation_state': message.person_observation_state,
+                 'person_observation_valid': bool(message.person_observation_valid),
+                 'person_distance_valid': bool(message.person_distance_valid),
+                 'nearest_person_m': float(message.nearest_person_m) if message.person_distance_valid else None,
+                 'crowd_density_valid': bool(message.crowd_density_valid),
+                 'crowd_density': float(message.crowd_density) if message.crowd_density_valid else None,
+                 'obstacle_distance_valid': bool(message.obstacle_distance_valid),
+                 'obstacle_distance_m': float(message.obstacle_distance_m) if message.obstacle_distance_valid else None,
+                 'safety_stop': bool(message.safety_stop), 'stop_confirmed': bool(message.stop_confirmed),
+                 'stop_confirmed_session_id': message.stop_confirmed_session_id,
+                 'navigation_session_id': message.navigation_session_id}
+        node.fused_snapshot = (value, time.monotonic())
+    def receive_cmd_vel(message):
+        linear = math.hypot(message.linear.x, message.linear.y)
+        angular = message.angular.z
+        if math.isfinite(linear) and math.isfinite(angular):
+            node.cmd_vel_snapshot = ({'linear_speed_mps': linear, 'angular_speed_rps': angular},
+                                     time.monotonic())
+    def receive_odom(message):
+        twist = message.twist.twist
+        linear = math.hypot(twist.linear.x, twist.linear.y)
+        angular = twist.angular.z
+        if math.isfinite(linear) and math.isfinite(angular):
+            node.odom_snapshot = ({'linear_speed_mps': linear, 'angular_speed_rps': angular},
+                                  time.monotonic())
+
     def receive_speech(message):
         try:
             node.speech_snapshot = (json.loads(message.data), time.monotonic())
         except ValueError:
             pass
     node.create_subscription(String, 'heritage/simulation/speech', receive_speech, 10)
+    node.create_subscription(String, 'heritage/visitor/tracks', receive_tracks, 10)
+    node.create_subscription(String, 'heritage/visitor/team_observation', receive_vision_team, 10)
+    node.create_subscription(CameraInfo, 'depth_camera/camera_info', receive_camera_info('rgb'),
+                             qos_profile_sensor_data)
+    node.create_subscription(CameraInfo, 'camera/depth/camera_info', receive_camera_info('depth'),
+                             qos_profile_sensor_data)
+    node.create_subscription(Image, 'camera/depth/image_raw', receive_depth_image,
+                             qos_profile_sensor_data)
+    node.create_subscription(LaserScan, 'scan', receive_scan, qos_profile_sensor_data)
+    node.create_subscription(PerceptionInput, 'heritage/perception/fused', receive_fused, 10)
+    node.create_subscription(Twist, 'cmd_vel', receive_cmd_vel, 10)
+    node.create_subscription(Odometry, 'odom', receive_odom, 10)
     def receive_team(message):
         try:
             value = json.loads(message.data)
@@ -195,6 +361,43 @@ def main():
             data['team'] = team if time.monotonic()-team_received < 1 else None
             speech, speech_received = node.speech_snapshot
             data['speech'] = speech if time.monotonic()-speech_received < 12 else None
+            now = time.monotonic()
+            data['evidence'] = {
+                'tracks': snapshot_payload(*node.track_snapshot, now, 1.0),
+                'team_observation': snapshot_payload(*node.vision_team_snapshot, now, 1.0),
+                'rgb_camera_info': snapshot_payload(*node.rgb_info_snapshot, now, 2.0),
+                'depth_camera_info': snapshot_payload(*node.depth_info_snapshot, now, 2.0),
+                'depth_image': snapshot_payload(*node.depth_image_snapshot, now, 1.0),
+                'scan': snapshot_payload(*node.scan_snapshot, now, 0.5),
+                'fused': snapshot_payload(*node.fused_snapshot, now, 1.0),
+                'cmd_vel': snapshot_payload(*node.cmd_vel_snapshot, now, 0.5),
+                'odom': snapshot_payload(*node.odom_snapshot, now, 0.5),
+                'nav2_limit_readback': {'valid': False, 'value_mps': None,
+                                         'reason': '当前 SetNavigationSpeed 接口未提供独立限速回读'},
+            }
+            try:
+                camera_transform = buffer.lookup_transform('base_footprint',
+                                                           'depth_camera_optical_frame',
+                                                           rclpy.time.Time())
+                camera_stamp_ns = (camera_transform.header.stamp.sec * 1_000_000_000 +
+                                   camera_transform.header.stamp.nanosec)
+                camera_tf = transform_summary(
+                    target_frame=camera_transform.header.frame_id,
+                    source_frame=camera_transform.child_frame_id,
+                    translation=(camera_transform.transform.translation.x,
+                                 camera_transform.transform.translation.y,
+                                 camera_transform.transform.translation.z),
+                    rotation=(camera_transform.transform.rotation.x,
+                              camera_transform.transform.rotation.y,
+                              camera_transform.transform.rotation.z,
+                              camera_transform.transform.rotation.w),
+                    stamp_ns=camera_stamp_ns,
+                    current_ros_time_ns=int(node.sim_seconds * 1_000_000_000))
+                data['evidence']['camera_tf'] = {
+                    'fresh': camera_tf['valid'], 'age_sec': camera_tf['age_sec'],
+                    'value': camera_tf}
+            except Exception:
+                data['evidence']['camera_tf'] = {'fresh': False, 'age_sec': None, 'value': None}
             try:
                 transform = buffer.lookup_transform('map', 'base_footprint', rclpy.time.Time())
                 stamp = transform.header.stamp.sec + transform.header.stamp.nanosec * 1e-9
@@ -219,7 +422,6 @@ def main():
             pass
 
     from rosgraph_msgs.msg import Clock
-    from rclpy.qos import qos_profile_sensor_data
     node.last_clock_at, node.sim_seconds = 0.0, 0.0
     def clock_callback(msg):
         node.sim_seconds = msg.clock.sec + msg.clock.nanosec * 1e-9

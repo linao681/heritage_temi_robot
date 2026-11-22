@@ -1,0 +1,5 @@
+bdf67d6 Add complete visitor tour simulation demo
+0577619 Complete Phase 2.6 dynamic safety validation
+9e50dd2 Use grep in Phase 2.5 startup check
+026906f Complete Phase 2.5 dynamic visitor validation
+59d41bf Complete Stage 2 perception and speed control

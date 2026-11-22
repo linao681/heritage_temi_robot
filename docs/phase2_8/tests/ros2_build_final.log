@@ -1,0 +1,21 @@
+timestamp_local=2026-11-23 00:16:23 CST
+command=bash scripts/build_ros2.sh
+ROS2 build cache: /tmp/heritage-temi-ros2-build.TWp8gp
+Starting >>> temi_interfaces
+[Processing: temi_interfaces]
+Finished <<< temi_interfaces [47.7s]
+Starting >>> heritage_dashboard
+Starting >>> heritage_knowledge
+Starting >>> heritage_tour_manager
+Starting >>> temi_bridge
+Starting >>> temi_speed_controller
+Starting >>> visitor_perception
+Finished <<< heritage_dashboard [2.93s]
+Finished <<< visitor_perception [2.89s]
+Finished <<< temi_speed_controller [2.91s]
+Finished <<< heritage_knowledge [2.94s]
+Finished <<< temi_bridge [3.04s]
+Finished <<< heritage_tour_manager [3.10s]
+
+Summary: 7 packages finished [51.1s]
+exit_code=0

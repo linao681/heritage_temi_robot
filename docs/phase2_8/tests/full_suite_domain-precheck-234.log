@@ -1,0 +1,6 @@
+timestamp_local=2026-11-22 23:29:19 CST
+command=.venv/bin/python -m pytest -q tests
+ros_domain_id=234
+ros_localhost_only=1
+result=FAIL_PRECHECK
+reason=ROS_DOMAIN_ID 234 exceeds supported RTPS domain range (0-232). Pytest was not started.

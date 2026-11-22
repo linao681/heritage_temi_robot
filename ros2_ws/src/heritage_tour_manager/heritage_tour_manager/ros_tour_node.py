@@ -21,6 +21,9 @@ from temi_interfaces.srv import StopRobot, AskHeritage, SubmitQuestion
 
 from .tour_config import TourConfig
 from .tour_manager import OperationResult, TourManager
+from .team_observation import (
+    observation_requires_pause, simulation_team_controls, validate_team_decision_mode,
+)
 from .visitor_assist import VisitorAssist
 
 
@@ -168,6 +171,14 @@ class HeritageTourNode(Node):
         self._config = config
         self._lock = Lock()
         self._closed = False
+        self.declare_parameter('team_decision_mode', 'business_script')
+        self._team_decision_mode = validate_team_decision_mode(
+            self.get_parameter('team_decision_mode').value)
+        self._vision_team = None
+        self._vision_team_received = 0.0
+        self._vision_pause_pending = False
+        self._vision_confirmed_route_index = None
+        self._vision_expected_count = 0
         self._loop = asyncio.new_event_loop()
         self._thread = Thread(target=self._loop.run_forever, name='heritage-tour', daemon=True)
         self._status = self.create_publisher(String, 'heritage/tour/status', 10)
@@ -201,7 +212,12 @@ class HeritageTourNode(Node):
                             callback_group=control_group)
         self._sim_team = None
         self._sim_team_received = 0.0
-        self.create_subscription(String, 'heritage/simulation/team_status', self._on_sim_team, 10)
+        if simulation_team_controls(self._team_decision_mode):
+            self.create_subscription(String, 'heritage/simulation/team_status',
+                                     self._on_sim_team, 10)
+        else:
+            self.create_subscription(String, 'heritage/visitor/team_observation',
+                                     self._on_vision_team, 10)
         controls = {
             'start': self._manager.start,
             'accept': partial(self._manager.consent, True),
@@ -386,6 +402,8 @@ class HeritageTourNode(Node):
         self._schedule(self._tick)
 
     def _tick(self):
+        if self._team_decision_mode == 'vision_conservative':
+            self._check_vision_team_freshness()
         if (self._last_snapshot is not None and self._last_snapshot['connected'] and
                 self._loop.time() - self._last_telemetry >= self._config.communication_timeout_sec):
             self._last_snapshot = {**self._last_snapshot, 'connected': False}
@@ -429,6 +447,8 @@ class HeritageTourNode(Node):
         return response
 
     def _on_sim_team(self, message):
+        if not simulation_team_controls(self._team_decision_mode):
+            return
         try:
             value = json.loads(message.data)
             if value.get('source') == 'gazebo_scripted_actors':
@@ -437,9 +457,47 @@ class HeritageTourNode(Node):
         except (ValueError, AttributeError):
             pass
 
+    def _on_vision_team(self, message):
+        now_ns = self.get_clock().now().nanoseconds
+        try:
+            value = json.loads(message.data)
+        except (ValueError, TypeError):
+            value = None
+        self._vision_team = value
+        self._vision_team_received = time.monotonic()
+        if (isinstance(value, dict) and type(value.get('expected_count')) is int and
+                value['expected_count'] >= 0):
+            self._vision_expected_count = value['expected_count']
+        if (self._vision_expected_count > 0 and
+                observation_requires_pause(value, now_ns=now_ns)):
+            self._schedule(self._pause_for_vision_uncertainty)
+
+    def _check_vision_team_freshness(self):
+        value = self._vision_team
+        if not isinstance(value, dict) or self._vision_expected_count <= 0:
+            return
+        ros_stale = observation_requires_pause(
+            value, now_ns=self.get_clock().now().nanoseconds)
+        wall_stale = time.monotonic() - self._vision_team_received > 1.0
+        if ros_stale or wall_stale:
+            self._schedule(self._pause_for_vision_uncertainty)
+
+    def _pause_for_vision_uncertainty(self):
+        status = self._manager.status()
+        if self._vision_confirmed_route_index == status['route_index']:
+            return
+        self._vision_confirmed_route_index = None
+        if status['state'] not in ('NAVIGATING', 'RETURNING') or self._vision_pause_pending:
+            return
+        self._vision_pause_pending = self._manager.visitor_uncertain()
+
     def _on_control(self, name, action, request, response):
+        if self._team_decision_mode == 'vision_conservative' and name == 'visitor_lost':
+            response.success = False
+            response.message = '视觉模式拒绝脚本掉队指令；状态由视觉观察器提供'
+            return response
         team = self._sim_team
-        if (name == 'resume' and team is not None and
+        if (self._team_decision_mode == 'business_script' and name == 'resume' and team is not None and
                 (time.monotonic()-self._sim_team_received > 1.0 or not team.get('gathered'))):
             response.success = False
             response.message = '游客尚未集合或队伍状态过期，保持暂停'
@@ -451,7 +509,14 @@ class HeritageTourNode(Node):
             future = asyncio.run_coroutine_threadsafe(self._dispatch(action), self._loop)
         try:
             response.success = future.result(timeout=self._config.communication_timeout_sec)
-            response.message = f'{name}: 已接受' if response.success else f'{name}: 当前状态不允许'
+            if (response.success and name == 'resume' and
+                    self._team_decision_mode == 'vision_conservative' and
+                    self._vision_pause_pending):
+                self._vision_confirmed_route_index = self._manager.status()['route_index']
+                self._vision_pause_pending = False
+                response.message = 'resume: 操作员已确认队伍并继续导览'
+            else:
+                response.message = f'{name}: 已接受' if response.success else f'{name}: 当前状态不允许'
         except ThreadTimeoutError:
             future.cancel()
             response.message = f'{name}: 未在通信超时内确认'

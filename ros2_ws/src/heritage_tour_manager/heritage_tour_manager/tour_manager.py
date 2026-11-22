@@ -53,7 +53,7 @@ class _LowBattery(Exception):
 class TourManager:
     """全部控制及运行方法由同一 asyncio loop 串行执行。"""
 
-    _PRIORITY = {'safety_pause': 0, 'team_pause': 1, 'pause': 2, 'low': 3,
+    _PRIORITY = {'team_pause': 0, 'safety_pause': 1, 'pause': 2, 'low': 3,
                  'cancel': 4, 'manual': 5, 'critical': 6, 'disconnect': 7}
 
     def __init__(self, robot: TourRobot, config: TourConfig,
@@ -195,6 +195,13 @@ class TourManager:
     def visitor_lost(self) -> bool:
         accepted = ((self.state is not TourState.PAUSED or self._pause_source == 'safety') and
                     self._request('team_pause', '游客掉队，等待重新集合'))
+        if accepted:
+            self.error_count += 1
+        return accepted
+
+    def visitor_uncertain(self) -> bool:
+        accepted = ((self.state is not TourState.PAUSED or self._pause_source == 'safety') and
+                    self._request('team_pause', '团队视觉信息不完整，安全等待人工确认'))
         if accepted:
             self.error_count += 1
         return accepted

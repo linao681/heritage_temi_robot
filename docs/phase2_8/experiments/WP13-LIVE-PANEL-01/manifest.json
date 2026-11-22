@@ -1,0 +1,71 @@
+{
+  "run_id": "WP13-LIVE-PANEL-01",
+  "status": "PASS_WITH_RISK",
+  "started_local": "2026-11-22 23:22:59 Asia/Shanghai",
+  "git_head": "bdf67d6dd1e09c503845af11e23a7f2f26b1a508",
+  "branch": "phase2_8-work",
+  "ros_domain_id": 231,
+  "gazebo_port": 11373,
+  "web_port": 8091,
+  "team_decision_mode": "vision_conservative",
+  "command": "bash scripts/start_phase25_system.sh 231 11373 8091",
+  "environment": {
+    "PHASE25_LOG_DIR": "/tmp/heritage-phase28-wp13-system",
+    "PHASE25_PREFLIGHT_TIMEOUT_SEC": "120",
+    "PHASE28_TEAM_DECISION_MODE": "vision_conservative",
+    "ros_distro": "humble",
+    "python": "3.10.12",
+    "opencv": "4.11.0"
+  },
+  "preflight": {
+    "ready": true,
+    "checks_passed": 34,
+    "checks_total": 34,
+    "robot_stationary": true
+  },
+  "owned_process_ids": {
+    "hall": 130521,
+    "navigation": 130695,
+    "gateway": 130891,
+    "knowledge": 130892,
+    "tour": 130893,
+    "perception": 130895,
+    "speed": 130894,
+    "visualization": 130896
+  },
+  "final_domain_empty": true,
+  "navigation_goal_sent": false,
+  "source_sha256": {
+    "scripts/visualization_bridge.py": "753cc3a1fc234a208b1d33c453119e41f2623c1ab2c7e46742ac12567d3930ef",
+    "visualization/ros_hall/ros-live.js": "bc8b86c54f2be986e874c01ec98406828f649a3a09ae8aeefb9a9a036d13684c"
+  },
+  "browser_observation": {
+    "url": "http://127.0.0.1:8091/",
+    "method": "accessible state and browser screenshot",
+    "screenshot_saved": false
+  },
+  "dirty_tracked_diff_sha256": "f245b82c96c216b7d5e13e4ede10c237b9037c7ae36bf564d3d7e747b49034e9",
+  "camera_config_sha256": "0973f3b9d3b6bb0fa7c7c7f514ee18daf719a3c8275196c3eebcec48bb665a09",
+  "model": {
+    "path": "assets/vision/object_detection_yolox_2022nov.onnx",
+    "sha256": "c5c2d13e59ae883e6af3b45daea64af4833a4951c92d116ec270d9ddbe998063"
+  },
+  "logs": [
+    "preflight.json",
+    "hall.log",
+    "navigation.log",
+    "gateway.log",
+    "knowledge.log",
+    "tour.log",
+    "perception.log",
+    "speed.log",
+    "visualization.log"
+  ],
+  "limitations": {
+    "actor_seed": "not applicable; no visitor actors were spawned",
+    "screenshot_saved": false,
+    "camera_video_connected": false,
+    "source_image_detection": "not applicable; sample observation showed 0 people",
+    "goal_sent": false
+  }
+}

@@ -1,0 +1,31 @@
+F....................................................................... [ 85%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+_ PersonTrackerTests.test_clock_reset_starts_new_epoch_without_reusing_old_track_id _
+
+self = <test_phase28_person_tracker.PersonTrackerTests testMethod=test_clock_reset_starts_new_epoch_without_reusing_old_track_id>
+
+    def test_clock_reset_starts_new_epoch_without_reusing_old_track_id(self):
+        tracker = PersonTracker()
+        detection = {'bbox': (0.1, 0.1, 0.3, 0.6), 'confidence': 0.9}
+        old_track = tracker.update([detection], 2_000_000_000, 'camera')[0]
+>       new_track = tracker.update([detection], 1_000_000_000, 'camera')[0]
+
+tests/test_phase28_person_tracker.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <visitor_perception.person_tracker.PersonTracker object at 0x72d51746fc40>
+detections = [{'bbox': (0.1, 0.1, 0.3, 0.6), 'confidence': 0.9}]
+stamp_ns = 1000000000, frame_id = 'camera'
+
+    def update(self, detections, stamp_ns: int, frame_id: str) -> list[PersonTrack]:
+        if type(stamp_ns) is not int or stamp_ns <= 0 or not isinstance(frame_id, str) or not frame_id:
+            raise ValueError('a positive image timestamp and frame id are required')
+        if self._last_stamp_ns is not None and stamp_ns <= self._last_stamp_ns:
+>           raise ValueError('image timestamps must increase within a tracking epoch')
+E           ValueError: image timestamps must increase within a tracking epoch
+
+ros2_ws/install/visitor_perception/lib/python3.10/site-packages/visitor_perception/person_tracker.py:74: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_phase28_person_tracker.py::PersonTrackerTests::test_clock_reset_starts_new_epoch_without_reusing_old_track_id
+1 failed, 83 passed in 0.67s

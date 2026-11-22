@@ -1,0 +1,70 @@
+{
+  "source_image": "artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-04/rgb_06.png",
+  "image_stamp_ns": 23801000000,
+  "frame_id": "depth_camera_optical_frame",
+  "width": 320,
+  "height": 240,
+  "annotator": "manual_visual_inspection",
+  "annotation_method": "independent visual boxes on the original captured RGB frame; not copied from detector boxes",
+  "bbox_format": "pixel xyxy, half-open coordinates",
+  "visible_person_count": 3,
+  "boxes": [
+    {
+      "label": "left mannequin",
+      "xyxy_px": [
+        73,
+        15,
+        108,
+        170
+      ]
+    },
+    {
+      "label": "center mannequin",
+      "xyxy_px": [
+        141,
+        15,
+        177,
+        170
+      ]
+    },
+    {
+      "label": "right mannequin",
+      "xyxy_px": [
+        211,
+        15,
+        247,
+        170
+      ]
+    }
+  ],
+  "matched_detection_stamp_ns": 23703000000,
+  "detection_time_delta_ms": -98.0,
+  "iou_threshold": 0.5,
+  "matches": [
+    {
+      "manual_label": "left mannequin",
+      "prediction_index": 1,
+      "iou": 0.9449434447579379,
+      "confidence": 0.9011026620864868
+    },
+    {
+      "manual_label": "center mannequin",
+      "prediction_index": 2,
+      "iou": 0.9200208415857396,
+      "confidence": 0.8820284008979797
+    },
+    {
+      "manual_label": "right mannequin",
+      "prediction_index": 0,
+      "iou": 0.9040788746760444,
+      "confidence": 0.9124797582626343
+    }
+  ],
+  "true_positive": 3,
+  "false_positive": 0,
+  "false_negative": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "limitations": "One static sample image only. This is not a representative accuracy benchmark."
+}

@@ -23,5 +23,6 @@ setup(
                                     'offline_video_count = visitor_perception.video_main:main',
                                     'perception_fusion = visitor_perception.ros_perception_fusion:main',
                                     'yolox_person_detector = visitor_perception.ros_person_detector:main',
-                                    'depth_association = visitor_perception.ros_depth_association:main']},
+                                    'depth_association = visitor_perception.ros_depth_association:main',
+                                    'team_observer = visitor_perception.ros_team_observer:main']},
 )

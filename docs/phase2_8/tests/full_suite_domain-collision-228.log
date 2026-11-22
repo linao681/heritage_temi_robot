@@ -1,0 +1,86 @@
+timestamp_local=2026-11-22 23:29:45 CST
+command=.venv/bin/python -m pytest -q tests
+ros_domain_id=230
+ros_localhost_only=1
+domain_precheck=empty
+....................F................................................... [ 13%]
+........................................................................ [ 26%]
+........................................................................ [ 39%]
+........................................................................ [ 53%]
+........................................................................ [ 66%]
+........................................................................ [ 79%]
+........................................................................ [ 92%]
+.......................................                                  [100%]
+=================================== FAILURES ===================================
+______________ test_gateway_process_commands_and_sigterm_shutdown ______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7cc63e127760>
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-29/test_gateway_process_commands_0')
+
+    def test_gateway_process_commands_and_sigterm_shutdown(monkeypatch, tmp_path):
+        monkeypatch.setenv('ROS_LOCALHOST_ONLY', '1')
+        monkeypatch.setenv('ROS_DOMAIN_ID', os.environ.get('HERITAGE_TEST_ROS_DOMAIN_ID', '228'))
+        monkeypatch.setenv('ROS_LOG_DIR', str(tmp_path))
+        root = Path(__file__).resolve().parents[1]
+        entrypoint = root / 'ros2_ws/install/temi_bridge/lib/temi_bridge/temi_gateway'
+        log = tmp_path / 'gateway.log'
+        with log.open('w') as output:
+            process = subprocess.Popen([str(entrypoint), '--config', str(root / 'config/system.yaml'),
+                                        '--backend', 'mock'], stdout=output, stderr=subprocess.STDOUT,
+                                       env=os.environ.copy())
+            rclpy.init(args=[])
+            node = rclpy.create_node('gateway_cli_client')
+            navigation = ActionClient(node, NavigateTo, 'temi/navigate_to')
+            speech = ActionClient(node, Speak, 'temi/speak')
+            stop = node.create_client(StopRobot, 'temi/stop')
+            snapshots = []
+            node.create_subscription(RobotStatus, 'temi/robot_status', snapshots.append, 10)
+    
+            def wait_until(predicate, timeout=5.0):
+                deadline = time.monotonic() + timeout
+                while not predicate():
+                    assert time.monotonic() < deadline, log.read_text()
+                    rclpy.spin_once(node, timeout_sec=0.05)
+    
+            def wait_future(future):
+                wait_until(future.done)
+                return future.result()
+    
+            def start_navigation(location):
+                goal = wait_future(navigation.send_goal_async(NavigateTo.Goal(location=location, timeout_sec=10.0)))
+                assert goal.accepted
+                wait_until(lambda: snapshots and snapshots[-1].is_moving)
+                return goal
+    
+            try:
+                assert navigation.wait_for_server(timeout_sec=5.0), log.read_text()
+                assert speech.wait_for_server(timeout_sec=5.0)
+                assert stop.wait_for_service(timeout_sec=5.0)
+                wait_until(lambda: snapshots and snapshots[-1].connected)
+>               moving_goal = start_navigation('exhibit_01')
+
+tests/test_gateway_cli.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_gateway_cli.py:49: in start_navigation
+    wait_until(lambda: snapshots and snapshots[-1].is_moving)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+predicate = <function test_gateway_process_commands_and_sigterm_shutdown.<locals>.start_navigation.<locals>.<lambda> at 0x7cc63e1e2710>
+timeout = 5.0
+
+    def wait_until(predicate, timeout=5.0):
+        deadline = time.monotonic() + timeout
+        while not predicate():
+>           assert time.monotonic() < deadline, log.read_text()
+E           AssertionError: [INFO] [1795361388.338659058] [temi_gateway]: Gateway started in mock mode
+E             
+E           assert 21795.079105665 < 21795.033189621
+E            +  where 21795.079105665 = <built-in function monotonic>()
+E            +    where <built-in function monotonic> = time.monotonic
+
+tests/test_gateway_cli.py:39: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_gateway_cli.py::test_gateway_process_commands_and_sigterm_shutdown
+1 failed, 542 passed in 200.36s (0:03:20)
+exit_code=1
+analysis=The suite process was started with outer domain 230, but tests/test_gateway_cli.py overrides ROS_DOMAIN_ID to default 228 unless HERITAGE_TEST_ROS_DOMAIN_ID is set. A live Gazebo/Nav2 graph existed on 228, causing the mock gateway test to collide.

@@ -1,0 +1,11 @@
+a89559b368f316babd4addcc18befd610131225ad029e178c8694a8eabf312e9  docs/phase2_8/experiments/WP01-GAZEBO-CAMERA-01/summary.json
+00dcef491aea9ea410ced77bd3e968b6faa980edf4300a8c1f1f845df93e9c2c  docs/phase2_8/experiments/WP01-GAZEBO-CAMERA-01/manifest.json
+f8be575abfe63458354d663fa912b4fbd20b8c7d7e4ba39fffb706ac923e677d  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/actors.log
+f87c85d2cd8f7c7923a2b9e5acaf623f3235537f3b04e0314c0f74f85f5afe6a  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/gazebo_truth.json
+4751cd0af9dc17ffd017e089104cfb4812059c255743b5051be24f539778ecf5  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/hall.log
+6148446c30bbd26c0b1779e0426e64cd5205f369d0f5f1d9d925dfba1affb7d8  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/perception.log
+519c43a640b8a1f555309c0d5dc37db997667c5172a945110f8a3e1248ffecdd  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/status.json
+a89559b368f316babd4addcc18befd610131225ad029e178c8694a8eabf312e9  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/summary.json
+95dd752d444250cca6e3bb4ee3d6156fe95e520b4e5d5327ca7e9e540c1a8c50  artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-01/vision_samples.json
+f527365eb078904d1a9f5a8be8a22a05509a0d65b2a7eceb6de8b9e833c1534b  artifacts/phase2_8/archive/WP01-GAZEBO-CAMERA-01.tar.gz
+b20b41c0944f276dfdc4517af462f1c2a9828be585b07d28cd6f2aae4a62583f  artifacts/phase2_8/archive/WP01-GAZEBO-CAMERA-01.manifest.json

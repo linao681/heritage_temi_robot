@@ -27,6 +27,8 @@ def generate_launch_description():
         Node(package='visitor_perception', executable='depth_association',
              parameters=[{'simulation_mode': simulation,
                           'min_detection_confidence': confidence}], output='screen'),
+        Node(package='visitor_perception', executable='team_observer',
+             parameters=[{'coverage': 'forward_only'}], output='screen'),
         Node(package='visitor_perception', executable='perception_fusion',
              parameters=[{'simulation_mode': simulation}], output='screen'),
     ])

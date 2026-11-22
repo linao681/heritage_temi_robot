@@ -1,0 +1,19 @@
+{
+  "run_id": "WP13-LIVE-PANEL-01",
+  "status": "PASS_WITH_RISK",
+  "valid_conclusions": [
+    "full ROS2/Gazebo stack preflight ready",
+    "browser rendered live structured evidence panel",
+    "camera calibration info, perception freshness, fused input, LaserScan, odom and speed/safety states were visible",
+    "no navigation goal was sent",
+    "owned domain was empty after cleanup"
+  ],
+  "not_proven": [
+    "visual person detection because scene had 0 people",
+    "team dropout detection or recovery",
+    "full tour",
+    "60-second disconnect/reconnect",
+    "saved browser screenshot",
+    "Nav2 speed-limit independent readback"
+  ]
+}

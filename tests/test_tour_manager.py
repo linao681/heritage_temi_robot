@@ -345,6 +345,17 @@ def test_manual_takeover_stops_and_releases_tour():
     asyncio.run(scenario())
 
 
+def test_vision_uncertainty_pauses_without_claiming_visitor_was_lost():
+    from heritage_tour_manager.tour_manager import TourManager, TourState
+
+    manager = TourManager(object(), load_config())
+    requests = []
+    manager.state = TourState.NAVIGATING
+    manager._request = lambda command, reason: requests.append((command, reason)) or True
+    assert manager.visitor_uncertain()
+    assert requests == [('team_pause', '团队视觉信息不完整，安全等待人工确认')]
+
+
 def test_assisted_resume_revoked_before_checkpoint_needs_new_confirmation():
     async def scenario():
         manager, backend, driver, _, monitor = await setup_rig()

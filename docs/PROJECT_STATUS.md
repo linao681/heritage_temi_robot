@@ -1,6 +1,25 @@
 # 项目状态
 
-## 阶段2.7当前状态（2026-11-22）
+
+## 最新状态：阶段 2.8（执行中，2026-11-23）
+
+本阶段在隔离分支 `phase2_8-work` 上推进，**整体尚未完成**。执行快照、逐工作包结果与最终报告见[阶段2.8进度](phase2_8/progress.md)、[验证矩阵](phase2_8/validation_matrix.md)、[最终报告](phase2_8/final_report.md)。未自动提交或推送。
+
+| 项目 | 当前结果 |
+|---|---|
+| ROS2 构建与全量测试 | 最新七包构建 7/7 通过；全 `tests` 550 passed、0 failed/skip/error（196.49秒）；WebSocket/网关专项2 passed。最终使用预检为空的 Domain 231，测试后再次确认空域 |
+| 视觉匿名跟踪 | 匿名 IoU 跟踪与保守团队 observer 已实现；一轮真实 Gazebo RGB-D 静态样本保存12 RGB/5 depth，一帧3人手工框 P/R=1.0。样本过小，推理FPS、深度误差和ID switch不可计算 |
+| 游客团队闭环 | 静态三人不证明动态掉队；视觉 observer 的47次输出均为 UNKNOWN，整路线 E07-A/B 未运行 |
+| 安全竞态 | 12类软件竞态回归通过；Gazebo 真实停稳/恢复时序本阶段未执行 |
+| 实时网页 | ROS结构化证据面板已实际加载并显示 CameraInfo、视觉/真值、fusion、Scan、速度、安全与 odom；代码现含深度有效像素与相机TF摘要，但这些新字段未重新做浏览器现场核验；无相机视频和已保存截图 |
+| 记录回放 | 独立离线 `RECORDED_ROS2` 播放器已实现；真实 WP01 归档导出186事件、12 RGB、5深度元数据并通过SHA校验；缺世界坐标/速度曲线，浏览器文件预览未完成 |
+| 其他工作包 | E02–E07动态实验、速度标定、稳定性、性能窗口、完整演示视频仍未完成；详见矩阵 |
+| 日志归档 | WP01样本30个文件归档，逐文件SHA256复核通过，原始文件保留 |
+| 实体 temi | 无实体设备；Android源码本阶段未修改，实机行为 `HARDWARE_REQUIRED` |
+
+阶段2.7下文内容保留为当时的历史结果，不代表阶段2.8已通过，也不覆盖其旧测试数或风险说明。
+
+## 阶段2.7状态快照（2026-11-22，阶段2.8之前）
 
 执行记录见[阶段2.7最终报告](phase2_7/final_report.md)、[验证矩阵](phase2_7/validation_matrix.md)和[证据索引](phase2_7/competition/evidence_index.md)。ROS2 七包构建通过；全 `tests` 目录最新回归 487 passed、0 failed、0 skipped。Domain 230 运行前后为空，未使用 Domain 226。
 

@@ -1,0 +1,7 @@
+timestamp_local=2026-11-23 00:25:23 CST
+command=.venv/bin/python -m pytest -q tests/test_gateway_websocket_integration.py tests/test_gateway_cli.py
+ros_domain_id=231
+domain_precheck=empty
+..                                                                       [100%]
+2 passed in 2.37s
+exit_code=0

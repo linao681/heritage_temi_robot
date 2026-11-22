@@ -1,0 +1,579 @@
+{
+  "success": true,
+  "mode": "demo",
+  "domain": 215,
+  "headless": true,
+  "children": [
+    {
+      "name": "speed_controller",
+      "pid": 134019,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "tour_manager",
+      "pid": 134018,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "visitor_perception",
+      "pid": 134017,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "knowledge_node",
+      "pid": 134016,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "temi_gateway",
+      "pid": 134015,
+      "exit_code": 0,
+      "forced": false
+    }
+  ],
+  "tour": {
+    "state": "COMPLETED",
+    "reason": "完整导览已结束",
+    "outcome": "completed",
+    "route_index": 7,
+    "visited": [
+      "entrance",
+      "exhibit_01",
+      "exhibit_02",
+      "exhibit_03",
+      "exhibit_04",
+      "exhibit_05",
+      "interaction_zone",
+      "exit"
+    ],
+    "target": "exit",
+    "pause_source": "",
+    "paused_session_id": "",
+    "current_location": "exit",
+    "connected": true,
+    "battery_percentage": 83.76393127441406,
+    "is_moving": false,
+    "error_count": 0,
+    "elapsed_sec": 24.644,
+    "safe_return_completed": false,
+    "qa_waiting": false,
+    "qa_result": {
+      "found": true,
+      "entry_id": "opera_language",
+      "answer": "潮剧以潮州方言演唱。",
+      "source": {
+        "name": "中国非物质文化遗产网·潮剧",
+        "url": "https://www.ihchina.cn/project_details/13143.html",
+        "checked": "2026-11-20"
+      },
+      "spoken": true
+    },
+    "history": [
+      {
+        "state": "IDLE",
+        "reason": "开始新导览任务",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "GREETING",
+        "reason": "迎宾",
+        "elapsed_sec": 0.001
+      },
+      {
+        "state": "WAITING_CONSENT",
+        "reason": "等待游客同意",
+        "elapsed_sec": 0.407
+      },
+      {
+        "state": "PLANNING",
+        "reason": "确定固定导览路线",
+        "elapsed_sec": 0.408
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往展厅入口",
+        "elapsed_sec": 0.409
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解展厅入口",
+        "elapsed_sec": 5.12
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮绣",
+        "elapsed_sec": 5.534
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮绣",
+        "elapsed_sec": 7.804
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮州木雕",
+        "elapsed_sec": 8.211
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮州木雕",
+        "elapsed_sec": 10.458
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮州工夫茶艺",
+        "elapsed_sec": 10.873
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮州工夫茶艺",
+        "elapsed_sec": 13.126
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮剧",
+        "elapsed_sec": 13.533
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮剧",
+        "elapsed_sec": 15.786
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮州音乐",
+        "elapsed_sec": 16.202
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解潮州音乐",
+        "elapsed_sec": 18.458
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往互动区",
+        "elapsed_sec": 18.872
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解互动区",
+        "elapsed_sec": 21.131
+      },
+      {
+        "state": "QA",
+        "reason": "互动等待，接受文字提问、人工结束或超时继续",
+        "elapsed_sec": 21.545
+      },
+      {
+        "state": "QA",
+        "reason": "知识问答与播报",
+        "elapsed_sec": 21.547
+      },
+      {
+        "state": "RETURNING",
+        "reason": "前往展厅出口",
+        "elapsed_sec": 21.974
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解展厅出口",
+        "elapsed_sec": 24.228
+      },
+      {
+        "state": "COMPLETED",
+        "reason": "完整导览已结束",
+        "elapsed_sec": 24.644
+      }
+    ],
+    "recovery_ack_id": ""
+  },
+  "visitor": {
+    "valid": true,
+    "people_count": 3,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "mock",
+    "stable": true,
+    "stable_fresh": true,
+    "sample_timestamp_monotonic_sec": 21893.640432091,
+    "sample_age_sec": 1.3994998880662024e-05
+  },
+  "robot": {
+    "connected": true,
+    "frame": "mock_map",
+    "moving": false,
+    "location": "exit",
+    "battery_percentage": 83.76393127441406
+  },
+  "error": "",
+  "rounds": [
+    {
+      "round": 1,
+      "tour": {
+        "state": "COMPLETED",
+        "reason": "完整导览已结束",
+        "outcome": "completed",
+        "route_index": 7,
+        "visited": [
+          "entrance",
+          "exhibit_01",
+          "exhibit_02",
+          "exhibit_03",
+          "exhibit_04",
+          "exhibit_05",
+          "interaction_zone",
+          "exit"
+        ],
+        "target": "exit",
+        "pause_source": "",
+        "paused_session_id": "",
+        "current_location": "exit",
+        "connected": true,
+        "battery_percentage": 93.0,
+        "is_moving": false,
+        "error_count": 0,
+        "elapsed_sec": 20.169,
+        "safe_return_completed": false,
+        "qa_waiting": false,
+        "qa_result": {
+          "found": true,
+          "entry_id": "opera_language",
+          "answer": "潮剧以潮州方言演唱。",
+          "source": {
+            "name": "中国非物质文化遗产网·潮剧",
+            "url": "https://www.ihchina.cn/project_details/13143.html",
+            "checked": "2026-11-20"
+          },
+          "spoken": true
+        },
+        "history": [
+          {
+            "state": "IDLE",
+            "reason": "开始新导览任务",
+            "elapsed_sec": 0.0
+          },
+          {
+            "state": "GREETING",
+            "reason": "迎宾",
+            "elapsed_sec": 0.001
+          },
+          {
+            "state": "WAITING_CONSENT",
+            "reason": "等待游客同意",
+            "elapsed_sec": 0.423
+          },
+          {
+            "state": "PLANNING",
+            "reason": "确定固定导览路线",
+            "elapsed_sec": 0.426
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往展厅入口",
+            "elapsed_sec": 0.427
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解展厅入口",
+            "elapsed_sec": 0.641
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮绣",
+            "elapsed_sec": 1.057
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮绣",
+            "elapsed_sec": 3.304
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮州木雕",
+            "elapsed_sec": 3.722
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮州木雕",
+            "elapsed_sec": 5.982
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮州工夫茶艺",
+            "elapsed_sec": 6.398
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮州工夫茶艺",
+            "elapsed_sec": 8.656
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮剧",
+            "elapsed_sec": 9.073
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮剧",
+            "elapsed_sec": 11.324
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮州音乐",
+            "elapsed_sec": 11.738
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮州音乐",
+            "elapsed_sec": 13.989
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往互动区",
+            "elapsed_sec": 14.401
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解互动区",
+            "elapsed_sec": 16.657
+          },
+          {
+            "state": "QA",
+            "reason": "互动等待，接受文字提问、人工结束或超时继续",
+            "elapsed_sec": 17.069
+          },
+          {
+            "state": "QA",
+            "reason": "知识问答与播报",
+            "elapsed_sec": 17.072
+          },
+          {
+            "state": "RETURNING",
+            "reason": "前往展厅出口",
+            "elapsed_sec": 17.497
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解展厅出口",
+            "elapsed_sec": 19.754
+          },
+          {
+            "state": "COMPLETED",
+            "reason": "完整导览已结束",
+            "elapsed_sec": 20.169
+          }
+        ],
+        "recovery_ack_id": ""
+      },
+      "robot": {
+        "connected": true,
+        "frame": "mock_map",
+        "moving": false,
+        "location": "exit",
+        "battery_percentage": 93.0
+      },
+      "visitor": {
+        "valid": true,
+        "people_count": 3,
+        "expected_count": 0,
+        "group_state": "untracked",
+        "source": "mock",
+        "stable": true,
+        "stable_fresh": true,
+        "sample_timestamp_monotonic_sec": 21867.941054546,
+        "sample_age_sec": 1.1078998795710504e-05
+      }
+    },
+    {
+      "round": 2,
+      "tour": {
+        "state": "COMPLETED",
+        "reason": "完整导览已结束",
+        "outcome": "completed",
+        "route_index": 7,
+        "visited": [
+          "entrance",
+          "exhibit_01",
+          "exhibit_02",
+          "exhibit_03",
+          "exhibit_04",
+          "exhibit_05",
+          "interaction_zone",
+          "exit"
+        ],
+        "target": "exit",
+        "pause_source": "",
+        "paused_session_id": "",
+        "current_location": "exit",
+        "connected": true,
+        "battery_percentage": 83.76393127441406,
+        "is_moving": false,
+        "error_count": 0,
+        "elapsed_sec": 24.644,
+        "safe_return_completed": false,
+        "qa_waiting": false,
+        "qa_result": {
+          "found": true,
+          "entry_id": "opera_language",
+          "answer": "潮剧以潮州方言演唱。",
+          "source": {
+            "name": "中国非物质文化遗产网·潮剧",
+            "url": "https://www.ihchina.cn/project_details/13143.html",
+            "checked": "2026-11-20"
+          },
+          "spoken": true
+        },
+        "history": [
+          {
+            "state": "IDLE",
+            "reason": "开始新导览任务",
+            "elapsed_sec": 0.0
+          },
+          {
+            "state": "GREETING",
+            "reason": "迎宾",
+            "elapsed_sec": 0.001
+          },
+          {
+            "state": "WAITING_CONSENT",
+            "reason": "等待游客同意",
+            "elapsed_sec": 0.407
+          },
+          {
+            "state": "PLANNING",
+            "reason": "确定固定导览路线",
+            "elapsed_sec": 0.408
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往展厅入口",
+            "elapsed_sec": 0.409
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解展厅入口",
+            "elapsed_sec": 5.12
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮绣",
+            "elapsed_sec": 5.534
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮绣",
+            "elapsed_sec": 7.804
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮州木雕",
+            "elapsed_sec": 8.211
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮州木雕",
+            "elapsed_sec": 10.458
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮州工夫茶艺",
+            "elapsed_sec": 10.873
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮州工夫茶艺",
+            "elapsed_sec": 13.126
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮剧",
+            "elapsed_sec": 13.533
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮剧",
+            "elapsed_sec": 15.786
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往潮州音乐",
+            "elapsed_sec": 16.202
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解潮州音乐",
+            "elapsed_sec": 18.458
+          },
+          {
+            "state": "NAVIGATING",
+            "reason": "前往互动区",
+            "elapsed_sec": 18.872
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解互动区",
+            "elapsed_sec": 21.131
+          },
+          {
+            "state": "QA",
+            "reason": "互动等待，接受文字提问、人工结束或超时继续",
+            "elapsed_sec": 21.545
+          },
+          {
+            "state": "QA",
+            "reason": "知识问答与播报",
+            "elapsed_sec": 21.547
+          },
+          {
+            "state": "RETURNING",
+            "reason": "前往展厅出口",
+            "elapsed_sec": 21.974
+          },
+          {
+            "state": "EXPLAINING",
+            "reason": "讲解展厅出口",
+            "elapsed_sec": 24.228
+          },
+          {
+            "state": "COMPLETED",
+            "reason": "完整导览已结束",
+            "elapsed_sec": 24.644
+          }
+        ],
+        "recovery_ack_id": ""
+      },
+      "robot": {
+        "connected": true,
+        "frame": "mock_map",
+        "moving": false,
+        "location": "exit",
+        "battery_percentage": 83.76393127441406
+      },
+      "visitor": {
+        "valid": true,
+        "people_count": 3,
+        "expected_count": 0,
+        "group_state": "untracked",
+        "source": "mock",
+        "stable": true,
+        "stable_fresh": true,
+        "sample_timestamp_monotonic_sec": 21893.640432091,
+        "sample_age_sec": 1.3994998880662024e-05
+      }
+    }
+  ],
+  "requested_rounds": 2,
+  "ready_nodes": [
+    "heritage_knowledge",
+    "heritage_tour_manager",
+    "temi_gateway",
+    "temi_speed_controller",
+    "visitor_perception"
+  ],
+  "wall_time_sec": 51.995,
+  "status_snapshot_note": "tour、robot、visitor 是关停前最后收到的状态，不是停车确认。"
+}

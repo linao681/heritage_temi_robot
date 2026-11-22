@@ -1,0 +1,12 @@
+{
+  "detection_frames": 41,
+  "valid_detection_frames": 40,
+  "frames_with_people": 37,
+  "max_detected_people": 3,
+  "team_states": {
+    "UNKNOWN": 41
+  },
+  "max_team_observed_count": 3,
+  "source": "actual_gazebo_rgb_depth_yolox_and_team_observer",
+  "caveat": "single short scripted actor sample; not tracking or full-tour validation"
+}

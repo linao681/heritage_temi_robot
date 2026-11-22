@@ -1,0 +1,125 @@
+{
+  "run_id": "WP01-GAZEBO-CAMERA-04",
+  "status": "PASS_WITH_RISK",
+  "scenario": {
+    "layout": "official",
+    "actors": 3,
+    "actor_motion": "static mannequins",
+    "seed": 282,
+    "robot_motion": "none"
+  },
+  "capture": {
+    "duration_wall_sec": 15.031988336002541,
+    "rgb_frames_saved": 12,
+    "depth_frames_saved": 5,
+    "raw_detection_messages": 46,
+    "raw_valid_messages": 46,
+    "associated_messages": 46,
+    "track_messages": 47,
+    "team_messages": 47,
+    "detection_publication_rate_hz": 3.0601407459735155
+  },
+  "representative_manual_frame": {
+    "image": "rgb_06.png",
+    "manually_visible_people": 3,
+    "detected_people": 3,
+    "absolute_count_error": 0,
+    "detection_stamp_delta_ms": -98.0,
+    "iou_threshold": 0.5,
+    "true_positive": 3,
+    "false_positive": 0,
+    "false_negative": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "mean_matched_iou": 0.923014387006574
+  },
+  "raw_detection_sample_age_sec": {
+    "median": 0.30119752883911133,
+    "p95": 0.39323776960372925,
+    "min": 0.2766384780406952,
+    "max": 0.396853506565094,
+    "sample_count": 46
+  },
+  "associated_depth_m": {
+    "valid_measurements": 138,
+    "total_possible_measurements": 138,
+    "min": 3.0465633869171143,
+    "median": 3.132887363433838,
+    "max": 3.1411612033843994,
+    "per_frame_saved_depth_image_stats": [
+      {
+        "path": "depth_00.npy",
+        "stamp_ns": 19000000000,
+        "encoding": "32FC1",
+        "valid_pixels": 64813,
+        "min_depth_m": 1.2754662036895752,
+        "median_depth_m": 3.029979705810547,
+        "max_depth_m": 4.570371150970459
+      },
+      {
+        "path": "depth_01.npy",
+        "stamp_ns": 21001000000,
+        "encoding": "32FC1",
+        "valid_pixels": 64813,
+        "min_depth_m": 1.2754788398742676,
+        "median_depth_m": 3.0299758911132812,
+        "max_depth_m": 4.570384502410889
+      },
+      {
+        "path": "depth_02.npy",
+        "stamp_ns": 23000000000,
+        "encoding": "32FC1",
+        "valid_pixels": 64813,
+        "min_depth_m": 1.2754666805267334,
+        "median_depth_m": 3.029970407485962,
+        "max_depth_m": 4.570533275604248
+      },
+      {
+        "path": "depth_03.npy",
+        "stamp_ns": 25001000000,
+        "encoding": "32FC1",
+        "valid_pixels": 64813,
+        "min_depth_m": 1.275479793548584,
+        "median_depth_m": 3.0299665927886963,
+        "max_depth_m": 4.570682525634766
+      },
+      {
+        "path": "depth_04.npy",
+        "stamp_ns": 27000000000,
+        "encoding": "32FC1",
+        "valid_pixels": 64813,
+        "min_depth_m": 1.2754662036895752,
+        "median_depth_m": 3.029961585998535,
+        "max_depth_m": 4.570695400238037
+      }
+    ]
+  },
+  "track_observation": {
+    "observed_count_per_message": 3,
+    "track_id_set_count": 1,
+    "stable_id_set_in_this_static_sample": true,
+    "identity_switch_metric": "NOT_COMPUTABLE; actors were static and not identity-labelled across time"
+  },
+  "team_observation": {
+    "states": {
+      "UNKNOWN": 47
+    },
+    "expected_count": 0,
+    "reason": "team count cannot be confirmed from current observation",
+    "interpretation": "UNKNOWN is correct for this isolated camera sample: no expected group size was published and forward-only coverage cannot certify complete team membership."
+  },
+  "limits": [
+    "Only one image was manually boxed; its precision/recall and count error do not estimate general model accuracy.",
+    "Depth error is NOT_COMPUTABLE: Gazebo actor center distance is not a ground-truth surface depth for the torso pixels used by the RGB-D association.",
+    "The measured 3.06 Hz is detection-message publication throughput over this capture window, not a controlled inference benchmark.",
+    "No moving actors, occlusion, departure/re-entry, tour pause, or recovery were exercised.",
+    "Model inference FPS is NOT_COMPUTABLE: no inference-boundary timing samples were captured."
+  ],
+  "model_inference_fps": "NOT_COMPUTABLE; timing not collected at model inference boundary",
+  "archive": {
+    "path": "../../../../artifacts/phase2_8/archive/WP01-GAZEBO-CAMERA-04.tar.gz",
+    "sha256": "c6d55b3144e3b64a4e13896e653b2c622b9606de897768fd5ad0e57e8e7ca064",
+    "verified_files": 30
+  }
+}

@@ -1,6 +1,6 @@
 # 项目专属工具链与依赖缓存
 /.toolchain/
-/.venv/
+/.venv
 
 # ROS2 colcon 构建产物
 /ros2_ws/build/
@@ -24,3 +24,9 @@ __pycache__/
 /assets/vision/*.onnx
 /assets/vision/*.part
 /assets/vision/*.avi
+
+# 阶段2.8高频原始运行日志；源码、配置、摘要及哈希索引仍纳入版本管理。
+/artifacts/phase2_8/raw/
+/artifacts/phase2_8/archive/
+
+/artifacts/phase2_8/replays/

@@ -1,0 +1,4 @@
+[INFO] [1795364609.093232198] [temi_gateway]: Gateway started in mock mode
+/home/linao/heritage_workspace/heritage_temi_robot-phase28/ros2_ws/install/temi_bridge/lib/temi_bridge/temi_gateway:33: RuntimeWarning: coroutine 'ActionServer._execute_goal' was never awaited
+  sys.exit(load_entry_point('temi-bridge==0.1.0', 'console_scripts', 'temi_gateway')())
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback

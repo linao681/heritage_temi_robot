@@ -1,0 +1,10 @@
+[INFO] [1795357332.444198529] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-22 22:22:14,334 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-22 22:22:14,335 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-22 22:22:14,753 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-22 22:22:14,756 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定导览路线
+2026-11-22 22:22:14,757 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往展厅入口
+2026-11-22 22:22:14,972 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解展厅入口
+2026-11-22 22:22:15,384 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往潮绣
+2026-11-22 22:22:24,792 INFO heritage_tour_manager.tour_manager: ERROR: 中断导航时停车未确认: ROS STOP 请求超时，未确认停止
+[WARN] [1795357347.794639992] [heritage_tour_manager]: 关闭时仍有 Action 未确认终止

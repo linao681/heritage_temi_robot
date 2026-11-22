@@ -1,0 +1,24 @@
+ M .gitignore
+ M ros2_ws/src/heritage_tour_manager/heritage_tour_manager/ros_tour_node.py
+ M ros2_ws/src/heritage_tour_manager/heritage_tour_manager/tour_manager.py
+ M ros2_ws/src/visitor_perception/launch/sensor_fusion.launch.py
+ M ros2_ws/src/visitor_perception/setup.py
+ M scripts/start_phase25_system.sh
+ M tests/test_tour_manager.py
+?? docs/phase2_8/
+?? docs/runs/mock-system-20261122-222046-488596/
+?? docs/runs/mock-system-20261122-222112-433371/
+?? docs/runs/mock-system-20261122-222205-790319/
+?? docs/runs/mock-system-20261122-222210-154061/
+?? docs/runs/mock-system-20261122-222229-137483/
+?? ros2_ws/src/heritage_tour_manager/heritage_tour_manager/team_observation.py
+?? ros2_ws/src/visitor_perception/visitor_perception/person_tracker.py
+?? ros2_ws/src/visitor_perception/visitor_perception/ros_team_observer.py
+?? ros2_ws/src/visitor_perception/visitor_perception/team_observer.py
+?? scripts/archive_experiment.py
+?? tests/test_phase28_archive.py
+?? tests/test_phase28_control_races.py
+?? tests/test_phase28_person_tracker.py
+?? tests/test_phase28_team_observer.py
+?? tests/test_phase28_team_sources.py
+?? tests/test_ros_team_observer.py

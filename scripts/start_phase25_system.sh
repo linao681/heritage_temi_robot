@@ -142,7 +142,8 @@ gateway_args=()
 if [[ "${PHASE25_PRESENTATION:-0}" == 1 ]]; then gateway_args+=(--presentation); fi
 start_group gateway python3 scripts/start_nav2_gateway.py --layout official --domain-id "$domain_id" "${gateway_args[@]}"
 start_group knowledge ros2 run heritage_knowledge knowledge_node --config config/knowledge.yaml
-start_group tour ros2 run heritage_tour_manager tour_manager --config config/submission_system.yaml --exhibits config/submission_exhibits.yaml
+team_decision_mode="${PHASE28_TEAM_DECISION_MODE:-business_script}"
+start_group tour ros2 run heritage_tour_manager tour_manager --config config/submission_system.yaml --exhibits config/submission_exhibits.yaml --ros-args -p "team_decision_mode:=$team_decision_mode"
 start_group speed ros2 launch temi_speed_controller speed_control.launch.py mock_mode:=false allow_simulated_sources:=true
 start_group perception ros2 launch visitor_perception sensor_fusion.launch.py simulation_mode:=true model_path:=assets/vision/object_detection_yolox_2022nov.onnx confidence:=0.5
 visualization_args=()

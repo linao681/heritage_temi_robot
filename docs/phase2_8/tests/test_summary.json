@@ -1,0 +1,92 @@
+{
+  "run_id": "WP10-FINAL-REGRESSION-02",
+  "status": "PASS_WITH_RISK",
+  "timestamp_local": "2026-11-23 00:21:38 CST",
+  "git_head": "bdf67d6dd1e09c503845af11e23a7f2f26b1a508",
+  "branch": "phase2_8-work",
+  "build": {
+    "command": "bash scripts/build_ros2.sh",
+    "ros_distro": "humble",
+    "packages_total": 7,
+    "packages_succeeded": 7,
+    "duration_sec": 51.1,
+    "exit_code": 0,
+    "log": "ros2_build_final.log"
+  },
+  "full_suite": {
+    "command": "HERITAGE_TEST_ROS_DOMAIN_ID=231 .venv/bin/python -m pytest -q tests",
+    "ros_domain_id": 231,
+    "domain_precheck": "empty",
+    "domain_postcheck": "empty",
+    "collected": 550,
+    "passed": 550,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "duration_sec": 196.49,
+    "exit_code": 0,
+    "log": "full_suite_final.log",
+    "precheck_log": "domain231-before-final.json",
+    "postcheck_log": "domain231-after-final.json"
+  },
+  "websocket_suite": {
+    "command": "HERITAGE_TEST_ROS_DOMAIN_ID=231 .venv/bin/python -m pytest -q tests/test_gateway_websocket_integration.py tests/test_gateway_cli.py",
+    "ros_domain_id": 231,
+    "domain_precheck": "empty",
+    "domain_postcheck": "empty",
+    "passed": 2,
+    "failed": 0,
+    "duration_sec": 2.37,
+    "exit_code": 0,
+    "log": "websocket-final.log",
+    "postcheck_log": "domain231-after-websocket.json"
+  },
+  "visualization_javascript": {
+    "node_syntax_check_exit_code": 0,
+    "runtime_check_exit_code": 0,
+    "offline_replay_integrity_check_exit_code": 0,
+    "actual_recording": {
+      "run_id": "WP01-GAZEBO-CAMERA-04",
+      "mode": "RECORDED_ROS2",
+      "events": 186,
+      "rgb_frames": 12,
+      "depth_frames": 5,
+      "controls_available": false,
+      "output_sha256": "823bf0a13d6b0f5433f0e84afc26e2b2da027bdbe3e6a06fe703c9861611a3d6"
+    },
+    "log": "visualization-final.log"
+  },
+  "preserved_failed_attempts": [
+    {
+      "attempt": "domain precheck 234",
+      "result": "FAIL_PRECHECK",
+      "reason": "ROS middleware rejected domain 234 as outside its supported port range; pytest did not start",
+      "log": "full_suite_domain-precheck-234.log"
+    },
+    {
+      "attempt": "first full suite with default per-test domains",
+      "result": "1 failed, 542 passed",
+      "reason": "test_gateway_cli.py defaulted to ROS domain 228, which had an already-running user Gazebo/Nav2 graph; see preserved log",
+      "log": "full_suite_domain-collision-228.log"
+    },
+    {
+      "attempt": "isolated gateway CLI",
+      "result": "1 passed",
+      "reason": "HERITAGE_TEST_ROS_DOMAIN_ID=230, confirming the test passes in a clean test domain",
+      "log": "gateway-cli-domain230.log"
+    },
+    {
+      "attempt": "domain 230 precheck before final regression",
+      "result": "ABORTED_BEFORE_TESTS",
+      "reason": "the project preflight detected the ros2cli daemon on domain 230; no pytest process started",
+      "log": "domain230-before-final.json"
+    }
+  ],
+  "notes": [
+    "No tests were skipped or ignored in the final full suite.",
+    "No source code changed after the final ROS2 build and 550-test full suite; subsequent changes were documentation and evidence summaries only.",
+    "The full suite and dedicated WebSocket run used domain 231; project preflight confirmed it empty before and after each run.",
+    "All generated Mock run directories were retained.",
+    "The first domain-collision run used the test-only mock temi_gateway action; it did not issue a Nav2/Gazebo navigation goal or reach the test stop call."
+  ]
+}

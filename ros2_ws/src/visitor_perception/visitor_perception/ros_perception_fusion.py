@@ -144,15 +144,10 @@ class PerceptionFusionNode(Node):
 
 def main(args=None):
     import rclpy
+    from .ros_shutdown import spin_node
     rclpy.init(args=args)
     node = PerceptionFusionNode()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        node.destroy_node()
-        rclpy.try_shutdown()
+    spin_node(rclpy, node)
 
 
 if __name__ == '__main__':

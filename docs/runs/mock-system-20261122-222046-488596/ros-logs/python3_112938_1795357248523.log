@@ -1,0 +1,1 @@
+[INFO] [1795357249.466493908] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'mock', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 17651.623450185, 'sample_age_sec': 9.464998584007844e-06}

@@ -1,0 +1,5 @@
+timestamp_local=2026-11-23 00:26:20 CST
+command=node syntax, runtime, replay integrity and actual recording verification
+replay integrity and read-only checks passed
+{"run_id":"WP01-GAZEBO-CAMERA-04","mode":"RECORDED_ROS2","events":186,"rgb_frames":12,"depth_frames":5,"controls_available":false}
+exit_code=0

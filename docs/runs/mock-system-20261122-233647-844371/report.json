@@ -1,0 +1,127 @@
+{
+  "success": false,
+  "mode": "demo",
+  "domain": 214,
+  "headless": true,
+  "children": [
+    {
+      "name": "speed_controller",
+      "pid": 136572,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "tour_manager",
+      "pid": 136571,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "visitor_perception",
+      "pid": 136570,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "knowledge_node",
+      "pid": 136569,
+      "exit_code": 0,
+      "forced": false
+    },
+    {
+      "name": "temi_gateway",
+      "pid": 136568,
+      "exit_code": 0,
+      "forced": false
+    }
+  ],
+  "tour": {
+    "state": "NAVIGATING",
+    "reason": "前往潮绣",
+    "outcome": "running",
+    "route_index": 1,
+    "visited": [
+      "entrance"
+    ],
+    "target": "exhibit_01",
+    "pause_source": "",
+    "paused_session_id": "",
+    "current_location": "entrance",
+    "connected": true,
+    "battery_percentage": 100.0,
+    "is_moving": false,
+    "error_count": 0,
+    "elapsed_sec": 1.135,
+    "safe_return_completed": false,
+    "qa_waiting": false,
+    "qa_result": null,
+    "history": [
+      {
+        "state": "IDLE",
+        "reason": "开始新导览任务",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "GREETING",
+        "reason": "迎宾",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "WAITING_CONSENT",
+        "reason": "等待游客同意",
+        "elapsed_sec": 0.408
+      },
+      {
+        "state": "PLANNING",
+        "reason": "确定固定导览路线",
+        "elapsed_sec": 0.41
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往展厅入口",
+        "elapsed_sec": 0.41
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解展厅入口",
+        "elapsed_sec": 0.623
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往潮绣",
+        "elapsed_sec": 1.042
+      }
+    ],
+    "recovery_ack_id": ""
+  },
+  "visitor": {
+    "valid": true,
+    "people_count": 3,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "mock",
+    "stable": true,
+    "stable_fresh": true,
+    "sample_timestamp_monotonic_sec": 22215.311916573,
+    "sample_age_sec": 1.4387002011062577e-05
+  },
+  "robot": {
+    "connected": true,
+    "frame": "mock_map",
+    "moving": false,
+    "location": "entrance",
+    "battery_percentage": 100.0
+  },
+  "error": "temi_gateway 提前退出 (0)",
+  "rounds": [],
+  "requested_rounds": 1,
+  "ready_nodes": [
+    "heritage_knowledge",
+    "heritage_tour_manager",
+    "temi_gateway",
+    "temi_speed_controller",
+    "visitor_perception"
+  ],
+  "wall_time_sec": 18.1,
+  "status_snapshot_note": "tour、robot、visitor 是关停前最后收到的状态，不是停车确认。"
+}

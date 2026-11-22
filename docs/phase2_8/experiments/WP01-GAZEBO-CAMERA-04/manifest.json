@@ -1,0 +1,64 @@
+{
+  "run_id": "WP01-GAZEBO-CAMERA-04",
+  "status": "PASS_WITH_RISK",
+  "started_local": "2026-11-22 23:04 Asia/Shanghai",
+  "git_head": "bdf67d6dd1e09c503845af11e23a7f2f26b1a508",
+  "branch": "phase2_8-work",
+  "worktree_dirty": true,
+  "tracked_diff_sha256": "5e4cda85c716732a53b2766a3f702ebd1e2496893bbbeceebf66800aafac0daf",
+  "ros_domain_id": 232,
+  "gazebo_master_port": 11375,
+  "owned_process_groups": [
+    128444,
+    128664
+  ],
+  "scenario": "official hall; three static Gazebo mannequin models; no robot navigation goal",
+  "commands": [
+    "ros2 launch simulation/hall.launch.py layout:=official gui:=false",
+    "ros2 launch visitor_perception sensor_fusion.launch.py simulation_mode:=true model_path:=assets/vision/object_detection_yolox_2022nov.onnx confidence:=0.5",
+    ".venv/bin/python scripts/spawn_people_scenario.py --layout official --scenario group_static --duration-sec 5 --start-delay-sec 1 --seed 282 --truth-output artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-04/gazebo_truth.json",
+    ".venv/bin/python /tmp/phase28_camera_capture.py artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-04"
+  ],
+  "capture_program_sha256": "dfe42a093d64f1b2a49776f171855dec96945c3b95fffd77f8bad5e2e10ca903",
+  "model": {
+    "path": "assets/vision/object_detection_yolox_2022nov.onnx",
+    "sha256": "c5c2d13e59ae883e6af3b45daea64af4833a4951c92d116ec270d9ddbe998063",
+    "backend": "OpenCV DNN CPU"
+  },
+  "camera_config_sha256": "0973f3b9d3b6bb0fa7c7c7f514ee18daf719a3c8275196c3eebcec48bb665a09",
+  "source_sha256": {
+    "ros2_ws/src/visitor_perception/visitor_perception/ros_shutdown.py": "a9d68d2c836bd69fa89cf7951dbea04e0af3397ab6896de659f6c9af29736434",
+    "ros2_ws/src/visitor_perception/visitor_perception/ros_person_detector.py": "b9dfa1b06a7aaba1048004f4ef2f0a91d1930aef88a942dcd2252cdcf29a5f0c",
+    "ros2_ws/src/visitor_perception/visitor_perception/ros_depth_association.py": "d3f90315fe8818e1c0ca7aa5b9c2d6582277b5ee70fa0232e00efea98f47af45",
+    "ros2_ws/src/visitor_perception/visitor_perception/ros_perception_fusion.py": "6f2c3fa2ef2d7c54382a98806c4a69c8b10b10c81f8f3e61e03895a65e9f050d",
+    "ros2_ws/src/visitor_perception/visitor_perception/ros_team_observer.py": "37a4b4c297396fee4a62c62eed29932b9dc5180d3eccfe8e564669d2fbd5f66e"
+  },
+  "environment": {
+    "ros_distro": "humble",
+    "python": "3.10.12",
+    "opencv": "4.11.0",
+    "onnxruntime": "not used"
+  },
+  "image_frames_archived": true,
+  "raw_evidence_directory": "../../../../artifacts/phase2_8/raw/WP01-GAZEBO-CAMERA-04/",
+  "cleanup": {
+    "owned_process_groups_exited": true,
+    "project_ros_nodes_remaining": [],
+    "initial_graph_probe_note": "the first post-cleanup probe briefly listed a ROS CLI daemon only; a second ROS-node probe returned an empty graph",
+    "final_domain_empty": true
+  },
+  "archive": {
+    "path": "../../../../artifacts/phase2_8/archive/WP01-GAZEBO-CAMERA-04.tar.gz",
+    "size_bytes": 464450,
+    "sha256": "c6d55b3144e3b64a4e13896e653b2c622b9606de897768fd5ad0e57e8e7ca064",
+    "integrity_report": "archive_integrity.json",
+    "verified_regular_files": 30,
+    "originals_retained": true
+  },
+  "limitations": {
+    "annotated_rgb_frames": 1,
+    "inference_fps": "NOT_COMPUTABLE; no per-inference timing instrumentation was collected",
+    "depth_error": "NOT_COMPUTABLE; no independent torso-surface depth ground truth",
+    "identity_switches": "NOT_COMPUTABLE; static actors and no manual temporal identity labels"
+  }
+}

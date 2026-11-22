@@ -1,0 +1,5 @@
+timestamp_local=2026-11-23 00:15:49 CST
+command=.venv/bin/python -m pytest -q tests/test_phase28_visualization_api.py tests/test_visualization_bridge.py tests/test_phase28_replay.py
+.............                                                            [100%]
+13 passed in 0.45s
+exit_code=0

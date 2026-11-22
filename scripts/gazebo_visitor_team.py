@@ -17,12 +17,21 @@ from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from spawn_people_scenario import PeopleScenario, ROOT
 from visitor_trail import VisitorTrail, advance, following_target
+from heritage_tour_manager.team_observation import simulation_team_controls
+
+
+def create_lost_service_client(node, team_decision_mode):
+    if not simulation_team_controls(team_decision_mode):
+        return None
+    return node.create_client(Trigger, 'heritage/tour/visitor_lost')
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--duration-sec', type=float, default=1200)
+    parser.add_argument('--team-decision-mode', choices=('business_script', 'vision_conservative'),
+                        default='business_script')
     args = parser.parse_args()
     if os.environ.get('ROS_LOCALHOST_ONLY') != '1':
         parser.error('requires ROS_LOCALHOST_ONLY=1')
@@ -38,7 +47,7 @@ def main():
     pause_sent = False
     pause_future = None
     publisher = node.create_publisher(String, 'heritage/simulation/team_status', 10)
-    lost = node.create_client(Trigger, 'heritage/tour/visitor_lost')
+    lost = create_lost_service_client(node, args.team_decision_mode)
 
     def receive(message):
         nonlocal tour
@@ -245,7 +254,8 @@ def main():
                     member['progress'] = next_progress
                 lag = max((max(0, m.get('target_progress', m['progress'])-m['progress']) for m in members), default=0)
                 joined = bool(members) and all(m['joined'] for m in members)
-                if joined and lag > 1.5 and not pause_sent and lost.service_is_ready():
+                if (joined and lag > 1.5 and not pause_sent and lost is not None and
+                        lost.service_is_ready()):
                     pause_future = lost.call_async(Trigger.Request())
                     pause_sent = True
                 if pause_future is not None and pause_future.done():
