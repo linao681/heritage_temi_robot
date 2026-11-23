@@ -16,6 +16,8 @@
 
 **13:51 CST最新执行更新：**视觉暂停handler修复已纳入最新完整`tests/`回归，624 passed、190.10秒；Domain 226在测试前后为空。运行器真实视觉run `visitor-full-20261123-133255`仍为FAIL，未人工恢复或完成导览；用户要求退出的本会话测试进程当前已不在运行。细节见`audit/full-regression-20261123-1351.log`、`experiments/WP02-vision-observation/visitor-full-20261123-133255/evidence.md`和`verification-attempts.md`。
 
+**14:19 CST Git发布更新：**阶段2.9源码、测试、报告与压缩实验记录已提交并推送至`origin/phase2_9-work`，实施提交`5a3d3a51717df436b9bf0f8ce2192237b5b18d91`。未合并到`main`；GitHub远端分支SHA与该提交一致。
+
 **12:11 CST复核：**服务接口变更后ROS2七包构建7/7；网关/速度控制器定向64项通过；最终完整测试在Domain 226、`HERITAGE_TEST_ROS_DOMAIN_ID=226`下619项全部通过，186.56秒。首轮未统一域回归、游客状态集成夹具诊断及处理记录见`audit/regression-20261123-1211.md`。Gazebo与实体场景仍需逐项按本计划验收，未以完整单测替代。
 
 已读阶段2.8 final_report、validation_matrix、progress、blockers、code_changes与阶段2.7游客实现记录。550项通过、7包构建、2项WebSocket是历史基线，不是本阶段新结果。504.840秒/7目标是阶段2.7业务脚本历史记录。单帧3人P/R=1、47次UNKNOWN不能扩展为动态视觉团队能力。

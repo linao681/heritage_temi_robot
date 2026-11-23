@@ -2,6 +2,10 @@
 
 更新：2026-11-23 13:51 CST。当前工作区 `/home/linao/heritage_workspace/heritage_temi_robot-phase28`，分支 `phase2_9-work`，HEAD `24c14231de61840a11c5462805df0cd6160af84d`。阶段2.9改动未提交、未推送、未合并。
 
+## Git发布更新（2026-11-23 14:19 CST）
+
+阶段2.9实施与证据提交`5a3d3a51717df436b9bf0f8ce2192237b5b18d91`已推送到`origin/phase2_9-work`，远端SHA与本地提交一致。没有合并到`main`。13:51的验证快照和624项全量回归日志保持不变。
+
 ## 最新执行结果（13:51 CST）
 
 - 全量`tests/`已在视觉暂停handler修复后重跑：624 passed，190.10秒，退出码0。域226运行前后均空；日志`docs/phase2_9/audit/full-regression-20261123-1351.log`，SHA-256 `609b53c935b48363831dd1cafd4200112991db64f5932cd81c179e5d5db52d74`。

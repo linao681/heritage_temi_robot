@@ -3,7 +3,7 @@
 
 ## 当前阶段：2.9（2026-11-23）
 
-阶段2.9正在分支`phase2_9-work`上实施，HEAD `24c14231de61840a11c5462805df0cd6160af84d`；当前改动未提交、未推送、未合并。最新完整自动化回归为624 passed、190.10秒；Domain 226在测试前后为空。official布局business_script路线和E07-A脚本恢复已取得PASS/PASS_WITH_RISK证据；真实视觉run仍FAIL，所有未完成动态实验按实际情况保留为NOT_RUN。详细的18个工作包执行状态和下一步见[阶段2.9实施计划](phase2_9/implementation_plan.md)、[验证矩阵](phase2_9/validation_matrix.md)与[国赛交接报告](competition_final/overnight_report.md)。
+阶段2.9在分支`phase2_9-work`实施；实施与证据提交`5a3d3a51717df436b9bf0f8ce2192237b5b18d91`已推送至`origin/phase2_9-work`，未合并到`main`。最新完整自动化回归为624 passed、190.10秒；Domain 226在测试前后为空。official布局business_script路线和E07-A脚本恢复已取得PASS/PASS_WITH_RISK证据；真实视觉run仍FAIL，所有未完成动态实验按实际情况保留为NOT_RUN。详细的18个工作包执行状态和下一步见[阶段2.9实施计划](phase2_9/implementation_plan.md)、[验证矩阵](phase2_9/validation_matrix.md)与[国赛交接报告](competition_final/overnight_report.md)。
 
 当前优先顺序：本轮已退出自启动测试进程；在启动下一项仿真前重新检查资源、ROS域和端口；随后独立完成视觉handler修复后的安全人工恢复/视觉观察run，再按可用资源逐项执行E02、E04、速度标定、E07-B和adaptive布局导航。不得将脚本游客、视觉观察、Mock播报或Gazebo结果表述为实体Temi验证。
 

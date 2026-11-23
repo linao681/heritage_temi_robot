@@ -3,7 +3,7 @@
 
 ## 最新状态：阶段 2.9（执行中，2026-11-23）
 
-当前工作区为`/home/linao/heritage_workspace/heritage_temi_robot-phase28`，分支`phase2_9-work`，HEAD `24c14231de61840a11c5462805df0cd6160af84d`。阶段2.9改动在工作树中，未提交、未推送、未合并；`main`和`phase2_8-work`不是本阶段当前分支。逐工作包结果见[阶段2.9进度](phase2_9/progress.md)、[验证矩阵](phase2_9/validation_matrix.md)、[国赛交接报告](competition_final/overnight_report.md)。
+当前工作区为`/home/linao/heritage_workspace/heritage_temi_robot-phase28`，执行分支`phase2_9-work`。阶段2.9实施与证据提交`5a3d3a51717df436b9bf0f8ce2192237b5b18d91`已推送至`origin/phase2_9-work`；它基于阶段2.8提交`24c14231de61840a11c5462805df0cd6160af84d`，没有合并到`main`。逐工作包结果见[阶段2.9进度](phase2_9/progress.md)、[验证矩阵](phase2_9/validation_matrix.md)、[国赛交接报告](competition_final/overnight_report.md)。
 
 | 项目 | 当前结果 |
 |---|---|

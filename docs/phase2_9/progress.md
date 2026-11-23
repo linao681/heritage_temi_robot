@@ -5,7 +5,7 @@
 ## 版本与工作区
 
 - 工作树：/home/linao/heritage_workspace/heritage_temi_robot-phase28；当前分支 phase2_9-work，基线HEAD 24c14231de61840a11c5462805df0cd6160af84d。
-- 本阶段修改未提交、未推送、未合并；未修改主工作树。
+- 实施与实验提交`5a3d3a51717df436b9bf0f8ce2192237b5b18d91`已推送至`origin/phase2_9-work`，未合并到`main`；本阶段未修改主工作树。
 - 没有实体Temi；没有向实体设备或其他用户ROS/Gazebo进程发送控制命令或发出停止命令。
 
 ## 已完成的代码、测试和材料
