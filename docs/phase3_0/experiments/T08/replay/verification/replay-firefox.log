@@ -1,0 +1,4 @@
+*** You are running in headless mode.
+Gtk-Message: 19:53:48.166: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+Could not find profile folder.
+exit_code=1

@@ -1,0 +1,30 @@
+1795419690.6369009 [INFO] [launch]: All log files can be found below /home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T04-vision/visitor-full-vision-20261123-154128/ros-logs/2026-11-23-15-41-30-636023-linao-P15-24-285024
+1795419690.6370201 [INFO] [launch]: Default logging verbosity is set to INFO
+1795419690.9673729 [INFO] [gzserver-1]: process started with pid [285081]
+1795419690.9675026 [INFO] [robot_state_publisher-2]: process started with pid [285083]
+1795419690.9675567 [INFO] [spawn_entity.py-3]: process started with pid [285085]
+1795419690.9812148 [robot_state_publisher-2] [INFO] [1795419690.980979175] [robot_state_publisher]: got segment base_footprint
+1795419690.9813266 [robot_state_publisher-2] [INFO] [1795419690.981045703] [robot_state_publisher]: got segment base_link
+1795419690.9815032 [robot_state_publisher-2] [INFO] [1795419690.981051337] [robot_state_publisher]: got segment caster
+1795419690.9815488 [robot_state_publisher-2] [INFO] [1795419690.981054867] [robot_state_publisher]: got segment depth_camera_link
+1795419690.9815795 [robot_state_publisher-2] [INFO] [1795419690.981057949] [robot_state_publisher]: got segment depth_camera_optical_frame
+1795419690.9816048 [robot_state_publisher-2] [INFO] [1795419690.981061118] [robot_state_publisher]: got segment display_link
+1795419690.9816287 [robot_state_publisher-2] [INFO] [1795419690.981064168] [robot_state_publisher]: got segment front_caster
+1795419690.9816523 [robot_state_publisher-2] [INFO] [1795419690.981067009] [robot_state_publisher]: got segment laser_link
+1795419690.9816766 [robot_state_publisher-2] [INFO] [1795419690.981069866] [robot_state_publisher]: got segment left_wheel
+1795419690.9816995 [robot_state_publisher-2] [INFO] [1795419690.981072636] [robot_state_publisher]: got segment right_wheel
+1795419692.1788793 [gzserver-1] [INFO] [1795419692.178666540] [gazebo.gazebo_ros_state]: Publishing states of gazebo models at [/gazebo/model_states]
+1795419692.1791124 [gzserver-1] [INFO] [1795419692.178992026] [gazebo.gazebo_ros_state]: Publishing states of gazebo links at [/gazebo/link_states]
+1795419693.1140981 [gzserver-1] [INFO] [1795419693.113826728] [depth_camera_ros]: Publishing camera info to [/depth_camera/camera_info]
+1795419693.1147945 [gzserver-1] [INFO] [1795419693.114551609] [depth_camera_ros]: Publishing depth camera info to [/camera/depth/camera_info]
+1795419693.1154239 [gzserver-1] [INFO] [1795419693.114932810] [depth_camera_ros]: Publishing pointcloud to [/depth_camera/points]
+1795419693.2368162 [gzserver-1] [INFO] [1795419693.236614072] [drive]: Wheel pair 1 separation set to [0.380000m]
+1795419693.2369456 [gzserver-1] [INFO] [1795419693.236644329] [drive]: Wheel pair 1 diameter set to [0.200000m]
+1795419693.2375398 [gzserver-1] [INFO] [1795419693.237372037] [drive]: Subscribed to [/cmd_vel]
+1795419693.2388790 [gzserver-1] [INFO] [1795419693.238768715] [drive]: Advertise odometry on [/odom]
+1795419693.2406495 [gzserver-1] [INFO] [1795419693.240525818] [drive]: Publishing odom transforms between [odom] and [base_footprint]
+1795419693.2407269 [gzserver-1] [INFO] [1795419693.240551573] [drive]: Publishing wheel transforms between [base_footprint], [left_wheel_joint] and [right_wheel_joint]
+1795419693.2704833 [INFO] [spawn_entity.py-3]: process has finished cleanly [pid 285085]
+1795419709.8726134 [robot_state_publisher-2] [INFO] [1795419709.872259462] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+1795419710.0214980 [INFO] [robot_state_publisher-2]: process has finished cleanly [pid 285083]
+1795419710.2805378 [INFO] [gzserver-1]: process has finished cleanly [pid 285081]

@@ -1,0 +1,2 @@
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T06/E02-1/run-002/tour/experiment_data.csv", "rows": 3378, "duration_sec": 341.975}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T06/E02-1/run-002/tour/report.json", "error": "TimeoutError: 动态人物场景在导览结束后仍未完成"}

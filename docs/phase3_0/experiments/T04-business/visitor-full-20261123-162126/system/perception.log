@@ -1,0 +1,16 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-16-21-32-891226-linao-P15-24-330732
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [330896]
+[INFO] [yolox_person_detector-2]: process started with pid [330913]
+[INFO] [depth_association-3]: process started with pid [330917]
+[INFO] [team_observer-4]: process started with pid [330919]
+[INFO] [perception_fusion-5]: process started with pid [330922]
+[visitor_perception-1] [INFO] [1795422094.807534758] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 82496.969816279, 'sample_age_sec': 1.032699947245419e-05}
+[visitor_perception-1] [INFO] [1795422114.919827664] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 82517.091976612, 'sample_age_sec': 1.2802993296645582e-05}
+[visitor_perception-1] [INFO] [1795422191.187486138] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 2, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 82593.359457241, 'sample_age_sec': 1.3698008842766285e-05}
+[visitor_perception-1] [INFO] [1795422206.141977974] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 82608.314266625, 'sample_age_sec': 9.992989362217486e-06}
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 330922]
+[INFO] [team_observer-4]: process has finished cleanly [pid 330919]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 330913]
+[INFO] [depth_association-3]: process has finished cleanly [pid 330917]
+[visitor_perception-1] [INFO] [1795422464.573697927] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 82865.616441094, 'sample_age_sec': 1.1298507610044908}

@@ -1,0 +1,14 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-17-29-19-642786-linao-P15-24-396334
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [396387]
+[INFO] [yolox_person_detector-2]: process started with pid [396389]
+[INFO] [depth_association-3]: process started with pid [396391]
+[INFO] [team_observer-4]: process started with pid [396395]
+[INFO] [perception_fusion-5]: process started with pid [396397]
+[visitor_perception-1] [INFO] [1795426164.990221486] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 1, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 86567.15503025, 'sample_age_sec': 1.2949996744282544e-05}
+[visitor_perception-1] [INFO] [1795426175.361813410] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 86577.534111677, 'sample_age_sec': 1.3059994671493769e-05}
+[visitor_perception-1] [INFO] [1795426176.578677082] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 1, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 86578.751111902, 'sample_age_sec': 9.711991879157722e-06}
+[visitor_perception-1] [INFO] [1795426186.881441144] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 86589.053831155, 'sample_age_sec': 1.0653995559550822e-05}
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 396397]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 396389]
+[visitor_perception-1] [INFO] [1795426492.787564251] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 86893.874770479, 'sample_age_sec': 1.0853633539954899}

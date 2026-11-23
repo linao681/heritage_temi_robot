@@ -1,0 +1,476 @@
+...................FFFFFFFFFFFF..F                                       [100%]
+=================================== FAILURES ===================================
+__________ test_snapshot_payload_drops_stale_values_and_preserves_age __________
+
+    def test_snapshot_payload_drops_stale_values_and_preserves_age():
+>       from scripts.visualization_bridge import snapshot_payload
+
+tests/test_phase28_visualization_api.py:7: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+_____________ test_scan_summary_uses_only_finite_in_range_samples ______________
+
+    def test_scan_summary_uses_only_finite_in_range_samples():
+>       from scripts.visualization_bridge import scan_summary
+
+tests/test_phase28_visualization_api.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+_______________ test_scan_summary_marks_empty_valid_set_invalid ________________
+
+    def test_scan_summary_marks_empty_valid_set_invalid():
+>       from scripts.visualization_bridge import scan_summary
+
+tests/test_phase28_visualization_api.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+___________ test_depth_image_summary_reports_finite_positive_samples ___________
+
+    def test_depth_image_summary_reports_finite_positive_samples():
+        import struct
+        from sensor_msgs.msg import Image
+>       from scripts.visualization_bridge import depth_image_summary
+
+tests/test_phase28_visualization_api.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+_____________ test_depth_image_summary_rejects_inconsistent_layout _____________
+
+    def test_depth_image_summary_rejects_inconsistent_layout():
+        from sensor_msgs.msg import Image
+>       from scripts.visualization_bridge import depth_image_summary
+
+tests/test_phase28_visualization_api.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+__________ test_transform_summary_reports_static_and_stale_transforms __________
+
+    def test_transform_summary_reports_static_and_stale_transforms():
+>       from scripts.visualization_bridge import transform_summary
+
+tests/test_phase28_visualization_api.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+___________________ test_ros_to_threejs_position_and_heading ___________________
+
+    def test_ros_to_threejs_position_and_heading():
+>       from scripts.visualization_bridge import convert_pose
+
+tests/test_visualization_bridge.py:6: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+_______ test_motion_snapshot_preserves_odometry_stamp_and_receive_clock ________
+
+    def test_motion_snapshot_preserves_odometry_stamp_and_receive_clock():
+>       from scripts.visualization_bridge import motion_snapshot
+
+tests/test_visualization_bridge.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+__________________ test_live_visitors_use_gazebo_model_poses ___________________
+
+    def test_live_visitors_use_gazebo_model_poses():
+        from geometry_msgs.msg import Pose
+>       from scripts.visualization_bridge import visitor_poses
+
+tests/test_visualization_bridge.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+___________ test_interaction_action_is_bounded_and_requires_question ___________
+
+    def test_interaction_action_is_bounded_and_requires_question():
+>       from scripts.visualization_bridge import interaction_request
+
+tests/test_visualization_bridge.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+_______ test_vision_team_confirmation_requires_a_current_pause_event_id ________
+
+    def test_vision_team_confirmation_requires_a_current_pause_event_id():
+>       from scripts.visualization_bridge import interaction_request
+
+tests/test_visualization_bridge.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+___________ test_only_business_script_resume_uses_scripted_team_gate ___________
+
+    def test_only_business_script_resume_uses_scripted_team_gate():
+>       from scripts.visualization_bridge import resume_requires_scripted_gather
+
+tests/test_visualization_bridge.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+_ test_nav2_limit_summary_reports_parameters_without_claiming_full_effective_speed _
+
+    def test_nav2_limit_summary_reports_parameters_without_claiming_full_effective_speed():
+>       from scripts.visualization_bridge import summarize_nav2_speed_limits
+
+tests/test_visualization_bridge.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """Local ROS visualization bridge with optional interactive tour controls."""
+    import argparse
+    import json
+    import math
+    import os
+    import signal
+    
+    import numpy as np
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from threading import Thread
+    import time
+    
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+    from rclpy.qos import qos_profile_sensor_data
+    from tf2_ros import Buffer, TransformListener
+    from std_msgs.msg import String
+    from geometry_msgs.msg import Twist
+    from nav_msgs.msg import Odometry
+    from rcl_interfaces.msg import ParameterType
+    from rcl_interfaces.srv import GetParameters
+    from sensor_msgs.msg import CameraInfo, Image, LaserScan
+>   from temi_interfaces.msg import PerceptionInput
+E   ModuleNotFoundError: No module named 'temi_interfaces'
+
+scripts/visualization_bridge.py:24: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_phase28_visualization_api.py::test_snapshot_payload_drops_stale_values_and_preserves_age
+FAILED tests/test_phase28_visualization_api.py::test_scan_summary_uses_only_finite_in_range_samples
+FAILED tests/test_phase28_visualization_api.py::test_scan_summary_marks_empty_valid_set_invalid
+FAILED tests/test_phase28_visualization_api.py::test_depth_image_summary_reports_finite_positive_samples
+FAILED tests/test_phase28_visualization_api.py::test_depth_image_summary_rejects_inconsistent_layout
+FAILED tests/test_phase28_visualization_api.py::test_transform_summary_reports_static_and_stale_transforms
+FAILED tests/test_visualization_bridge.py::test_ros_to_threejs_position_and_heading
+FAILED tests/test_visualization_bridge.py::test_motion_snapshot_preserves_odometry_stamp_and_receive_clock
+FAILED tests/test_visualization_bridge.py::test_live_visitors_use_gazebo_model_poses
+FAILED tests/test_visualization_bridge.py::test_interaction_action_is_bounded_and_requires_question
+FAILED tests/test_visualization_bridge.py::test_vision_team_confirmation_requires_a_current_pause_event_id
+FAILED tests/test_visualization_bridge.py::test_only_business_script_resume_uses_scripted_team_gate
+FAILED tests/test_visualization_bridge.py::test_nav2_limit_summary_reports_parameters_without_claiming_full_effective_speed
+13 failed, 21 passed in 0.39s

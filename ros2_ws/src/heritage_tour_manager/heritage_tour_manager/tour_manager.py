@@ -6,6 +6,7 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 from typing import Awaitable, Callable, Protocol
+from uuid import uuid4
 
 from .tour_config import TourConfig
 
@@ -81,6 +82,10 @@ class TourManager:
         self._pause_source = ''
         self._paused_session_id = ''
         self._pending_safety_session_id = ''
+        self._pending_team_session_id = ''
+        self._last_pause_stop_requested = False
+        self._last_pause_stop_confirmed = False
+        self._last_pause_action_quiescence_confirmed = False
         self._recovery_guard: Callable[[], bool] | None = None
         self._qa_event = asyncio.Event()
         self._accepted = False
@@ -89,6 +94,7 @@ class TourManager:
         self._visitor_guard: Callable[[], bool] | None = None
         self._team_recovery_required = False
         self._team_resume_confirmed = False
+        self._team_pause_event_id = ''
         self.qa_lookup = qa_lookup
         self._qa_open = False
         self._qa_question = None
@@ -115,11 +121,15 @@ class TourManager:
             'target': self.target,
             'pause_source': self._pause_source,
             'paused_session_id': self._paused_session_id,
+            'last_pause_stop_requested': self._last_pause_stop_requested,
+            'last_pause_stop_confirmed': self._last_pause_stop_confirmed,
+            'last_pause_action_quiescence_confirmed': self._last_pause_action_quiescence_confirmed,
             'current_location': self.current_location, 'connected': self.connected,
             'battery_percentage': self.battery_percentage, 'is_moving': self.is_moving,
             'error_count': self.error_count, 'elapsed_sec': round(elapsed, 3),
             'team_recovery_required': self._team_recovery_required,
             'team_resume_confirmed': self._team_resume_confirmed,
+            'team_pause_event_id': self._team_pause_event_id,
             'safe_return_completed': self._safe_return_completed,
             'qa_waiting': self.state is TourState.QA and self._qa_open and not self._qa_event.is_set(),
             'qa_result': self._qa_result,
@@ -156,8 +166,10 @@ class TourManager:
         self._qa_question = self._qa_result = None
         self._visitor_guard = visitor_guard
         self._team_recovery_required = self._team_resume_confirmed = False
+        self._team_pause_event_id = ''
         self._control = None
         self._pause_source = self._paused_session_id = self._pending_safety_session_id = ''
+        self._pending_team_session_id = ''
         self._recovery_guard = None
         for event in (self._control_event, self._consent_event, self._resume_event, self._qa_event):
             event.clear()
@@ -187,17 +199,26 @@ class TourManager:
 
     def pause(self) -> bool:
         if self.state is TourState.PAUSED and self._pause_source == 'safety':
-            return self._request('pause', '用户暂停')
-        return self.state is not TourState.PAUSED and self._request('pause', '用户暂停')
+            accepted = self._request('pause', '用户暂停')
+        else:
+            accepted = self.state is not TourState.PAUSED and self._request('pause', '用户暂停')
+        if accepted:
+            self._last_pause_stop_requested = False
+            self._last_pause_stop_confirmed = False
+            self._last_pause_action_quiescence_confirmed = False
+        return accepted
 
     def safety_pause(self, session_id: str) -> bool:
         if (not session_id or self.state not in (TourState.NAVIGATING, TourState.RETURNING) or
                 not self._request('safety_pause', '导航安全停车')):
             return False
         self._pending_safety_session_id = session_id
+        self._last_pause_stop_requested = False
+        self._last_pause_stop_confirmed = False
+        self._last_pause_action_quiescence_confirmed = False
         return True
 
-    def _request_visitor_pause(self, reason: str) -> bool:
+    def _request_visitor_pause(self, reason: str, session_id: str = '') -> bool:
         if self._team_recovery_required:
             return True
         if self._control is not None:
@@ -211,17 +232,22 @@ class TourManager:
         else:
             accepted = self._request('team_pause', reason)
         if accepted:
+            self._pending_team_session_id = session_id
+            self._last_pause_stop_requested = False
+            self._last_pause_stop_confirmed = False
+            self._last_pause_action_quiescence_confirmed = False
             self._team_recovery_required = True
             self._team_resume_confirmed = False
+            self._team_pause_event_id = uuid4().hex
             self.error_count += 1
             self._emit()
         return accepted
 
-    def visitor_lost(self) -> bool:
-        return self._request_visitor_pause('游客掉队，等待重新集合')
+    def visitor_lost(self, session_id: str = '') -> bool:
+        return self._request_visitor_pause('游客掉队，等待重新集合', session_id)
 
-    def visitor_uncertain(self) -> bool:
-        return self._request_visitor_pause('团队视觉信息不完整，安全等待人工确认')
+    def visitor_uncertain(self, session_id: str = '') -> bool:
+        return self._request_visitor_pause('团队视觉信息不完整，安全等待人工确认', session_id)
 
     def resume(self) -> bool:
         if not self._can_resume():
@@ -237,6 +263,13 @@ class TourManager:
         self._resume_event.set()
         self._emit()
         return True
+
+    def confirm_team_recovery(self, pause_event_id: str) -> bool:
+        if (self.state is not TourState.PAUSED or not self._team_recovery_required or
+                self._team_resume_confirmed or not isinstance(pause_event_id, str) or
+                not pause_event_id or pause_event_id != self._team_pause_event_id):
+            return False
+        return self.resume()
 
     def resume_safety(self, session_id: str, guard: Callable[[], bool]) -> bool:
         if (not self._can_resume() or self._pause_source != 'safety' or
@@ -291,6 +324,7 @@ class TourManager:
     def _clear_team_recovery(self):
         self._team_recovery_required = False
         self._team_resume_confirmed = False
+        self._team_pause_event_id = ''
 
     def invalidate_visitor_resume(self):
         """辅助队伍状态失效时撤销尚未消费的恢复请求。"""
@@ -369,7 +403,9 @@ class TourManager:
             command, reason = self._control
             if command != 'disconnect' and (self.is_moving or command == 'manual') and not stopped:
                 # 保留当前控制优先级直至 STOP 结算；等待中更高优先级命令仍可替换。
+                self._last_pause_stop_requested = True
                 result = await self.robot.stop()
+                self._last_pause_stop_confirmed = result.success
                 if not result.success:
                     raise _TourEnd(TourState.ERROR, 'error', '停车未确认: ' + result.message)
                 stopped = True
@@ -379,10 +415,12 @@ class TourManager:
             if command in ('pause', 'safety_pause', 'team_pause'):
                 self._resume_event.clear()
                 self._recovery_guard = None
+                self._last_pause_action_quiescence_confirmed = True
                 self._pause_source = {'pause': 'manual', 'team_pause': 'team',
                                       'safety_pause': 'safety'}[command]
-                self._paused_session_id = (self._pending_safety_session_id
-                                           if command == 'safety_pause' else '')
+                self._paused_session_id = (
+                    self._pending_safety_session_id if command == 'safety_pause' else
+                    self._pending_team_session_id if command == 'team_pause' else '')
                 self._transition(TourState.PAUSED, reason)
                 # 等待显式恢复，低电量、取消、人工接管与断线仍可中断暂停。
                 while True:
@@ -447,7 +485,9 @@ class TourManager:
                     finished_successfully = (operation_started and was_done and not task.cancelled() and
                                              task.exception() is None and task.result().success)
                     if (motion and operation_started and not never_submitted and not finished_successfully) or self.is_moving:
+                        self._last_pause_stop_requested = True
                         stop_result = await self.robot.stop()
+                        self._last_pause_stop_confirmed = stop_result.success
                     if not task.done():
                         task.cancel()
                     settled, = await asyncio.gather(task, return_exceptions=True)

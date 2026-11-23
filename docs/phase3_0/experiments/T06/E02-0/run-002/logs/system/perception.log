@@ -1,0 +1,14 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-18-22-55-186699-linao-P15-24-466496
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [466551]
+[INFO] [yolox_person_detector-2]: process started with pid [466553]
+[INFO] [depth_association-3]: process started with pid [466555]
+[INFO] [team_observer-4]: process started with pid [466557]
+[INFO] [perception_fusion-5]: process started with pid [466559]
+[visitor_perception-1] [INFO] [1795429379.656076515] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 1, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 89781.822300543, 'sample_age_sec': 8.728995453566313e-06}
+[visitor_perception-1] [INFO] [1795429390.334760936] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 89792.50685467, 'sample_age_sec': 1.1832991731353104e-05}
+[INFO] [team_observer-4]: process has finished cleanly [pid 466557]
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 466559]
+[INFO] [depth_association-3]: process has finished cleanly [pid 466555]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 466553]
+[visitor_perception-1] [INFO] [1795429710.005089795] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 90110.979729826, 'sample_age_sec': 1.1979399039992131}

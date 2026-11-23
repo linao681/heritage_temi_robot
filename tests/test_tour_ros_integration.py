@@ -16,6 +16,7 @@ from rclpy.executors import MultiThreadedExecutor
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from temi_interfaces.action import NavigateTo, Speak
+from temi_interfaces.srv import ConfirmTeamRecovery
 
 from temi_bridge.mock_backend import MockConfig, MockTemiBackend
 from temi_bridge.ros_gateway import TemiGatewayNode
@@ -67,6 +68,8 @@ def rig(monkeypatch, tmp_path):
     }
     navigation = ActionClient(client, NavigateTo, 'temi/navigate_to')
     speech = ActionClient(client, Speak, 'temi/speak')
+    confirm_team = client.create_client(
+        ConfirmTeamRecovery, 'heritage/tour/confirm_team_recovery')
     executor = MultiThreadedExecutor(num_threads=8)
     for node in (gateway, tour, client):
         executor.add_node(node)
@@ -74,10 +77,11 @@ def rig(monkeypatch, tmp_path):
     thread.start()
     try:
         assert all(service.wait_for_service(timeout_sec=5.0) for service in controls.values())
+        assert confirm_team.wait_for_service(timeout_sec=5.0)
         wait_until(lambda: statuses and statuses[-1]['connected'])
         yield SimpleNamespace(backend=backend, gateway=gateway, tour=tour, config=config,
                               statuses=statuses, controls=controls, navigation=navigation, client=client,
-                              speech=speech)
+                              speech=speech, confirm_team=confirm_team)
     finally:
         tour.close()
         tour.close()
@@ -255,6 +259,35 @@ def test_cancel_during_goal_acceptance_cleans_up_pending_goal(rig):
         rig.gateway._navigation.register_goal_callback(previous)
 
 
+def test_vision_confirmation_service_requires_current_pause_event(rig):
+    rig.tour._team_decision_mode = 'vision_conservative'
+    call(rig, 'start')
+    wait_state(rig, 'WAITING_CONSENT')
+    call(rig, 'accept')
+    wait_until(lambda: rig.backend.get_status().is_moving and
+               bool(rig.tour._navigation_session_id))
+    target = rig.tour._manager.status()['target']
+    future = asyncio.run_coroutine_threadsafe(
+        rig.tour._dispatch(lambda: rig.tour._manager.visitor_uncertain(
+            rig.tour._navigation_session_id)), rig.tour._loop)
+    assert future.result(timeout=2.0)
+    wait_state(rig, 'PAUSED')
+    event_id = rig.statuses[-1]['team_pause_event_id']
+    assert event_id and rig.statuses[-1]['paused_session_id']
+
+    stale = ConfirmTeamRecovery.Request(pause_event_id='stale-event')
+    assert not wait_result(rig.confirm_team.call_async(stale)).accepted
+    assert not wait_result(rig.controls['resume'].call_async(Trigger.Request())).success
+    current = ConfirmTeamRecovery.Request(pause_event_id=event_id)
+    assert wait_result(rig.confirm_team.call_async(current)).accepted
+    assert not wait_result(rig.confirm_team.call_async(current)).accepted
+    wait_until(lambda: rig.tour._manager.status()['state'] == 'NAVIGATING')
+    assert rig.tour._manager.status()['target'] == target
+    assert rig.tour._manager.status()['team_pause_event_id'] == ''
+    call(rig, 'cancel')
+    wait_state(rig, 'IDLE', 'canceled')
+
+
 def test_speech_result_timeout_cancels_old_action_before_new_speech(rig):
     original = rig.backend.config
     rig.backend.config = replace(original, speech_delay_sec=5.0)
@@ -286,6 +319,66 @@ def test_unknown_ros_result_is_not_terminal_confirmation():
         result = Future()
         result.set_result(SimpleNamespace(status=GoalStatus.STATUS_UNKNOWN))
         assert not await robot._settle_goal(None, SimpleNamespace(accepted=True), result)
+
+    asyncio.run(scenario())
+
+
+def test_navigation_goal_session_is_registered_before_submission_and_retired_after_terminal():
+    import asyncio
+    from concurrent.futures import Future
+    from action_msgs.msg import GoalStatus
+    from heritage_tour_manager.ros_tour_node import _RosTourRobot
+
+    class SessionNode:
+        current_session = ''
+        retired = []
+
+        def _register_navigation_session(self, session_id):
+            self.current_session = session_id
+
+        def _retire_navigation_session(self, session_id):
+            self.retired.append(session_id)
+            if self.current_session == session_id:
+                self.current_session = ''
+
+    class Goal:
+        accepted = True
+
+        def get_result_async(self):
+            result = Future()
+            result.set_result(SimpleNamespace(
+                status=GoalStatus.STATUS_SUCCEEDED,
+                result=SimpleNamespace(success=True, message='到达'),
+            ))
+            return result
+
+    node = SessionNode()
+    acceptance = Future()
+    acceptance.set_result(Goal())
+
+    class Client:
+        def server_is_ready(self):
+            return True
+
+        def send_goal_async(self, request, *, goal_uuid):
+            assert len(goal_uuid.uuid) == 16
+            assert node.current_session == bytes(goal_uuid.uuid).hex()
+            self.submitted_session = node.current_session
+            return acceptance
+
+    async def scenario():
+        robot = _RosTourRobot.__new__(_RosTourRobot)
+        robot._node = node
+        robot._config = SimpleNamespace(communication_timeout_sec=1.0)
+        robot._cleanup = {}
+        robot.navigation_send_guard = None
+        client = Client()
+        robot._navigation = client
+        result = await robot._action(client, SimpleNamespace(), 1.0)
+        assert result.success is True
+        assert client.submitted_session
+        assert node.current_session == ''
+        assert node.retired == [client.submitted_session]
 
     asyncio.run(scenario())
 

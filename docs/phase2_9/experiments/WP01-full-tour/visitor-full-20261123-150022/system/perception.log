@@ -1,0 +1,16 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-15-00-28-931271-linao-P15-24-265075
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [265208]
+[INFO] [yolox_person_detector-2]: process started with pid [265210]
+[INFO] [depth_association-3]: process started with pid [265213]
+[INFO] [team_observer-4]: process started with pid [265215]
+[INFO] [perception_fusion-5]: process started with pid [265217]
+[visitor_perception-1] [INFO] [1795417231.804126910] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 2, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 77633.965836308, 'sample_age_sec': 9.196999599225819e-06}
+[visitor_perception-1] [INFO] [1795417249.733397812] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 77651.905527782, 'sample_age_sec': 1.2876000255346298e-05}
+[visitor_perception-1] [INFO] [1795417333.811806596] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 2, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 77735.984154638, 'sample_age_sec': 1.0106989066116512e-05}
+[visitor_perception-1] [INFO] [1795417348.390977078] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 77750.562227306, 'sample_age_sec': 1.4057994121685624e-05}
+[INFO] [team_observer-4]: process has finished cleanly [pid 265215]
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 265217]
+[INFO] [depth_association-3]: process has finished cleanly [pid 265213]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 265210]
+[visitor_perception-1] [INFO] [1795417665.793921833] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 78066.781063243, 'sample_age_sec': 1.1854531999997562}

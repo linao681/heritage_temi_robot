@@ -1,0 +1,168 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-18-41-17-536474-linao-P15-24-488277
+[INFO] [launch]: Default logging verbosity is set to INFO
+Gazebo and robot_state_publisher share generated URDF: /tmp/heritage-camera-e1lz9r26/heritage_robot.urdf
+[INFO] [gzserver-1]: process started with pid [488333]
+[INFO] [robot_state_publisher-2]: process started with pid [488335]
+[INFO] [spawn_entity.py-3]: process started with pid [488337]
+[robot_state_publisher-2] [INFO] [1795430478.230448528] [robot_state_publisher]: got segment base_footprint
+[robot_state_publisher-2] [INFO] [1795430478.230503206] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-2] [INFO] [1795430478.230507203] [robot_state_publisher]: got segment caster
+[robot_state_publisher-2] [INFO] [1795430478.230509544] [robot_state_publisher]: got segment depth_camera_link
+[robot_state_publisher-2] [INFO] [1795430478.230511691] [robot_state_publisher]: got segment depth_camera_optical_frame
+[robot_state_publisher-2] [INFO] [1795430478.230513958] [robot_state_publisher]: got segment display_link
+[robot_state_publisher-2] [INFO] [1795430478.230516070] [robot_state_publisher]: got segment front_caster
+[robot_state_publisher-2] [INFO] [1795430478.230518057] [robot_state_publisher]: got segment laser_link
+[robot_state_publisher-2] [INFO] [1795430478.230520021] [robot_state_publisher]: got segment left_wheel
+[robot_state_publisher-2] [INFO] [1795430478.230521965] [robot_state_publisher]: got segment right_wheel
+[spawn_entity.py-3] [INFO] [1795430478.256437107] [spawn_entity]: Spawn Entity started
+[spawn_entity.py-3] [INFO] [1795430478.256662916] [spawn_entity]: Loading entity published on topic robot_description
+[spawn_entity.py-3] [INFO] [1795430478.257830869] [spawn_entity]: Waiting for entity xml on robot_description
+[spawn_entity.py-3] [INFO] [1795430478.268483353] [spawn_entity]: Waiting for service /spawn_entity, timeout = 30
+[spawn_entity.py-3] [INFO] [1795430478.268623545] [spawn_entity]: Waiting for service /spawn_entity
+[gzserver-1] [INFO] [1795430479.087646138] [gazebo.gazebo_ros_state]: Publishing states of gazebo models at [/gazebo/model_states]
+[gzserver-1] [INFO] [1795430479.088048945] [gazebo.gazebo_ros_state]: Publishing states of gazebo links at [/gazebo/link_states]
+[spawn_entity.py-3] [INFO] [1795430479.271501707] [spawn_entity]: Calling service /spawn_entity
+[gzserver-1] [INFO] [1795430480.028510098] [depth_camera_ros]: Publishing camera info to [/depth_camera/camera_info]
+[gzserver-1] [INFO] [1795430480.029342372] [depth_camera_ros]: Publishing depth camera info to [/camera/depth/camera_info]
+[gzserver-1] [INFO] [1795430480.029858732] [depth_camera_ros]: Publishing pointcloud to [/depth_camera/points]
+[spawn_entity.py-3] [INFO] [1795430480.035294586] [spawn_entity]: Spawn status: SpawnEntity: Successfully spawned entity [heritage_robot]
+[gzserver-1] [INFO] [1795430480.150288075] [drive]: Wheel pair 1 separation set to [0.380000m]
+[gzserver-1] [INFO] [1795430480.150325544] [drive]: Wheel pair 1 diameter set to [0.200000m]
+[gzserver-1] [INFO] [1795430480.151324698] [drive]: Subscribed to [/cmd_vel]
+[gzserver-1] [INFO] [1795430480.152823290] [drive]: Advertise odometry on [/odom]
+[gzserver-1] [INFO] [1795430480.154570451] [drive]: Publishing odom transforms between [odom] and [base_footprint]
+[gzserver-1] [INFO] [1795430480.154590862] [drive]: Publishing wheel transforms between [base_footprint], [left_wheel_joint] and [right_wheel_joint]
+[INFO] [spawn_entity.py-3]: process has finished cleanly [pid 488337]
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[robot_state_publisher-2] [INFO] [1795431129.071231370] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 488335]
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[gzserver-1] Exception sending a multicast message:Network is unreachable
+[INFO] [gzserver-1]: process has finished cleanly [pid 488333]

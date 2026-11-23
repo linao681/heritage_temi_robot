@@ -1,0 +1,20 @@
+{
+  "archive_sha256": "e70414c30b269101f4f47ebcdbc6220f8885a7c26466a7a2e274575727071eaf",
+  "verified_files": [
+    {
+      "path": "manifest.json",
+      "size_bytes": 48289,
+      "sha256": "062ed7853c21fa30e141498ecc950e29e2766ee75090421a9a11cac14ff51bf3"
+    },
+    {
+      "path": "report.json",
+      "size_bytes": 13640,
+      "sha256": "5d745cb17badc728bda90cfd3f45afddd446e08c905a3681760349f914958ddd"
+    },
+    {
+      "path": "live_evidence.jsonl",
+      "size_bytes": 11218295,
+      "sha256": "047ba41027a4dd84641855181170bf2ec27d144e98e9f4ab52f0861472f5d601"
+    }
+  ]
+}

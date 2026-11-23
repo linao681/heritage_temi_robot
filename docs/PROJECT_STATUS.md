@@ -1,5 +1,26 @@
 # 项目状态
 
+## 阶段3.0当前权威状态（2026-11-23 20:34 CST）
+
+本工作树位于`phase2_9-work`，HEAD为`f372e3f4e0702470eb91b2a32683e62590777840`。阶段3.0改动未提交、未推送、未合并；此前阶段2.9发布状态保留为历史记录。详细结论见[阶段3.0进度](phase3_0/progress.md)、[实验矩阵](phase3_0/experiment_matrix.md)、[最终报告](phase3_0/final_report.md)。
+
+| 工作项 | 当前证据 |
+|---|---|
+| 官方/business_script全程 | PASS：T04 business run `visitor-full-20261123-162126`，wait、五区、问答、出口完成；3名Gazebo脚本演员；报告SHA `6afc1a912eeb3d95212ecdc643b071c6ad99e197b328e38dc93f1d7eb1be3f31` |
+| 视觉保守全程 | PASS_WITH_RISK：T04 vision run `visitor-full-20261123-160651`到出口；1078条视觉团队观察全部UNKNOWN，6次停稳确认有新鲜odom；测试操作员确认，不能报告视觉掉队检测成功 |
+| E07-A | PASS_WITH_RISK：脚本演员在zone_3掉队后21.42秒集合，测试操作员确认、新UUID恢复同一目标；不属于视觉团队闭环 |
+| E04 | PASS_WITH_RISK：前向横穿run通过联合视觉/深度与激光条件下停车；未做纯视觉/纯激光独立消融，无接触安全认证 |
+| E02 | PASS_WITH_RISK：空场与三人全路线通过，单人run失败；三人Nav2限速保持0.300m/s、速度窗不足，因此人群实速限速未证实 |
+| 布局B | PASS_WITH_RISK：adaptive Nav2路线6/6与业务全路线分别通过，使用独立运行证据 |
+| 回放/浏览器 | 真实记录导出和loopback只读HTTP检查通过；无原始RGB/depth，GUI视觉验收NOT_RUN |
+| 测试 | T10七包构建7/7；阶段3.0完整`tests/`为680 passed、无失败或跳过。624 passed为阶段2.9历史基线 |
+| 展示/硬件 | 本工作树未发现PPTX/PDF/视频文件，本轮未生成；无实体Temi，实体功能HARDWARE_REQUIRED |
+
+T11最终报告已生成，阶段3.0文档/证据尚未提交或推送。旧阶段内容以下均为历史快照，不代表阶段3.0状态。
+
+---
+
+
 
 ## 最新状态：阶段 2.9（执行中，2026-11-23）
 

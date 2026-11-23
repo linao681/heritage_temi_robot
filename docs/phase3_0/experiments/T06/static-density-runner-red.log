@@ -1,0 +1,92 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+____________ test_e02_static_density_scenarios_are_supported[empty] ____________
+
+scenario = 'empty'
+
+    @pytest.mark.parametrize('scenario', ['empty', 'single_static', 'group_static'])
+    def test_e02_static_density_scenarios_are_supported(scenario):
+>       validated = validate_experiment(experiment(
+            id=f'E02-{scenario}', scenario=scenario, actor_motion={}))
+
+tests/test_phase27_experiment_runner.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+experiment = {'actor_motion': {}, 'id': 'E02-empty', 'layout': 'official', 'robot_speed_mps': 0.3, ...}
+
+    def validate_experiment(experiment):
+        """Validate the values that affect a run; reject non-finite values early."""
+        if not isinstance(experiment, dict):
+            raise ValueError('experiment must be a mapping')
+        experiment = dict(experiment)
+        identifier = experiment.get('id')
+        if not isinstance(identifier, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,63}', identifier):
+            raise ValueError('id must be a safe 1-64 character identifier')
+        scenario = experiment.get('scenario')
+        if scenario not in VALID_SCENARIOS:
+>           raise ValueError(f'unsupported scenario: {scenario}')
+E           ValueError: unsupported scenario: empty
+
+scripts/run_phase27_experiment.py:66: ValueError
+________ test_e02_static_density_scenarios_are_supported[single_static] ________
+
+scenario = 'single_static'
+
+    @pytest.mark.parametrize('scenario', ['empty', 'single_static', 'group_static'])
+    def test_e02_static_density_scenarios_are_supported(scenario):
+>       validated = validate_experiment(experiment(
+            id=f'E02-{scenario}', scenario=scenario, actor_motion={}))
+
+tests/test_phase27_experiment_runner.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+experiment = {'actor_motion': {}, 'id': 'E02-single_static', 'layout': 'official', 'robot_speed_mps': 0.3, ...}
+
+    def validate_experiment(experiment):
+        """Validate the values that affect a run; reject non-finite values early."""
+        if not isinstance(experiment, dict):
+            raise ValueError('experiment must be a mapping')
+        experiment = dict(experiment)
+        identifier = experiment.get('id')
+        if not isinstance(identifier, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,63}', identifier):
+            raise ValueError('id must be a safe 1-64 character identifier')
+        scenario = experiment.get('scenario')
+        if scenario not in VALID_SCENARIOS:
+>           raise ValueError(f'unsupported scenario: {scenario}')
+E           ValueError: unsupported scenario: single_static
+
+scripts/run_phase27_experiment.py:66: ValueError
+________ test_e02_static_density_scenarios_are_supported[group_static] _________
+
+scenario = 'group_static'
+
+    @pytest.mark.parametrize('scenario', ['empty', 'single_static', 'group_static'])
+    def test_e02_static_density_scenarios_are_supported(scenario):
+>       validated = validate_experiment(experiment(
+            id=f'E02-{scenario}', scenario=scenario, actor_motion={}))
+
+tests/test_phase27_experiment_runner.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+experiment = {'actor_motion': {}, 'id': 'E02-group_static', 'layout': 'official', 'robot_speed_mps': 0.3, ...}
+
+    def validate_experiment(experiment):
+        """Validate the values that affect a run; reject non-finite values early."""
+        if not isinstance(experiment, dict):
+            raise ValueError('experiment must be a mapping')
+        experiment = dict(experiment)
+        identifier = experiment.get('id')
+        if not isinstance(identifier, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,63}', identifier):
+            raise ValueError('id must be a safe 1-64 character identifier')
+        scenario = experiment.get('scenario')
+        if scenario not in VALID_SCENARIOS:
+>           raise ValueError(f'unsupported scenario: {scenario}')
+E           ValueError: unsupported scenario: group_static
+
+scripts/run_phase27_experiment.py:66: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_phase27_experiment_runner.py::test_e02_static_density_scenarios_are_supported[empty]
+FAILED tests/test_phase27_experiment_runner.py::test_e02_static_density_scenarios_are_supported[single_static]
+FAILED tests/test_phase27_experiment_runner.py::test_e02_static_density_scenarios_are_supported[group_static]
+3 failed, 27 deselected in 0.05s
+exit_code=1

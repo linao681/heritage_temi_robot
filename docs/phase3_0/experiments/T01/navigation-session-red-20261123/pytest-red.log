@@ -1,0 +1,88 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_navigation_goal_session_is_registered_before_submission_and_retired_after_terminal _
+
+    def test_navigation_goal_session_is_registered_before_submission_and_retired_after_terminal():
+        import asyncio
+        from concurrent.futures import Future
+        from action_msgs.msg import GoalStatus
+        from heritage_tour_manager.ros_tour_node import _RosTourRobot
+    
+        class SessionNode:
+            current_session = ''
+            retired = []
+    
+            def _register_navigation_session(self, session_id):
+                self.current_session = session_id
+    
+            def _retire_navigation_session(self, session_id):
+                self.retired.append(session_id)
+                if self.current_session == session_id:
+                    self.current_session = ''
+    
+        class Goal:
+            accepted = True
+    
+            def get_result_async(self):
+                result = Future()
+                result.set_result(SimpleNamespace(
+                    status=GoalStatus.STATUS_SUCCEEDED,
+                    result=SimpleNamespace(success=True, message='到达'),
+                ))
+                return result
+    
+        node = SessionNode()
+        acceptance = Future()
+        acceptance.set_result(Goal())
+    
+        class Client:
+            def server_is_ready(self):
+                return True
+    
+            def send_goal_async(self, request, *, goal_uuid):
+                assert len(goal_uuid.uuid) == 16
+                assert node.current_session == bytes(goal_uuid.uuid).hex()
+                self.submitted_session = node.current_session
+                return acceptance
+    
+        async def scenario():
+            robot = _RosTourRobot.__new__(_RosTourRobot)
+            robot._node = node
+            robot._config = SimpleNamespace(communication_timeout_sec=1.0)
+            robot._cleanup = {}
+            robot.navigation_send_guard = None
+            client = Client()
+            robot._navigation = client
+            result = await robot._action(client, SimpleNamespace(), 1.0)
+            assert result.success is True
+            assert client.submitted_session
+            assert node.current_session == ''
+            assert node.retired == [client.submitted_session]
+    
+>       asyncio.run(scenario())
+
+tests/test_tour_ros_integration.py:383: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def scenario():
+        robot = _RosTourRobot.__new__(_RosTourRobot)
+        robot._node = node
+        robot._config = SimpleNamespace(communication_timeout_sec=1.0)
+        robot._cleanup = {}
+        robot.navigation_send_guard = None
+        client = Client()
+        robot._navigation = client
+        result = await robot._action(client, SimpleNamespace(), 1.0)
+>       assert result.success is True
+E       assert False is True
+E        +  where False = OperationResult(success=False, message="ROS Action 失败: test_navigation_goal_session_is_registered_before_submission_an...t.send_goal_async() missing 1 required keyword-only argument: 'goal_uuid'", termination_confirmed=True, submitted=True).success
+
+tests/test_tour_ros_integration.py:378: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_tour_ros_integration.py::test_navigation_goal_session_is_registered_before_submission_and_retired_after_terminal
+1 failed in 0.24s

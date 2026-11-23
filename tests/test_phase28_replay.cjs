@@ -45,8 +45,13 @@ async function fixture() {
   const js = fs.readFileSync(path.join(__dirname, '../visualization/ros_hall/replay.js'), 'utf8');
   const liveJs = fs.readFileSync(path.join(__dirname, '../visualization/ros_hall/ros-live.js'), 'utf8');
   assert.match(html, /RECORDED_ROS2/);
+  assert.match(html, /trajectory-canvas/);
+  assert.match(html, /speed-canvas/);
   assert.match(liveJs, /LIVE_ROS2/);
   assert.match(liveJs, /DEMO_SIMULATED/);
+  assert.match(js, /function drawTrajectory/);
+  assert.match(js, /function drawSpeed/);
+  assert.match(js, /Gazebo ModelStates/);
   assert.match(js, /location\.hostname === '127\.0\.0\.1'/);
   assert.match(js, /fetch\('\/recording\/replay\.json'/);
   assert.match(js, /fetch\('\/recording\/replay\.json\.sha256'/);

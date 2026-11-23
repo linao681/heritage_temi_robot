@@ -1,0 +1,22 @@
+PASS file docs/competition_final/key_metrics.md (6462 bytes)
+PASS file docs/competition_final/final_validation_matrix.md (7543 bytes)
+PASS file docs/competition_final/experiment_summary.md (8574 bytes)
+PASS file docs/competition_final/evidence_index.md (11995 bytes)
+PASS file docs/competition_final/final_progress.md (10940 bytes)
+PASS file docs/competition_final/blockers.md (7045 bytes)
+PASS file docs/competition_final/overnight_report.md (7973 bytes)
+PASS file docs/competition_final/six_minute_script.md (3949 bytes)
+PASS file docs/competition_final/slides_outline.md (2191 bytes)
+PASS file docs/competition_final/demo_storyboard.md (2733 bytes)
+PASS file docs/competition_final/innovation_summary.md (3277 bytes)
+PASS file docs/competition_final/technical_architecture.md (2430 bytes)
+PASS file docs/competition_final/figure_evidence_map.md (2757 bytes)
+PASS file docs/competition_final/jury_qa.md (5564 bytes)
+PASS script timings: [('0:00', '0:40', '40'), ('0:40', '1:30', '50'), ('1:30', '3:30', '120'), ('3:30', '4:40', '70'), ('4:40', '5:30', '50'), ('5:30', '6:00', '30')]; total=360 seconds
+PASS jury Q&A count: 26
+PASS storyboard links four evidence segments and loopback replay command
+PASS sha256 docs/phase3_0/experiments/T04-business/visitor-full-20261123-162126/report.json 6afc1a912eeb3d95212ecdc643b071c6ad99e197b328e38dc93f1d7eb1be3f31
+PASS sha256 docs/phase3_0/experiments/T04-vision/visitor-full-20261123-160651/report.json c8def186c8bc3cd6f5b67fa87e70bb6e8bd106c1fde68bb95ec786d7906f05e0
+Traceback (most recent call last):
+  File "<stdin>", line 31, in <module>
+AssertionError: docs/phase3_0/experiments/T08/replay/visitor-full-20261123-125818-run-003/replay.json: expected 3bb0e05025ef67fbfb63bebf3d9d68bf0803629d295b4d8b058a0aa3372167c, got 3bb0e05025ef67fbfb63beb8d3f9d68bf0803629d295b4d8b058a0aa3372167c

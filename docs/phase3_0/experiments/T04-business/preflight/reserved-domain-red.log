@@ -1,0 +1,15 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_resource_preflight_rejects_system_reserved_domains ____________
+
+    def test_resource_preflight_rejects_system_reserved_domains():
+        result = check_resource_preflight(SimpleNamespace(
+            domain_id=211, gazebo_port=11389, web_port=8114))
+    
+>       assert result['ready'] is False
+E       assert True is False
+
+tests/test_phase29_full_demo.py:48: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase29_full_demo.py::test_resource_preflight_rejects_system_reserved_domains
+1 failed in 0.05s

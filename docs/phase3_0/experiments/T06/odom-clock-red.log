@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________________ test_recorder_can_use_simulation_clock ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-135/test_recorder_can_use_simulati0')
+
+    def test_recorder_can_use_simulation_clock(tmp_path):
+        import rclpy
+    
+        initialized_here = not rclpy.ok()
+        if initialized_here:
+            rclpy.init(args=None)
+        recorder = None
+        try:
+>           recorder = Phase2Recorder(
+                tmp_path / 'sim-clock.csv', 'sim-clock-test', 10.0,
+                use_sim_time=True)
+E               TypeError: Phase2Recorder.__init__() got an unexpected keyword argument 'use_sim_time'
+
+tests/test_phase29_recording.py:120: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_phase29_recording.py::test_recorder_can_use_simulation_clock
+1 failed in 0.28s

@@ -1,0 +1,4 @@
+{'port': 11395, 'bindable': True}
+{'port': 8120, 'bindable': True}
+domain_probe_exit_code=0
+port_probe_exit_code=0

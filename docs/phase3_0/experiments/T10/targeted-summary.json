@@ -1,0 +1,72 @@
+[
+  {
+    "suite": "full-demo",
+    "exit_code": 0,
+    "passed": 28,
+    "pytest_summary": "28 passed in 0.11s",
+    "log_sha256": "b372f1d9b58df0d9784cf96eef7f1cf57ba6183c0c0a5422789fc910a6df75d5"
+  },
+  {
+    "suite": "tour-manager",
+    "exit_code": 0,
+    "passed": 31,
+    "pytest_summary": "31 passed in 13.21s",
+    "log_sha256": "82040b0ff53794edbbaaf551a403783ec09a06f96632103b935b0fc3e61d7c92"
+  },
+  {
+    "suite": "tour-ros-integration",
+    "exit_code": 0,
+    "passed": 17,
+    "pytest_summary": "17 passed in 24.52s",
+    "log_sha256": "7042bcc5e80d62910835336a0c3f53b7f8a92328fe687b457759c2d24612e060"
+  },
+  {
+    "suite": "dynamic-vision",
+    "exit_code": 0,
+    "passed": 23,
+    "pytest_summary": "23 passed in 0.30s",
+    "log_sha256": "a3ce199c61b141f4950c670bd74e1d09eb179a5e5332c77d9406a00a2a59a5d9"
+  },
+  {
+    "suite": "recording",
+    "exit_code": 0,
+    "passed": 26,
+    "pytest_summary": "26 passed in 1.34s",
+    "log_sha256": "133fbf4df96ec447289b9aaaf3b1c440ddedd10868333c5f47c6895b553d032a"
+  },
+  {
+    "suite": "speed-calibration",
+    "exit_code": 0,
+    "passed": 64,
+    "pytest_summary": "64 passed in 0.12s",
+    "log_sha256": "a5af1796bbf3b0e542fa00ad63de39fcd7d87ee2ddad287fba5688f3a9d7081b"
+  },
+  {
+    "suite": "replay",
+    "exit_code": 0,
+    "passed": 19,
+    "pytest_summary": "19 passed in 0.04s",
+    "log_sha256": "ca297b4167ea52f7a0e7e3fb4defd206e74168ef515dfd8fecdf753aeb5acf97"
+  },
+  {
+    "suite": "websocket",
+    "exit_code": 0,
+    "passed": 36,
+    "pytest_summary": "36 passed in 12.98s",
+    "log_sha256": "aa6fdaac86f0b86968680a42fd1321af756a65cbd6a5a36244fe472ab5762aa9"
+  },
+  {
+    "suite": "safety-races",
+    "exit_code": 0,
+    "passed": 22,
+    "pytest_summary": "22 passed in 0.38s",
+    "log_sha256": "8a18ad9607fdeb0b1bd9ff943c5a11c74d305bd9448277e4337ea680b94fe727"
+  },
+  {
+    "suite": "phase30-new",
+    "exit_code": 0,
+    "passed": 26,
+    "pytest_summary": "26 passed in 0.67s",
+    "log_sha256": "1bd855cdeded828a6c3f6d4ed6f167ba3881c2697cdf4e55ca8f6cb1434cc42c"
+  }
+]

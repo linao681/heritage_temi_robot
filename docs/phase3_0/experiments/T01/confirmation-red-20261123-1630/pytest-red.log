@@ -1,0 +1,50 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_vision_confirmation_is_bound_to_current_pause_event_and_one_shot _____
+
+    def test_vision_confirmation_is_bound_to_current_pause_event_and_one_shot():
+        async def scenario():
+            manager, backend, driver, _, monitor = await setup_rig()
+            try:
+                await accept(manager)
+                await wait_until(lambda: manager.status()['state'] == 'NAVIGATING')
+                target = driver.navigation_calls[-1]
+                assert manager.visitor_uncertain('nav-vision-2')
+                await wait_until(lambda: manager.status()['state'] == 'PAUSED')
+                event_id = manager.status()['team_pause_event_id']
+                assert event_id
+                assert not manager.confirm_team_recovery('stale-event')
+                assert manager.confirm_team_recovery(event_id)
+                assert not manager.confirm_team_recovery(event_id)
+                await wait_until(lambda: driver.navigation_calls.count(target) == 2)
+                assert manager.status()['team_pause_event_id'] == ''
+                assert not backend.get_status().is_moving or manager.status()['state'] == 'NAVIGATING'
+            finally:
+                if manager.running:
+                    manager.cancel()
+                await end_rig(manager, monitor)
+>       asyncio.run(scenario())
+
+tests/test_tour_manager.py:424: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+/usr/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def scenario():
+        manager, backend, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.status()['state'] == 'NAVIGATING')
+            target = driver.navigation_calls[-1]
+            assert manager.visitor_uncertain('nav-vision-2')
+            await wait_until(lambda: manager.status()['state'] == 'PAUSED')
+>           event_id = manager.status()['team_pause_event_id']
+E           KeyError: 'team_pause_event_id'
+
+tests/test_tour_manager.py:412: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_tour_manager.py::test_vision_confirmation_is_bound_to_current_pause_event_and_one_shot
+1 failed in 0.12s

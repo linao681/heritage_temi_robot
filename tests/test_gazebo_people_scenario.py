@@ -13,10 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 
 import spawn_people_scenario
+from phase27_scenario import crossing_step
 from spawn_people_scenario import (ground_truth_path_lengths, scenario_anchor,
                                    scene_positions, trajectory_duration,
                                    trajectory_position, write_truth_record,
-                                   PeopleScenario, navigation_heading)
+                                   PeopleScenario, navigation_heading,
+                                   navigation_publishers_ready,
+                                   scenario_pose_for_navigation_target)
 from run_phase25_clean_tour import TourEvidence, validate_dynamic_scenario_evidence
 from run_phase25_clean_tour import validate_leaving_recovery_evidence
 
@@ -128,6 +131,27 @@ def test_approaching_scenario_heading_tracks_active_navigation_goal():
     assert navigation_heading(robot, goal) == pytest.approx(math.pi / 2)
 
 
+def test_crossing_scenario_heading_tracks_active_navigation_goal():
+    robot = {'x': 1.0, 'y': 2.0, 'yaw': 0.0}
+    goal = {'x': 1.0, 'y': 5.0}
+
+    pose = scenario_pose_for_navigation_target('crossing', robot, goal)
+
+    assert pose['yaw'] == pytest.approx(math.pi / 2)
+    assert robot['yaw'] == 0.0
+
+
+@pytest.mark.parametrize('scenario', ['single', 'group'])
+def test_static_density_scenario_faces_active_navigation_goal(scenario):
+    robot = {'x': 1.0, 'y': 2.0, 'yaw': 0.0}
+    goal = {'x': 1.0, 'y': 5.0}
+
+    pose = scenario_pose_for_navigation_target(scenario, robot, goal)
+
+    assert pose['yaw'] == pytest.approx(math.pi / 2)
+    assert robot['yaw'] == 0.0
+
+
 def test_dynamic_people_scenarios_anchor_on_live_robot_while_gate_stays_at_wait():
     wait = {'x': -12.0, 'y': -8.0, 'yaw': 0.0}
     robot = {'x': 3.0, 'y': 4.0, 'yaw': math.pi / 2}
@@ -138,6 +162,19 @@ def test_dynamic_people_scenarios_anchor_on_live_robot_while_gate_stays_at_wait(
     assert scenario_anchor('group_straggler', wait, robot) == robot
     assert scenario_anchor('single_static', wait, robot) == wait
     assert scenario_anchor('group_static', wait, robot) == robot
+
+
+@pytest.mark.parametrize(
+    'counts,expected',
+    [
+        ({'temi/navigation_status': 1, 'odom': 1, '/gazebo/model_states': 1}, True),
+        ({'temi/navigation_status': 1, 'odom': 1, '/gazebo/model_states': 0}, False),
+        ({'temi/navigation_status': 0, 'odom': 1, '/gazebo/model_states': 1}, False),
+        ({}, False),
+    ],
+)
+def test_static_scenario_readiness_requires_all_live_ros_publishers(counts, expected):
+    assert navigation_publishers_ready(counts) is expected
 
 
 def test_approaching_trajectory_moves_from_four_and_half_metres_to_safe_hold_distance():
@@ -173,6 +210,35 @@ def test_crossing_trajectory_changes_lateral_position_while_holding_forward_rang
     assert start[1] == pytest.approx(-1.5)
     assert end[0] == pytest.approx(3.5)
     assert end[1] == pytest.approx(1.5)
+
+
+def test_crossing_step_is_time_based_and_finishes_only_after_clear_hold():
+    anchor = (0.0, 0.0, 0.0)
+    config = {'speed_mps': 0.25, 'forward_distance_m': 3.5,
+              'start_lateral_m': -1.5, 'end_lateral_m': 1.5,
+              'hold_clear_sec': 1.0}
+
+    start = crossing_step(config, 0.0, anchor)
+    halfway = crossing_step(config, 6.0, anchor)
+    crossed = crossing_step(config, 12.0, anchor)
+    cleared = crossing_step(config, 13.0, anchor)
+
+    assert start['pose'] == pytest.approx((3.5, -1.5, math.pi))
+    assert halfway['pose'] == pytest.approx((3.5, 0.0, math.pi))
+    assert crossed['pose'] == pytest.approx((3.5, 1.5, math.pi))
+    assert crossed['phase'] == 'HOLD_CLEAR'
+    assert crossed['finished'] is False
+    assert cleared['finished'] is True
+
+
+def test_crossing_cli_requires_the_geometry_guard(monkeypatch, capsys):
+    monkeypatch.setattr(sys, 'argv', ['spawn_people_scenario.py', '--scenario', 'crossing'])
+
+    with pytest.raises(SystemExit) as error:
+        spawn_people_scenario.main()
+
+    assert error.value.code == 2
+    assert 'crossing 场景需要持续轨迹与几何风险检查' in capsys.readouterr().err
 
 
 def test_leaving_trajectory_increases_separation_from_the_robot():

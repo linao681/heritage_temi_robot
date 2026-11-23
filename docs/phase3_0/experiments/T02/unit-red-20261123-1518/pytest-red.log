@@ -1,0 +1,33 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_operator_mode_defaults_to_external_and_scripted_test_requires_vision_mode _
+
+    def test_operator_mode_defaults_to_external_and_scripted_test_requires_vision_mode():
+>       assert parse_args([]).operator_mode == 'external'
+E       AttributeError: 'Namespace' object has no attribute 'operator_mode'
+
+tests/test_phase29_full_demo.py:43: AttributeError
+_____________ test_vision_runner_does_not_inject_scripted_straggle _____________
+
+    def test_vision_runner_does_not_inject_scripted_straggle():
+>       assert demo_runner.should_inject_scripted_straggle('business_script')
+E       AttributeError: module 'run_visitor_full_demo' has no attribute 'should_inject_scripted_straggle'
+
+tests/test_phase29_full_demo.py:52: AttributeError
+___ test_scripted_operator_confirmation_requires_current_stopped_team_pause ____
+
+    def test_scripted_operator_confirmation_requires_current_stopped_team_pause():
+        tour = {'state': 'PAUSED', 'pause_source': 'team',
+                'team_recovery_required': True, 'team_resume_confirmed': False}
+        observation = {'requires_manual_confirmation': True}
+        stopped = {'confirmed': True}
+>       assert demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative', tour, observation, stopped)
+E       AttributeError: module 'run_visitor_full_demo' has no attribute 'scripted_operator_confirmation_allowed'
+
+tests/test_phase29_full_demo.py:61: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_phase29_full_demo.py::test_operator_mode_defaults_to_external_and_scripted_test_requires_vision_mode
+FAILED tests/test_phase29_full_demo.py::test_vision_runner_does_not_inject_scripted_straggle
+FAILED tests/test_phase29_full_demo.py::test_scripted_operator_confirmation_requires_current_stopped_team_pause
+3 failed, 22 deselected in 0.06s

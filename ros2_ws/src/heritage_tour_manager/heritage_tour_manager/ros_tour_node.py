@@ -7,6 +7,7 @@ import json
 import math
 import time
 from threading import Lock, Thread
+from uuid import uuid4
 
 from action_msgs.msg import GoalStatus
 from rclpy.action import ActionClient
@@ -17,7 +18,8 @@ from std_msgs.msg import Int32, String
 from std_srvs.srv import Trigger
 from temi_interfaces.action import NavigateTo, Speak
 from temi_interfaces.msg import NavigationStatus, PerceptionInput, RobotStatus
-from temi_interfaces.srv import StopRobot, AskHeritage, SubmitQuestion
+from temi_interfaces.srv import StopRobot, AskHeritage, SubmitQuestion, ConfirmTeamRecovery
+from unique_identifier_msgs.msg import UUID
 
 from .tour_config import TourConfig
 from .tour_manager import OperationResult, TourManager
@@ -95,6 +97,8 @@ class _RosTourRobot:
         communication = self._config.communication_timeout_sec
         deadline = loop.time() + timeout
         acceptance = goal = result = None
+        navigation_session_id = ''
+        session_terminal_confirmed = False
         try:
             old = self._cleanup.get(client)
             if old is not None:
@@ -106,30 +110,42 @@ class _RosTourRobot:
             if (client is self._navigation and self.navigation_send_guard is not None and
                     not self.navigation_send_guard()):
                 return OperationResult(False, '导航资格已撤销，未提交 ROS Action', submitted=False)
-            acceptance = client.send_goal_async(request)
+            if client is self._navigation:
+                goal_uuid = UUID(uuid=list(uuid4().bytes))
+                navigation_session_id = bytes(goal_uuid.uuid).hex()
+                self._node._register_navigation_session(navigation_session_id)
+                acceptance = client.send_goal_async(request, goal_uuid=goal_uuid)
+            else:
+                acceptance = client.send_goal_async(request)
             goal = await _wait_future(acceptance, min(deadline, loop.time() + communication))
             if not goal.accepted:
+                session_terminal_confirmed = True
                 return OperationResult(False, 'ROS Action 拒绝了任务')
             result = goal.get_result_async()
             response = await _wait_future(result, deadline)
             if response.status not in (GoalStatus.STATUS_SUCCEEDED, GoalStatus.STATUS_CANCELED, GoalStatus.STATUS_ABORTED):
                 self._cleanup[client] = asyncio.create_task(self._settle_goal(acceptance, goal, result))
                 return OperationResult(False, 'ROS Action 返回非终态，尚未确认终止', False)
+            session_terminal_confirmed = True
             return OperationResult(
                 response.status == GoalStatus.STATUS_SUCCEEDED and response.result.success,
                 response.result.message,
             )
         except asyncio.CancelledError:
-            if not await self._cancel_action(client, acceptance, goal, result):
+            session_terminal_confirmed = await self._cancel_action(client, acceptance, goal, result)
+            if not session_terminal_confirmed:
                 raise RuntimeError('旧 ROS Action 尚未确认终止')
             raise
         except asyncio.TimeoutError:
-            confirmed = await self._cancel_action(client, acceptance, goal, result)
-            return OperationResult(False, 'ROS Action 请求或执行超时' if confirmed else
-                                   'ROS Action 超时且旧任务未确认终止', confirmed)
+            session_terminal_confirmed = await self._cancel_action(client, acceptance, goal, result)
+            return OperationResult(False, 'ROS Action 请求或执行超时' if session_terminal_confirmed else
+                                   'ROS Action 超时且旧任务未确认终止', session_terminal_confirmed)
         except Exception as error:
-            confirmed = await self._cancel_action(client, acceptance, goal, result)
-            return OperationResult(False, f'ROS Action 失败: {error}', confirmed)
+            session_terminal_confirmed = await self._cancel_action(client, acceptance, goal, result)
+            return OperationResult(False, f'ROS Action 失败: {error}', session_terminal_confirmed)
+        finally:
+            if navigation_session_id and session_terminal_confirmed:
+                self._node._retire_navigation_session(navigation_session_id)
 
     async def navigate(self, location, timeout_sec):
         return await self._action(self._navigation, NavigateTo.Goal(
@@ -227,7 +243,7 @@ class HeritageTourNode(Node):
             'resume': self._manager.resume,
             'resume_safety': self._resume_safety,
             'cancel': self._manager.cancel,
-            'visitor_lost': self._manager.visitor_lost,
+            'visitor_lost': self._visitor_lost,
             'manual_takeover': self._manager.manual_takeover,
             'finish_qa': self._manager.finish_qa,
         }
@@ -237,6 +253,8 @@ class HeritageTourNode(Node):
         for name, action in controls.items():
             self.create_service(Trigger, 'heritage/tour/' + name,
                                 partial(self._on_control, name, action), callback_group=control_group)
+        self.create_service(ConfirmTeamRecovery, 'heritage/tour/confirm_team_recovery',
+                            self._on_confirm_team_recovery, callback_group=control_group)
 
     async def _initialize(self):
         self._manager = TourManager(self._robot, self._config, on_change=self._publish,
@@ -273,14 +291,33 @@ class HeritageTourNode(Node):
         self._schedule(self._update_navigation, message.status, message.task_id)
 
     def _update_navigation(self, state, session_id):
-        if state in ('start', 'calculating', 'going', 'reposing'):
-            if session_id and session_id not in self._retired_sessions:
-                if self._navigation_session_id and self._navigation_session_id != session_id:
-                    self._retired_sessions.add(self._navigation_session_id)
-                self._navigation_session_id = session_id
-        elif session_id and session_id == self._navigation_session_id:
+        with self._lock:
+            if state in ('start', 'calculating', 'going', 'reposing'):
+                if session_id and session_id not in self._retired_sessions:
+                    if self._navigation_session_id and self._navigation_session_id != session_id:
+                        self._retired_sessions.add(self._navigation_session_id)
+                    self._navigation_session_id = session_id
+            elif session_id and session_id == self._navigation_session_id:
+                self._retired_sessions.add(session_id)
+                self._navigation_session_id = ''
+
+    def _register_navigation_session(self, session_id):
+        with self._lock:
+            if session_id in self._retired_sessions:
+                raise RuntimeError('拒绝重用已结束的导航会话 UUID')
+            if self._navigation_session_id and self._navigation_session_id != session_id:
+                self._retired_sessions.add(self._navigation_session_id)
+            self._navigation_session_id = session_id
+
+    def _retire_navigation_session(self, session_id):
+        with self._lock:
             self._retired_sessions.add(session_id)
-            self._navigation_session_id = ''
+            if self._navigation_session_id == session_id:
+                self._navigation_session_id = ''
+
+    def _current_navigation_session(self):
+        with self._lock:
+            return self._navigation_session_id
 
     def _on_fused(self, message):
         self._schedule(self._update_fused, message, time.monotonic())
@@ -310,7 +347,7 @@ class HeritageTourNode(Node):
         self._speed_recovery = (evidence, received_at)
 
     def _pause_safety(self):
-        return self._manager.safety_pause(self._navigation_session_id)
+        return self._manager.safety_pause(self._current_navigation_session())
 
     @staticmethod
     def _recovery_sample_clear(sample, evidence, now):
@@ -464,6 +501,9 @@ class HeritageTourNode(Node):
             return self._manager.start(visitor_guard=guard)
         return self._manager.start()
 
+    def _visitor_lost(self):
+        return self._manager.visitor_lost(self._current_navigation_session())
+
     def _on_sim_team(self, message):
         if not simulation_team_controls(self._team_decision_mode):
             return
@@ -486,9 +526,11 @@ class HeritageTourNode(Node):
         if (isinstance(value, dict) and type(value.get('expected_count')) is int and
                 value['expected_count'] >= 0):
             self._vision_expected_count = value['expected_count']
-        if (self._vision_expected_count > 0 and
-                observation_requires_pause(value, now_ns=now_ns)):
-            self._schedule(self._pause_for_vision_uncertainty)
+        if self._vision_expected_count > 0:
+            if observation_requires_pause(value, now_ns=now_ns):
+                self._schedule(self._pause_for_vision_uncertainty)
+            else:
+                self._schedule(self._clear_vision_confirmation)
 
     def _check_vision_team_freshness(self):
         value = self._vision_team
@@ -507,12 +549,21 @@ class HeritageTourNode(Node):
         self._vision_confirmed_route_index = None
         if status['state'] not in ('NAVIGATING', 'RETURNING') or self._vision_pause_pending:
             return
-        self._vision_pause_pending = self._manager.visitor_uncertain()
+        self._vision_pause_pending = self._manager.visitor_uncertain(
+            self._current_navigation_session())
+
+    def _clear_vision_confirmation(self):
+        self._vision_confirmed_route_index = None
 
     def _on_control(self, name, action, request, response):
         if self._team_decision_mode == 'vision_conservative' and name == 'visitor_lost':
             response.success = False
             response.message = '视觉模式拒绝脚本掉队指令；状态由视觉观察器提供'
+            return response
+        if (self._team_decision_mode == 'vision_conservative' and name == 'resume' and
+                self._manager.status()['team_recovery_required']):
+            response.success = False
+            response.message = '视觉团队恢复必须确认当前暂停事件ID'
             return response
         team = self._sim_team
         if (self._team_decision_mode == 'business_script' and name == 'resume' and
@@ -541,6 +592,34 @@ class HeritageTourNode(Node):
             response.message = f'{name}: 未在通信超时内确认'
         except Exception as error:
             response.message = f'{name}: {error}'
+        return response
+
+    def _on_confirm_team_recovery(self, request, response):
+        if self._team_decision_mode != 'vision_conservative':
+            response.message = '当前模式不接受视觉团队确认'
+            return response
+        with self._lock:
+            if self._closed:
+                response.message = '导览节点已关闭'
+                return response
+            action = partial(self._manager.confirm_team_recovery, request.pause_event_id)
+            future = asyncio.run_coroutine_threadsafe(self._dispatch(action), self._loop)
+        try:
+            response.accepted = future.result(timeout=self._config.communication_timeout_sec)
+            if response.accepted:
+                status = self._manager.status()
+                self._vision_confirmed_route_index = status['route_index']
+                self._vision_pause_pending = False
+                response.message = ('团队确认已记录；底层安全暂停仍须通过原有恢复条件'
+                                    if status['pause_source'] == 'safety' else
+                                    '团队确认已记录，正在等待同目标新导航任务')
+            else:
+                response.message = '暂停事件ID已过期或当前状态不允许确认'
+        except ThreadTimeoutError:
+            future.cancel()
+            response.message = '团队确认超时，请检查当前暂停状态'
+        except Exception as error:
+            response.message = f'团队确认失败: {error}'
         return response
 
     async def _shutdown(self):

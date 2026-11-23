@@ -1,0 +1,40 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_pause_resume_summary_requires_new_session_for_same_target_and_pairs_motion _
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-125/test_pause_resume_summary_requ0')
+
+    def test_pause_resume_summary_requires_new_session_for_same_target_and_pairs_motion(tmp_path):
+        pause = {'elapsed_sec': 1.0, 'tour': {
+            'state': 'PAUSED', 'pause_source': 'team', 'team_recovery_required': True,
+            'team_pause_event_id': 'event-1', 'paused_session_id': 'old-uuid',
+            'route_index': 2, 'target': 'zone_2'}, 'evidence': {}}
+        resumed = {'elapsed_sec': 2.0, 'tour': {
+            'state': 'NAVIGATING', 'route_index': 2, 'target': 'zone_2'}, 'evidence': {
+            'fused': {'fresh': True, 'value': {'navigation_session_id': 'new-uuid'}},
+            'cmd_vel': {'fresh': True, 'value': {
+                'linear_speed_mps': 0.25, 'received_monotonic_sec': 2.0}},
+            'odom': {'fresh': True, 'value': {
+                'linear_speed_mps': 0.23, 'stamp_ns': 2_000_000_000,
+                'received_monotonic_sec': 2.05}}}}
+        path = tmp_path / 'pause-resume.jsonl'
+        path.write_text(''.join(json.dumps(row) + '\n' for row in (pause, resumed)))
+    
+        summary = summarize_pause_resumes(path)
+    
+>       assert summary == [{
+            'pause_event_id': 'event-1', 'pause_source': 'team',
+            'paused_session_id': 'old-uuid', 'route_index': 2, 'target': 'zone_2',
+            'resumed_session_id': 'new-uuid', 'uuid_changed': True,
+            'same_target': True, 'paired_motion_samples': 1,
+            'physical_motion_observed': True, 'status': 'PASS',
+        }]
+E       AssertionError: assert [{'max_cmd_ve...vent-1', ...}] == [{'paired_mot...d-uuid', ...}]
+E         At index 0 diff: {'pause_event_id': 'event-1', 'pause_source': 'team', 'paused_session_id': 'old-uuid', 'route_index': 2, 'target': 'zone_2', 'resumed_session_id': 'new-uuid', 'uuid_changed': True, 'same_target': True, 'paired_motion_samples': 1, 'max_cmd_vel_linear_mps': 0.25, 'max_odom_linear_mps': 0.23, 'physical_motion_observed': True, 'status': 'PASS'} != {'pause_event_id': 'event-1', 'pause_source': 'team', 'paused_session_id': 'old-uuid', 'route_index': 2, 'target': 'zone_2', 'resumed_session_id': 'new-uuid', 'uuid_changed': True, 'same_target': True, 'paired_mot...
+E         
+E         ...Full output truncated (20 lines hidden), use '-vv' to show
+
+tests/test_phase29_full_demo.py:395: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase29_full_demo.py::test_pause_resume_summary_requires_new_session_for_same_target_and_pairs_motion
+1 failed in 0.04s

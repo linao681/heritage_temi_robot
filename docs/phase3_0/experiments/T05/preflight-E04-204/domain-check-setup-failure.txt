@@ -1,0 +1,4 @@
+Attempt: preflight DDS check on domain 204
+Result: NOT_RUN (shell exit 127)
+Cause: strict nounset was enabled while sourcing /opt/ros/humble/setup.bash; AMENT_TRACE_SETUP_FILES was unset.
+Resource and port checks completed (6.2 GiB available; ports 11392/8117 bindable). No ROS or Gazebo process was started by this attempt.

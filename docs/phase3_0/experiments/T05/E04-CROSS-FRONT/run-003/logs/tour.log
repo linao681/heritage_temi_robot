@@ -1,0 +1,2 @@
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-003/tour/experiment_data.csv", "rows": 3048, "duration_sec": 304.812}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-003/tour/report.json", "error": "TimeoutError: 完整导览未在总时限内结束"}

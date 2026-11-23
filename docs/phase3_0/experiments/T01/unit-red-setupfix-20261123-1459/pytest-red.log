@@ -1,0 +1,81 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+___ test_same_route_new_uncertainty_reopens_pause_after_reliable_observation ___
+
+    def test_same_route_new_uncertainty_reopens_pause_after_reliable_observation():
+        class Manager:
+            pauses = 0
+    
+            def status(self):
+                return {'state': 'NAVIGATING', 'route_index': 4}
+    
+            def visitor_uncertain(self):
+                self.pauses += 1
+                return True
+    
+        manager = Manager()
+        node = SimpleNamespace(
+            get_clock=lambda: SimpleNamespace(now=lambda: SimpleNamespace(nanoseconds=1_000_000_000)),
+            _vision_team=None,
+            _vision_team_received=0.0,
+            _vision_pause_pending=False,
+            _vision_confirmed_route_index=4,
+            _vision_expected_count=3,
+            _manager=manager,
+            _schedule=lambda callback, *args: callback(*args),
+        )
+        node._pause_for_vision_uncertainty = MethodType(
+            HeritageTourNode._pause_for_vision_uncertainty, node)
+        observed = {
+            'source': 'vision_tracker', 'valid': True, 'stamp_ns': 1_000_000_000,
+            'sample_age_sec': 0.05, 'expected_count': 3, 'observed_count': 3,
+            'observation_state': 'OBSERVED', 'coverage': 'team_visible',
+        }
+        uncertain = {
+            **observed, 'observed_count': 1, 'observation_state': 'UNKNOWN',
+            'coverage': 'forward_only',
+        }
+    
+        HeritageTourNode._on_vision_team(node, SimpleNamespace(
+            data=json.dumps(observed)))
+        HeritageTourNode._on_vision_team(node, SimpleNamespace(
+            data=json.dumps(uncertain)))
+    
+>       assert manager.pauses == 1
+E       assert 0 == 1
+E        +  where 0 = <test_phase30_vision_confirmation.test_same_route_new_uncertainty_reopens_pause_after_reliable_observation.<locals>.Manager object at 0x779387be1960>.pauses
+
+tests/test_phase30_vision_confirmation.py:46: AssertionError
+___ test_vision_runner_does_not_turn_unknown_observation_into_safety_resume ____
+
+    def test_vision_runner_does_not_turn_unknown_observation_into_safety_resume():
+        tour = {'state': 'PAUSED', 'reason': '导航安全停车', 'pause_source': 'safety',
+                'team_recovery_required': False}
+        observation = {'requires_manual_confirmation': True}
+    
+>       assert not demo_runner.should_handle_paused_team(
+            'vision_conservative', tour, observation)
+E       AssertionError: assert not True
+E        +  where True = <function should_handle_paused_team at 0x77938054b880>('vision_conservative', {'pause_source': 'safety', 'reason': '导航安全停车', 'state': 'PAUSED', 'team_recovery_required': False}, {'requires_manual_confirmation': True})
+E        +    where <function should_handle_paused_team at 0x77938054b880> = demo_runner.should_handle_paused_team
+
+tests/test_phase29_full_demo.py:225: AssertionError
+___ test_vision_runner_does_not_override_manual_pause_with_team_confirmation ___
+
+    def test_vision_runner_does_not_override_manual_pause_with_team_confirmation():
+        tour = {'state': 'PAUSED', 'reason': '用户暂停', 'pause_source': 'manual',
+                'team_recovery_required': True}
+        observation = {'requires_manual_confirmation': True}
+    
+>       assert not demo_runner.should_handle_paused_team(
+            'vision_conservative', tour, observation)
+E       AssertionError: assert not True
+E        +  where True = <function should_handle_paused_team at 0x77938054b880>('vision_conservative', {'pause_source': 'manual', 'reason': '用户暂停', 'state': 'PAUSED', 'team_recovery_required': True}, {'requires_manual_confirmation': True})
+E        +    where <function should_handle_paused_team at 0x77938054b880> = demo_runner.should_handle_paused_team
+
+tests/test_phase29_full_demo.py:234: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase30_vision_confirmation.py::test_same_route_new_uncertainty_reopens_pause_after_reliable_observation
+FAILED tests/test_phase29_full_demo.py::test_vision_runner_does_not_turn_unknown_observation_into_safety_resume
+FAILED tests/test_phase29_full_demo.py::test_vision_runner_does_not_override_manual_pause_with_team_confirmation
+3 failed, 20 deselected in 0.35s

@@ -1,0 +1,11 @@
+{
+  "mem_available_kib": 6500824,
+  "mem_available_gib": 6.2,
+  "minimum_memory_gib": 6.0,
+  "memory_ok": true,
+  "ports": {
+    "11392": "bindable",
+    "8117": "bindable"
+  },
+  "ports_ok": true
+}

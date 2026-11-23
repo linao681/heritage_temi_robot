@@ -1,0 +1,457 @@
+    PID    PPID    PGID     ELAPSED   RSS COMMAND         COMMAND
+      1       0       1    23:46:28 12204 systemd         /sbin/init splash
+      2       0       0    23:46:28     0 kthreadd        [kthreadd]
+      3       2       0    23:46:28     0 pool_workqueue_ [pool_workqueue_release]
+      4       2       0    23:46:28     0 kworker/R-rcu_g [kworker/R-rcu_g]
+      5       2       0    23:46:28     0 kworker/R-rcu_p [kworker/R-rcu_p]
+      6       2       0    23:46:28     0 kworker/R-slub_ [kworker/R-slub_]
+      7       2       0    23:46:28     0 kworker/R-netns [kworker/R-netns]
+      9       2       0    23:46:28     0 kworker/0:0H-ev [kworker/0:0H-events_highpri]
+     12       2       0    23:46:28     0 kworker/R-mm_pe [kworker/R-mm_pe]
+     13       2       0    23:46:28     0 rcu_tasks_kthre [rcu_tasks_kthread]
+     14       2       0    23:46:28     0 rcu_tasks_rude_ [rcu_tasks_rude_kthread]
+     15       2       0    23:46:28     0 rcu_tasks_trace [rcu_tasks_trace_kthread]
+     16       2       0    23:46:28     0 ksoftirqd/0     [ksoftirqd/0]
+     17       2       0    23:46:28     0 rcu_preempt     [rcu_preempt]
+     18       2       0    23:46:28     0 migration/0     [migration/0]
+     19       2       0    23:46:28     0 idle_inject/0   [idle_inject/0]
+     20       2       0    23:46:28     0 cpuhp/0         [cpuhp/0]
+     21       2       0    23:46:28     0 cpuhp/2         [cpuhp/2]
+     22       2       0    23:46:28     0 idle_inject/2   [idle_inject/2]
+     23       2       0    23:46:28     0 migration/2     [migration/2]
+     24       2       0    23:46:28     0 ksoftirqd/2     [ksoftirqd/2]
+     26       2       0    23:46:28     0 kworker/2:0H-ev [kworker/2:0H-events_highpri]
+     27       2       0    23:46:28     0 cpuhp/4         [cpuhp/4]
+     28       2       0    23:46:28     0 idle_inject/4   [idle_inject/4]
+     29       2       0    23:46:28     0 migration/4     [migration/4]
+     30       2       0    23:46:28     0 ksoftirqd/4     [ksoftirqd/4]
+     32       2       0    23:46:28     0 kworker/4:0H-ev [kworker/4:0H-events_highpri]
+     33       2       0    23:46:28     0 cpuhp/6         [cpuhp/6]
+     34       2       0    23:46:28     0 idle_inject/6   [idle_inject/6]
+     35       2       0    23:46:28     0 migration/6     [migration/6]
+     36       2       0    23:46:28     0 ksoftirqd/6     [ksoftirqd/6]
+     38       2       0    23:46:28     0 kworker/6:0H-ev [kworker/6:0H-events_highpri]
+     39       2       0    23:46:28     0 cpuhp/8         [cpuhp/8]
+     40       2       0    23:46:28     0 idle_inject/8   [idle_inject/8]
+     41       2       0    23:46:28     0 migration/8     [migration/8]
+     42       2       0    23:46:28     0 ksoftirqd/8     [ksoftirqd/8]
+     44       2       0    23:46:28     0 kworker/8:0H-ev [kworker/8:0H-events_highpri]
+     45       2       0    23:46:28     0 cpuhp/10        [cpuhp/10]
+     46       2       0    23:46:28     0 idle_inject/10  [idle_inject/10]
+     47       2       0    23:46:28     0 migration/10    [migration/10]
+     48       2       0    23:46:28     0 ksoftirqd/10    [ksoftirqd/10]
+     50       2       0    23:46:28     0 kworker/10:0H-e [kworker/10:0H-events_highpri]
+     51       2       0    23:46:28     0 cpuhp/12        [cpuhp/12]
+     52       2       0    23:46:28     0 idle_inject/12  [idle_inject/12]
+     53       2       0    23:46:28     0 migration/12    [migration/12]
+     54       2       0    23:46:28     0 ksoftirqd/12    [ksoftirqd/12]
+     56       2       0    23:46:28     0 kworker/12:0H-e [kworker/12:0H-events_highpri]
+     57       2       0    23:46:28     0 cpuhp/13        [cpuhp/13]
+     58       2       0    23:46:28     0 idle_inject/13  [idle_inject/13]
+     59       2       0    23:46:28     0 migration/13    [migration/13]
+     60       2       0    23:46:28     0 ksoftirqd/13    [ksoftirqd/13]
+     62       2       0    23:46:28     0 kworker/13:0H-e [kworker/13:0H-events_highpri]
+     63       2       0    23:46:28     0 cpuhp/14        [cpuhp/14]
+     64       2       0    23:46:28     0 idle_inject/14  [idle_inject/14]
+     65       2       0    23:46:28     0 migration/14    [migration/14]
+     66       2       0    23:46:28     0 ksoftirqd/14    [ksoftirqd/14]
+     68       2       0    23:46:28     0 kworker/14:0H-e [kworker/14:0H-events_highpri]
+     69       2       0    23:46:28     0 cpuhp/15        [cpuhp/15]
+     70       2       0    23:46:28     0 idle_inject/15  [idle_inject/15]
+     71       2       0    23:46:28     0 migration/15    [migration/15]
+     72       2       0    23:46:28     0 ksoftirqd/15    [ksoftirqd/15]
+     74       2       0    23:46:28     0 kworker/15:0H-e [kworker/15:0H-events_highpri]
+     75       2       0    23:46:28     0 cpuhp/1         [cpuhp/1]
+     76       2       0    23:46:28     0 idle_inject/1   [idle_inject/1]
+     77       2       0    23:46:28     0 migration/1     [migration/1]
+     78       2       0    23:46:28     0 ksoftirqd/1     [ksoftirqd/1]
+     80       2       0    23:46:28     0 kworker/1:0H-ev [kworker/1:0H-events_highpri]
+     81       2       0    23:46:28     0 cpuhp/3         [cpuhp/3]
+     82       2       0    23:46:28     0 idle_inject/3   [idle_inject/3]
+     83       2       0    23:46:28     0 migration/3     [migration/3]
+     84       2       0    23:46:28     0 ksoftirqd/3     [ksoftirqd/3]
+     86       2       0    23:46:28     0 kworker/3:0H-ev [kworker/3:0H-events_highpri]
+     87       2       0    23:46:28     0 cpuhp/5         [cpuhp/5]
+     88       2       0    23:46:28     0 idle_inject/5   [idle_inject/5]
+     89       2       0    23:46:28     0 migration/5     [migration/5]
+     90       2       0    23:46:28     0 ksoftirqd/5     [ksoftirqd/5]
+     92       2       0    23:46:28     0 kworker/5:0H-ev [kworker/5:0H-events_highpri]
+     93       2       0    23:46:28     0 cpuhp/7         [cpuhp/7]
+     94       2       0    23:46:28     0 idle_inject/7   [idle_inject/7]
+     95       2       0    23:46:28     0 migration/7     [migration/7]
+     96       2       0    23:46:28     0 ksoftirqd/7     [ksoftirqd/7]
+     98       2       0    23:46:28     0 kworker/7:0H-ev [kworker/7:0H-events_highpri]
+     99       2       0    23:46:28     0 cpuhp/9         [cpuhp/9]
+    100       2       0    23:46:28     0 idle_inject/9   [idle_inject/9]
+    101       2       0    23:46:28     0 migration/9     [migration/9]
+    102       2       0    23:46:28     0 ksoftirqd/9     [ksoftirqd/9]
+    104       2       0    23:46:28     0 kworker/9:0H-ev [kworker/9:0H-events_highpri]
+    105       2       0    23:46:28     0 cpuhp/11        [cpuhp/11]
+    106       2       0    23:46:28     0 idle_inject/11  [idle_inject/11]
+    107       2       0    23:46:28     0 migration/11    [migration/11]
+    108       2       0    23:46:28     0 ksoftirqd/11    [ksoftirqd/11]
+    110       2       0    23:46:28     0 kworker/11:0H-e [kworker/11:0H-events_highpri]
+    111       2       0    23:46:28     0 kdevtmpfs       [kdevtmpfs]
+    112       2       0    23:46:28     0 kworker/R-inet_ [kworker/R-inet_]
+    113       2       0    23:46:28     0 kauditd         [kauditd]
+    114       2       0    23:46:28     0 khungtaskd      [khungtaskd]
+    116       2       0    23:46:28     0 oom_reaper      [oom_reaper]
+    117       2       0    23:46:28     0 kworker/R-write [kworker/R-write]
+    118       2       0    23:46:28     0 kcompactd0      [kcompactd0]
+    119       2       0    23:46:28     0 ksmd            [ksmd]
+    120       2       0    23:46:28     0 khugepaged      [khugepaged]
+    121       2       0    23:46:28     0 kworker/R-kinte [kworker/R-kinte]
+    122       2       0    23:46:28     0 kworker/R-kbloc [kworker/R-kbloc]
+    123       2       0    23:46:28     0 kworker/R-blkcg [kworker/R-blkcg]
+    125       2       0    23:46:28     0 irq/9-acpi      [irq/9-acpi]
+    129       2       0    23:46:28     0 kworker/R-tpm_d [kworker/R-tpm_d]
+    130       2       0    23:46:28     0 kworker/R-ata_s [kworker/R-ata_s]
+    131       2       0    23:46:28     0 kworker/R-md    [kworker/R-md]
+    132       2       0    23:46:28     0 kworker/R-md_bi [kworker/R-md_bi]
+    133       2       0    23:46:28     0 kworker/R-edac- [kworker/R-edac-]
+    134       2       0    23:46:28     0 kworker/R-devfr [kworker/R-devfr]
+    135       2       0    23:46:28     0 watchdogd       [watchdogd]
+    137       2       0    23:46:28     0 kworker/R-quota [kworker/R-quota]
+    139       2       0    23:46:28     0 kworker/14:1H-k [kworker/14:1H-kblockd]
+    140       2       0    23:46:28     0 kswapd0         [kswapd0]
+    141       2       0    23:46:28     0 ecryptfs-kthrea [ecryptfs-kthread]
+    142       2       0    23:46:28     0 kworker/R-kthro [kworker/R-kthro]
+    143       2       0    23:46:28     0 irq/124-aerdrv  [irq/124-aerdrv]
+    144       2       0    23:46:28     0 kworker/R-acpi_ [kworker/R-acpi_]
+    147       2       0    23:46:28     0 hwrng           [hwrng]
+    148       2       0    23:46:28     0 kworker/R-hfi-u [kworker/R-hfi-u]
+    150       2       0    23:46:28     0 kworker/R-mld   [kworker/R-mld]
+    151       2       0    23:46:28     0 kworker/R-ipv6_ [kworker/R-ipv6_]
+    158       2       0    23:46:28     0 kworker/R-kstrp [kworker/R-kstrp]
+    178       2       0    23:46:28     0 kworker/R-charg [kworker/R-charg]
+    198       2       0    23:46:28     0 kworker/13:1H-k [kworker/13:1H-kblockd]
+    201       2       0    23:46:28     0 kworker/4:1H-kb [kworker/4:1H-kblockd]
+    202       2       0    23:46:28     0 kworker/0:1H-ac [kworker/0:1H-acpi_thermal_pm]
+    214       2       0    23:46:28     0 kworker/15:1H-k [kworker/15:1H-kblockd]
+    215       2       0    23:46:28     0 kworker/2:1H-kb [kworker/2:1H-kblockd]
+    217       2       0    23:46:28     0 kworker/6:1H-kb [kworker/6:1H-kblockd]
+    218       2       0    23:46:28     0 kworker/9:1H-kb [kworker/9:1H-kblockd]
+    219       2       0    23:46:28     0 kworker/10:1H-k [kworker/10:1H-kblockd]
+    220       2       0    23:46:28     0 kworker/11:1H-a [kworker/11:1H-acpi_thermal_pm]
+    221       2       0    23:46:28     0 kworker/12:1H-k [kworker/12:1H-kblockd]
+    222       2       0    23:46:28     0 kworker/1:1H-kb [kworker/1:1H-kblockd]
+    223       2       0    23:46:28     0 kworker/3:1H-kb [kworker/3:1H-kblockd]
+    237       2       0    23:46:28     0 kworker/5:1H-kb [kworker/5:1H-kblockd]
+    238       2       0    23:46:28     0 kworker/8:1H-kb [kworker/8:1H-kblockd]
+    239       2       0    23:46:28     0 kworker/7:1H-kb [kworker/7:1H-kblockd]
+    260       2       0    23:46:28     0 kworker/R-nvme- [kworker/R-nvme-]
+    261       2       0    23:46:28     0 kworker/R-nvme- [kworker/R-nvme-]
+    263       2       0    23:46:28     0 kworker/R-nvme- [kworker/R-nvme-]
+    264       2       0    23:46:28     0 kworker/R-nvme- [kworker/R-nvme-]
+    266       2       0    23:46:28     0 scsi_eh_0       [scsi_eh_0]
+    267       2       0    23:46:28     0 kworker/R-scsi_ [kworker/R-scsi_]
+    291       2       0    23:46:28     0 irq/81-ELAN0420 [irq/81-ELAN0420:00]
+    313       2       0    23:46:26     0 jbd2/nvme0n1p4- [jbd2/nvme0n1p4-8]
+    314       2       0    23:46:26     0 kworker/R-ext4- [kworker/R-ext4-]
+    355       1     355    23:46:26 70228 systemd-journal /lib/systemd/systemd-journald
+    416       1     416    23:46:26  7124 systemd-udevd   /lib/systemd/systemd-udevd
+    496       2       0    23:46:26     0 kworker/R-cfg80 [kworker/R-cfg80]
+    501       2       0    23:46:26     0 irq/161-mei_me  [irq/161-mei_me]
+    502       2       0    23:46:26     0 irq/16-processo [irq/16-processor_thermal_device_pci]
+    526       2       0    23:46:26     0 irq/162-iwlwifi [irq/162-iwlwifi:default_queue]
+    527       2       0    23:46:26     0 irq/163-iwlwifi [irq/163-iwlwifi:queue_1]
+    528       2       0    23:46:26     0 irq/164-iwlwifi [irq/164-iwlwifi:queue_2]
+    529       2       0    23:46:26     0 irq/165-iwlwifi [irq/165-iwlwifi:queue_3]
+    530       2       0    23:46:26     0 irq/166-iwlwifi [irq/166-iwlwifi:queue_4]
+    531       2       0    23:46:26     0 irq/167-iwlwifi [irq/167-iwlwifi:queue_5]
+    532       2       0    23:46:26     0 irq/168-iwlwifi [irq/168-iwlwifi:queue_6]
+    533       2       0    23:46:26     0 irq/169-iwlwifi [irq/169-iwlwifi:queue_7]
+    534       2       0    23:46:26     0 irq/170-iwlwifi [irq/170-iwlwifi:queue_8]
+    535       2       0    23:46:26     0 irq/171-iwlwifi [irq/171-iwlwifi:queue_9]
+    536       2       0    23:46:26     0 irq/172-iwlwifi [irq/172-iwlwifi:queue_10]
+    537       2       0    23:46:26     0 irq/173-iwlwifi [irq/173-iwlwifi:queue_11]
+    538       2       0    23:46:26     0 irq/174-iwlwifi [irq/174-iwlwifi:queue_12]
+    539       2       0    23:46:26     0 irq/175-iwlwifi [irq/175-iwlwifi:queue_13]
+    540       2       0    23:46:26     0 irq/176-iwlwifi [irq/176-iwlwifi:queue_14]
+    541       2       0    23:46:26     0 irq/177-iwlwifi [irq/177-iwlwifi:exception]
+    603       2       0    23:46:26     0 kworker/R-crypt [kworker/R-crypt]
+    619       2       0    23:46:25     0 nv_queue        [nv_queue]
+    620       2       0    23:46:25     0 nv_mem_pool_scr [nv_mem_pool_scrubber_queue]
+    621       2       0    23:46:25     0 nv_mem_pool_scr [nv_mem_pool_scrubber_queue]
+    622       2       0    23:46:25     0 nv_mem_pool_scr [nv_mem_pool_scrubber_queue]
+    623       2       0    23:46:25     0 nv_queue        [nv_queue]
+    624       2       0    23:46:25     0 nv_open_q       [nv_open_q]
+    674       1     674    23:46:25  6876 systemd-oomd    /lib/systemd/systemd-oomd
+    676       1     676    23:46:25 14052 systemd-resolve /lib/systemd/systemd-resolved
+    677       1     677    23:46:25  7468 systemd-timesyn /lib/systemd/systemd-timesyncd
+    679       2       0    23:46:25     0 nvidia-modeset/ [nvidia-modeset/kthread_q]
+    680       2       0    23:46:25     0 nvidia-modeset/ [nvidia-modeset/deferred_close_kthread_q]
+    682       2       0    23:46:25     0 irq/179-nvidia  [irq/179-nvidia]
+    683       2       0    23:46:25     0 nvidia          [nvidia]
+    684       2       0    23:46:25     0 nv_queue        [nv_queue]
+    750       1     750    23:46:24  8300 accounts-daemon /usr/libexec/accounts-daemon
+    751       1     751    23:46:24  2116 acpid           /usr/sbin/acpid
+    754       1     754    23:46:24  4064 avahi-daemon    avahi-daemon: running [linao-P15-25.local]
+    755       1     755    23:46:24  4568 bluetoothd      /usr/lib/bluetooth/bluetoothd
+    756       1     756    23:46:24  2936 cron            /usr/sbin/cron -f -P
+    757       1     757    23:46:24  7020 dbus-daemon     @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+    759       1     759    23:46:24 19484 NetworkManager  /usr/sbin/NetworkManager --no-daemon
+    765       1     765    23:46:24  4124 irqbalance      /usr/sbin/irqbalance --foreground
+    767       1     767    23:46:24 21684 networkd-dispat /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+    768       1     768    23:46:24 11796 polkitd         /usr/libexec/polkitd --no-debug
+    771       1     771    23:46:24  7980 power-profiles- /usr/libexec/power-profiles-daemon
+    774       1     774    23:46:24  6056 rsyslogd        /usr/sbin/rsyslogd -n -iNONE
+    781       1     781    23:46:24 37384 snapd           /snap/snapd/current/usr/lib/snapd/snapd
+    784       1     784    23:46:24  6652 switcheroo-cont /usr/libexec/switcheroo-control
+    788       1     788    23:46:24  8092 systemd-logind  /lib/systemd/systemd-logind
+    790       1     790    23:46:24 10412 thermald        /usr/sbin/thermald --systemd --dbus-enable --adaptive
+    791       1     791    23:46:24 12524 udisksd         /usr/libexec/udisks2/udisksd
+    792       1     792    23:46:24  9572 wpa_supplicant  /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+    797     754     754    23:46:24  1392 avahi-daemon    avahi-daemon: chroot helper
+    864       1     864    23:46:24  9440 ModemManager    /usr/sbin/ModemManager
+    877       1     877    23:46:24 23920 unattended-upgr /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    933       1     933    23:46:23  9276 upowerd         /usr/libexec/upowerd
+   1052       2       0    23:46:23     0 UVM global queu [UVM global queue]
+   1053       2       0    23:46:23     0 UVM deferred re [UVM deferred release queue]
+   1054       2       0    23:46:23     0 UVM Tools Event [UVM Tools Event Queue]
+   1072       1    1072    23:46:23  1848 nvidia-persiste /usr/bin/nvidia-persistenced --user nvidia-persistenced --no-persistence-mode --verbose
+   1157       1    1157    23:46:22  8984 gdm3            /usr/sbin/gdm3
+   1190       1    1190    23:46:22  3484 rtkit-daemon    /usr/libexec/rtkit-daemon
+   1351       1    1351    23:46:17  2336 kerneloops      /usr/sbin/kerneloops --test
+   1353       1    1353    23:46:17  2320 kerneloops      /usr/sbin/kerneloops
+   1377       1    1377    23:46:16 20124 packagekitd     /usr/libexec/packagekitd
+   1511       1    1511    23:46:16 13184 colord          /usr/libexec/colord
+   1614    1157    1157    23:45:02 11032 gdm-session-wor gdm-session-worker [pam/gdm-password]
+   1629       1    1629    23:45:00 11068 systemd         /lib/systemd/systemd --user
+   1630    1629    1629    23:45:00  6020 (sd-pam)        (sd-pam)
+   1636    1629    1636    23:45:00  5504 pipewire        /usr/bin/pipewire
+   1637    1629    1637    23:45:00  4832 pipewire-media- /usr/bin/pipewire-media-session
+   1638    1629    1638    23:45:00 29564 pulseaudio      /usr/bin/pulseaudio --daemonize=no --log-target=journal
+   1651       1    1650    23:45:00 10588 gnome-keyring-d /usr/bin/gnome-keyring-daemon --daemonize --login
+   1660    1629    1660    23:45:00  6164 dbus-daemon     /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   1679    1629    1679    23:45:00  7620 xdg-document-po /usr/libexec/xdg-document-portal
+   1683    1629    1683    23:45:00  6540 xdg-permission- /usr/libexec/xdg-permission-store
+   1691    1679    1691    23:45:00  1964 fusermount3     fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/1000/doc
+   1695       2       0    23:45:00     0 krfcommd        [krfcommd]
+   1742    1614    1742    23:44:59  6372 gdm-x-session   /usr/libexec/gdm-x-session --run-script env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+   1744    1742    1742    23:44:59 155568 Xorg           /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3
+   1747       2       0    23:44:59     0 nvidia-drm/time [nvidia-drm/timeline-9]
+   1759    1742    1742    23:44:58 15928 gnome-session-b /usr/libexec/gnome-session-binary --session=ubuntu
+   1832    1629    1832    23:44:58  8460 at-spi-bus-laun /usr/libexec/at-spi-bus-launcher
+   1838    1832    1832    23:44:58  4640 dbus-daemon     /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 11 --address=unix:path=/run/user/1000/at-spi/bus_1
+   1845    1629    1845    23:44:58  5512 gnome-session-c /usr/libexec/gnome-session-ctl --monitor
+   1856    1629    1856    23:44:58  8060 gvfsd           /usr/libexec/gvfsd
+   1862    1629    1856    23:44:58  6712 gvfsd-fuse      /usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f
+   1866    1629    1866    23:44:58 17948 gnome-session-b /usr/libexec/gnome-session-binary --systemd-service --session=ubuntu
+   1894    1629    1894    23:44:58 512812 gnome-shell    /usr/bin/gnome-shell
+   1900       2       0    23:44:58     0 nvidia-drm/time [nvidia-drm/timeline-b]
+   1913    1629    1660    23:44:54 18148 gnome-shell-cal /usr/libexec/gnome-shell-calendar-server
+   1921    1629    1921    23:44:54 25692 evolution-sourc /usr/libexec/evolution-source-registry
+   1927    1629    1927    23:44:54  6252 dconf-service   /usr/libexec/dconf-service
+   1932    1629    1660    23:44:54 40748 goa-daemon      /usr/libexec/goa-daemon
+   1933    1629    1933    23:44:54 11148 gvfs-udisks2-vo /usr/libexec/gvfs-udisks2-volume-monitor
+   1938    1629    1938    23:44:54 30504 evolution-calen /usr/libexec/evolution-calendar-factory
+   1945    1629    1945    23:44:54  6984 gvfs-goa-volume /usr/libexec/gvfs-goa-volume-monitor
+   1955    1629    1660    23:44:54 15712 goa-identity-se /usr/libexec/goa-identity-service
+   1957    1629    1957    23:44:54  7008 gvfs-mtp-volume /usr/libexec/gvfs-mtp-volume-monitor
+   1970    1629    1970    23:44:54 31664 evolution-addre /usr/libexec/evolution-addressbook-factory
+   1974    1629    1974    23:44:54  7140 gvfs-gphoto2-vo /usr/libexec/gvfs-gphoto2-volume-monitor
+   1983    1629    1983    23:44:54  8440 gvfs-afc-volume /usr/libexec/gvfs-afc-volume-monitor
+   1992    1856    1856    23:44:54  9240 gvfsd-trash     /usr/libexec/gvfsd-trash --spawner :1.20 /org/gtk/gvfs/exec_spaw/0
+   2005    1629    1660    23:44:54 23288 gjs             /usr/bin/gjs /usr/share/gnome-shell/org.gnome.Shell.Notifications
+   2007    1629    1832    23:44:54  8180 at-spi2-registr /usr/libexec/at-spi2-registryd --use-gnome-session
+   2026    1629    2026    23:44:54 13280 xdg-desktop-por /usr/libexec/xdg-desktop-portal
+   2030    1629    2030    23:44:54 62368 xdg-desktop-por /usr/libexec/xdg-desktop-portal-gnome
+   2037    1629    2037    23:44:53  1756 sh              sh -c /usr/bin/ibus-daemon --panel disable $([ "$XDG_SESSION_TYPE" = "x11" ] && echo "--xim")
+   2038    1629    2038    23:44:53  7188 gsd-a11y-settin /usr/libexec/gsd-a11y-settings
+   2039    1629    2039    23:44:53 29240 gsd-color       /usr/libexec/gsd-color
+   2042    2037    2042    23:44:53 22004 ibus-daemon     /usr/bin/ibus-daemon --panel disable --xim
+   2043    1629    2043    23:44:53 16312 gsd-datetime    /usr/libexec/gsd-datetime
+   2045    1629    2045    23:44:53  8512 gsd-housekeepin /usr/libexec/gsd-housekeeping
+   2047    1629    2047    23:44:53 25432 gsd-keyboard    /usr/libexec/gsd-keyboard
+   2049    1629    2049    23:44:53 30608 gsd-media-keys  /usr/libexec/gsd-media-keys
+   2051    1629    2051    23:44:53 28352 gsd-power       /usr/libexec/gsd-power
+   2055    1629    2055    23:44:53 11544 gsd-print-notif /usr/libexec/gsd-print-notifications
+   2059    1629    2059    23:44:53  6992 gsd-rfkill      /usr/libexec/gsd-rfkill
+   2060    1629    2060    23:44:53  6468 gsd-screensaver /usr/libexec/gsd-screensaver-proxy
+   2061    1629    2061    23:44:53 11152 gsd-sharing     /usr/libexec/gsd-sharing
+   2063    1629    2063    23:44:53  8264 gsd-smartcard   /usr/libexec/gsd-smartcard
+   2073    1629    2073    23:44:53  9980 gsd-sound       /usr/libexec/gsd-sound
+   2076    1629    2076    23:44:53 25588 gsd-wacom       /usr/libexec/gsd-wacom
+   2079    1629    2079    23:44:53 28148 gsd-xsettings   /usr/libexec/gsd-xsettings
+   2083    1866    1866    23:44:53  8084 gsd-disk-utilit /usr/libexec/gsd-disk-utility-notify
+   2094    1866    1866    23:44:53 71348 evolution-alarm /usr/libexec/evolution-data-server/evolution-alarm-notify
+   2126    2042    2042    23:44:53  7772 ibus-dconf      /usr/libexec/ibus-dconf
+   2129    2042    2042    23:44:53 35032 ibus-extension- /usr/libexec/ibus-extension-gtk3
+   2133    1629    2042    23:44:53 25492 ibus-x11        /usr/libexec/ibus-x11 --kill-daemon
+   2135    1629    1660    23:44:53  8084 ibus-portal     /usr/libexec/ibus-portal
+   2160    1629    2055    23:44:53 15148 gsd-printer     /usr/libexec/gsd-printer
+   2248    1629    1660    23:44:53 23176 gjs             /usr/bin/gjs /usr/share/gnome-shell/org.gnome.ScreenSaver
+   2263    2042    2042    23:44:53 39524 ibus-engine-lib /usr/libexec/ibus-engine-libpinyin --ibus
+   2269    1629    2269    23:44:53 54244 tracker-miner-f /usr/libexec/tracker-miner-fs-3
+   2273    1629    2273    23:44:53 27004 xdg-desktop-por /usr/libexec/xdg-desktop-portal-gtk
+   2324    1894    1894    23:44:52 70532 gjs             gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com -M 1 -D 2560:0:1440:2560:1:0:0:0:0:0 -D 0:0:2560:1440:1:27:0:70:0:1
+   2343    1629    2343    23:44:52  6628 gvfsd-metadata  /usr/libexec/gvfsd-metadata
+   2426    1629    2426    23:44:50  4676 user-session-he /snap/snapd-desktop-integration/391/usr/bin/user-session-helper /snap/snapd-desktop-integration/391/usr/bin/snapd-desktop-integration
+   2504    2426    2426    23:44:50 103876 snapd-desktop-i /snap/snapd-desktop-integration/391/usr/bin/snapd-desktop-integration
+   2562    1894    1894    23:44:46 301680 FlClash        FlClash
+   2573       2       0    23:44:46     0 nvidia-drm/time [nvidia-drm/timeline-c]
+   2582       2       0    23:44:46     0 nvidia-drm/time [nvidia-drm/timeline-d]
+   2583       2       0    23:44:46     0 nvidia-drm/time [nvidia-drm/timeline-e]
+   2595    2562    1894    23:44:46 92540 FlClashCore     /usr/share/FlClash/FlClashCore /tmp/FlClashSocket_8628.sock
+   2607       2       0    23:44:46     0 nvidia-drm/time [nvidia-drm/timeline-f]
+   4395    1866    1866    23:43:54 35524 update-notifier update-notifier
+   7352    1629    1660    23:37:31 25972 snap            /snap/snapd/current/usr/bin/snap userd
+   7789    1629    7789    23:37:24 12956 speech-dispatch /usr/bin/speech-dispatcher -s -t 0
+   7800    7789    7789    23:37:24     0 sd_es <defunct> [sd_espeak-ng-mb] <defunct>
+   7803    7789    7789    23:37:24  9620 sd_espeak-ng    /usr/lib/speech-dispatcher-modules/sd_espeak-ng /etc/speech-dispatcher/modules/espeak-ng.conf
+   7810    7789    7789    23:37:24  6240 sd_dummy        /usr/lib/speech-dispatcher-modules/sd_dummy /etc/speech-dispatcher/modules/dummy.conf
+   8281    1894    1894    23:36:42 446744 wechat         /usr/bin/wechat
+   8285    1629    8284    23:36:42  2836 crashpad_handle /opt/wechat/crashpad_handler --no-rate-limit --database=/home/linao/.xwechat/crashinfo --annotation=ext_info={"app_call_name":"wechat","app_name":"wechat","app_path":"/opt/wechat/wechat","build_ver":"1","crash_notify":"1","input_action":2,"main_thread_id":"8281","major_ver":"4","minor_ver":"1","module_name":"xwechat_linux","modules_dir":"/opt","patch_ver":"4","product":"wechat","report_type":"9999","restart_app_cmd":"","version":"4067692804"} --annotation=product=wechat --initial-client-fd=8 --shared-client-connection
+   8353    8281    1894    23:36:42 208716 WeChatAppEx    /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --log-level=2 --lang=zh-CN --wechat-files-path=/home/linao/文档/xwechat_files --product-id=1002 --wechat-sub-user-agent=MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x63090a13) UnifiedPCLinuxWechat(0xf2741104) --web-translate --client_version=4067692804 --wmpf_root_dir=/home/linao/.xwechat/radium --enable-applet-v3 --wmpf-drm-plugin-path --no-preload --mojo-platform-channel-handle=3
+   8377    1629    8376    23:36:42  4680 crashpad_handle /opt/wechat/RadiumWMPF/runtime/crashpad_handler --no-rate-limit --database=/home/linao/.xwechat/crashinfo --annotation=ext_info={"app_call_name":"WeChatAppEx","app_name":"WeChatAppEx","app_path":"/opt/wechat/RadiumWMPF/runtime/WeChatAppEx","crash_notify":"0","main_thread_id":"8353","module_name":"XWeb_linux","modules_dir":"/opt/wechat/RadiumWMPF/runtime","product":"WeChatAppEx","report_type":"9999","restart_app_cmd":"/opt/wechat/RadiumWMPF/runtime/WeChatAppEx --log-level=2 --lang=zh-CN --wechat-files-path=/home/linao/文档/xwechat_files --product-id=1002 --wechat-sub-user-agent=MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x63090a13) UnifiedPCLinuxWechat(0xf2741104) --web-translate --client_version=4067692804 --wmpf_root_dir=/home/linao/.xwechat/radium --enable-applet-v3 --wmpf-drm-plugin-path --no-preload --mojo-platform-channel-handle=3 --disable-notifications --disable-gpu --enable-crash-reporter --enable-features=,OverlayScrollbar,XWorker,NetworkServiceMemoryCache --disable-features=DigitalGoodsApi,NotificationTriggers,PeriodicBackgroundSync,BackForwardCache,TFLiteLanguageDetectionEnabled,WebOTP,HardwareMediaKeyHandling,AudioServiceOutOfProcess,Vulkan,AutoupgradeMixedContent --wmpf_root_dir=/home/linao/.xwechat/radium","version":"4067692804"} --annotation=product=WeChatAppEx --initial-client-fd=104 --shared-client-connection
+   8383    8353    1894    23:36:42 32508 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=zygote --no-zygote-sandbox --log-level=2 --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --product-id=1002
+   8384    8353    1894    23:36:42 32376 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=zygote --log-level=2 --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --product-id=1002
+   8386    8384    1894    23:36:42 12476 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=zygote --log-level=2 --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --product-id=1002
+   8404    8353    1894    23:36:41 68696 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=utility --utility-sub-type=network.mojom.NetworkService --lang=zh-CN --service-sandbox-type=none --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --product-id=1002 --disable-mojo-broker --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+   8406    8383    1894    23:36:41 81340 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=gpu-process --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --product-id=1002 --gpu-preferences=WAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAABgAAAAAAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAGAAAAAAAAAAYAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --use-gl=angle --use-angle=swiftshader-webgl --disable-mojo-broker --shared-files --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+   8488    8281    1894    23:36:37 268956 wxocr          /opt/wechat/wxocr --crashpad-handler-pid=8285 --mojo-platform-channel-handle=5 --shared-files --field-trial-handle=0,i,17603425374471169207,9418906038505756783,131072
+   8504    8353    1894    23:36:37 45920 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=utility --utility-sub-type=flue.mojom.ILinkServiceHost --lang=zh-CN --service-sandbox-type=none --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --product-id=1002 --disable-mojo-broker --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+   8505    8281    1894    23:36:37 11432 wxplayer        /opt/wechat/wxplayer --crashpad-handler-pid=8285 --mojo-platform-channel-handle=5 --shared-files --field-trial-handle=0,i,17603425374471169207,9418906038505756783,131072
+   8515    8281    1894    23:36:37 21016 wxplayer        /opt/wechat/wxplayer --crashpad-handler-pid=8285 --mojo-platform-channel-handle=5 --shared-files --field-trial-handle=0,i,17603425374471169207,9418906038505756783,131072
+   8516    8281    1894    23:36:37 71036 wxutility       /opt/wechat/wxutility --crashpad-handler-pid=8285 --mojo-platform-channel-handle=5 --shared-files --field-trial-handle=0,i,17603425374471169207,9418906038505756783,131072
+   8577    8383    1894    23:36:37 137124 WeChatAppEx    /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --wmpf-render-type=6 --product-id=1002 --disable-notifications --disable-gpu-compositing --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1795339597827123 --disable-mojo-broker --launch-time-ticks=591527851 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+   8578    8577    1894    23:36:37 13412 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=broker
+   8617    8383    1894    23:36:37 69824 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --wmpf-render-type=5 --product-id=1002 --no-sandbox --xfile_addon_dir_path=/opt/wechat/XEditor --xfile_rw_dir_path=/home/linao/文档/xwechat_files/wxid_3atr3x5x838y22_9b16 --xfile_readonly_common_path=/home/linao/文档/xwechat_files --xfile_rw_common_path=/opt/wechat/RadiumWMPF/runtime/xfile/cache --disable-notifications --disable-gpu-compositing --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=7 --time-ticks-at-unix-epoch=-1795339597827123 --disable-mojo-broker --launch-time-ticks=591631221 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+   8662    8383    1894    23:36:37 273252 WeChatAppEx    /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --is-subscription-disorder --wmpf-render-type=0 --product-id=1002 --disable-notifications --disable-gpu-compositing --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=8 --time-ticks-at-unix-epoch=-1795339597827123 --disable-mojo-broker --launch-time-ticks=591883055 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+   8663    8662    1894    23:36:37 13416 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=broker
+  17487    2042    2042    22:59:18  7580 ibus-engine-sim /usr/libexec/ibus-engine-simple
+  18589    1856    1856    22:58:15 11408 gvfsd-http      /usr/libexec/gvfsd-http --spawner :1.20 /org/gtk/gvfs/exec_spaw/1
+  26058    1856    1856    22:46:15  9200 gvfsd-network   /usr/libexec/gvfsd-network --spawner :1.20 /org/gtk/gvfs/exec_spaw/2
+  26084    1856    1856    22:46:14  8968 gvfsd-dnssd     /usr/libexec/gvfsd-dnssd --spawner :1.20 /org/gtk/gvfs/exec_spaw/4
+ 139328       1  139328    17:13:03 13708 cupsd           /usr/sbin/cupsd -l
+ 139331       1  139331    17:13:03 11448 cups-browsed    /usr/sbin/cups-browsed
+ 180455    1894    1894    08:01:08 1622440 firefox       /snap/firefox/9036/usr/lib/firefox/firefox
+ 180537    1629  180536    08:01:06  2444 crashhelper     /snap/firefox/9036/usr/lib/firefox/crashhelper 180455 9 /tmp/ 11 20261006030843
+ 180648  180455    1894    08:01:05 33752 forkserver      /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -ipcHandle 0 -signalPipe 1 -initialChannelId {0450f4f3-3e64-47a3-831e-3f4f07efdb48} -parentPid 180455 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 1 forkserver
+ 180649       2       0    08:01:05     0 nvidia-drm/time [nvidia-drm/timeline-8e]
+ 180652  180648    1894    08:01:05 42344 Socket Process  /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -parentBuildID 20261006030843 -prefsHandle 0:39443 -prefMapHandle 1:297178 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {3b3edb9b-4a22-46bd-9b81-6d95aaf1feeb} -parentPid 180455 -crashHelperPid 180537 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/9036/usr/lib/firefox/browser 2 socket
+ 180687  180648    1894    08:01:05 197260 Privileged Cont /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:39633 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {5fe00861-ac21-4494-8fa0-fc5cbbc2c517} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 3 tab
+ 180696  180648    1894    08:01:05 56788 RDD Process     /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -parentBuildID 20261006030843 -prefsHandle 0:39633 -prefMapHandle 1:297178 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {625a2fa9-40f5-48bc-81f9-2976a7da9c14} -parentPid 180455 -crashHelperPid 180537 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/9036/usr/lib/firefox/browser 4 rdd
+ 180732       2       0    08:01:05     0 nvidia-drm/time [nvidia-drm/timeline-8f]
+ 180817  180648    1894    08:01:04 187732 WebExtensions  /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:39745 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {de9ed28f-7e28-4841-b9e0-e11c3356f8c6} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 5 tab
+ 181000  180648    1894    08:01:03 54772 Utility Process /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -parentBuildID 20261006030843 -sandboxingKind 0 -prefsHandle 0:56607 -prefMapHandle 1:297178 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {04d53227-0302-4275-bab1-7e5e61cc749d} -parentPid 180455 -crashHelperPid 180537 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/9036/usr/lib/firefox/browser 6 utility
+ 181003  180648    1894    08:01:03 929184 Isolated Web Co /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:50796 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {6cd8c1bb-7011-4cf3-b868-5bdb393ef0af} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 7 tab
+ 181013  180648    1894    08:01:03 113500 Isolated Web Co /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:50796 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {d5cad0b9-d41c-43e1-9d7b-8e8f1b04cea2} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 8 tab
+ 182074  180648    1894    07:59:56 547904 Isolated Web Co /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:50904 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {734dd297-2533-444b-a52e-f8e787771934} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 11 tab
+ 182117    1894    1894    07:59:21 456268 ChatGPT        /usr/lib/chatgpt/ChatGPT
+ 182124    1629  182123    07:59:21  3960 browser_crashpa /usr/lib/chatgpt/browser_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --user-stream-region=4,65568 --database=/home/linao/.config/Codex/Crash Reports --annotation=lsb-release=Ubuntu 22.04.5 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=157.0.8103.78 --initial-client-fd=7 --shared-client-connection
+ 182126    1629  182125    07:59:21  3440 browser_crashpa /usr/lib/chatgpt/browser_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/linao/.config/Codex/Crash Reports --annotation=lsb-release=Ubuntu 22.04.5 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=157.0.8103.78 --initial-client-fd=4 --shared-client-connection
+ 182130  182117    1894    07:59:21 80368 ChatGPT         /usr/lib/chatgpt/ChatGPT --type=zygote --no-zygote-sandbox --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --change-stack-guard-on-fork=enable
+ 182131  182117    1894    07:59:21 80920 ChatGPT         /usr/lib/chatgpt/ChatGPT --type=zygote --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --change-stack-guard-on-fork=enable
+ 182137  182131    1894    07:59:21 20540 ChatGPT         /usr/lib/chatgpt/ChatGPT --type=zygote --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --change-stack-guard-on-fork=enable
+ 182167  182130    1894    07:59:20 303672 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=gpu-process --gpu-recent-crash-count=0 --ozone-platform=x11 --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --change-stack-guard-on-fork=enable --gpu-preferences=YAAAAAAAAACgAAACAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,5721345723577439453,9658732831730540655,262144 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708988185955192
+ 182169  182117    1894    07:59:20 130888 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=utility --utility-sub-type=network.mojom.NetworkService --lang=zh-CN --service-sandbox-type=none --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,4090961451860030400,935992445176906109,524288 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708989122997041
+ 182183  182137    1894    07:59:20 73128 ChatGPT         /usr/lib/chatgpt/ChatGPT --type=utility --utility-sub-type=storage.mojom.StorageService --lang=zh-CN --service-sandbox-type=utility --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,9902500617161973817,4513403231024885768,524288 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708990060038890
+ 182218       2       0    07:59:20     0 nvidia-drm/time [nvidia-drm/timeline-91]
+ 182219  182167    1894    07:59:20 36680 ChatGPT         /usr/lib/chatgpt/ChatGPT --type=broker
+ 182581  182137    1894    07:59:18 129080 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --launch-time-ticks=56830566968 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,8256504086391629571,5929358591905199882,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708991934122588
+ 182605  182117    1894    07:59:18 298440 codex          /usr/lib/chatgpt/resources/codex -c features.code_mode_host=true app-server --analytics-default-enabled -c plugins.codex-app-tools@openai-bundled.mcp_servers.codex_app.enabled=true
+ 182689  182137    1894    07:59:16 815760 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=8 --launch-time-ticks=56832402371 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,12187192753654251809,15319670732729174363,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708993808206286 --force-fieldtrials=WebRTC-Sctp-Snap/Enabled/WebRTC-IceHandshakeDtls/Enabled/WebRTC-ForceDtls13/Enabled/
+ 182716  182117    1894    07:59:13 211788 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=utility --utility-sub-type=node.mojom.NodeService --lang=zh-CN --service-sandbox-type=none --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,1789052862709453788,10297356401614838166,524288 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708994745248135
+ 183052  182117    1894    07:59:09 61828 codex           /usr/lib/chatgpt/resources/codex -c forced_login_method="chatgpt" exec-server --concurrent-requests 32 --remote https://codex-cloud-environments.chatgpt.com/api --environment-id ccarenv_b64_Y2NhcmVudl82YWJkZDJlY2RhZWM4MTkxYWNiYzgxZmIzNTBhOWJhMw
+ 183075  182117    1894    07:59:09 54792 MainThread      /home/linao/.config/Codex/artifact-sessions/runtime-generations/generation-XYuHY4/runtime/bin/node /home/linao/.config/Codex/artifact-sessions/runtime-generations/generation-XYuHY4/runtime/node_modules/@oai/artifact-tool/dist/artifact-session/host-daemon.mjs
+ 183179  182605  183179    07:59:06 11376 node_repl       /usr/lib/chatgpt/resources/cua_node/bin/node_repl
+ 183180  182137    1894    07:59:06 183388 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=11 --launch-time-ticks=56842754154 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,5758785597584296114,10332523325745953603,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708996619331833 --force-fieldtrials=WebRTC-Sctp-Snap/Enabled/WebRTC-IceHandshakeDtls/Enabled/WebRTC-ForceDtls13/Enabled/
+ 183181  182605  183181    07:59:06 83060 MainThread      /usr/lib/chatgpt/resources/cua_node/bin/node ./server.mjs
+ 183198  182605  183198    07:59:06 11388 node_repl       /usr/lib/chatgpt/resources/cua_node/bin/node_repl
+ 183219  182605  183219    07:59:06 11176 node_repl       /usr/lib/chatgpt/resources/cua_node/bin/node_repl
+ 183396  182137    1894    07:59:02 314508 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=12 --launch-time-ticks=56846158819 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7889652817001632978,17178755200237513609,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190708997556373682 --force-fieldtrials=WebRTC-Sctp-Snap/Enabled/WebRTC-IceHandshakeDtls/Enabled/WebRTC-ForceDtls13/Enabled/
+ 183544  182137    1894    07:59:02 130436 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=15 --launch-time-ticks=56846751035 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,4819466550069141461,7199184184241276003,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190709000367499229
+ 183642  182137    1894    07:59:01 126360 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=19 --launch-time-ticks=56847138061 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,4769012210474109800,11671123246033631580,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190709004115666625
+ 183741  182137    1894    07:58:59 82216 ChatGPT         /usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --change-stack-guard-on-fork=enable --ozone-platform=x11 --enable-blink-features=WebMCP,FocusgroupV2 --disable-blink-features=ReplacedNormalFlowStackingInlinePaint --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=21 --launch-time-ticks=56849953834 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,5018947669957366756,3317123087720714134,1572864 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190709005989750323
+ 184023    1894    1894    07:58:11 191768 code           /usr/share/code/code
+ 184028  184023    1894    07:58:11 49256 code            /usr/share/code/code --type=zygote --no-zygote-sandbox
+ 184029  184023    1894    07:58:11 49468 code            /usr/share/code/code --type=zygote
+ 184031  184029    1894    07:58:11 12660 code            /usr/share/code/code --type=zygote
+ 184046    1629  184045    07:58:10  3640 chrome_crashpad /usr/share/code/chrome_crashpad_handler --monitor-self-annotation=ptype=crashpad-handler --no-rate-limit --database=/home/linao/.config/Code/Crashpad --url=appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=b1ef2cbd-1af1-4464-8d56-ef815e872bd8&iid=b1ef2cbd-1af1-4464-8d56-ef815e872bd8&sid=b1ef2cbd-1af1-4464-8d56-ef815e872bd8 --annotation=_companyName=Microsoft --annotation=_productName=VSCode --annotation=_version=1.121.0 --annotation=lsb-release=Ubuntu 22.04.5 LTS --annotation=plat=Linux --annotation=prod=Electron --annotation=ver=39.8.8 --initial-client-fd=48 --shared-client-connection
+ 184063  184028    1894    07:58:10 254488 code           /usr/share/code/code --type=zygote --no-zygote-sandbox
+ 184068  184023    1894    07:58:10 75272 code            /proc/self/exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=zh-CN --service-sandbox-type=none --crashpad-handler-pid=184046 --enable-crash-reporter=f2f9e8b0-5e26-4c4d-9e6c-86a8e88e1305,no_channel --user-data-dir=/home/linao/.config/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,6665485665195928602,2189974782404831586,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708989122997041
+ 184089  184031    1894    07:58:10 259556 code           /usr/share/code/code --type=zygote
+ 184109       2       0    07:58:09     0 nvidia-drm/time [nvidia-drm/timeline-92]
+ 184111  184063    1894    07:58:09 37184 code            /usr/share/code/code --type=zygote --no-zygote-sandbox
+ 184429  184023    1894    07:58:08 524216 code           /proc/self/exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=zh-CN --service-sandbox-type=none --dns-result-order=ipv4first --experimental-network-inspection --inspect-port=0 --js-flags=--nodecommit_pooled_pages --crashpad-handler-pid=184046 --enable-crash-reporter=f2f9e8b0-5e26-4c4d-9e6c-86a8e88e1305,no_channel --user-data-dir=/home/linao/.config/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,6665485665195928602,2189974782404831586,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708990997080739
+ 184446  184023    1894    07:58:08 120960 code           /proc/self/exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=zh-CN --service-sandbox-type=none --js-flags=--nodecommit_pooled_pages --crashpad-handler-pid=184046 --enable-crash-reporter=f2f9e8b0-5e26-4c4d-9e6c-86a8e88e1305,no_channel --user-data-dir=/home/linao/.config/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,6665485665195928602,2189974782404831586,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708991934122588
+ 184448  184023    1894    07:58:08 149528 code           /proc/self/exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=zh-CN --service-sandbox-type=none --js-flags=--nodecommit_pooled_pages --crashpad-handler-pid=184046 --enable-crash-reporter=f2f9e8b0-5e26-4c4d-9e6c-86a8e88e1305,no_channel --user-data-dir=/home/linao/.config/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,6665485665195928602,2189974782404831586,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708992871164437
+ 184882  184429    1894    07:58:05  6116 pet             /home/linao/.vscode/extensions/ms-python.vscode-python-envs-1.44.0-linux-x64/python-env-tools/bin/pet server
+ 185011  184429    1894    07:58:03 124220 codex          /home/linao/.vscode/extensions/openai.chatgpt-26.51117.41037-linux-x64/bin/linux-x86_64/codex -c features.code_mode_host=true -c features.windows_sandbox_service=true app-server --analytics-default-enabled
+ 185016  184429    1894    07:58:02 81736 code            /usr/share/code/code /home/linao/.vscode/extensions/ms-vscode.vscode-chat-customizations-evaluations-1.0.9/out/server.js --node-ipc --clientProcessId=184429
+ 185076  184031    1894    07:58:02 173572 code           /usr/share/code/code --type=zygote
+ 185340  184429    1894    07:58:00 86620 code            /usr/share/code/code /usr/share/code/resources/app/extensions/json-language-features/server/dist/node/jsonServerMain --node-ipc --clientProcessId=184429
+ 185521  184023    1894    07:57:58 112856 code           /proc/self/exe --type=utility --utility-sub-type=node.mojom.NodeService --lang=zh-CN --service-sandbox-type=none --js-flags=--nodecommit_pooled_pages --crashpad-handler-pid=184046 --enable-crash-reporter=f2f9e8b0-5e26-4c4d-9e6c-86a8e88e1305,no_channel --user-data-dir=/home/linao/.config/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,6665485665195928602,2189974782404831586,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,EarlyEstablishGpuChannel,EstablishGpuChannelAsync --disable-features=CalculateNativeWinOcclusion,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --trace-process-track-uuid=3190708994745248135
+ 185559  185521  185559    07:57:58  9824 bash            /usr/bin/bash --init-file /usr/share/code/resources/app/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+ 185851  184429    1894    07:57:57 368800 code           /usr/share/code/code /home/linao/.vscode/extensions/ms-python.vscode-pylance-2026.4.1/dist/server.bundle.js --cancellationReceive=file:291d5d967406416749830220a3de89d6c60b4aa602 --node-ipc --clientProcessId=184429
+ 185963  184429    1894    07:57:49 211200 claude         /home/linao/.vscode/extensions/anthropic.claude-code-2.1.330-linux-x64/resources/native-binary/claude --output-format stream-json --verbose --input-format stream-json --max-thinking-tokens=31999 --permission-prompt-tool=stdio --resume=4ac9ce90-20d1-47fe-8201-514457ef1281 --setting-sources=user,project,local --permission-mode=acceptEdits --include-partial-messages --debug --debug-to-stderr --enable-auth-status --no-chrome --replay-user-messages
+ 186463  182605  186463    07:55:36 18868 codex-code-mode /usr/lib/chatgpt/resources/codex-code-mode-host --listen grpc+stdio://
+ 253753  182117    1894    03:06:04 101860 ChatGPT        /usr/lib/chatgpt/ChatGPT --type=utility --utility-sub-type=audio.mojom.AudioService --lang=zh-CN --service-sandbox-type=none --crashpad-handler-pid=182124 --enable-crash-reporter=, --user-data-dir=/home/linao/.config/Codex --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --code-cache-schemes=app --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,10642826099021258319,15510600733580566559,524288 --field-trial-handle=3,i,1664005072082700047,6407939615779688635,262144 --enable-features=DevToolsWebMCPSupport,DocumentPolicyIncludeJSCallStacksInCrashReports,ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,OwlNativeCaret,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,10865709226144223884,187012677202241545,4 --trace-process-track-uuid=3190709006926792172
+ 259212       2       0    02:21:57     0 nvidia-drm/time [nvidia-drm/timeline-aa]
+ 260623    1629    1660    02:15:02 89740 nautilus        /usr/bin/nautilus --gapplication-service
+ 262971  180648    1894    02:13:29 289884 Isolated Web Co /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51205 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {415bc687-3e39-452d-8596-f961ad2a3cd1} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 24 tab
+ 264988  180648    1894    02:12:39 384164 Isolated Web Co /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51205 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {0e3b3b30-dbf3-47b5-928b-3ec396cba9ef} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 25 tab
+ 265545       2       0    02:12:33     0 nvidia-drm/time [nvidia-drm/timeline-ad]
+ 265555  180648    1894    02:12:32 74552 Web Content     /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51205 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {99bc0775-0e63-4726-9c2a-c8e3bd55c78a} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 26 tab
+ 272465    8386    1894    02:03:43 97224 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --wmpf-render-type=0 --product-id=1002 --disable-notifications --disable-gpu-compositing --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=11 --time-ticks-at-unix-epoch=-1795339597827123 --disable-mojo-broker --launch-time-ticks=78165922382 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+ 272549       2       0    02:02:34     0 nvidia-drm/time [nvidia-drm/timeline-ae]
+ 273327       2       0    01:58:01     0 nvidia-drm/time [nvidia-drm/timeline-af]
+ 273331  180648    1894    01:58:00 74940 Web Content     /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51206 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {d3a3e7d5-b04d-4acb-ab0c-8c332179996a} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 27 tab
+ 273506  180648    1894    01:57:41 75080 Web Content     /snap/firefox/9036/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:51206 -prefMapHandle 1:297178 -jsInitHandle 2:162336 -parentBuildID 20261006030843 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {eb8eacb1-9e2d-4835-9bce-2d3904d0fee9} -parentPid 180455 -crashHelperPid 180537 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/9036/usr/lib/firefox/omni.ja -appomni /snap/firefox/9036/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/9036/usr/lib/firefox/browser 28 tab
+ 277071    8386    1894    01:45:03 106844 WeChatAppEx    /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --wmpf-render-type=7 --product-id=1002 --disable-notifications --disable-gpu-compositing --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=13 --time-ticks-at-unix-epoch=-1795339597827123 --disable-mojo-broker --launch-time-ticks=79285799374 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+ 277154    8386    1894    01:45:00 54472 WeChatAppEx     /opt/wechat/RadiumWMPF/runtime/WeChatAppEx --type=renderer --client_version=4067692804 --enable-crash-reporter --wmpf_root_dir=/home/linao/.xwechat/radium --crashpad-handler-pid=8377 --wmpf-render-type=7 --product-id=1002 --disable-notifications --disable-gpu-compositing --lang=zh-CN --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=14 --time-ticks-at-unix-epoch=-1795339597827123 --disable-mojo-broker --launch-time-ticks=79288698145 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17109133503005012457,12380469380450343596,262144 --enable-features=NetworkServiceMemoryCache,OverlayScrollbar,XWorker --disable-features=AudioServiceOutOfProcess,AutoupgradeMixedContent,BackForwardCache,DigitalGoodsApi,HardwareMediaKeyHandling,NotificationTriggers,PeriodicBackgroundSync,TFLiteLanguageDetectionEnabled,Vulkan,WebOTP --variations-seed-version --log-level=2
+ 283097       1  283097    01:34:18 29588 fwupd           /usr/libexec/fwupd/fwupd
+ 292123       2       0    01:25:04     0 kworker/1:0-mm_ [kworker/1:0-mm_percpu_wq]
+ 292635    1629  292237    01:24:32 64056 python3         /usr/bin/python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon --ros-domain-id 213 --rmw-implementation rmw_fastrtps_cpp
+ 307508       2       0    01:11:58     0 kworker/u32:3-f [kworker/u32:3-flush-259:0]
+ 317071       2       0    01:04:11     0 kworker/u32:1-f [kworker/u32:1-flush-259:0]
+ 327835       2       0       52:53     0 kworker/15:2-mm [kworker/15:2-mm_percpu_wq]
+ 345793       2       0       41:28     0 kworker/11:0-mm [kworker/11:0-mm_percpu_wq]
+ 347125       2       0       33:37     0 kworker/8:2-mm_ [kworker/8:2-mm_percpu_wq]
+ 349048    1629  348934       31:50 63368 python3         /usr/bin/python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon --ros-domain-id 208 --rmw-implementation rmw_fastrtps_cpp
+ 352695       2       0       30:38     0 kworker/9:0-eve [kworker/9:0-events]
+ 352714       2       0       30:30     0 kworker/6:0-ino [kworker/6:0-inode_switch_wbs]
+ 353056       2       0       26:42     0 kworker/13:1-ev [kworker/13:1-events]
+ 353264       2       0       26:13     0 kworker/0:0-ine [kworker/0:0-inet_frag_wq]
+ 365086       2       0       21:05     0 kworker/u32:2-f [kworker/u32:2-flush-259:0]
+ 365391       2       0       20:59     0 kworker/u33:2-r [kworker/u33:2-rb_allocator]
+ 369994       2       0       18:47     0 kworker/5:0-eve [kworker/5:0-events]
+ 370052       2       0       18:22     0 kworker/14:1-ev [kworker/14:1-events]
+ 370241       2       0       16:46     0 kworker/7:0-eve [kworker/7:0-events]
+ 370389       2       0       15:46     0 kworker/3:1-eve [kworker/3:1-events]
+ 370517       2       0       15:10     0 kworker/9:2-mm_ [kworker/9:2-mm_percpu_wq]
+ 370518       2       0       15:09     0 kworker/10:1-mm [kworker/10:1-mm_percpu_wq]
+ 370537       2       0       14:39     0 kworker/8:1-eve [kworker/8:1-events]
+ 371188       2       0       13:38     0 kworker/2:2-ine [kworker/2:2-inet_frag_wq]
+ 371874       2       0       13:05     0 kworker/4:3-eve [kworker/4:3-events]
+ 371895       2       0       12:57     0 kworker/5:1-eve [kworker/5:1-events]
+ 371898       2       0       12:56     0 kworker/11:2-ev [kworker/11:2-events]
+ 371899       2       0       12:52     0 kworker/8:3-eve [kworker/8:3-events]
+ 371916       2       0       12:40     0 kworker/6:1-eve [kworker/6:1-events]
+ 371969       2       0       12:07     0 kworker/12:0-mm [kworker/12:0-mm_percpu_wq]
+ 371970       2       0       12:07     0 kworker/13:2-in [kworker/13:2-inet_frag_wq]
+ 372092       2       0       11:14     0 kworker/0:2-eve [kworker/0:2-events]
+ 372227       2       0       10:47     0 kworker/1:2-eve [kworker/1:2-events]
+ 372450       2       0       09:55     0 kworker/u33:0-r [kworker/u33:0-rb_allocator]
+ 372531       2       0       08:54     0 kworker/10:0-in [kworker/10:0-inet_frag_wq]
+ 374987       2       0       06:15     0 kworker/u32:5-e [kworker/u32:5-events_power_efficient]
+ 375002       2       0       06:13     0 kworker/3:0-eve [kworker/3:0-events]
+ 375012       2       0       06:13     0 kworker/4:1-mm_ [kworker/4:1-mm_percpu_wq]
+ 375030       2       0       06:05     0 kworker/12:2-ev [kworker/12:2-events]
+ 375031       2       0       06:05     0 kworker/14:2-ev [kworker/14:2-events]
+ 375048       2       0       05:59     0 kworker/2:1-mm_ [kworker/2:1-mm_percpu_wq]
+ 375053       2       0       05:59     0 kworker/15:0-in [kworker/15:0-inet_frag_wq]
+ 375070       2       0       05:52     0 kworker/7:2-eve [kworker/7:2-events]
+ 375158       2       0       04:41     0 kworker/8:0-eve [kworker/8:0-events]
+ 375244       2       0       04:02     0 kworker/u33:1-r [kworker/u33:1-rb_allocator]
+ 375363       2       0       03:32     0 kworker/5:2     [kworker/5:2]
+ 375541       2       0       02:36     0 kworker/6:2     [kworker/6:2]
+ 375551       2       0       02:34     0 kworker/10:2-ev [kworker/10:2-events]
+ 375789       2       0       01:35     0 kworker/13:0-rc [kworker/13:0-rcu_gp]
+ 375870       2       0       01:12     0 kworker/9:1-mm_ [kworker/9:1-mm_percpu_wq]
+ 376206       2       0       00:11     0 kworker/7:1     [kworker/7:1]
+ 376208    1629  376208       00:08 32872 tracker-extract /usr/libexec/tracker-extract-3
+ 376228  182605  376228       00:00  3508 bash            /bin/bash -lc run=docs/phase3_0/experiments/T05/preflight-E04-run2 mkdir -p "$run" date '+%Y-%m-%d %H:%M:%S %Z' > "$run/time.txt" free -b > "$run/free.txt" df -B1 . > "$run/disk.txt" ps -eo pid,ppid,pgid,etime,rss,comm,args > "$run/processes.txt" ss -ltn > "$run/listening-ports.txt" python3 - "$run" <<'PY' import json, pathlib, socket, sys p=pathlib.Path(sys.argv[1]); lines=pathlib.Path('/proc/meminfo').read_text().splitlines() mem_kib=int(next(x.split()[1] for x in lines if x.startswith('MemAvailable:'))) ports={} for port in (11393,8118):     try:         with socket.socket() as s: s.bind(('127.0.0.1',port))         ports[str(port)]='bindable'     except OSError as e: ports[str(port)]=f'busy: {e}' result={'mem_available_kib':mem_kib,'mem_available_gib':round(mem_kib/1024/1024,3),         'minimum_memory_gib':6.0,'memory_ok':mem_kib>=6*1024*1024,         'ports':ports,'ports_ok':all(v=='bindable' for v in ports.values())} (p/'resource-port-check.json').write_text(json.dumps(result,indent=2)+'\n'); print(json.dumps(result)) PY set +u source /opt/ros/humble/setup.bash source ros2_ws/install/setup.bash set -u export ROS_LOCALHOST_ONLY=1 ROS_DOMAIN_ID=203 set +e .venv/bin/python scripts/phase25_preflight.py --check-domain-empty > "$run/domain-check.json" 2> "$run/domain-check.err" result=$? printf '%s\n' "$result" > "$run/domain-check.exit" cat "$run/domain-check.json" exit "$result"
+ 376234  376228  376228       00:00  3228 ps              ps -eo pid,ppid,pgid,etime,rss,comm,args

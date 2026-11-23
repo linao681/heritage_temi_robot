@@ -129,12 +129,127 @@
       return firstStamp + Math.round(Number(slider.value) * 1_000_000);
     }
 
+    function drawTrajectory(stamp) {
+      const plot = document.getElementById('trajectory-canvas');
+      const ctx = plot.getContext('2d');
+      const padding = 30;
+      ctx.clearRect(0, 0, plot.width, plot.height);
+      ctx.fillStyle = '#24211d';
+      ctx.fillRect(0, 0, plot.width, plot.height);
+      const robot = recording.robot_pose_series.filter(item => item.stamp_ns <= stamp);
+      const visitors = recording.visitor_pose_series.filter(item => item.stamp_ns <= stamp);
+      const all = [...recording.robot_pose_series, ...recording.visitor_pose_series];
+      if (!all.length) {
+        ctx.fillStyle = '#eee7da';
+        ctx.font = '16px sans-serif';
+        ctx.fillText('本轮没有可回放的位置样本', padding, padding);
+        return;
+      }
+      const xs = all.map(item => item.x), zs = all.map(item => item.z);
+      const minX = Math.min(...xs), maxX = Math.max(...xs);
+      const minZ = Math.min(...zs), maxZ = Math.max(...zs);
+      const scaleX = (plot.width - 2 * padding) / Math.max(0.1, maxX - minX);
+      const scaleZ = (plot.height - 2 * padding) / Math.max(0.1, maxZ - minZ);
+      const scale = Math.min(scaleX, scaleZ);
+      const centerX = plot.width / 2, centerY = plot.height / 2;
+      const point = item => ({
+        x: centerX + (item.x - (minX + maxX) / 2) * scale,
+        y: centerY - (item.z - (minZ + maxZ) / 2) * scale,
+      });
+      function drawPath(items, color, source, labelY) {
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let previous = null;
+        for (const item of items) {
+          const current = point(item);
+          if (!previous || item.stamp_ns - previous.stamp_ns > 1_000_000_000) {
+            ctx.moveTo(current.x, current.y);
+          } else {
+            ctx.lineTo(current.x, current.y);
+          }
+          previous = item;
+        }
+        ctx.stroke();
+        const last = items[items.length - 1];
+        if (last) {
+          const current = point(last);
+          ctx.beginPath();
+          ctx.arc(current.x, current.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillText(source, padding, labelY);
+      }
+      drawPath(robot, '#64d7a2', 'Robot · ROS TF', 18);
+      const visitorGroups = new Map();
+      for (const item of visitors) {
+        if (!visitorGroups.has(item.id)) visitorGroups.set(item.id, []);
+        visitorGroups.get(item.id).push(item);
+      }
+      const colors = ['#f2a65a', '#80b8ff', '#e583c5', '#d4ca6b', '#8cd6d1'];
+      let index = 0;
+      for (const [id, items] of visitorGroups) {
+        drawPath(items, colors[index % colors.length], `Gazebo truth · ${id}`, 38 + index * 18);
+        index += 1;
+      }
+      ctx.fillStyle = '#c9c0b4';
+      ctx.fillText('Hall display coordinates (m)', padding, plot.height - 10);
+    }
+
+    function drawSpeed(stamp) {
+      const plot = document.getElementById('speed-canvas');
+      const ctx = plot.getContext('2d');
+      const padding = 34;
+      ctx.clearRect(0, 0, plot.width, plot.height);
+      ctx.fillStyle = '#24211d';
+      ctx.fillRect(0, 0, plot.width, plot.height);
+      const items = recording.speed_series.filter(item => item.stamp_ns <= stamp);
+      const start = firstStamp;
+      const end = Math.max(start + 1, Number(slider.max) * 1_000_000 + firstStamp);
+      const maxSpeed = Math.max(0.1, ...recording.speed_series.map(item => item.linear_speed_mps));
+      const x = time => padding + (time - start) / (end - start) * (plot.width - 2 * padding);
+      const y = value => plot.height - padding - value / maxSpeed * (plot.height - 2 * padding);
+      ctx.strokeStyle = '#625b52';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padding, padding);
+      ctx.lineTo(padding, plot.height - padding);
+      ctx.lineTo(plot.width - padding, plot.height - padding);
+      ctx.stroke();
+      for (const [source, color] of [['cmd_vel', '#f2a65a'], ['odom', '#64d7a2']]) {
+        const series = items.filter(item => item.source === source);
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        let previous = null;
+        for (const item of series) {
+          const currentX = x(item.stamp_ns), currentY = y(item.linear_speed_mps);
+          if (!previous || item.stamp_ns - previous.stamp_ns > 1_000_000_000) {
+            ctx.moveTo(currentX, currentY);
+          } else {
+            ctx.lineTo(currentX, currentY);
+          }
+          previous = item;
+        }
+        ctx.stroke();
+        ctx.fillText(source === 'cmd_vel' ? 'cmd_vel · 指令' : 'odom · 实测',
+          padding + (source === 'cmd_vel' ? 4 : 170), 18);
+      }
+      ctx.fillStyle = '#c9c0b4';
+      ctx.fillText(`线速度 (m/s) · 记录样本截至 ${((stamp - firstStamp) / 1e9).toFixed(1)} s`,
+        padding, plot.height - 8);
+    }
+
     function drawFrame() {
       const stamp = currentStamp();
       const frame = nearestFrame(recording.rgb_frames, stamp);
       const nearestEvent = recording.events.reduce((best, event) =>
         !best || Math.abs(event.stamp_ns - stamp) < Math.abs(best.stamp_ns - stamp) ? event : best, null);
       timeLabel.textContent = `${((stamp - firstStamp) / 1e9).toFixed(2)} s / ${(durationNs / 1e9).toFixed(2)} s`;
+      drawTrajectory(stamp);
+      drawSpeed(stamp);
       context.clearRect(0, 0, canvas.width, canvas.height);
       if (!frame) {
         context.fillStyle = '#eee7da';
@@ -181,11 +296,22 @@
       for (const event of recording.events.slice(0, 500)) {
         const button = document.createElement('button');
         const payload = event.data || {};
-        const label = event.type === 'team_observation'
-          ? `${payload.observation_state || '状态'} · ${payload.observed_count ?? '—'}/${payload.expected_count ?? '—'}`
-          : event.type.endsWith('_detection')
-            ? `${event.type} · ${payload.people_count ?? payload.detections?.length ?? 0} 人`
-            : `匿名轨迹 · ${(payload.tracks || []).length} 人`;
+        let label;
+        if (event.type === 'team_observation') {
+          label = `视觉团队 ${payload.observation_state || '状态'} · ${payload.observed_count ?? '—'}/${payload.expected_count ?? '—'}`;
+        } else if (event.type === 'gazebo_team_truth') {
+          label = `Gazebo真值 ${payload.state || '状态'} · ${payload.count ?? '—'} 人 · 落后 ${payload.lag_m ?? '—'} m`;
+        } else if (event.type === 'tour_state') {
+          label = `导览 ${payload.state || '状态'} · ${payload.reason || ''}`;
+        } else if (event.type === 'safety_state') {
+          label = `安全 ${payload.state || '状态'} · ${payload.reason || ''}`;
+        } else if (event.type === 'cmd_vel' || event.type === 'odom') {
+          label = `${event.type} · ${payload.linear_speed_mps?.toFixed(2) ?? '—'} m/s`;
+        } else if (event.type.endsWith('_detection')) {
+          label = `${event.type} · ${payload.people_count ?? payload.detections?.length ?? 0} 人`;
+        } else {
+          label = `匿名轨迹 · ${(payload.tracks || []).length} 人`;
+        }
         button.textContent = `${((event.stamp_ns - firstStamp) / 1e9).toFixed(2)} s  ${label}`;
         button.addEventListener('click', () => seekEvent(event));
         eventsList.appendChild(button);
@@ -210,11 +336,14 @@
       meta.textContent = `实验 ${recording.run_id} · 来源状态 ${recording.source.status} · 归档 SHA256 ${recording.source.archive_sha256}`;
       document.getElementById('trajectory-note').textContent =
         recording.robot_pose_series.length || recording.visitor_pose_series.length
-          ? `机器人位置 ${recording.robot_pose_series.length} 点 · 游客位置 ${recording.visitor_pose_series.length} 点`
+          ? `机器人 ROS TF ${recording.robot_pose_series.length} 点 · 游客 Gazebo ModelStates 真值 ${recording.visitor_pose_series.length} 点`
           : '本轮未记录世界坐标位置；匿名框只在匹配图像上显示，不拼接成物理轨迹。';
       document.getElementById('speed-note').textContent = recording.speed_series.length
-        ? `本轮有 ${recording.speed_series.length} 个实际速度样本。`
+        ? `本轮保存 ${recording.speed_series.filter(item => item.source === 'cmd_vel').length} 条 cmd_vel 指令与 ${recording.speed_series.filter(item => item.source === 'odom').length} 条 odom 速度观测。`
         : `本轮没有速度曲线数据；不插值、不使用仿真真值补造。`;
+      document.getElementById('frame-caption').textContent = recording.rgb_frames.length
+        ? '检测框仅叠加于同一时间附近的已保存 RGB 图像。'
+        : '本轮没有保存 RGB 图像；仅回放记录中的匿名检测框坐标，不伪造图像叠加。';
       populateEvents();
       mode.textContent = 'RECORDED_ROS2 · 来源与文件哈希已校验';
       mode.className = 'mode valid';

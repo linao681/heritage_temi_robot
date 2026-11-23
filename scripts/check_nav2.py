@@ -1,5 +1,6 @@
 """Execute explicit single-point or five-zone Gazebo navigation checks."""
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -22,13 +23,41 @@ def route_keys(full_tour):
     return [f'zone_{index}' for index in range(1, 6)] + ['exit'] if full_tour else ['zone_1']
 
 
+def validate_domain_configuration(environment, domain_id):
+    if (isinstance(domain_id, bool) or not isinstance(domain_id, int) or
+            not 0 <= domain_id <= 232):
+        raise ValueError('domain_id must be an integer in 0..232')
+    if (environment.get('ROS_LOCALHOST_ONLY') != '1' or
+            environment.get('ROS_DOMAIN_ID') != str(domain_id)):
+        raise ValueError('set ROS_LOCALHOST_ONLY=1 and ROS_DOMAIN_ID to the explicit --domain-id')
+    return domain_id
+
+
+def navigation_report_path(output, layout, full_tour, root=ROOT):
+    if output is None:
+        name = f'{layout}_full_tour.json' if full_tour else f'{layout}_navigation.json'
+        output = Path(root) / 'docs/acceptance/gazebo' / name
+    path = Path(output)
+    if path.exists():
+        raise FileExistsError(f'navigation report already exists: {path}')
+    return path
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--layout', choices=['official', 'adaptive'], default='official')
     parser.add_argument('--full-tour', action='store_true', help='五区顺序导航并前往出口')
+    parser.add_argument('--domain-id', type=int, required=True,
+                        help='必须与已经预检的ROS_DOMAIN_ID一致')
+    parser.add_argument('--output', type=Path,
+                        help='独立新报告路径；拒绝覆盖已有文件')
     args = parser.parse_args()
-    if os.environ.get('ROS_LOCALHOST_ONLY') != '1' or os.environ.get('ROS_DOMAIN_ID') != '211':
-        parser.error('This simulation check requires localhost Domain 211')
+    try:
+        validate_domain_configuration(os.environ, args.domain_id)
+        report_path = navigation_report_path(args.output, args.layout, args.full_tour)
+    except (ValueError, FileExistsError) as error:
+        parser.error(str(error))
+    report_path.parent.mkdir(parents=True, exist_ok=True)
     rclpy.init()
     node = rclpy.create_node('gazebo_navigation_check')
     node.set_parameters([rclpy.parameter.Parameter('use_sim_time', value=True)])
@@ -57,13 +86,18 @@ def main():
             if time.monotonic() > end:
                 raise TimeoutError('navigation wait timed out')
             rclpy.spin_once(node, timeout_sec=0.1)
-    report = {'success': False, 'layout': args.layout, 'stations': [],
+    goals_path = ROOT / 'simulation/generated' / f'{args.layout}_goals.json'
+    map_path = ROOT / 'simulation/generated' / f'{args.layout}.yaml'
+    report = {'success': False, 'layout': args.layout, 'domain_id': args.domain_id,
+              'map_yaml_sha256': hashlib.sha256(map_path.read_bytes()).hexdigest(),
+              'goals_sha256': hashlib.sha256(goals_path.read_bytes()).hexdigest(),
+              'stations': [],
               'requested_route': route_keys(args.full_tour)}
     try:
         wait(lambda: client.server_is_ready() and buffer.can_transform(
             'map', 'base_footprint', rclpy.time.Time()), 45)
         wait(lambda: 'gazebo' in node.get_node_names(), 10)
-        goals = json.loads((ROOT / 'simulation/generated' / f'{args.layout}_goals.json').read_text())['goals']
+        goals = json.loads(goals_path.read_text())['goals']
         for index, key in enumerate(report['requested_route'], 1):
             name = ZONE_NAMES[int(key[-1])-1] if key.startswith('zone_') else '出口'
             set_status('NAVIGATING', name, index)
@@ -113,10 +147,7 @@ def main():
                 wait(cancel.done, 5)
             except TimeoutError:
                 pass
-        directory = ROOT / 'docs/acceptance/gazebo'
-        directory.mkdir(parents=True, exist_ok=True)
-        filename = f'{args.layout}_full_tour.json' if args.full_tour else f'{args.layout}_navigation.json'
-        (directory / filename).write_text(json.dumps(report, ensure_ascii=False, indent=2))
+        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2))
         print(json.dumps(report))
         # 发送终态后短暂保持心跳，便于展示与订阅端接收。
         end = time.monotonic() + 2

@@ -1,0 +1,5 @@
+PASS final report has seven requested sections
+PASS repository version branch=phase2_9-work HEAD=f372e3f4e0702470eb91b2a32683e62590777840
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+AssertionError: {'pause_event_id': 'd93bcaa4b6024133995dac8c2ca52539', 'pause_source': 'team', 'paused_session_id': 'ed59ec45afd04834852ebcd68799c1f6', 'route_index': 6, 'target': 'exit', 'resumed_session_id': '853a8196443446cd8ce50e35524c454e', 'uuid_changed': True, 'same_target': True, 'paired_motion_samples': 210, 'max_cmd_vel_linear_mps': 0.34949877858161926, 'max_odom_linear_mps': 0.35561211121911573, 'physical_motion_observed': True, 'status': 'PASS'}

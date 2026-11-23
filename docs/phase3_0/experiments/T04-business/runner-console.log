@@ -1,0 +1,3 @@
+完整演示：http://127.0.0.1:8113
+证据：docs/phase3_0/experiments/T04-business/visitor-full-20261123-161819
+{"status": "FAIL", "report": "docs/phase3_0/experiments/T04-business/visitor-full-20261123-161819/report.json", "error": "仿真系统已退出，查看 system.log"}

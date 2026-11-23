@@ -1,0 +1,464 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "vision_conservative",
+  "operator_mode": "scripted_test",
+  "run_id": "visitor-full-20261123-164811",
+  "manifest": "docs/phase3_0/experiments/T04-vision/visitor-full-20261123-164811/manifest.json",
+  "team_evidence_source": "vision_tracker",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode_description": "simulated consent; test operator input is separately logged",
+  "scripted_operator_scope": "this run-owned Gazebo process",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 6.136478424072266,
+    "free_disk_gib": 44.273155212402344,
+    "load_per_cpu": 0.005,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": [],
+    "domain_id": 207,
+    "domain_available": true
+  },
+  "navigation_motion_evidence": {
+    "complete": true,
+    "required_targets": [
+      "zone_1",
+      "zone_2",
+      "zone_3",
+      "zone_4",
+      "zone_5",
+      "exit"
+    ],
+    "minimum_paired_motion_samples_per_target": 3,
+    "missing_targets": [],
+    "targets": {
+      "zone_1": {
+        "cmd_vel_motion_samples": 58,
+        "paired_odom_motion_samples": 58,
+        "max_cmd_vel_linear_mps": 0.3421052631578947,
+        "max_odom_linear_mps": 0.3410605861314069,
+        "navigation_sessions": [
+          "928d25f197d44b77aca59e13142bd4df",
+          "e155b6f778864ab89cf51d254dd2f129"
+        ]
+      },
+      "zone_2": {
+        "cmd_vel_motion_samples": 106,
+        "paired_odom_motion_samples": 106,
+        "max_cmd_vel_linear_mps": 0.3421052631578947,
+        "max_odom_linear_mps": 0.34666511403590666,
+        "navigation_sessions": [
+          "c849f8f438544d869b27cf205beb5012"
+        ]
+      },
+      "zone_3": {
+        "cmd_vel_motion_samples": 135,
+        "paired_odom_motion_samples": 135,
+        "max_cmd_vel_linear_mps": 0.34984758496284485,
+        "max_odom_linear_mps": 0.3571226342034783,
+        "navigation_sessions": [
+          "b9cd4f9513004e0a864a9da8a77d4168"
+        ]
+      },
+      "zone_4": {
+        "cmd_vel_motion_samples": 115,
+        "paired_odom_motion_samples": 115,
+        "max_cmd_vel_linear_mps": 0.3421052631578947,
+        "max_odom_linear_mps": 0.34738533785351733,
+        "navigation_sessions": [
+          "5d73fab91fd8498bb7db70e96347593b",
+          "df8e0521460f428594c07f34c4b2249b"
+        ]
+      },
+      "zone_5": {
+        "cmd_vel_motion_samples": 158,
+        "paired_odom_motion_samples": 158,
+        "max_cmd_vel_linear_mps": 0.3499542882567959,
+        "max_odom_linear_mps": 0.35656680319082423,
+        "navigation_sessions": [
+          "a1a1712f496d4fae910d646f482bcb6b"
+        ]
+      },
+      "exit": {
+        "cmd_vel_motion_samples": 210,
+        "paired_odom_motion_samples": 210,
+        "max_cmd_vel_linear_mps": 0.3499615490436554,
+        "max_odom_linear_mps": 0.3570560817276794,
+        "navigation_sessions": [
+          "5901efd5c87f4fb79bdf4ff16fafb8c6"
+        ]
+      }
+    }
+  },
+  "pause_resume_evidence": [
+    {
+      "pause_event_id": "fcda52be9c214e7692ca9969937a9166",
+      "pause_source": "team",
+      "paused_session_id": "4fbe2457ce0d461bb6b3a3ea8eb9cdcd",
+      "route_index": 0,
+      "target": "wait",
+      "resumed_session_id": null,
+      "uuid_changed": false,
+      "same_target": false,
+      "paired_motion_samples": 0,
+      "max_cmd_vel_linear_mps": 0.0,
+      "max_odom_linear_mps": 0.0,
+      "physical_motion_observed": false,
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "pause_event_id": "8b334bbc0d8c4e798ce8b87c6034a473",
+      "pause_source": "team",
+      "paused_session_id": "928d25f197d44b77aca59e13142bd4df",
+      "route_index": 1,
+      "target": "zone_1",
+      "resumed_session_id": "e155b6f778864ab89cf51d254dd2f129",
+      "uuid_changed": true,
+      "same_target": true,
+      "paired_motion_samples": 57,
+      "max_cmd_vel_linear_mps": 0.3421052631578947,
+      "max_odom_linear_mps": 0.3410605861314069,
+      "physical_motion_observed": true,
+      "status": "PASS"
+    },
+    {
+      "pause_event_id": "e6e7094fc04f457786bd45ba3fb3378b",
+      "pause_source": "team",
+      "paused_session_id": "0810fc3fe11d4b8a99fcae2ccc2e9693",
+      "route_index": 2,
+      "target": "zone_2",
+      "resumed_session_id": "c849f8f438544d869b27cf205beb5012",
+      "uuid_changed": true,
+      "same_target": true,
+      "paired_motion_samples": 106,
+      "max_cmd_vel_linear_mps": 0.3421052631578947,
+      "max_odom_linear_mps": 0.34666511403590666,
+      "physical_motion_observed": true,
+      "status": "PASS"
+    },
+    {
+      "pause_event_id": "859992107b0143d690da68cdb72a5b94",
+      "pause_source": "team",
+      "paused_session_id": "2d37126aaea24670ab5071b80a691092",
+      "route_index": 3,
+      "target": "zone_3",
+      "resumed_session_id": "b9cd4f9513004e0a864a9da8a77d4168",
+      "uuid_changed": true,
+      "same_target": true,
+      "paired_motion_samples": 135,
+      "max_cmd_vel_linear_mps": 0.34984758496284485,
+      "max_odom_linear_mps": 0.3571226342034783,
+      "physical_motion_observed": true,
+      "status": "PASS"
+    },
+    {
+      "pause_event_id": "5b7a890c4a654f79a6e4a624da527823",
+      "pause_source": "team",
+      "paused_session_id": "5d73fab91fd8498bb7db70e96347593b",
+      "route_index": 4,
+      "target": "zone_4",
+      "resumed_session_id": "df8e0521460f428594c07f34c4b2249b",
+      "uuid_changed": true,
+      "same_target": true,
+      "paired_motion_samples": 114,
+      "max_cmd_vel_linear_mps": 0.3421052631578947,
+      "max_odom_linear_mps": 0.34738533785351733,
+      "physical_motion_observed": true,
+      "status": "PASS"
+    },
+    {
+      "pause_event_id": "7f481a9e38c44a37ba69c5cd67be8512",
+      "pause_source": "team",
+      "paused_session_id": "db25749894644b81a04ae7b46597d69b",
+      "route_index": 5,
+      "target": "zone_5",
+      "resumed_session_id": "a1a1712f496d4fae910d646f482bcb6b",
+      "uuid_changed": true,
+      "same_target": true,
+      "paired_motion_samples": 158,
+      "max_cmd_vel_linear_mps": 0.3499542882567959,
+      "max_odom_linear_mps": 0.35656680319082423,
+      "physical_motion_observed": true,
+      "status": "PASS"
+    },
+    {
+      "pause_event_id": "0e1d963c346047cbaa9fa8c11b47de68",
+      "pause_source": "team",
+      "paused_session_id": "af8fcfc967c14189ab8e6425560d108f",
+      "route_index": 6,
+      "target": "exit",
+      "resumed_session_id": "5901efd5c87f4fb79bdf4ff16fafb8c6",
+      "uuid_changed": true,
+      "same_target": true,
+      "paired_motion_samples": 210,
+      "max_cmd_vel_linear_mps": 0.3499615490436554,
+      "max_odom_linear_mps": 0.3570560817276794,
+      "physical_motion_observed": true,
+      "status": "PASS"
+    }
+  ],
+  "error": "暂停恢复缺少同目标新UUID或配对cmd_vel/odom证据",
+  "events": [
+    {
+      "elapsed_sec": 11.330162198995822,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 19.460892470000545,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 20.64829464200011,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 20.648314432997722,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "fcda52be9c214e7692ca9969937a9166",
+        "route_index": 0,
+        "target": "wait",
+        "paused_session_id": "4fbe2457ce0d461bb6b3a3ea8eb9cdcd",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 26.686348449002253,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 26.686371417992632,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "8b334bbc0d8c4e798ce8b87c6034a473",
+        "route_index": 1,
+        "target": "zone_1",
+        "paused_session_id": "928d25f197d44b77aca59e13142bd4df",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 26.99049871499301,
+      "action": "operator_resume_observed",
+      "result": {
+        "source": "external dashboard action",
+        "operator_identity_verified": false
+      }
+    },
+    {
+      "elapsed_sec": 52.77731170099287,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 52.77733614499448,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "e6e7094fc04f457786bd45ba3fb3378b",
+        "route_index": 2,
+        "target": "zone_2",
+        "paused_session_id": "0810fc3fe11d4b8a99fcae2ccc2e9693",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 53.08213091100333,
+      "action": "operator_resume_observed",
+      "result": {
+        "source": "external dashboard action",
+        "operator_identity_verified": false
+      }
+    },
+    {
+      "elapsed_sec": 93.45327542099403,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 93.4533248719963,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "859992107b0143d690da68cdb72a5b94",
+        "route_index": 3,
+        "target": "zone_3",
+        "paused_session_id": "2d37126aaea24670ab5071b80a691092",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 93.75544504799473,
+      "action": "operator_resume_observed",
+      "result": {
+        "source": "external dashboard action",
+        "operator_identity_verified": false
+      }
+    },
+    {
+      "elapsed_sec": 142.9927704169968,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 142.99279950799246,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "5b7a890c4a654f79a6e4a624da527823",
+        "route_index": 4,
+        "target": "zone_4",
+        "paused_session_id": "5d73fab91fd8498bb7db70e96347593b",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 143.29560341699107,
+      "action": "operator_resume_observed",
+      "result": {
+        "source": "external dashboard action",
+        "operator_identity_verified": false
+      }
+    },
+    {
+      "elapsed_sec": 186.1023229699931,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 186.10234509099973,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "7f481a9e38c44a37ba69c5cd67be8512",
+        "route_index": 5,
+        "target": "zone_5",
+        "paused_session_id": "db25749894644b81a04ae7b46597d69b",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 186.4075737480016,
+      "action": "operator_resume_observed",
+      "result": {
+        "source": "external dashboard action",
+        "operator_identity_verified": false
+      }
+    },
+    {
+      "elapsed_sec": 247.53700950699567,
+      "action": "ask",
+      "result": {
+        "success": true,
+        "message": "已接受文字提问"
+      }
+    },
+    {
+      "elapsed_sec": 252.97299050400034,
+      "action": "confirm_team_recovery",
+      "result": {
+        "success": true,
+        "message": "团队确认已记录，正在等待同目标新导航任务"
+      }
+    },
+    {
+      "elapsed_sec": 252.97300793199975,
+      "action": "operator_team_confirmation",
+      "result": {
+        "operator_type": "simulated_test_input",
+        "pause_source": "team",
+        "team_pause_event_id": "0e1d963c346047cbaa9fa8c11b47de68",
+        "route_index": 6,
+        "target": "exit",
+        "paused_session_id": "af8fcfc967c14189ab8e6425560d108f",
+        "team_resume_confirmed_before": false,
+        "recovery_ack_id": "",
+        "observed_navigation_session_id": "",
+        "team_state_source": "vision_tracker",
+        "tour_resume_requested": true,
+        "safety_recovery_bypassed": false
+      }
+    },
+    {
+      "elapsed_sec": 253.27891985599126,
+      "action": "operator_resume_observed",
+      "result": {
+        "source": "external dashboard action",
+        "operator_identity_verified": false
+      }
+    }
+  ],
+  "elapsed_sec": 326.8061038320011
+}

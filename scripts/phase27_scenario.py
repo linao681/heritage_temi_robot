@@ -100,6 +100,33 @@ def actor_step(config, elapsed_sec, anchor):
     return {'phase': phase, 'pose': pose, 'finished': finished}
 
 
+def crossing_step(config, elapsed_sec, anchor):
+    """Move a crossing actor on a time-based path independent of robot stop state."""
+    elapsed = _finite_number(elapsed_sec, 'elapsed_sec', 0.0)
+    x, y, yaw = _anchor_pose(anchor)
+    speed = _finite_number(config.get('speed_mps'), 'speed_mps', 0.0, True)
+    forward_distance = _finite_number(config.get('forward_distance_m'),
+                                       'forward_distance_m', 0.0, True)
+    start_lateral = _finite_number(config.get('start_lateral_m'), 'start_lateral_m')
+    end_lateral = _finite_number(config.get('end_lateral_m'), 'end_lateral_m')
+    if math.isclose(start_lateral, end_lateral, abs_tol=1e-9):
+        raise ValueError('crossing path must have non-zero lateral distance')
+    hold_clear = _finite_number(config.get('hold_clear_sec', 0.0),
+                                'hold_clear_sec', 0.0)
+    distance = abs(end_lateral - start_lateral)
+    duration = distance / speed
+    progress = min(1.0, elapsed / duration)
+    lateral = start_lateral + (end_lateral - start_lateral) * progress
+    forward_x, forward_y = math.cos(yaw), math.sin(yaw)
+    left_x, left_y = -forward_y, forward_x
+    pose = (x + forward_x * forward_distance + left_x * lateral,
+            y + forward_y * forward_distance + left_y * lateral,
+            yaw + math.pi)
+    finished = elapsed >= duration + hold_clear
+    return {'phase': 'CROSSING' if progress < 1.0 else 'HOLD_CLEAR',
+            'pose': pose, 'finished': finished}
+
+
 def _xy(pose):
     if isinstance(pose, dict):
         x, y = pose.get('x'), pose.get('y')

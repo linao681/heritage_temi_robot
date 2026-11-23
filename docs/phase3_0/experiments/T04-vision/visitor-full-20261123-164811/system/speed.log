@@ -1,0 +1,15 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-16-48-17-830894-linao-P15-24-354181
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [354238]
+[speed_controller-1] [WARN] [1795423711.182275544] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [ERROR] [1795423716.697223117] [temi_speed_controller]: 调速接口未完成: {"command_id": "558028ce24e94ec3b3484a53eebc2268", "status": "error", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "导航Action已被STOP阻断，活动会话=928d25f197d44b77aca59e13142bd4df", "stale_session": false, "navigation_session_id": "928d25f197d44b77aca59e13142bd4df"}
+[speed_controller-1] [WARN] [1795423716.854341088] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795423743.057270150] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "46c98252e2d14cc3bd9bc6705506a00a", "status": "stale", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "0810fc3fe11d4b8a99fcae2ccc2e9693"}
+[speed_controller-1] [WARN] [1795423743.154530296] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795423783.854011899] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795423833.158168045] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "75826651a6f940118c3da496d353dd85", "status": "stale", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "5d73fab91fd8498bb7db70e96347593b"}
+[speed_controller-1] [WARN] [1795423833.253902900] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795423876.555173562] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "8c60b5bc16824fd898259498187b985f", "status": "stale", "requested_target_speed_mps": 0.4938825808073345, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "db25749894644b81a04ae7b46597d69b"}
+[speed_controller-1] [WARN] [1795423876.654291755] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795423943.257883941] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "86329962ac1948b0bb596707a4b72ad9", "status": "stale", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "af8fcfc967c14189ab8e6425560d108f"}
+[speed_controller-1] [WARN] [1795423943.353978145] [temi_speed_controller]: 请求导航停止: 安全停车条件

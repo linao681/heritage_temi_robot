@@ -18,6 +18,7 @@ from gazebo_msgs.msg import ModelStates
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from rclpy.node import Node
+from rclpy.parameter import Parameter
 from std_msgs.msg import String
 from temi_interfaces.msg import NavigationStatus, PerceptionInput, PersonDetectionArray
 from tf2_ros import Buffer, TransformException, TransformListener
@@ -196,8 +197,10 @@ def ground_truth_nearest_person(names, poses):
 
 
 class Phase2Recorder(Node):
-    def __init__(self, output, experiment_id, hz):
-        super().__init__('phase2_topic_recorder')
+    def __init__(self, output, experiment_id, hz, *, use_sim_time=False):
+        super().__init__(
+            'phase2_topic_recorder',
+            parameter_overrides=[Parameter('use_sim_time', value=use_sim_time)])
         self._output = output
         self._experiment_id = experiment_id
         self._file = output.open('w', newline='', encoding='utf-8')
@@ -535,6 +538,8 @@ def main():
     parser.add_argument('--hz', type=float, default=10.0)
     parser.add_argument('--experiment-id', default='phase2-live')
     parser.add_argument('--output', type=Path)
+    parser.add_argument('--use-sim-time', action='store_true',
+                        help='compare ROS message stamps against the Gazebo /clock')
     args = parser.parse_args()
     if not 0 < args.duration_sec <= 3600 or not 0 < args.hz <= 50:
         parser.error('duration must be 0..3600 sec and hz must be 0..50')
@@ -542,7 +547,8 @@ def main():
     output = args.output or ROOT / 'docs/experiments/phase2' / f'run-{stamp}' / 'experiment_data.csv'
     output.parent.mkdir(parents=True, exist_ok=True)
     rclpy.init(args=None)
-    node = Phase2Recorder(output, args.experiment_id, args.hz)
+    node = Phase2Recorder(output, args.experiment_id, args.hz,
+                          use_sim_time=args.use_sim_time)
     executor = MultiThreadedExecutor(num_threads=4)
     executor.add_node(node)
     def spin_executor():

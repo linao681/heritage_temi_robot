@@ -1,5 +1,20 @@
 # 技术贡献与创新边界
 
+## 阶段3.0已验证范围（2026-11-23）
+
+- T04 official/business_script导览完成入口、五区、问答和出口；三名Gazebo脚本演员，测试操作员输入，Mock Speak。报告：`T04-business/visitor-full-20261123-162126`。
+- T04 vision_conservative路线到达出口，但团队观察1078条均为UNKNOWN；六次暂停均有新鲜odom停稳确认并需测试操作员确认。这验证保守安全路径，不验证全队感知成功。
+- E07-A使用Gazebo脚本团队：zone_3 LOST→GATHERED 21.42秒，模拟确认后新UUID恢复同目标；不属于视觉观察闭环。
+- E04仅前向横穿：YOLOX/RGB-D和LaserScan同时有效，数据不足以做单源归因。
+- E02的0/3人场景路线通过，单人run失败；没有满足稳定速度窗口，5人/散开未跑。人数不等于密度。
+- adaptive布局B完成Nav2六目标路线及独立business_script完整Tour；操作员同意和播报仍是模拟。
+- T08提供真实ROS记录的哈希只读回放，但源数据没有相机图像帧，浏览器GUI检查未完成。
+
+以上材料是对应实验的工程实现与仿真证据；没有证明实体Temi、全景队伍跟踪或原创YOLOX/Nav2算法。
+
+---
+
+
 ## 可由代码支持的工程贡献
 
 1. **面向导览流程的ROS2业务状态机**：五区路线、同意/拒绝、问答、讲解、出口等动作以显式Tour状态驱动，见 `heritage_tour_manager`。

@@ -26,9 +26,11 @@ MODEL_PATH = ROOT / 'assets/vision/object_detection_yolox_2022nov.onnx'
 KNOWN_USER_DOMAINS = {211, 219, 225}
 VALID_LAYOUTS = {'official', 'adaptive'}
 VALID_STATIONS = ['wait', 'zone_1', 'zone_2', 'zone_3', 'zone_4', 'zone_5', 'exit']
+STATIC_POPULATION_SCENARIOS = {'empty', 'single', 'group'}
 VALID_SCENARIOS = {
     'tour', 'none', 'approaching', 'crossing', 'leaving', 'group_straggler',
     'crowded', 'crowd_sequence', 'qa', 'camera_a', 'camera_b', 'camera_c', 'camera_d',
+    *STATIC_POPULATION_SCENARIOS,
 }
 CAMERA_VARIANTS = {
     'camera_a': (0.55, 0.0),
@@ -99,6 +101,8 @@ def validate_experiment(experiment):
         actor['movement_speed_mps'] = _finite(
             actor.get('movement_speed_mps', 0.25), 'actor_motion.movement_speed_mps',
             minimum=0.0, allow_equal_minimum=False)
+    if scenario == 'crossing' and actor.get('continue_after_robot_stop') is not True:
+        raise ValueError('crossing requires continuous geometry checks')
     if 'target_distance_m' in actor:
         actor['target_distance_m'] = _finite(
             actor['target_distance_m'], 'actor_motion.target_distance_m', minimum=0.0)
@@ -109,6 +113,10 @@ def validate_experiment(experiment):
         raise ValueError('actor_motion.leave_direction must be forward, left, or right')
     if bool(actor.get('leave_after_hold')) and not bool(actor.get('continue_after_robot_stop')):
         raise ValueError('leave_after_hold requires continue_after_robot_stop')
+    if scenario in STATIC_POPULATION_SCENARIOS and actor.get('retain_scenario_model') is not True:
+        raise ValueError(f'{scenario} requires retain_scenario_model for comparable route data')
+    if 'retain_scenario_model' in actor and type(actor['retain_scenario_model']) is not bool:
+        raise ValueError('actor_motion.retain_scenario_model must be a boolean')
     experiment['actor_motion'] = actor
     if scenario in CAMERA_VARIANTS:
         expected_height, expected_pitch = CAMERA_VARIANTS[scenario]
@@ -359,14 +367,35 @@ def prepare_arrival_visitor(experiment, run_dir, *, root=ROOT, env=None):
     }
 
 
+def build_system_start_command(root, experiment, *, domain_id, gazebo_port, web_port):
+    return [
+        'bash', str(Path(root) / 'scripts/start_phase25_system.sh'),
+        str(domain_id), str(gazebo_port), str(web_port),
+        str(experiment['robot_speed_mps']), str(experiment['camera_height_m']),
+        str(experiment['camera_pitch_down_deg']), str(experiment['layout']),
+    ]
+
+
+def build_clean_tour_command(root, python, experiment, tour_output):
+    return [
+        str(python), str(Path(root) / 'scripts/run_phase25_clean_tour.py'),
+        '--experiment-id', experiment['id'], '--timeout-sec',
+        str(experiment['timeouts'].get('tour_sec', 1200)),
+        '--visitor-timeout-sec', str(experiment['timeouts'].get('visitor_sec', 90)),
+        '--output-dir', str(tour_output), '--layout', experiment['layout'],
+    ]
+
+
 def execute_experiment(experiment, *, domain_id, gazebo_port, web_port,
                        output_dir=None, root=ROOT):
     experiment = validate_experiment(experiment)
-    output_root = root / 'docs/phase2_7/experiments'
+    output_roots = (root / 'docs/phase2_7/experiments',
+                    root / 'docs/phase3_0/experiments')
     if output_dir is not None:
         output_dir = Path(output_dir).resolve()
-        if output_root.resolve() not in output_dir.parents:
-            raise ValueError('output directory must be inside docs/phase2_7/experiments')
+        if not any(output_root.resolve() in output_dir.parents
+                   for output_root in output_roots):
+            raise ValueError('output directory must be inside a phase experiment directory')
         if output_dir.exists():
             raise FileExistsError(str(output_dir))
         run_dir = output_dir
@@ -428,11 +457,9 @@ def execute_experiment(experiment, *, domain_id, gazebo_port, web_port,
             system_log_path = logs / 'system_start.log'
             with system_log_path.open('w', encoding='utf-8') as system_log:
                 system_process = subprocess.Popen(
-                    ['bash', str(root / 'scripts/start_phase25_system.sh'),
-                     str(domain_id), str(gazebo_port), str(web_port),
-                     str(experiment['robot_speed_mps']),
-                     str(experiment['camera_height_m']),
-                     str(experiment['camera_pitch_down_deg'])],
+                    build_system_start_command(
+                        root, experiment, domain_id=domain_id,
+                        gazebo_port=gazebo_port, web_port=web_port),
                     cwd=root, env=env, stdout=system_log, stderr=subprocess.STDOUT,
                     start_new_session=True)
                 manifest['owned_process_groups'].append({
@@ -453,16 +480,18 @@ def execute_experiment(experiment, *, domain_id, gazebo_port, web_port,
                 json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
             tour_output = run_dir / 'tour'
-            command = [str(python), str(root / 'scripts/run_phase25_clean_tour.py'),
-                       '--experiment-id', experiment['id'], '--timeout-sec',
-                       str(experiment['timeouts'].get('tour_sec', 1200)),
-                       '--visitor-timeout-sec', str(experiment['timeouts'].get('visitor_sec', 90)),
-                       '--output-dir', str(tour_output)]
+            command = build_clean_tour_command(root, python, experiment, tour_output)
             scenario = experiment['scenario']
-            if (scenario not in {'tour', 'none', 'qa', 'approaching', 'crossing', 'leaving'} and
+            if (scenario not in ({'tour', 'none', 'qa', 'approaching', 'crossing', 'leaving'} |
+                                 STATIC_POPULATION_SCENARIOS) and
                     scenario not in CAMERA_VARIANTS):
                 raise ValueError(f'scenario is not supported by the phase 2.7 tour executor: {scenario}')
-            if scenario in {'approaching', 'crossing', 'leaving'} | set(CAMERA_VARIANTS):
+            if scenario in STATIC_POPULATION_SCENARIOS:
+                command.extend(['--dynamic-scenario', scenario,
+                                '--scenario-target', experiment.get('scenario_target', 'zone_1'),
+                                '--scenario-seed', str(experiment['seed']),
+                                '--retain-scenario-model'])
+            elif scenario in {'approaching', 'crossing', 'leaving'} | set(CAMERA_VARIANTS):
                 command.extend(['--dynamic-scenario',
                                 'approaching' if scenario in CAMERA_VARIANTS else scenario,
                                 '--scenario-target', experiment.get('scenario_target', 'zone_1')])

@@ -1,0 +1,13 @@
+[INFO] [launch]: All log files can be found below /home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T04-vision/visitor-full-vision-20261123-154128/ros-logs/2026-11-23-15-41-35-085529-linao-P15-24-286190
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [286321]
+[INFO] [yolox_person_detector-2]: process started with pid [286323]
+[INFO] [depth_association-3]: process started with pid [286325]
+[INFO] [team_observer-4]: process started with pid [286327]
+[INFO] [perception_fusion-5]: process started with pid [286329]
+[visitor_perception-1] [INFO] [1795419696.946680631] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 80099.100997421, 'sample_age_sec': 2.1432002540677786e-05}
+[INFO] [team_observer-4]: process has finished cleanly [pid 286327]
+[INFO] [depth_association-3]: process has finished cleanly [pid 286325]
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 286329]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 286323]
+[visitor_perception-1] [INFO] [1795419710.889789928] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 80111.992772738, 'sample_age_sec': 1.069566282996675}

@@ -1,0 +1,60 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_______ test_tour_export_uses_real_pose_speed_and_separates_gazebo_truth _______
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-140/test_tour_export_uses_real_pos0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x794610a69db0>
+
+    def test_tour_export_uses_real_pose_speed_and_separates_gazebo_truth(tmp_path, monkeypatch):
+>       from scripts.export_phase30_tour_replay import build_tour_replay
+E       ModuleNotFoundError: No module named 'scripts.export_phase30_tour_replay'
+
+tests/test_phase30_tour_replay.py:77: ModuleNotFoundError
+____ test_tour_export_events_are_monotonic_and_include_state_and_detection _____
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-140/test_tour_export_events_are_mo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x794610ab78e0>
+
+    def test_tour_export_events_are_monotonic_and_include_state_and_detection(tmp_path, monkeypatch):
+>       from scripts.export_phase30_tour_replay import build_tour_replay
+E       ModuleNotFoundError: No module named 'scripts.export_phase30_tour_replay'
+
+tests/test_phase30_tour_replay.py:104: ModuleNotFoundError
+_______________ test_tour_export_rejects_unordered_sample_times ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-140/test_tour_export_rejects_unord0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x794611ab15d0>
+
+    def test_tour_export_rejects_unordered_sample_times(tmp_path, monkeypatch):
+>       from scripts.export_phase30_tour_replay import build_tour_replay
+E       ModuleNotFoundError: No module named 'scripts.export_phase30_tour_replay'
+
+tests/test_phase30_tour_replay.py:117: ModuleNotFoundError
+________________ test_tour_export_rejects_run_directory_escape _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-140/test_tour_export_rejects_run_d0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x794610c28ac0>
+
+    def test_tour_export_rejects_run_directory_escape(tmp_path, monkeypatch):
+>       from scripts import export_phase30_tour_replay as exporter
+E       ImportError: cannot import name 'export_phase30_tour_replay' from 'scripts' (/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/__init__.py)
+
+tests/test_phase30_tour_replay.py:130: ImportError
+__________ test_exported_archive_contains_only_verified_source_files ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-140/test_exported_archive_contains0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x794611ab2050>
+
+    def test_exported_archive_contains_only_verified_source_files(tmp_path, monkeypatch):
+>       from scripts.export_phase30_tour_replay import build_tour_replay
+E       ModuleNotFoundError: No module named 'scripts.export_phase30_tour_replay'
+
+tests/test_phase30_tour_replay.py:140: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_phase30_tour_replay.py::test_tour_export_uses_real_pose_speed_and_separates_gazebo_truth
+FAILED tests/test_phase30_tour_replay.py::test_tour_export_events_are_monotonic_and_include_state_and_detection
+FAILED tests/test_phase30_tour_replay.py::test_tour_export_rejects_unordered_sample_times
+FAILED tests/test_phase30_tour_replay.py::test_tour_export_rejects_run_directory_escape
+FAILED tests/test_phase30_tour_replay.py::test_exported_archive_contains_only_verified_source_files
+5 failed in 0.04s
+pytest_exit_code=1

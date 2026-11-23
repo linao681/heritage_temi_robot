@@ -1,0 +1,279 @@
+{
+  "status": "PASS",
+  "scenario": "single_static",
+  "layout": "official",
+  "source": "gazebo_model_states_and_set_entity_state",
+  "started_unix_sec": 1795429792.5983734,
+  "started_monotonic_sec": 90194.771251635,
+  "movement_started_monotonic_sec": null,
+  "movement_ended_monotonic_sec": null,
+  "duration_sec": 8.105724362001638,
+  "seed": 31,
+  "speed_mps": 0.3,
+  "update_hz": 5.0,
+  "end_distance_m": 1.4,
+  "actor_motion": {
+    "continue_after_robot_stop": false,
+    "stop_at_target": true,
+    "movement_speed_mps": 0.3,
+    "target_distance_m": 1.4,
+    "hold_at_target_sec": 2.0,
+    "leave_after_hold": false,
+    "leave_distance_m": 3.9,
+    "leave_direction": "forward",
+    "hold_clear_sec": 1.0,
+    "pause_on_collision": true,
+    "motion_phase_events": [],
+    "contact_observed": null
+  },
+  "removed_previous_models": [],
+  "commanded_model_poses_world": [
+    {
+      "name": "phase25_person_01",
+      "x": -9.653908843860373,
+      "y": -7.902236951471988,
+      "yaw": 3.141592653589793,
+      "gazebo_readback_x": -9.65391,
+      "gazebo_readback_y": -7.90224,
+      "readback_source": "gazebo_model_states"
+    }
+  ],
+  "robot_pose_world_at_spawn": {
+    "x": -12.65389777327421,
+    "y": -7.902214246534176,
+    "yaw": -1.7928237995523407e-05
+  },
+  "gazebo_model_state_samples": [
+    {
+      "elapsed_sec": 3.105504489998566,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 3.305816684005549,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 3.506106793996878,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 3.709718544007046,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 3.90981170500163,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 4.110107991000405,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 4.313487595994957,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 4.513636586998473,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 4.713798412005417,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 4.9183266809995985,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 5.1186498169990955,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 5.318835664002108,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 5.523606255999766,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 5.724814062996302,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 5.925105506001273,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 6.12736606800172,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 6.327647369995248,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 6.527834545006044,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 6.730058767992887,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 6.93054223600484,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 7.130816906996188,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 7.334232936002081,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 7.537813813993125,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 7.738098889996763,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    },
+    {
+      "elapsed_sec": 7.940953358003753,
+      "name": "phase25_person_01",
+      "x": -9.65391,
+      "y": -7.90224,
+      "yaw": 3.14159,
+      "commanded_x": -9.653908843860373,
+      "commanded_y": -7.902236951471988
+    }
+  ],
+  "model_asset": "simulation/models/person_mannequin/model.sdf",
+  "ground_truth_note": "轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。",
+  "models_spawned_monotonic_sec": 90195.856855724,
+  "ended_monotonic_sec": 90202.876977223,
+  "stopped_by_actual_safety_status": false,
+  "removed_after": []
+}

@@ -1,0 +1,20 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-18-41-21-941204-linao-P15-24-488879
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [488983]
+[INFO] [yolox_person_detector-2]: process started with pid [488985]
+[INFO] [depth_association-3]: process started with pid [488987]
+[INFO] [team_observer-4]: process started with pid [488989]
+[INFO] [perception_fusion-5]: process started with pid [488991]
+[visitor_perception-1] [INFO] [1795430494.368335989] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 1, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 90896.533091575, 'sample_age_sec': 9.96301241684705e-06}
+[visitor_perception-1] [INFO] [1795430506.431574572] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 90908.603788872, 'sample_age_sec': 1.1128999176435173e-05}
+[visitor_perception-1] [INFO] [1795430508.000130129] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 1, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 90910.172244471, 'sample_age_sec': 1.3475990272127092e-05}
+[visitor_perception-1] [INFO] [1795430512.962334043] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 90915.134463449, 'sample_age_sec': 1.1913012713193893e-05}
+[visitor_perception-1] [INFO] [1795430522.247488320] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 90923.347556857, 'sample_age_sec': 1.0723619130003499}
+[visitor_perception-1] [INFO] [1795430525.606000101] [visitor_perception]: 游客感知: data_restored, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 90927.778239703, 'sample_age_sec': 1.4156001270748675e-05}
+[visitor_perception-1] [INFO] [1795430551.448402703] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 90952.521409244, 'sample_age_sec': 1.0988504109991482}
+[visitor_perception-1] [INFO] [1795431127.305786319] [visitor_perception]: 游客感知: data_restored, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 90956.477790161, 'sample_age_sec': 1.3998986105434597e-05}
+[INFO] [team_observer-4]: process has finished cleanly [pid 488989]
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 488991]
+[INFO] [depth_association-3]: process has finished cleanly [pid 488987]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 488985]
+[visitor_perception-1] [INFO] [1795431129.647762196] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 90957.653681248, 'sample_age_sec': 1.166548809997039}

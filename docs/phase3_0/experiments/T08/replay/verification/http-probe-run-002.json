@@ -1,0 +1,59 @@
+{
+  "bind_address": "127.0.0.1",
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "bytes": 5082,
+      "sha256": "8f35bd85888e8503b49b4b56779fd122e0f4ee7adecc6274e41784f4ee98cd36"
+    },
+    {
+      "method": "GET",
+      "path": "/replay.js",
+      "status": 200,
+      "bytes": 19709,
+      "sha256": "85d7bde46bc819c79464170fb69055de80d2af7535917c49ef3fee70b19feff6"
+    },
+    {
+      "method": "GET",
+      "path": "/recording/replay.json",
+      "status": 200,
+      "bytes": 3739274,
+      "sha256": "3bb0e05025ef67fbfb63beb8d3f9d68bf0803629d295b4d8b058a0aa3372167c"
+    },
+    {
+      "method": "GET",
+      "path": "/recording/replay.json.sha256",
+      "status": 200,
+      "bytes": 78,
+      "sha256": "24f512a76fe17cd524871804ace99ca37e2353604a4d3f4ddfd8af0c9d41fde1"
+    },
+    {
+      "method": "GET",
+      "path": "/%2e%2e/etc/passwd",
+      "status": 404,
+      "bytes": 447,
+      "sha256": "154f02e323a968879bbfce64df6dc946a0cd257263dbaf6623c762ea141430c5"
+    },
+    {
+      "method": "GET",
+      "path": "/api/stop",
+      "status": 404,
+      "bytes": 447,
+      "sha256": "154f02e323a968879bbfce64df6dc946a0cd257263dbaf6623c762ea141430c5"
+    },
+    {
+      "method": "HEAD",
+      "path": "/",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "method": "POST",
+      "path": "/api/stop",
+      "status": 501,
+      "bytes": 497
+    }
+  ]
+}

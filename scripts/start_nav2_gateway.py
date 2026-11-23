@@ -51,7 +51,9 @@ def main():
     thread.start()
     gateway = None
     try:
-        deadline = time.monotonic() + 45
+        # Costmap lifecycle configuration can exceed 45s on a resource-limited host.
+        # This only extends readiness waiting; no navigation action is sent until ready.
+        deadline = time.monotonic() + 120
         while not transport.ready() and not stop.wait(0.1):
             if time.monotonic() > deadline:
                 raise RuntimeError('等待仿真 Nav2 和定位超时')

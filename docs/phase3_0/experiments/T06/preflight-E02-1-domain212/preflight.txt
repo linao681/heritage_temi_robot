@@ -1,0 +1,16 @@
+2026-11-23T18:02:06+08:00
+               total        used        free      shared  buff/cache   available
+内存：       15Gi       9.5Gi       1.7Gi       186Mi       4.2Gi       6.1Gi
+交换：         0B          0B          0B
+文件系统        大小  已用  可用 已用% 挂载点
+/dev/nvme0n1p4  196G  142G   45G   77% /
+
+Gazebo/Nav2 processes:
+
+Port checks:
+{'port': 11398, 'bindable': True}
+{'port': 8123, 'bindable': True}
+
+ROS Domain check:
+{"domain_id": 212, "other_nodes": [], "empty": true}
+exit_code=0

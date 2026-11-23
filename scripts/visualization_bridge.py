@@ -29,7 +29,7 @@ except ImportError:
     from route_status import fresh_status
 
 ROOT = Path(__file__).resolve().parents[1]
-INTERACTION_ACTIONS = ('start', 'arm_visitor', 'accept', 'refuse', 'pause', 'resume', 'cancel', 'manual_takeover', 'finish_qa', 'straggle', 'gather')
+INTERACTION_ACTIONS = ('start', 'arm_visitor', 'accept', 'refuse', 'pause', 'resume', 'cancel', 'manual_takeover', 'finish_qa', 'straggle', 'gather', 'confirm_team_recovery')
 
 
 def interaction_request(payload):
@@ -37,6 +37,10 @@ def interaction_request(payload):
         raise ValueError('未知交互操作')
     action = payload['action']
     if action != 'ask':
+        if action == 'confirm_team_recovery':
+            pause_event_id = payload.get('pause_event_id')
+            if not isinstance(pause_event_id, str) or not 1 <= len(pause_event_id) <= 128:
+                raise ValueError('暂停事件ID无效')
         return action, None, 'basic'
     question = payload.get('question')
     if not isinstance(question, str) or not 1 <= len(question.strip()) <= 500:
@@ -72,6 +76,15 @@ def snapshot_payload(value, received_at, now, max_age_sec):
     age = None if received_at is None else now - received_at
     fresh = value is not None and age is not None and 0 <= age <= max_age_sec
     return {'fresh': fresh, 'age_sec': age, 'value': value if fresh else None}
+
+
+def motion_snapshot(linear_speed_mps, angular_speed_rps, received_monotonic_sec, *, stamp_ns=None):
+    result = {'linear_speed_mps': float(linear_speed_mps),
+              'angular_speed_rps': float(angular_speed_rps),
+              'received_monotonic_sec': float(received_monotonic_sec)}
+    if stamp_ns is not None:
+        result['stamp_ns'] = int(stamp_ns)
+    return result
 
 
 def summarize_nav2_speed_limits(controller_max_vel_x, controller_max_speed_xy,
@@ -177,11 +190,13 @@ def main():
     node = rclpy.create_node('heritage_web_visualization')
     if args.interactive:
         from std_srvs.srv import Trigger
-        from temi_interfaces.srv import SubmitQuestion
+        from temi_interfaces.srv import SubmitQuestion, ConfirmTeamRecovery
         from threading import Lock
         control_lock = Lock()
         controls = {action: node.create_client(Trigger, ('heritage/simulation/team/' if action in ('straggle', 'gather') else 'heritage/tour/') + action)
-                    for action in INTERACTION_ACTIONS}
+                    for action in INTERACTION_ACTIONS if action != 'confirm_team_recovery'}
+        team_recovery_client = node.create_client(
+            ConfirmTeamRecovery, 'heritage/tour/confirm_team_recovery')
         question_client = node.create_client(SubmitQuestion, 'heritage/tour/ask')
     node.route_status, node.route_received = None, 0.0
     node.tour_status, node.tour_received = None, 0.0
@@ -305,15 +320,17 @@ def main():
         linear = math.hypot(message.linear.x, message.linear.y)
         angular = message.angular.z
         if math.isfinite(linear) and math.isfinite(angular):
-            node.cmd_vel_snapshot = ({'linear_speed_mps': linear, 'angular_speed_rps': angular},
-                                     time.monotonic())
+            received = time.monotonic()
+            node.cmd_vel_snapshot = (motion_snapshot(linear, angular, received), received)
     def receive_odom(message):
         twist = message.twist.twist
         linear = math.hypot(twist.linear.x, twist.linear.y)
         angular = twist.angular.z
         if math.isfinite(linear) and math.isfinite(angular):
-            node.odom_snapshot = ({'linear_speed_mps': linear, 'angular_speed_rps': angular},
-                                  time.monotonic())
+            received = time.monotonic()
+            stamp_ns = message.header.stamp.sec * 1_000_000_000 + message.header.stamp.nanosec
+            node.odom_snapshot = (motion_snapshot(linear, angular, received,
+                                                  stamp_ns=stamp_ns), received)
 
     def receive_speech(message):
         try:
@@ -360,8 +377,11 @@ def main():
                                 ('state', 'reason', 'target', 'visited', 'outcome', 'qa_waiting',
                                  'qa_result', 'visitor_assist', 'connected', 'is_moving',
                                  'history', 'elapsed_sec', 'route_index', 'pause_source',
-                                 'paused_session_id', 'team_recovery_required',
-                                 'team_resume_confirmed', 'recovery_ack_id')}
+                                 'paused_session_id', 'last_pause_stop_requested',
+                                 'last_pause_stop_confirmed',
+                                 'last_pause_action_quiescence_confirmed', 'team_recovery_required',
+                                 'team_resume_confirmed', 'team_pause_event_id',
+                                 'recovery_ack_id')}
             node.tour_received = time.monotonic()
         except (TypeError, ValueError):
             pass
@@ -405,7 +425,8 @@ def main():
                 length = int(self.headers.get('Content-Length', '0'))
                 if not 0 < length <= 8192:
                     raise ValueError('请求大小异常')
-                action, question, level = interaction_request(json.loads(self.rfile.read(length)))
+                payload = json.loads(self.rfile.read(length))
+                action, question, level = interaction_request(payload)
             except (ValueError, TypeError):
                 return self.send_json(400, {'success': False, 'message': '交互请求无效'})
             if not control_lock.acquire(blocking=False):
@@ -415,11 +436,16 @@ def main():
                 if (action == 'resume' and resume_requires_scripted_gather(args.team_decision_mode) and
                         team is not None and (time.monotonic()-received > 1 or not team.get('gathered'))):
                     return self.send_json(409, {'success': False, 'message': '游客尚未集合或队伍状态过期'})
-                client = question_client if action == 'ask' else controls[action]
+                client = (question_client if action == 'ask' else
+                          team_recovery_client if action == 'confirm_team_recovery' else
+                          controls[action])
                 if not client.service_is_ready():
                     return self.send_json(503, {'success': False, 'message': '导览服务未就绪'})
                 request = (SubmitQuestion.Request(question=question, exhibit='exhibit_05', level=level)
-                           if action == 'ask' else Trigger.Request())
+                           if action == 'ask' else
+                           ConfirmTeamRecovery.Request(
+                               pause_event_id=payload['pause_event_id'])
+                           if action == 'confirm_team_recovery' else Trigger.Request())
                 future = client.call_async(request)
                 deadline = time.monotonic() + 8
                 while not future.done() and time.monotonic() < deadline:
@@ -428,7 +454,7 @@ def main():
                     future.cancel()
                     return self.send_json(504, {'success': False, 'message': '确认超时，请查看当前导览状态'})
                 result = future.result()
-                return self.send_json(200, {'success': result.accepted if action == 'ask' else result.success,
+                return self.send_json(200, {'success': result.accepted if action in ('ask', 'confirm_team_recovery') else result.success,
                                             'message': result.message})
             except Exception:
                 return self.send_json(503, {'success': False, 'message': '导览服务异常，请查看当前状态'})

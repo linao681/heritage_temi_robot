@@ -8,6 +8,17 @@ def test_ros_to_threejs_position_and_heading():
     assert convert_pose(-1, 4, math.pi/2) == pytest.approx({'x': -1, 'z': -4, 'yaw': math.pi})
 
 
+def test_motion_snapshot_preserves_odometry_stamp_and_receive_clock():
+    from scripts.visualization_bridge import motion_snapshot
+    result = motion_snapshot(0.01, -0.02, 12.5, stamp_ns=9_876_543_210)
+    assert result == {
+        'linear_speed_mps': 0.01,
+        'angular_speed_rps': -0.02,
+        'received_monotonic_sec': 12.5,
+        'stamp_ns': 9_876_543_210,
+    }
+
+
 def test_live_visitors_use_gazebo_model_poses():
     from geometry_msgs.msg import Pose
     from scripts.visualization_bridge import visitor_poses
@@ -31,6 +42,17 @@ def test_interaction_action_is_bounded_and_requires_question():
                     {'action': 'ask', 'question': '潮剧怎么唱', 'level': 'unknown'}):
         with pytest.raises(ValueError):
             interaction_request(payload)
+
+
+def test_vision_team_confirmation_requires_a_current_pause_event_id():
+    from scripts.visualization_bridge import interaction_request
+    assert interaction_request({'action': 'confirm_team_recovery',
+                                'pause_event_id': 'pause-event-123'}) == (
+                                    'confirm_team_recovery', None, 'basic')
+    for value in (None, '', 'x' * 129):
+        with pytest.raises(ValueError):
+            interaction_request({'action': 'confirm_team_recovery',
+                                 'pause_event_id': value})
 
 
 def test_only_business_script_resume_uses_scripted_team_gate():
@@ -57,6 +79,8 @@ def test_tour_status_keeps_real_state_history_for_event_timeline():
     assert "'team_resume_confirmed'" in bridge
     assert "'recovery_ack_id'" in bridge
     assert 'ROS状态机事件时间线' in live
+    assert "'team_pause_event_id'" in bridge
+    assert "payload.pause_event_id=lastData.tour.team_pause_event_id" in live
 
 
 def test_nav2_limit_summary_reports_parameters_without_claiming_full_effective_speed():

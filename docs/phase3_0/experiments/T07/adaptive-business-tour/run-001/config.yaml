@@ -1,0 +1,21 @@
+route:
+- wait
+- zone_1
+- zone_2
+- zone_3
+- zone_4
+- zone_5
+- exit
+timeouts:
+  preflight_sec: 240.0
+  tour_sec: 900.0
+  visitor_sec: 90.0
+  shutdown_sec: 20.0
+seed: 31
+id: T07-ADAPTIVE-BUSINESS-TOUR
+scenario: tour
+robot_speed_mps: 0.3
+camera_height_m: 0.55
+camera_pitch_down_deg: 0.0
+actor_motion: {}
+layout: adaptive

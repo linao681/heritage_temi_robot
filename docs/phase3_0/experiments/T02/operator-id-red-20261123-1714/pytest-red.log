@@ -1,0 +1,39 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_scripted_operator_confirmation_requires_current_stopped_team_pause ____
+
+    def test_scripted_operator_confirmation_requires_current_stopped_team_pause():
+        tour = {'state': 'PAUSED', 'pause_source': 'team',
+                'team_recovery_required': True, 'team_resume_confirmed': False,
+                'paused_session_id': 'nav-current',
+                'team_pause_event_id': 'pause-event-current'}
+        observation = {'requires_manual_confirmation': True}
+        stopped = {'confirmed': True}
+        assert demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative', tour, observation, stopped)
+        assert not demo_runner.scripted_operator_confirmation_allowed(
+            'external', 'vision_conservative', tour, observation, stopped)
+        assert not demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative', tour, observation,
+            {'confirmed': False})
+        assert not demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative',
+            dict(tour, pause_source='manual'), observation, stopped)
+        assert not demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative',
+            dict(tour, team_resume_confirmed=True), observation, stopped)
+        assert not demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative',
+            dict(tour, paused_session_id=''), observation, stopped)
+>       assert not demo_runner.scripted_operator_confirmation_allowed(
+            'scripted_test', 'vision_conservative',
+            dict(tour, team_pause_event_id=''), observation, stopped)
+E       AssertionError: assert not True
+E        +  where True = <function scripted_operator_confirmation_allowed at 0x76df0b3da830>('scripted_test', 'vision_conservative', {'pause_source': 'team', 'paused_session_id': 'nav-current', 'state': 'PAUSED', 'team_pause_event_id': '', ...}, {'requires_manual_confirmation': True}, {'confirmed': True})
+E        +    where <function scripted_operator_confirmation_allowed at 0x76df0b3da830> = demo_runner.scripted_operator_confirmation_allowed
+E        +    and   {'pause_source': 'team', 'paused_session_id': 'nav-current', 'state': 'PAUSED', 'team_pause_event_id': '', ...} = dict({'pause_source': 'team', 'paused_session_id': 'nav-current', 'state': 'PAUSED', 'team_pause_event_id': 'pause-event-current', ...}, team_pause_event_id='')
+
+tests/test_phase29_full_demo.py:79: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase29_full_demo.py::test_scripted_operator_confirmation_requires_current_stopped_team_pause
+1 failed in 0.05s

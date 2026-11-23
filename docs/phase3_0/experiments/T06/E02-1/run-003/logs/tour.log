@@ -1,0 +1,2 @@
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T06/E02-1/run-003/tour/experiment_data.csv", "rows": 510, "duration_sec": 53.126}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T06/E02-1/run-003/tour/report.json", "error": "RuntimeError: 导览进入异常状态：ERROR / 机器人通信中断，停止状态未确认"}

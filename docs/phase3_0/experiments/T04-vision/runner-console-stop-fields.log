@@ -1,0 +1,5 @@
+完整演示：http://127.0.0.1:8115
+证据：docs/phase3_0/experiments/T04-vision/visitor-full-20261123-164114
+IDLE: 等待游客
+None: 
+{"status": "FAIL", "report": "docs/phase3_0/experiments/T04-vision/visitor-full-20261123-164114/report.json", "error": "仿真系统已退出，查看 system.log"}

@@ -1,0 +1,4 @@
+Attempt: E04-CROSS-FRONT validate-only
+Result: NOT_RUN (shell exit 1)
+Cause: output redirection failed because docs/phase3_0/experiments/T05 did not exist; the Python validator was not launched.
+No Gazebo, ROS node, or experiment process was started by this attempt.

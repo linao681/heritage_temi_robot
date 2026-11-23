@@ -1,0 +1,54 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "vision_conservative",
+  "operator_mode": "scripted_test",
+  "run_id": "visitor-full-20261123-154128",
+  "manifest": "docs/phase3_0/experiments/T04-vision/visitor-full-20261123-154128/manifest.json",
+  "team_evidence_source": "vision_tracker",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode_description": "simulated consent; test operator input is separately logged",
+  "scripted_operator_scope": "this run-owned Gazebo process",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 6.230037689208984,
+    "free_disk_gib": 44.365928649902344,
+    "load_per_cpu": 0.036875,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "error": "resume: {'success': False, 'message': '视觉团队恢复必须确认当前暂停事件ID'}",
+  "events": [
+    {
+      "elapsed_sec": 11.64421286500874,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 19.778368315004627,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 21.157220929002506,
+      "action": "resume",
+      "result": {
+        "success": false,
+        "message": "视觉团队恢复必须确认当前暂停事件ID"
+      }
+    }
+  ],
+  "elapsed_sec": 21.157299505008268
+}

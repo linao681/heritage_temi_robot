@@ -1,5 +1,26 @@
 # 阶段2.9当前阻塞与风险
 
+## 阶段3.0权威更新（2026-11-23 20:10 CST）
+
+当前工作树：`phase2_9-work`，HEAD `f372e3f4e0702470eb91b2a32683e62590777840`；本轮阶段3.0改动未提交、未推送、未合并。旧的阶段2.9文字和624项测试均为历史快照，不覆盖下表结论。
+
+| 证据项 | 阶段3.0结果 | 边界 |
+|---|---|---|
+| official/business_script完整导览与知识问答 | PASS，`visitor-full-20261123-162126`：入口同意、五区、QA、出口，COMPLETED，377.088秒；3名Gazebo脚本游客，5次停稳后新UUID同目标恢复 | 同意、脚本游客、集合操作员输入为模拟；播报是Mock/字幕 |
+| vision_conservative整路线与保守停车 | PASS_WITH_RISK，`visitor-full-20261123-160651`：官方布局完整到出口，331.287秒，6次视觉UNKNOWN安全暂停均有新鲜odom停稳确认 | 1078条团队观察均UNKNOWN；使用测试操作员确认；不能声称视觉队伍跟踪成功或自动掉队识别 |
+| E07-A掉队恢复 | PASS_WITH_RISK，阶段2.9原始run `visitor-full-20261123-125818`：zone_3 LOST→GATHERED为21.42秒，模拟操作员确认后同目标新UUID恢复并完成导览 | Gazebo脚本团队，不是视觉判断；非固定条件前后对照 |
+| E04前向横穿 | PASS_WITH_RISK，T05 `E04-CROSS-FRONT/run-004`：YOLOX/RGB-D人员距离、激光障碍同时有效，近人策略响应、Nav2停车、odom停稳、演员继续移动 | 视觉/激光未做独立消融；0.544m是仿真几何代理，无接触传感器或实机认证 |
+| E02人群 | PASS_WITH_RISK，T06空场/三人全程PASS，单人失败 | 三人限速仍为0.300m/s；稳定直行窗未达门槛，无证据证明人数增加导致实速降低；5人/散开未跑 |
+| adaptive布局B | PASS_WITH_RISK：Nav2六目标6/6、172.510秒；独立业务全程COMPLETED、194.035秒 | 一名入口演员，业务同意由测试脚本触发，Mock Speak；非视觉团队/E07验收 |
+| ROS记录回放 | PASS_WITH_RISK：真实旧run导出6050事件、1269个ROS TF机器人位姿、3813个Gazebo真值游客位姿、2250个cmd/odom速度样本；SHA验证及只读HTTP检查通过 | 来源为阶段2.9业务脚本run；无RGB/depth原图，桌面浏览器视觉验收NOT_RUN |
+| 全量回归 | PASS：阶段3.0完整`tests/` 680 passed、0 failed、0 skipped；七包构建7/7 | Domain 220前后为空；pytest SHA `91af50f880851a035f8d7d316a32662d7219bdd8b98ab084c92e22823f3ed837`；624 passed仍是阶段2.9历史快照 |
+| 实体Temi | HARDWARE_REQUIRED | 当前无实体机器人；SDK底盘运动、实体制动、ASR/TTS和现场安全未验证 |
+
+数字用途仅限对应run及其来源。T10全量自动化回归已通过；历史阶段数据不能补齐阶段3.0未运行的E02/E04子场景或浏览器/硬件验收。
+
+---
+
+
 最新状态：2026-11-23 13:51 CST。视觉暂停handler修复后的完整`tests/`已624项通过；Gazebo视觉run没有重启，动态视觉仍是实景验收阻塞。
 
 ## 直接阻塞

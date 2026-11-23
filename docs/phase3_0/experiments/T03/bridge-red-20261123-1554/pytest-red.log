@@ -1,0 +1,12 @@
+F......                                                                  [100%]
+=================================== FAILURES ===================================
+_______ test_motion_snapshot_preserves_odometry_stamp_and_receive_clock ________
+
+    def test_motion_snapshot_preserves_odometry_stamp_and_receive_clock():
+>       from scripts.visualization_bridge import motion_snapshot
+E       ImportError: cannot import name 'motion_snapshot' from 'scripts.visualization_bridge' (/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/visualization_bridge.py)
+
+tests/test_visualization_bridge.py:12: ImportError
+=========================== short test summary info ============================
+FAILED tests/test_visualization_bridge.py::test_motion_snapshot_preserves_odometry_stamp_and_receive_clock
+1 failed, 6 passed in 0.26s

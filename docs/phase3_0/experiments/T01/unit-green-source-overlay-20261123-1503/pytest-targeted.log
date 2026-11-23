@@ -1,0 +1,69 @@
+F..............................................................          [100%]
+=================================== FAILURES ===================================
+___ test_same_route_new_uncertainty_reopens_pause_after_reliable_observation ___
+
+    def test_same_route_new_uncertainty_reopens_pause_after_reliable_observation():
+        class Manager:
+            pauses = 0
+    
+            def status(self):
+                return {'state': 'NAVIGATING', 'route_index': 4}
+    
+            def visitor_uncertain(self):
+                self.pauses += 1
+                return True
+    
+        manager = Manager()
+        node = SimpleNamespace(
+            get_clock=lambda: SimpleNamespace(now=lambda: SimpleNamespace(nanoseconds=1_000_000_000)),
+            _vision_team=None,
+            _vision_team_received=0.0,
+            _vision_pause_pending=False,
+            _vision_confirmed_route_index=4,
+            _vision_expected_count=3,
+            _manager=manager,
+            _schedule=lambda callback, *args: callback(*args),
+        )
+        node._pause_for_vision_uncertainty = MethodType(
+            HeritageTourNode._pause_for_vision_uncertainty, node)
+        observed = {
+            'source': 'vision_tracker', 'valid': True, 'stamp_ns': 1_000_000_000,
+            'sample_age_sec': 0.05, 'expected_count': 3, 'observed_count': 3,
+            'observation_state': 'OBSERVED', 'coverage': 'team_visible',
+        }
+        uncertain = {
+            **observed, 'observed_count': 1, 'observation_state': 'UNKNOWN',
+            'coverage': 'forward_only',
+        }
+    
+>       HeritageTourNode._on_vision_team(node, SimpleNamespace(
+            data=json.dumps(observed)))
+
+tests/test_phase30_vision_confirmation.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = namespace(get_clock=<function test_same_route_new_uncertainty_reopens_pause_after_reliable_observation.<locals>.<lambd...350e50>, _pause_for_vision_uncertainty=<bound method HeritageTourNode._pause_for_vision_uncertainty of namespace(...)>)
+message = namespace(data='{"source": "vision_tracker", "valid": true, "stamp_ns": 1000000000, "sample_age_sec": 0.05, "expected_count": 3, "observed_count": 3, "observation_state": "OBSERVED", "coverage": "team_visible"}')
+
+    def _on_vision_team(self, message):
+        now_ns = self.get_clock().now().nanoseconds
+        try:
+            value = json.loads(message.data)
+        except (ValueError, TypeError):
+            value = None
+        self._vision_team = value
+        self._vision_team_received = time.monotonic()
+        if (isinstance(value, dict) and type(value.get('expected_count')) is int and
+                value['expected_count'] >= 0):
+            self._vision_expected_count = value['expected_count']
+        if self._vision_expected_count > 0:
+            if observation_requires_pause(value, now_ns=now_ns):
+                self._schedule(self._pause_for_vision_uncertainty)
+            else:
+>               self._schedule(self._clear_vision_confirmation)
+E               AttributeError: 'types.SimpleNamespace' object has no attribute '_clear_vision_confirmation'
+
+ros2_ws/src/heritage_tour_manager/heritage_tour_manager/ros_tour_node.py:493: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_phase30_vision_confirmation.py::test_same_route_new_uncertainty_reopens_pause_after_reliable_observation
+1 failed, 62 passed in 14.08s

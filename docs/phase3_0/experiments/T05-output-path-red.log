@@ -1,0 +1,58 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_phase30_output_directory_keeps_failed_run_record _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-128/test_phase30_output_directory_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73e418aaf460>
+
+    def test_phase30_output_directory_keeps_failed_run_record(tmp_path, monkeypatch):
+        import run_phase27_experiment as runner
+    
+        monkeypatch.setattr(runner, 'git_context', lambda _root: ('base-sha', [], ''))
+        monkeypatch.setattr(runner, '_dependency_versions', lambda _python: {'pytest': '6.2.5'})
+        monkeypatch.setattr(runner, 'source_paths', lambda _root: {'phase27_scenario': 'scripts/phase27_scenario.py'})
+        run_dir = tmp_path / 'docs/phase3_0/experiments/T05/E04-crossing-001'
+    
+        with pytest.raises(ValueError, match='reserved'):
+>           execute_experiment(
+                experiment(scenario='crossing', route=['wait', 'zone_1']),
+                domain_id=225, gazebo_port=11361, web_port=8089,
+                output_dir=run_dir, root=tmp_path)
+
+tests/test_phase27_experiment_runner.py:249: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+experiment = {'actor_motion': {'continue_after_robot_stop': True, 'hold_at_target_sec': 2.0, 'leave_after_hold': True, 'leave_distance_m': 3.1, ...}, 'camera_height_m': 0.55, 'camera_pitch_down_deg': 0.0, 'id': 'E03-S01', ...}
+
+    def execute_experiment(experiment, *, domain_id, gazebo_port, web_port,
+                           output_dir=None, root=ROOT):
+        experiment = validate_experiment(experiment)
+        output_root = root / 'docs/phase2_7/experiments'
+        if output_dir is not None:
+            output_dir = Path(output_dir).resolve()
+            if output_root.resolve() not in output_dir.parents:
+>               raise ValueError('output directory must be inside docs/phase2_7/experiments')
+E               ValueError: output directory must be inside docs/phase2_7/experiments
+
+scripts/run_phase27_experiment.py:369: ValueError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-128/test_phase30_output_directory_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73e418aaf460>
+
+    def test_phase30_output_directory_keeps_failed_run_record(tmp_path, monkeypatch):
+        import run_phase27_experiment as runner
+    
+        monkeypatch.setattr(runner, 'git_context', lambda _root: ('base-sha', [], ''))
+        monkeypatch.setattr(runner, '_dependency_versions', lambda _python: {'pytest': '6.2.5'})
+        monkeypatch.setattr(runner, 'source_paths', lambda _root: {'phase27_scenario': 'scripts/phase27_scenario.py'})
+        run_dir = tmp_path / 'docs/phase3_0/experiments/T05/E04-crossing-001'
+    
+>       with pytest.raises(ValueError, match='reserved'):
+E       AssertionError: Regex pattern 'reserved' does not match 'output directory must be inside docs/phase2_7/experiments'.
+
+tests/test_phase27_experiment_runner.py:248: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase27_experiment_runner.py::test_phase30_output_directory_keeps_failed_run_record
+1 failed in 0.05s

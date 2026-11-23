@@ -22,10 +22,11 @@ from tf2_ros import Buffer, TransformException, TransformListener
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_ROUTE = ['wait', 'zone_1', 'zone_2', 'zone_3', 'zone_4', 'zone_5', 'exit']
+STATIC_POPULATION_SCENARIOS = {'empty', 'single', 'group'}
 
 
 class TourEvidence(Node):
-    def __init__(self):
+    def __init__(self, layout='official'):
         super().__init__('phase25_clean_tour_evidence')
         self.visitor = {}
         self.tour = {}
@@ -41,7 +42,9 @@ class TourEvidence(Node):
         self.stops = []
         self.odom = []
         self.gazebo = {}
-        self.goals = json.loads((ROOT / 'simulation/generated/official_goals.json').read_text())['goals']
+        self.layout = layout
+        self.goals = json.loads(
+            (ROOT / f'simulation/generated/{layout}_goals.json').read_text())['goals']
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.create_subscription(String, 'heritage/visitor/status', self._visitor, 10)
@@ -247,12 +250,43 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
+def summarize_static_population_evidence(scenario, truth, perception_events):
+    expected_count = {'empty': 0, 'single': 1, 'group': 3}.get(scenario)
+    models = truth.get('commanded_model_poses_world') if isinstance(truth, dict) else None
+    if (expected_count is None or truth.get('status') != 'PASS' or
+            not isinstance(models, list) or len(models) != expected_count):
+        raise AssertionError('静态人数场景缺少匹配Gazebo模型回读')
+    spawned_at = truth.get('models_spawned_monotonic_sec')
+    if not isinstance(spawned_at, (int, float)) or not math.isfinite(spawned_at):
+        raise AssertionError('静态人数场景缺少模型生成单调时钟')
+    observations = [event for event in perception_events
+                    if isinstance(event.get('time_monotonic_sec'), (int, float)) and
+                    event['time_monotonic_sec'] >= spawned_at]
+    counts = {}
+    for event in observations:
+        state = event.get('person_observation_state', 'UNKNOWN')
+        counts[state] = counts.get(state, 0) + 1
+    return {
+        'setup_status': 'PASS', 'scenario': scenario,
+        'gazebo_ground_truth_count': expected_count,
+        'gazebo_model_readback_count': len(models),
+        'models_spawned_monotonic_sec': spawned_at,
+        'perception_sample_count_after_spawn': len(observations),
+        'perception_observation_states': counts,
+        'detection_note': '传感器观测来自ROS感知消息；Gazebo人数仅用于独立评估，不代替检测结果。',
+    }
+
+
 def safety_pause_timeout_budget_sec(args):
-    if args.dynamic_scenario != 'approaching' or not args.continue_after_robot_stop:
+    if (args.dynamic_scenario not in {'approaching', 'crossing'} or
+            not args.continue_after_robot_stop):
         return min(30.0, args.timeout_sec)
-    approach_sec = max(0.0, 4.5 - args.scenario_end_distance_m) / args.person_speed_mps
-    leave_sec = args.leave_distance_m / args.person_speed_mps if args.leave_after_hold else 0.0
-    actor_sec = approach_sec + args.hold_at_target_sec + leave_sec + args.hold_clear_sec
+    if args.dynamic_scenario == 'crossing':
+        actor_sec = 3.0 / args.person_speed_mps + args.hold_clear_sec
+    else:
+        approach_sec = max(0.0, 4.5 - args.scenario_end_distance_m) / args.person_speed_mps
+        leave_sec = args.leave_distance_m / args.person_speed_mps if args.leave_after_hold else 0.0
+        actor_sec = approach_sec + args.hold_at_target_sec + leave_sec + args.hold_clear_sec
     return min(args.timeout_sec, max(30.0, actor_sec + 30.0))
 
 
@@ -430,15 +464,18 @@ def validate_leaving_recovery_evidence(truth, speed_events, stop_events,
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--experiment-id', default='E01')
+    parser.add_argument('--layout', choices=('official', 'adaptive'), default='official')
     parser.add_argument('--timeout-sec', type=float, default=1200.0)
     parser.add_argument('--visitor-timeout-sec', type=float, default=90.0)
     parser.add_argument('--output-dir', type=Path)
     parser.add_argument('--question', default='潮州音乐有哪些类型？')
     parser.add_argument('--exhibit', default='exhibit_05')
     parser.add_argument('--dynamic-scenario',
-                        choices=('none', 'crossing', 'approaching', 'leaving'), default='none',
+                        choices=('none', 'crossing', 'approaching', 'leaving',
+                                 'empty', 'single', 'group'), default='none',
                         help='与真实导航路段联动的 Gazebo 动态人物实验')
     parser.add_argument('--scenario-target', default='zone_4')
+    parser.add_argument('--scenario-seed', type=int, default=0)
     parser.add_argument('--person-speed-mps', type=float, default=0.25)
     parser.add_argument('--scenario-end-distance-m', type=float, default=1.4)
     parser.add_argument('--continue-after-robot-stop', action='store_true',
@@ -459,10 +496,14 @@ def main():
             not 0.5 <= args.scenario_end_distance_m <= 4.5 or
             not math.isfinite(args.hold_at_target_sec) or args.hold_at_target_sec < 0 or
             not math.isfinite(args.leave_distance_m) or args.leave_distance_m < 0 or
-            not math.isfinite(args.hold_clear_sec) or args.hold_clear_sec < 0):
+            not math.isfinite(args.hold_clear_sec) or args.hold_clear_sec < 0 or
+            args.scenario_seed < 0):
         parser.error('timeout 参数必须是有限正数')
-    if args.continue_after_robot_stop and args.dynamic_scenario != 'approaching':
-        parser.error('--continue-after-robot-stop 当前仅支持 approaching 场景')
+    if (args.continue_after_robot_stop and
+            args.dynamic_scenario not in {'approaching', 'crossing'}):
+        parser.error('--continue-after-robot-stop 仅支持 approaching 和 crossing 场景')
+    if args.dynamic_scenario == 'crossing' and not args.continue_after_robot_stop:
+        parser.error('crossing 场景需要持续轨迹与几何风险检查')
     if args.leave_after_hold and not args.continue_after_robot_stop:
         parser.error('--leave-after-hold 需要启用 --continue-after-robot-stop')
     if args.continue_after_robot_stop and not args.retain_scenario_model:
@@ -477,7 +518,7 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     record_file = out / 'experiment_data.csv'
     rclpy.init(args=None)
-    node = TourEvidence()
+    node = TourEvidence(layout=args.layout)
     scenario_process = None
     scenario_log = None
     scenario_truth = out / 'scenario' / 'truth.json'
@@ -485,10 +526,12 @@ def main():
         sys.executable, str(ROOT / 'scripts/record_phase2_topics.py'),
         '--duration-sec', str(min(args.timeout_sec + 60.0, 3600.0)), '--hz', '10',
         '--experiment-id', args.experiment_id, '--output', str(record_file),
+        '--use-sim-time',
     ], cwd=ROOT)
     started_utc = datetime.now(timezone.utc).isoformat()
     result = {'experiment_id': args.experiment_id, 'started_utc': started_utc,
-              'domain_id': domain, 'status': 'RUNNING', 'expected_route': EXPECTED_ROUTE,
+              'domain_id': domain, 'layout': args.layout,
+              'status': 'RUNNING', 'expected_route': EXPECTED_ROUTE,
               'safety_pause_timeout_budget_sec': pause_timeout_sec,
               'operator_consent': 'test harness called accept after WAITING_CONSENT',
               'speech_mode': 'Mock Speak Action; successful action is not real audio'}
@@ -531,9 +574,11 @@ def main():
             scenario_command = [
                 sys.executable, str(ROOT / 'scripts/spawn_people_scenario.py'),
                 '--scenario', args.dynamic_scenario,
+                '--layout', args.layout,
                 '--wait-for-navigation-target', args.scenario_target,
-                '--navigation-timeout-sec', str(args.timeout_sec),
+                '--navigation-timeout-sec', str(min(args.timeout_sec, 120.0)),
                 '--ready-file', str(scenario_ready),
+                '--seed', str(args.scenario_seed),
                 '--speed-mps', str(args.person_speed_mps), '--start-delay-sec', '0',
                 '--target-distance-m', str(args.scenario_end_distance_m),
                 '--hold-at-target-sec', str(args.hold_at_target_sec),
@@ -546,7 +591,7 @@ def main():
                 scenario_command.append('--continue-after-robot-stop')
                 if args.leave_after_hold:
                     scenario_command.append('--leave-after-hold')
-            else:
+            elif not args.retain_scenario_model:
                 scenario_command.append('--remove-after')
             if args.dynamic_scenario == 'approaching' and not args.continue_after_robot_stop:
                 scenario_command.append('--stop-on-safety-stop')
@@ -614,10 +659,16 @@ def main():
                 result['dynamic_scenario']['truth'] = json.loads(scenario_truth.read_text(encoding='utf-8'))
             if scenario_exit != 0 or result['dynamic_scenario'].get('truth', {}).get('status') != 'PASS':
                 raise RuntimeError('动态人物模型/位姿回读未得到 PASS 真值记录')
-            result['dynamic_scenario']['response_evidence'] = (
-                validate_dynamic_scenario_evidence(
-                    result['dynamic_scenario']['truth'], node.perception_events,
-                    node.speed_events, node.navigation))
+            if args.dynamic_scenario in STATIC_POPULATION_SCENARIOS:
+                result['dynamic_scenario']['population_evidence'] = (
+                    summarize_static_population_evidence(
+                        args.dynamic_scenario, result['dynamic_scenario']['truth'],
+                        node.perception_events))
+            else:
+                result['dynamic_scenario']['response_evidence'] = (
+                    validate_dynamic_scenario_evidence(
+                        result['dynamic_scenario']['truth'], node.perception_events,
+                        node.speed_events, node.navigation))
             if args.dynamic_scenario == 'leaving' or args.leave_after_hold:
                 result['dynamic_scenario']['recovery_evidence'] = (
                     validate_leaving_recovery_evidence(

@@ -3,6 +3,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import signal
@@ -24,9 +25,10 @@ def should_handle_paused_team(team_decision_mode, tour, team, *, now_monotonic=N
         return False
     reason = tour.get('reason') or ''
     if team_decision_mode == 'vision_conservative':
-        if isinstance(team, dict) and 'requires_manual_confirmation' in team:
-            return team.get('requires_manual_confirmation') is True
-        return '视觉' in reason or '观察' in reason
+        return (tour.get('pause_source') in ('team', 'safety') and
+                tour.get('team_recovery_required') is True and
+                isinstance(team, dict) and
+                team.get('requires_manual_confirmation') is True)
     if team_decision_mode != 'business_script' or not isinstance(team, dict):
         return False
     stamp = team.get('time_monotonic_sec')
@@ -36,6 +38,23 @@ def should_handle_paused_team(team_decision_mode, tour, team, *, now_monotonic=N
     pending_recovery = tour.get('team_recovery_required') is True
     return (fresh_team and (pending_recovery or team.get('state') == 'LOST' or
                             '掉队' in reason))
+
+
+def should_inject_scripted_straggle(team_decision_mode):
+    return team_decision_mode == 'business_script'
+
+
+def scripted_operator_confirmation_allowed(operator_mode, team_decision_mode, tour,
+                                           team_observation, stop_evidence):
+    return (operator_mode == 'scripted_test' and
+            team_decision_mode == 'vision_conservative' and
+            isinstance(tour, dict) and tour.get('team_resume_confirmed') is not True and
+            isinstance(tour.get('paused_session_id'), str) and
+            bool(tour.get('paused_session_id')) and
+            isinstance(tour.get('team_pause_event_id'), str) and
+            bool(tour.get('team_pause_event_id')) and
+            should_handle_paused_team(team_decision_mode, tour, team_observation) and
+            isinstance(stop_evidence, dict) and stop_evidence.get('confirmed') is True)
 
 
 def business_team_complete(team, expected_visitors):
@@ -68,6 +87,8 @@ def parse_args(argv=None):
     parser.add_argument('--layout', choices=('official', 'adaptive'), default='official')
     parser.add_argument('--team-decision-mode', choices=('business_script', 'vision_conservative'),
                         default='business_script')
+    parser.add_argument('--operator-mode', choices=('external', 'scripted_test'),
+                        default='external')
     parser.add_argument('--domain-id', type=int, default=229)
     parser.add_argument('--gazebo-port', type=int, default=11367)
     parser.add_argument('--web-port', type=int, default=8098)
@@ -75,7 +96,10 @@ def parse_args(argv=None):
     parser.add_argument('--output-dir', type=Path)
     parser.add_argument('--expected-visitors', type=visitor_count, default=3)
     parser.add_argument('--keep-open', action='store_true')
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    if args.operator_mode == 'scripted_test' and args.team_decision_mode != 'vision_conservative':
+        parser.error('scripted_test 仅支持由本运行器启动的 vision_conservative Gazebo 场景')
+    return args
 
 
 def allocate_run_directory(output_root, timestamp=None):
@@ -145,6 +169,7 @@ def build_run_manifest(run, args, command=None):
         'goals_sha256': _sha256(goals),
         'vision_model_sha256': _sha256(model),
         'team_decision_mode': args.team_decision_mode,
+        'operator_mode': args.operator_mode,
         'expected_visitors': args.expected_visitors,
         'expected_visitors_source': 'explicit operator/demo configuration',
         'team_truth_used_for_decision': args.team_decision_mode == 'business_script',
@@ -229,7 +254,7 @@ def check_resource_preflight(args):
                                            ('web', args.web_port)))
     port_errors = [f"{item['name']}:{item['port']} {item.get('error', 'unavailable')}"
                    for item in port_results if not item['bindable']]
-    return evaluate_resource_snapshot(
+    resource = evaluate_resource_snapshot(
         mem_available_kib / 1024 / 1024,
         disk.free / 1024**3,
         load_1m / cpu_cores,
@@ -237,26 +262,115 @@ def check_resource_preflight(args):
         gazebo_processes,
         ports_available=not port_errors,
         port_errors=port_errors)
+    resource['domain_id'] = args.domain_id
+    resource['domain_available'] = args.domain_id not in (211, 219)
+    if not resource['domain_available']:
+        resource['ready'] = False
+        resource['reasons'].append(
+            f'ROS domain {args.domain_id} is reserved by the local simulation setup')
+    return resource
 
 
-def pause_stop_evidence(snapshot):
+class StationaryStopWindow:
+    def __init__(self, minimum_duration_sec=0.5, maximum_gap_sec=0.2):
+        self.minimum_duration_sec = minimum_duration_sec
+        self.maximum_gap_sec = maximum_gap_sec
+        self.reset()
+
+    def reset(self):
+        self.session_id = None
+        self.first_received_sec = None
+        self.last_received_sec = None
+        self.last_stamp_ns = None
+        self.sample_count = 0
+
+    def observe(self, *, valid, session_id, stamp_ns, received_sec):
+        if (not valid or not isinstance(session_id, str) or not session_id or
+                type(stamp_ns) is not int or stamp_ns <= 0 or
+                type(received_sec) not in (int, float) or not math.isfinite(received_sec)):
+            self.reset()
+            return self.result()
+        if self.session_id is not None and self.session_id != session_id:
+            self.reset()
+        if self.last_stamp_ns is not None:
+            if stamp_ns == self.last_stamp_ns:
+                return self.result()
+            gap = received_sec - self.last_received_sec
+            if stamp_ns < self.last_stamp_ns or gap <= 0 or gap > self.maximum_gap_sec:
+                self.reset()
+        if self.sample_count == 0:
+            self.session_id = session_id
+            self.first_received_sec = received_sec
+        self.last_received_sec = received_sec
+        self.last_stamp_ns = stamp_ns
+        self.sample_count += 1
+        return self.result()
+
+    def result(self):
+        duration = (0.0 if self.sample_count < 2 else
+                    self.last_received_sec - self.first_received_sec)
+        return {'confirmed': self.sample_count >= 2 and duration >= self.minimum_duration_sec,
+                'sample_count': self.sample_count,
+                'stable_duration_sec': max(0.0, duration)}
+
+
+def pause_stop_evidence(snapshot, window=None):
     tour = snapshot.get('tour') or {}
-    odom_snapshot = ((snapshot.get('evidence') or {}).get('odom') or {})
+    evidence = snapshot.get('evidence') or {}
+    odom_snapshot = evidence.get('odom') or {}
     odom = odom_snapshot.get('value') or {}
+    fused_snapshot = evidence.get('fused') or {}
+    fused = fused_snapshot.get('value') or {}
+    cmd_snapshot = evidence.get('cmd_vel') or {}
+    cmd = cmd_snapshot.get('value') or {}
     speed = odom.get('linear_speed_mps')
+    angular_speed = odom.get('angular_speed_rps')
     fresh_odom = odom_snapshot.get('fresh') is True
-    stopped = (tour.get('is_moving') is False and fresh_odom and
-               isinstance(speed, (int, float)) and speed <= 0.02)
-    return {'confirmed': stopped, 'tour_is_moving': tour.get('is_moving'),
+    age = odom_snapshot.get('age_sec')
+    bounded = lambda value, limit: (type(value) in (int, float) and
+                                    math.isfinite(value) and abs(value) <= limit)
+    session_id = tour.get('paused_session_id')
+    terminal = tour.get('state') == 'COMPLETED'
+    if terminal:
+        session_id = f"terminal:{tour.get('target') or 'exit'}"
+    pause_state = tour.get('state') == 'PAUSED'
+    stop_requested = pause_state and tour.get('last_pause_stop_requested') is True
+    stop_confirmed = pause_state and tour.get('last_pause_stop_confirmed') is True
+    action_quiescent = pause_state and tour.get('last_pause_action_quiescence_confirmed') is True
+    manager_stop_valid = terminal or (
+        tour.get('state') == 'PAUSED' and stop_requested and stop_confirmed and action_quiescent)
+    safety_session_valid = (terminal or tour.get('pause_source') != 'safety' or
+                            fused_snapshot.get('fresh') is True and
+                            fused.get('stop_confirmed') is True and
+                            fused.get('stop_confirmed_session_id') == session_id)
+    cmd_clear = (cmd_snapshot.get('fresh') is not True or
+                 bounded(cmd.get('linear_speed_mps'), 0.02) and
+                 bounded(cmd.get('angular_speed_rps'), 0.05))
+    sample_valid = (tour.get('is_moving') is False and fresh_odom and
+                    type(age) in (int, float) and math.isfinite(age) and 0 <= age <= 0.5 and
+                    bounded(speed, 0.02) and bounded(angular_speed, 0.05) and
+                    cmd_clear and safety_session_valid and manager_stop_valid)
+    window_result = ({'confirmed': False, 'sample_count': 0,
+                      'stable_duration_sec': 0.0} if window is None else
+                     window.observe(valid=sample_valid, session_id=session_id,
+                                    stamp_ns=odom.get('stamp_ns'),
+                                    received_sec=odom.get('received_monotonic_sec')))
+    return {**window_result, 'sample_valid': sample_valid,
+            'tour_is_moving': tour.get('is_moving'),
             'odom_fresh': fresh_odom, 'odom_linear_speed_mps': speed,
-            'odom_age_sec': odom_snapshot.get('age_sec'),
-            'navigation_session_id': tour.get('paused_session_id')}
+            'odom_angular_speed_rps': angular_speed, 'odom_age_sec': age,
+            'stop_requested': stop_requested,
+            'stop_confirmed': stop_confirmed,
+            'action_quiescence_confirmed': action_quiescent,
+            'stop_confirmed_session_id': fused.get('stop_confirmed_session_id'),
+            'navigation_session_id': session_id}
 
 
 def summarize_navigation_motion(evidence_path, *, minimum_samples_per_target=3):
     targets = ('zone_1', 'zone_2', 'zone_3', 'zone_4', 'zone_5', 'exit')
     summary = {target: {'cmd_vel_motion_samples': 0, 'paired_odom_motion_samples': 0,
-                        'max_cmd_vel_linear_mps': 0.0, 'max_odom_linear_mps': 0.0}
+                        'max_cmd_vel_linear_mps': 0.0, 'max_odom_linear_mps': 0.0,
+                        'navigation_sessions': set()}
                for target in targets}
     with Path(evidence_path).open(encoding='utf-8') as source:
         for line in source:
@@ -274,21 +388,119 @@ def summarize_navigation_motion(evidence_path, *, minimum_samples_per_target=3):
             odom = odom_snapshot.get('value') or {}
             cmd_speed = cmd.get('linear_speed_mps')
             odom_speed = odom.get('linear_speed_mps')
-            if (cmd_snapshot.get('fresh') is not True or type(cmd_speed) not in (int, float) or
-                    abs(cmd_speed) <= 0.02):
+            cmd_age, odom_age = cmd_snapshot.get('age_sec'), odom_snapshot.get('age_sec')
+            fused = (evidence.get('fused') or {}).get('value') or {}
+            session_id = fused.get('navigation_session_id')
+            cmd_received = cmd.get('received_monotonic_sec')
+            odom_received = odom.get('received_monotonic_sec')
+            odom_stamp = odom.get('stamp_ns')
+            cmd_valid = (
+                cmd_snapshot.get('fresh') is True and
+                type(cmd_age) in (int, float) and math.isfinite(cmd_age) and 0 <= cmd_age <= 0.5 and
+                type(cmd_speed) in (int, float) and math.isfinite(cmd_speed) and abs(cmd_speed) > 0.02 and
+                type(cmd_received) in (int, float) and math.isfinite(cmd_received))
+            if not cmd_valid:
                 continue
             item = summary[target]
             item['cmd_vel_motion_samples'] += 1
             item['max_cmd_vel_linear_mps'] = max(item['max_cmd_vel_linear_mps'], abs(cmd_speed))
-            if (odom_snapshot.get('fresh') is True and type(odom_speed) in (int, float) and
-                    abs(odom_speed) > 0.02):
-                item['paired_odom_motion_samples'] += 1
-                item['max_odom_linear_mps'] = max(item['max_odom_linear_mps'], abs(odom_speed))
+            valid_motion_pair = (
+                odom_snapshot.get('fresh') is True and
+                type(odom_age) in (int, float) and math.isfinite(odom_age) and 0 <= odom_age <= 0.5 and
+                type(odom_speed) in (int, float) and math.isfinite(odom_speed) and abs(odom_speed) > 0.02 and
+                type(odom_stamp) is int and odom_stamp > 0 and
+                type(odom_received) in (int, float) and math.isfinite(odom_received) and
+                abs(cmd_received - odom_received) <= 0.2 and
+                isinstance(session_id, str) and bool(session_id))
+            if not valid_motion_pair:
+                continue
+            item['navigation_sessions'].add(session_id)
+            item['paired_odom_motion_samples'] += 1
+            item['max_odom_linear_mps'] = max(item['max_odom_linear_mps'], abs(odom_speed))
     missing = [target for target, samples in summary.items()
                if samples['paired_odom_motion_samples'] < minimum_samples_per_target]
+    for item in summary.values():
+        item['navigation_sessions'] = sorted(item['navigation_sessions'])
     return {'complete': not missing, 'required_targets': list(targets),
             'minimum_paired_motion_samples_per_target': minimum_samples_per_target,
             'missing_targets': missing, 'targets': summary}
+
+
+def summarize_pause_resumes(evidence_path):
+    rows = [json.loads(line) for line in Path(evidence_path).open(encoding='utf-8')
+            if line.strip()]
+    summaries = []
+    seen_events = set()
+    for index, row in enumerate(rows):
+        tour = row.get('tour') or {}
+        event_id = tour.get('team_pause_event_id')
+        if (tour.get('state') != 'PAUSED' or tour.get('team_recovery_required') is not True or
+                not isinstance(event_id, str) or not event_id or event_id in seen_events):
+            continue
+        seen_events.add(event_id)
+        old_session = tour.get('paused_session_id')
+        route_index, target = tour.get('route_index'), tour.get('target')
+        resumed_index, new_session = None, ''
+        for candidate_index in range(index + 1, len(rows)):
+            candidate = rows[candidate_index]
+            candidate_tour = candidate.get('tour') or {}
+            if (candidate_tour.get('state') == 'PAUSED' and
+                    candidate_tour.get('team_pause_event_id') != event_id):
+                break
+            if (candidate_tour.get('state') not in ('NAVIGATING', 'RETURNING') or
+                    candidate_tour.get('route_index') != route_index or
+                    candidate_tour.get('target') != target):
+                continue
+            evidence = candidate.get('evidence') or {}
+            fused_snapshot = evidence.get('fused') or {}
+            fused = fused_snapshot.get('value') or {}
+            candidate_session = fused.get('navigation_session_id')
+            if (fused_snapshot.get('fresh') is True and isinstance(candidate_session, str) and
+                    candidate_session and candidate_session != old_session):
+                resumed_index, new_session = candidate_index, candidate_session
+                break
+        paired_samples = 0
+        max_cmd_vel = max_odom = 0.0
+        if resumed_index is not None:
+            for candidate in rows[resumed_index:]:
+                candidate_tour = candidate.get('tour') or {}
+                if (candidate_tour.get('state') not in ('NAVIGATING', 'RETURNING') or
+                        candidate_tour.get('route_index') != route_index or
+                        candidate_tour.get('target') != target):
+                    break
+                evidence = candidate.get('evidence') or {}
+                fused_snapshot = evidence.get('fused') or {}
+                fused = fused_snapshot.get('value') or {}
+                cmd_snapshot = evidence.get('cmd_vel') or {}
+                odom_snapshot = evidence.get('odom') or {}
+                cmd, odom = cmd_snapshot.get('value') or {}, odom_snapshot.get('value') or {}
+                cmd_speed, odom_speed = cmd.get('linear_speed_mps'), odom.get('linear_speed_mps')
+                cmd_received, odom_received = (cmd.get('received_monotonic_sec'),
+                                               odom.get('received_monotonic_sec'))
+                valid_pair = (
+                    fused_snapshot.get('fresh') is True and fused.get('navigation_session_id') == new_session and
+                    cmd_snapshot.get('fresh') is True and odom_snapshot.get('fresh') is True and
+                    type(cmd_speed) in (int, float) and math.isfinite(cmd_speed) and abs(cmd_speed) > 0.02 and
+                    type(odom_speed) in (int, float) and math.isfinite(odom_speed) and abs(odom_speed) > 0.02 and
+                    type(cmd_received) in (int, float) and math.isfinite(cmd_received) and
+                    type(odom_received) in (int, float) and math.isfinite(odom_received) and
+                    abs(cmd_received - odom_received) <= 0.2)
+                if valid_pair:
+                    paired_samples += 1
+                    max_cmd_vel = max(max_cmd_vel, abs(cmd_speed))
+                    max_odom = max(max_odom, abs(odom_speed))
+        same_target = resumed_index is not None
+        uuid_changed = bool(old_session and new_session and old_session != new_session)
+        summaries.append({
+            'pause_event_id': event_id, 'pause_source': tour.get('pause_source'),
+            'paused_session_id': old_session, 'route_index': route_index, 'target': target,
+            'resumed_session_id': new_session or None, 'uuid_changed': uuid_changed,
+            'same_target': same_target, 'paired_motion_samples': paired_samples,
+            'max_cmd_vel_linear_mps': max_cmd_vel, 'max_odom_linear_mps': max_odom,
+            'physical_motion_observed': paired_samples > 0,
+            'status': 'PASS' if same_target and uuid_changed else 'NOT_VERIFIED',
+        })
+    return summaries
 
 
 def main(argv=None):
@@ -306,6 +518,7 @@ def main(argv=None):
     events = []
     report = {'status': 'RUNNING', 'layout': args.layout,
               'team_decision_mode': args.team_decision_mode,
+              'operator_mode': args.operator_mode,
               'run_id': run.name,
               'manifest': str(run/'manifest.json'),
               'team_evidence_source': ('vision_tracker' if args.team_decision_mode == 'vision_conservative'
@@ -313,16 +526,20 @@ def main(argv=None):
               'actor_source': 'Gazebo scripted visitor actors',
               'expected_visitors': args.expected_visitors,
               'expected_visitors_source': 'explicit demo/operator configuration',
-              'operator_mode': ('scripted simulated consent; business regroup is scripted; '
-                                'vision resume requires an external operator action'),
+              'operator_mode_description': ('simulated consent; test operator input is separately logged'
+                                            if args.operator_mode == 'scripted_test' else
+                                            'simulated visitor consent; vision recovery requires an external operator action'),
+              'scripted_operator_scope': ('this run-owned Gazebo process'
+                                          if args.operator_mode == 'scripted_test' else None),
               'speech_mode': 'timed subtitles, no physical temi audio'}
     handle = (run/'system.log').open('w')
     process = None
     print(f'完整演示：{origin}\n证据：{run}', flush=True)
     started = time.monotonic()
 
-    def command(action, question=None):
-        request = urllib.request.Request(origin+'/api/interact', data=json.dumps({'action': action, 'question': question}).encode(), headers={'Origin': origin, 'Content-Type': 'application/json'}, method='POST')
+    def command(action, question=None, **fields):
+        payload = {'action': action, 'question': question, **fields}
+        request = urllib.request.Request(origin+'/api/interact', data=json.dumps(payload).encode(), headers={'Origin': origin, 'Content-Type': 'application/json'}, method='POST')
         with urllib.request.urlopen(request, timeout=12) as response:
             result = json.load(response)
         events.append({'elapsed_sec': time.monotonic()-started, 'action': action, 'result': result})
@@ -338,6 +555,9 @@ def main(argv=None):
     vision_pause_seen = False
     pause_stops = []
     last_pause_signature = None
+    active_pause_signature = None
+    pause_stop_window = StationaryStopWindow()
+    final_stop_window = StationaryStopWindow()
     try:
         resource_state = check_resource_preflight(args)
         report['resource_preflight'] = resource_state
@@ -364,6 +584,8 @@ def main(argv=None):
                 if state != 'PAUSED':
                     pause_handled = False
                     gathered_at = None
+                    active_pause_signature = None
+                    pause_stop_window.reset()
                 previous_state = last_state
                 if state != last_state:
                     print(f'{state}: {tour.get("reason", "")}', flush=True)
@@ -395,14 +617,19 @@ def main(argv=None):
                 elif not accepted and state == 'WAITING_CONSENT':
                     time.sleep(2)
                     command('accept'); accepted = True
-                elif not straggled and state == 'NAVIGATING' and tour.get('target') == 'zone_2':
+                elif (not straggled and should_inject_scripted_straggle(args.team_decision_mode) and
+                      state == 'NAVIGATING' and tour.get('target') == 'zone_2'):
                     command('straggle'); straggled = True
                 elif should_handle_paused_team(args.team_decision_mode, tour, pause_team):
-                    stop_evidence = pause_stop_evidence(data)
+                    signature = (tour.get('pause_source'), tour.get('route_index'),
+                                 tour.get('paused_session_id'), tour.get('target'))
+                    if signature != active_pause_signature:
+                        pause_stop_window.reset()
+                        active_pause_signature = signature
+                    stop_evidence = pause_stop_evidence(data, pause_stop_window)
                     if not stop_evidence['confirmed']:
                         time.sleep(.1)
                         continue
-                    signature = (tour.get('route_index'), tour.get('paused_session_id'))
                     if signature != last_pause_signature:
                         pause_stops.append({'elapsed_sec': time.monotonic()-started,
                                             'reason': tour.get('reason'), **stop_evidence})
@@ -410,8 +637,30 @@ def main(argv=None):
                     if not pause_handled:
                         if args.team_decision_mode == 'vision_conservative':
                             vision_pause_seen = True
-                            if straggled:
-                                command('gather'); gathering = True
+                            if scripted_operator_confirmation_allowed(
+                                    args.operator_mode, args.team_decision_mode, tour,
+                                    pause_team, stop_evidence):
+                                fused = (((data.get('evidence') or {}).get('fused') or {}).get('value') or {})
+                                command('confirm_team_recovery',
+                                        pause_event_id=tour['team_pause_event_id'])
+                                events.append({
+                                    'elapsed_sec': time.monotonic()-started,
+                                    'action': 'operator_team_confirmation',
+                                    'result': {
+                                        'operator_type': 'simulated_test_input',
+                                        'pause_source': tour.get('pause_source'),
+                                        'team_pause_event_id': tour.get('team_pause_event_id'),
+                                        'route_index': tour.get('route_index'),
+                                        'target': tour.get('target'),
+                                        'paused_session_id': tour.get('paused_session_id'),
+                                        'team_resume_confirmed_before': tour.get('team_resume_confirmed'),
+                                        'recovery_ack_id': tour.get('recovery_ack_id'),
+                                        'observed_navigation_session_id': fused.get('navigation_session_id'),
+                                        'team_state_source': 'vision_tracker',
+                                        'tour_resume_requested': True,
+                                        'safety_recovery_bypassed': False,
+                                    },
+                                })
                             pause_handled = True
                         else:
                             command('gather'); gathering = True; pause_handled = True
@@ -428,18 +677,28 @@ def main(argv=None):
                         time.sleep(3)
                         command('finish_qa'); finished_qa = True
                 if state == 'COMPLETED':
-                    expected_events = (accepted, straggled, gathering, resumed, asked)
-                    if tour.get('visited') != ['wait','zone_1','zone_2','zone_3','zone_4','zone_5','exit'] or not all(expected_events):
+                    if args.team_decision_mode == 'business_script':
+                        expected_events = all((accepted, straggled, gathering, resumed, asked))
+                    else:
+                        expected_events = accepted and asked and (not vision_pause_seen or resumed)
+                    if tour.get('visited') != ['wait','zone_1','zone_2','zone_3','zone_4','zone_5','exit'] or not expected_events:
                         raise RuntimeError('路线或交互证据不完整')
-                    final_stop = pause_stop_evidence(data)
+                    final_stop = pause_stop_evidence(data, final_stop_window)
+                    if not final_stop['confirmed']:
+                        time.sleep(.1)
+                        continue
                     cmd_vel = ((data.get('evidence') or {}).get('cmd_vel') or {})
                     motion_evidence = summarize_navigation_motion(run/'live_evidence.jsonl')
                     report['navigation_motion_evidence'] = motion_evidence
                     if not motion_evidence['complete']:
                         raise RuntimeError('导航期间缺少有效cmd_vel/odom运动证据')
-                    if (tour.get('is_moving') is not False or not final_stop['odom_fresh'] or
-                            not isinstance(final_stop['odom_linear_speed_mps'], (int, float)) or
-                            final_stop['odom_linear_speed_mps'] > 0.02):
+                    pause_resume_evidence = summarize_pause_resumes(run/'live_evidence.jsonl')
+                    report['pause_resume_evidence'] = pause_resume_evidence
+                    if (not pause_resume_evidence or
+                            any(item['status'] != 'PASS' for item in pause_resume_evidence) or
+                            not any(item['physical_motion_observed'] for item in pause_resume_evidence)):
+                        raise RuntimeError('暂停恢复缺少同目标新UUID或配对cmd_vel/odom证据')
+                    if not final_stop['confirmed']:
                         raise RuntimeError('终点缺少新鲜odom停稳证据')
                     if not pause_stops:
                         raise RuntimeError('未采到暂停期间新鲜odom停稳证据')

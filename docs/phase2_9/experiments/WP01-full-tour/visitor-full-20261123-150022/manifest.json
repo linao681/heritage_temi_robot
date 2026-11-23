@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "run_id": "visitor-full-20261123-150022",
+  "started_at_utc": "2026-11-23T07:00:22.417639+00:00",
+  "git_head": "f372e3f4e0702470eb91b2a32683e62590777840",
+  "git_dirty_paths": [
+    " M tests/test_phase29_full_demo.py",
+    "?? docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-145926/manifest.json",
+    "?? docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-145926/report.json",
+    "?? docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-145926/system.log",
+    "?? docs/phase3_0/blockers.md",
+    "?? docs/phase3_0/changes.md",
+    "?? docs/phase3_0/experiment_matrix.md",
+    "?? docs/phase3_0/experiments/T01/unit-red-20261123-1458/pytest-red.log",
+    "?? docs/phase3_0/final_report.md",
+    "?? docs/phase3_0/implementation_plan.md",
+    "?? docs/phase3_0/progress.md",
+    "?? docs/phase3_0/test_results.md",
+    "?? tests/test_phase30_vision_confirmation.py"
+  ],
+  "dirty_source_sha256": "0ca39872a2bac333935fb927efc7efc77e39f8a079a0c4c155f79d780ac9dea6",
+  "dirty_source_files": {
+    "tests/test_phase29_full_demo.py": "02f6c94b6b6ae630edb1f63a66c8a4bc33a0485513772689778110a9e4644b8b",
+    "tests/test_phase30_vision_confirmation.py": "b56ab54068543b8ec2be4c5046d1b8044a6c90ca8d23d641aad4b54c7d0f92fb"
+  },
+  "layout": "official",
+  "map_yaml": "simulation/generated/official.yaml",
+  "map_sha256": "039fdaf1dd600daece245f0d558c1221a5fa7b407afd8f73319e32170cb89f0c",
+  "map_image": "simulation/generated/official.pgm",
+  "map_image_sha256": "69793ba58c6a8f69ca28c75b2b524cfed006c664019a3e02cbcbb6ea1a5ec615",
+  "goals_file": "simulation/generated/official_goals.json",
+  "goals_sha256": "4bac876b5c3287a62eded8ec38546b66f5e2ed8ab204924396064e6816332e6f",
+  "vision_model_sha256": "c5c2d13e59ae883e6af3b45daea64af4833a4951c92d116ec270d9ddbe998063",
+  "team_decision_mode": "business_script",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit operator/demo configuration",
+  "team_truth_used_for_decision": true,
+  "ros_domain": 229,
+  "gazebo_port": 11367,
+  "web_port": 8098,
+  "timeout_sec": 1200,
+  "keep_open": true,
+  "command": [
+    "scripts/run_visitor_full_demo.py",
+    "--keep-open"
+  ]
+}

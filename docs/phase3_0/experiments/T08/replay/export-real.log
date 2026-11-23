@@ -1,0 +1,3 @@
+usage: export_phase30_tour_replay.py [-h] --run-dir RUN_DIR --output-dir
+                                     OUTPUT_DIR
+export_phase30_tour_replay.py: error: 'docs/phase3_0/experiments/T08/replay/visitor-full-20261123-125818/source-evidence.tar.gz' is not in the subpath of '/home/linao/heritage_workspace/heritage_temi_robot-phase28' OR one path is relative and the other is absolute.

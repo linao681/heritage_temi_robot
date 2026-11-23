@@ -1,0 +1,10 @@
+完整演示：http://127.0.0.1:8111
+证据：docs/phase3_0/experiments/T04-vision/visitor-full-20261123-154831
+IDLE: 等待游客
+模拟游客/操作员：start
+GREETING: 迎宾
+WAITING_CONSENT: 等待游客同意
+模拟游客/操作员：accept
+NAVIGATING: 前往入口待命点
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+{"status": "FAIL", "report": "docs/phase3_0/experiments/T04-vision/visitor-full-20261123-154831/report.json", "error": "演示被操作员中断"}

@@ -14,12 +14,18 @@ from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from std_srvs.srv import Trigger
 from temi_interfaces.msg import NavigationStatus, SafetyStopStatus
-from phase27_scenario import actor_step, collision_envelopes, swept_gap
+from phase27_scenario import actor_step, crossing_step, collision_envelopes, swept_gap
 
 ROOT = Path(__file__).resolve().parents[1]
 PREFIX = 'phase25_person_'
 LEGACY_PREFIX = 'phase2_person_'
 MAX_PEOPLE = 8
+NAVIGATION_READY_TOPICS = ('temi/navigation_status', 'odom', '/gazebo/model_states')
+
+
+def navigation_publishers_ready(counts):
+    return all(type(counts.get(topic)) is int and counts[topic] > 0
+               for topic in NAVIGATION_READY_TOPICS)
 
 
 def pose_sample_is_newer(sample_monotonic_sec, after_monotonic_sec):
@@ -151,6 +157,17 @@ class PeopleScenario(Node):
             return None
         return {**self._latest_navigation, 'odom_speed_mps': self._odom_speed_mps,
                 'navigation_age_sec': navigation_age, 'odom_age_sec': odom_age}
+
+    def wait_for_navigation_publishers(self, timeout_sec=10.0):
+        deadline = time.monotonic() + timeout_sec
+        counts = {}
+        while rclpy.ok() and time.monotonic() < deadline:
+            counts = {topic: self.count_publishers(topic)
+                      for topic in NAVIGATION_READY_TOPICS}
+            if navigation_publishers_ready(counts):
+                return counts
+            rclpy.spin_once(self, timeout_sec=0.05)
+        raise TimeoutError(f'ROS topics not ready for visitor scenario: {counts}')
 
     def wait_for_navigation(self, target, timeout_sec=120.0):
         deadline = time.monotonic() + timeout_sec
@@ -297,6 +314,14 @@ def navigation_heading(robot_pose, goal_pose):
     return math.atan2(dy, dx)
 
 
+def scenario_pose_for_navigation_target(scenario, robot_pose, target_goal):
+    if scenario not in ('approaching', 'crossing', 'single', 'group'):
+        return robot_pose
+    pose = dict(robot_pose)
+    pose['yaw'] = navigation_heading(robot_pose, target_goal)
+    return pose
+
+
 def scenario_anchor(scenario, wait, robot_pose):
     return wait if scenario == 'single_static' else robot_pose
 
@@ -430,6 +455,10 @@ def main():
         parser.error('--leave-after-hold 需要显式启用 --continue-after-robot-stop')
     if args.continue_after_robot_stop and args.stop_on_safety_stop:
         parser.error('--continue-after-robot-stop 与 --stop-on-safety-stop 互斥')
+    if (args.continue_after_robot_stop and args.scenario not in ('approaching', 'crossing')):
+        parser.error('--continue-after-robot-stop 仅支持 approaching 和 crossing 场景')
+    if args.scenario == 'crossing' and not args.continue_after_robot_stop:
+        parser.error('crossing 场景需要持续轨迹与几何风险检查')
     if (not math.isfinite(args.speed_mps) or args.speed_mps <= 0 or
             not math.isfinite(args.update_hz) or not 1.0 <= args.update_hz <= 20.0 or
             not math.isfinite(args.start_delay_sec) or args.start_delay_sec < 0 or
@@ -499,6 +528,8 @@ def main():
             write_truth_record(output, record)
             print(json.dumps(record, ensure_ascii=False))
             return
+        if args.wait_for_navigation_target:
+            record['navigation_topic_publishers'] = node.wait_for_navigation_publishers()
         if args.ready_file:
             args.ready_file.parent.mkdir(parents=True, exist_ok=True)
             args.ready_file.write_text('ready\n', encoding='utf-8')
@@ -508,15 +539,16 @@ def main():
         robot_pose = node.current_pose()
         record['robot_pose_world_at_spawn'] = robot_pose
         scenario_robot_pose = robot_pose
-        if args.scenario == 'approaching' and args.wait_for_navigation_target:
-            goals = json.loads((ROOT / 'simulation/generated/official_goals.json').read_text())['goals']
+        if args.scenario in ('approaching', 'crossing', 'single', 'group') and args.wait_for_navigation_target:
+            goals = json.loads(
+                (ROOT / f'simulation/generated/{args.layout}_goals.json').read_text())['goals']
             target_goal = goals.get(args.wait_for_navigation_target)
             if target_goal is not None:
-                scenario_robot_pose = dict(robot_pose)
-                scenario_robot_pose['yaw'] = navigation_heading(robot_pose, target_goal)
+                scenario_robot_pose = scenario_pose_for_navigation_target(
+                    args.scenario, robot_pose, target_goal)
                 record['trajectory_heading_rad'] = scenario_robot_pose['yaw']
                 record['trajectory_heading_source'] = 'active_navigation_goal_bearing'
-        phase27_motion = (args.scenario == 'approaching' and
+        phase27_motion = (args.scenario in ('approaching', 'crossing') and
                           args.continue_after_robot_stop)
         if phase27_motion:
             robot_radius, actor_radius, envelope_source = collision_envelopes(
@@ -537,6 +569,7 @@ def main():
         models = [node.spawn(f'{PREFIX}{index + 1:02d}', *pose)
                   for index, pose in enumerate(positions)]
         record['commanded_model_poses_world'] = models
+        record['models_spawned_monotonic_sec'] = time.monotonic()
         moving = args.scenario in ('approaching', 'crossing', 'leaving', 'group_straggler')
         natural_duration = max(
             (trajectory_duration(args.scenario, (model['x'], model['y'], model['yaw']),
@@ -545,7 +578,7 @@ def main():
             default=0.0)
         duration = (args.duration_sec if args.duration_sec is not None else
                     natural_duration if moving else 5.0)
-        if phase27_motion and args.duration_sec is None:
+        if phase27_motion and args.duration_sec is None and args.scenario == 'approaching':
             start_distance = math.hypot(positions[0][0] - scenario_robot_pose['x'],
                                         positions[0][1] - scenario_robot_pose['y'])
             duration = ((start_distance - args.end_distance_m) / args.speed_mps +
@@ -555,6 +588,9 @@ def main():
                         args.hold_clear_sec)
             if duration <= 0.0:
                 raise ValueError('阶段2.7人物运动时长必须为正数')
+        elif (phase27_motion and args.duration_sec is None and
+              args.scenario == 'crossing'):
+            duration += args.hold_clear_sec
         deadline = time.monotonic() + args.start_delay_sec
         while rclpy.ok() and time.monotonic() < deadline:
             rclpy.spin_once(node, timeout_sec=0.05)
@@ -566,17 +602,37 @@ def main():
                 model = models[0]
                 anchor = (scenario_robot_pose['x'], scenario_robot_pose['y'],
                           scenario_robot_pose.get('yaw', 0.0))
-                actor_config = {
-                    'speed_mps': args.speed_mps,
-                    'start_distance_m': math.hypot(model['x'] - anchor[0],
-                                                   model['y'] - anchor[1]),
-                    'target_distance_m': args.end_distance_m,
-                    'hold_at_target_sec': args.hold_at_target_sec,
-                    'leave_after_hold': args.leave_after_hold,
-                    'leave_distance_m': args.leave_distance_m,
-                    'leave_direction': args.leave_direction,
-                    'hold_clear_sec': args.hold_clear_sec,
-                }
+                if args.scenario == 'approaching':
+                    actor_config = {
+                        'speed_mps': args.speed_mps,
+                        'start_distance_m': math.hypot(model['x'] - anchor[0],
+                                                       model['y'] - anchor[1]),
+                        'target_distance_m': args.end_distance_m,
+                        'hold_at_target_sec': args.hold_at_target_sec,
+                        'leave_after_hold': args.leave_after_hold,
+                        'leave_distance_m': args.leave_distance_m,
+                        'leave_direction': args.leave_direction,
+                        'hold_clear_sec': args.hold_clear_sec,
+                    }
+                else:
+                    end = trajectory_position('crossing',
+                                              (model['x'], model['y'], model['yaw']),
+                                              scenario_robot_pose, 1.0)
+                    forward = (math.cos(anchor[2]), math.sin(anchor[2]))
+                    left = (-forward[1], forward[0])
+                    start_delta = (model['x'] - anchor[0], model['y'] - anchor[1])
+                    end_delta = (end[0] - anchor[0], end[1] - anchor[1])
+                    actor_config = {
+                        'speed_mps': args.speed_mps,
+                        'start_distance_m': math.hypot(start_delta[0], start_delta[1]),
+                        'forward_distance_m': start_delta[0] * forward[0] +
+                                              start_delta[1] * forward[1],
+                        'start_lateral_m': start_delta[0] * left[0] +
+                                           start_delta[1] * left[1],
+                        'end_lateral_m': end_delta[0] * left[0] +
+                                         end_delta[1] * left[1],
+                        'hold_clear_sec': args.hold_clear_sec,
+                    }
                 record['actor_motion']['start_anchor_world'] = list(anchor)
                 record['actor_motion']['start_distance_m'] = actor_config['start_distance_m']
                 record['actor_motion'].setdefault('motion_phase_events', [])
@@ -595,7 +651,9 @@ def main():
                     if elapsed > duration + interval:
                         record['actor_motion']['timeout'] = True
                         break
-                    step = actor_step(actor_config, elapsed, anchor)
+                    step = (crossing_step(actor_config, elapsed, anchor)
+                            if args.scenario == 'crossing' else
+                            actor_step(actor_config, elapsed, anchor))
                     robot_now = node.current_pose()
                     commanded = step['pose']
                     geometry_gap = swept_gap(
@@ -775,6 +833,12 @@ def main():
         })
         write_truth_record(output, record)
         print(json.dumps(record, ensure_ascii=False))
+    except KeyboardInterrupt as error:
+        record.update({'status': 'FAIL', 'duration_sec': time.monotonic() - started_monotonic,
+                       'ended_monotonic_sec': time.monotonic(),
+                       'error': f'{type(error).__name__}: scenario interrupted'})
+        write_truth_record(output, record)
+        raise
     except Exception as error:
         record.update({'status': 'FAIL', 'duration_sec': time.monotonic() - started_monotonic,
                        'ended_monotonic_sec': time.monotonic(),
@@ -792,7 +856,8 @@ def main():
         raise
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':

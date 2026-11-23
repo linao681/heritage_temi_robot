@@ -42,6 +42,34 @@ def test_phase27_experiment_config_accepts_supported_complete_run():
     assert validated['actor_motion']['target_distance_m'] == 1.4
 
 
+def test_crossing_requires_the_continuous_motion_geometry_guard():
+    unsafe = experiment(scenario='crossing', route=['wait', 'zone_1'], actor_motion={
+        'movement_speed_mps': 0.25,
+    })
+    with pytest.raises(ValueError, match='crossing requires continuous geometry checks'):
+        validate_experiment(unsafe)
+
+    guarded = experiment(scenario='crossing', route=['wait', 'zone_1'], actor_motion={
+        'continue_after_robot_stop': True, 'movement_speed_mps': 0.25,
+    })
+    assert validate_experiment(guarded)['scenario'] == 'crossing'
+
+
+@pytest.mark.parametrize('scenario', ['empty', 'single', 'group'])
+def test_e02_static_density_scenarios_are_supported(scenario):
+    validated = validate_experiment(experiment(
+        id=f'E02-{scenario}', scenario=scenario,
+        actor_motion={'retain_scenario_model': True}))
+
+    assert validated['scenario'] == scenario
+
+
+def test_e02_static_population_must_remain_present_for_route_comparison():
+    with pytest.raises(ValueError, match='retain_scenario_model'):
+        validate_experiment(experiment(
+            scenario='group', actor_motion={'retain_scenario_model': False}))
+
+
 def test_phase27_config_accepts_lateral_actor_departure_and_rejects_unknown_direction():
     validated = validate_experiment(experiment(actor_motion={
         'continue_after_robot_stop': True, 'leave_after_hold': True,
@@ -229,6 +257,26 @@ def test_preflight_failure_keeps_a_failed_run_record(tmp_path, monkeypatch):
     with pytest.raises(ValueError, match='reserved'):
         execute_experiment(
             experiment(), domain_id=225, gazebo_port=11361, web_port=8089,
+            output_dir=run_dir, root=tmp_path)
+
+    manifest = yaml.safe_load((run_dir / 'manifest.json').read_text())
+    assert manifest['status'] == 'FAIL'
+    assert 'reserved' in manifest['error']
+    assert (run_dir / 'config.yaml').is_file()
+
+
+def test_phase30_output_directory_keeps_failed_run_record(tmp_path, monkeypatch):
+    import run_phase27_experiment as runner
+
+    monkeypatch.setattr(runner, 'git_context', lambda _root: ('base-sha', [], ''))
+    monkeypatch.setattr(runner, '_dependency_versions', lambda _python: {'pytest': '6.2.5'})
+    monkeypatch.setattr(runner, 'source_paths', lambda _root: {'phase27_scenario': 'scripts/phase27_scenario.py'})
+    run_dir = tmp_path / 'docs/phase3_0/experiments/T05/E04-crossing-001'
+
+    with pytest.raises(ValueError, match='reserved'):
+        execute_experiment(
+            experiment(scenario='crossing', route=['wait', 'zone_1']),
+            domain_id=225, gazebo_port=11361, web_port=8089,
             output_dir=run_dir, root=tmp_path)
 
     manifest = yaml.safe_load((run_dir / 'manifest.json').read_text())

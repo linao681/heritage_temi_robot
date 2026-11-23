@@ -380,6 +380,52 @@ def test_vision_uncertainty_pauses_without_claiming_visitor_was_lost():
     assert requests == [('team_pause', '团队视觉信息不完整，安全等待人工确认')]
 
 
+def test_vision_pause_retains_cancelled_navigation_session_id():
+    async def scenario():
+        manager, backend, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.status()['state'] == 'NAVIGATING')
+            target = driver.navigation_calls[-1]
+            assert manager.visitor_uncertain('nav-vision-1')
+            await wait_until(lambda: manager.status()['state'] == 'PAUSED')
+            assert not backend.get_status().is_moving
+            assert manager.status()['paused_session_id'] == 'nav-vision-1'
+            assert manager.status()['last_pause_stop_requested'] is True
+            assert manager.status()['last_pause_stop_confirmed'] is True
+            assert manager.resume()
+            await wait_until(lambda: driver.navigation_calls.count(target) == 2)
+        finally:
+            if manager.running:
+                manager.cancel()
+            await end_rig(manager, monitor)
+    asyncio.run(scenario())
+
+
+def test_vision_confirmation_is_bound_to_current_pause_event_and_one_shot():
+    async def scenario():
+        manager, backend, driver, _, monitor = await setup_rig()
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.status()['state'] == 'NAVIGATING')
+            target = driver.navigation_calls[-1]
+            assert manager.visitor_uncertain('nav-vision-2')
+            await wait_until(lambda: manager.status()['state'] == 'PAUSED')
+            event_id = manager.status()['team_pause_event_id']
+            assert event_id
+            assert not manager.confirm_team_recovery('stale-event')
+            assert manager.confirm_team_recovery(event_id)
+            assert not manager.confirm_team_recovery(event_id)
+            await wait_until(lambda: driver.navigation_calls.count(target) == 2)
+            assert manager.status()['team_pause_event_id'] == ''
+            assert not backend.get_status().is_moving or manager.status()['state'] == 'NAVIGATING'
+        finally:
+            if manager.running:
+                manager.cancel()
+            await end_rig(manager, monitor)
+    asyncio.run(scenario())
+
+
 def test_assisted_resume_revoked_before_checkpoint_needs_new_confirmation():
     async def scenario():
         manager, backend, driver, _, monitor = await setup_rig()

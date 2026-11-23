@@ -1,0 +1,45 @@
+完整演示：http://127.0.0.1:8116
+证据：docs/phase3_0/experiments/T04-vision/visitor-full-20261123-164811
+IDLE: 等待游客
+模拟游客/操作员：start
+GREETING: 迎宾
+WAITING_CONSENT: 等待游客同意
+模拟游客/操作员：accept
+NAVIGATING: 前往入口待命点
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+EXPLAINING: 讲解入口待命点
+NAVIGATING: 前往非遗概览
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+NAVIGATING: 前往非遗概览
+EXPLAINING: 讲解非遗概览
+NAVIGATING: 前往传统工艺
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+NAVIGATING: 前往传统工艺
+EXPLAINING: 讲解传统工艺
+NAVIGATING: 前往代表作品
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+NAVIGATING: 前往代表作品
+EXPLAINING: 讲解代表作品
+NAVIGATING: 前往传承故事
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+NAVIGATING: 前往传承故事
+EXPLAINING: 讲解传承故事
+NAVIGATING: 前往互动体验
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+NAVIGATING: 前往互动体验
+EXPLAINING: 讲解互动体验
+QA: 互动等待，接受文字提问、人工结束或超时继续
+模拟游客/操作员：ask
+RETURNING: 前往出口
+PAUSED: 团队视觉信息不完整，安全等待人工确认
+模拟游客/操作员：confirm_team_recovery
+RETURNING: 前往出口
+EXPLAINING: 讲解出口
+COMPLETED: 完整导览已结束
+{"status": "FAIL", "report": "docs/phase3_0/experiments/T04-vision/visitor-full-20261123-164811/report.json", "error": "暂停恢复缺少同目标新UUID或配对cmd_vel/odom证据"}

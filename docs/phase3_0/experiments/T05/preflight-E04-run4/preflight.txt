@@ -1,0 +1,18 @@
+2026-11-23T17:28:35+08:00
+               total        used        free      shared  buff/cache   available
+内存：       15Gi       9.2Gi       1.7Gi       143Mi       4.5Gi       6.2Gi
+交换：         0B          0B          0B
+文件系统        大小  已用  可用 已用% 挂载点
+/dev/nvme0n1p4  196G  142G   45G   77% /
+
+Gazebo/Nav2 processes:
+
+Port bind checks:
+  File "<string>", line 1
+    import socket; ports=(11395,8120); results=[];\nfor p in ports:\n s=socket.socket();\n try: s.bind(("127.0.0.1",p)); results.append({"port":p,"bindable":True})\n except OSError as e: results.append({"port":p,"bindable":False,"error":str(e)})\n finally: s.close()\nprint(results)
+                                                   ^
+SyntaxError: unexpected character after line continuation character
+
+ROS domain probe:
+{"domain_id": 207, "other_nodes": [], "empty": true}
+exit_code=0

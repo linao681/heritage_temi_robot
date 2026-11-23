@@ -1,0 +1,172 @@
+FF..F                                                                    [100%]
+=================================== FAILURES ===================================
+_______ test_tour_export_uses_real_pose_speed_and_separates_gazebo_truth _______
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-141/test_tour_export_uses_real_pos0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x766c8481d840>
+
+    def test_tour_export_uses_real_pose_speed_and_separates_gazebo_truth(tmp_path, monkeypatch):
+        from scripts.export_phase30_tour_replay import build_tour_replay
+    
+        run_id, source, output = make_source_run(tmp_path, monkeypatch)
+>       paths = build_tour_replay(source, output)
+
+tests/test_phase30_tour_replay.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/export_phase30_tour_replay.py:256: in build_tour_replay
+    archive_path_relative = archive_path.relative_to(ROOT).as_posix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-linao/pytest-141/test_tour_export_uses_real_pos0/export/source-evidence.tar.gz')
+other = (PosixPath('/home/linao/heritage_workspace/heritage_temi_robot-phase28'),)
+parts = ['/', 'tmp', 'pytest-of-linao', 'pytest-141', 'test_tour_export_uses_real_pos0', 'export', ...]
+drv = '', root = '/'
+
+    def relative_to(self, *other):
+        """Return the relative path to another path identified by the passed
+        arguments.  If the operation is not possible (because this is not
+        a subpath of the other path), raise ValueError.
+        """
+        # For the purpose of this method, drive and root are considered
+        # separate parts, i.e.:
+        #   Path('c:/').relative_to('c:')  gives Path('/')
+        #   Path('c:/').relative_to('/')   raise ValueError
+        if not other:
+            raise TypeError("need at least one argument")
+        parts = self._parts
+        drv = self._drv
+        root = self._root
+        if root:
+            abs_parts = [drv, root] + parts[1:]
+        else:
+            abs_parts = parts
+        to_drv, to_root, to_parts = self._parse_args(other)
+        if to_root:
+            to_abs_parts = [to_drv, to_root] + to_parts[1:]
+        else:
+            to_abs_parts = to_parts
+        n = len(to_abs_parts)
+        cf = self._flavour.casefold_parts
+        if (root or drv) if n == 0 else cf(abs_parts[:n]) != cf(to_abs_parts):
+            formatted = self._format_parsed_parts(to_drv, to_root, to_parts)
+>           raise ValueError("{!r} is not in the subpath of {!r}"
+                    " OR one path is relative and the other is absolute."
+                             .format(str(self), str(formatted)))
+E           ValueError: '/tmp/pytest-of-linao/pytest-141/test_tour_export_uses_real_pos0/export/source-evidence.tar.gz' is not in the subpath of '/home/linao/heritage_workspace/heritage_temi_robot-phase28' OR one path is relative and the other is absolute.
+
+/usr/lib/python3.10/pathlib.py:818: ValueError
+____ test_tour_export_events_are_monotonic_and_include_state_and_detection _____
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-141/test_tour_export_events_are_mo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x766c8571e8c0>
+
+    def test_tour_export_events_are_monotonic_and_include_state_and_detection(tmp_path, monkeypatch):
+        from scripts.export_phase30_tour_replay import build_tour_replay
+    
+        _, source, output = make_source_run(tmp_path, monkeypatch)
+>       replay = json.loads(build_tour_replay(source, output)['recording'].read_text())
+
+tests/test_phase30_tour_replay.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/export_phase30_tour_replay.py:256: in build_tour_replay
+    archive_path_relative = archive_path.relative_to(ROOT).as_posix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-linao/pytest-141/test_tour_export_events_are_mo0/export/source-evidence.tar.gz')
+other = (PosixPath('/home/linao/heritage_workspace/heritage_temi_robot-phase28'),)
+parts = ['/', 'tmp', 'pytest-of-linao', 'pytest-141', 'test_tour_export_events_are_mo0', 'export', ...]
+drv = '', root = '/'
+
+    def relative_to(self, *other):
+        """Return the relative path to another path identified by the passed
+        arguments.  If the operation is not possible (because this is not
+        a subpath of the other path), raise ValueError.
+        """
+        # For the purpose of this method, drive and root are considered
+        # separate parts, i.e.:
+        #   Path('c:/').relative_to('c:')  gives Path('/')
+        #   Path('c:/').relative_to('/')   raise ValueError
+        if not other:
+            raise TypeError("need at least one argument")
+        parts = self._parts
+        drv = self._drv
+        root = self._root
+        if root:
+            abs_parts = [drv, root] + parts[1:]
+        else:
+            abs_parts = parts
+        to_drv, to_root, to_parts = self._parse_args(other)
+        if to_root:
+            to_abs_parts = [to_drv, to_root] + to_parts[1:]
+        else:
+            to_abs_parts = to_parts
+        n = len(to_abs_parts)
+        cf = self._flavour.casefold_parts
+        if (root or drv) if n == 0 else cf(abs_parts[:n]) != cf(to_abs_parts):
+            formatted = self._format_parsed_parts(to_drv, to_root, to_parts)
+>           raise ValueError("{!r} is not in the subpath of {!r}"
+                    " OR one path is relative and the other is absolute."
+                             .format(str(self), str(formatted)))
+E           ValueError: '/tmp/pytest-of-linao/pytest-141/test_tour_export_events_are_mo0/export/source-evidence.tar.gz' is not in the subpath of '/home/linao/heritage_workspace/heritage_temi_robot-phase28' OR one path is relative and the other is absolute.
+
+/usr/lib/python3.10/pathlib.py:818: ValueError
+__________ test_exported_archive_contains_only_verified_source_files ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-linao/pytest-141/test_exported_archive_contains0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x766c84769f00>
+
+    def test_exported_archive_contains_only_verified_source_files(tmp_path, monkeypatch):
+        from scripts.export_phase30_tour_replay import build_tour_replay
+    
+        _, source, output = make_source_run(tmp_path, monkeypatch)
+>       paths = build_tour_replay(source, output)
+
+tests/test_phase30_tour_replay.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/export_phase30_tour_replay.py:256: in build_tour_replay
+    archive_path_relative = archive_path.relative_to(ROOT).as_posix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-linao/pytest-141/test_exported_archive_contains0/export/source-evidence.tar.gz')
+other = (PosixPath('/home/linao/heritage_workspace/heritage_temi_robot-phase28'),)
+parts = ['/', 'tmp', 'pytest-of-linao', 'pytest-141', 'test_exported_archive_contains0', 'export', ...]
+drv = '', root = '/'
+
+    def relative_to(self, *other):
+        """Return the relative path to another path identified by the passed
+        arguments.  If the operation is not possible (because this is not
+        a subpath of the other path), raise ValueError.
+        """
+        # For the purpose of this method, drive and root are considered
+        # separate parts, i.e.:
+        #   Path('c:/').relative_to('c:')  gives Path('/')
+        #   Path('c:/').relative_to('/')   raise ValueError
+        if not other:
+            raise TypeError("need at least one argument")
+        parts = self._parts
+        drv = self._drv
+        root = self._root
+        if root:
+            abs_parts = [drv, root] + parts[1:]
+        else:
+            abs_parts = parts
+        to_drv, to_root, to_parts = self._parse_args(other)
+        if to_root:
+            to_abs_parts = [to_drv, to_root] + to_parts[1:]
+        else:
+            to_abs_parts = to_parts
+        n = len(to_abs_parts)
+        cf = self._flavour.casefold_parts
+        if (root or drv) if n == 0 else cf(abs_parts[:n]) != cf(to_abs_parts):
+            formatted = self._format_parsed_parts(to_drv, to_root, to_parts)
+>           raise ValueError("{!r} is not in the subpath of {!r}"
+                    " OR one path is relative and the other is absolute."
+                             .format(str(self), str(formatted)))
+E           ValueError: '/tmp/pytest-of-linao/pytest-141/test_exported_archive_contains0/export/source-evidence.tar.gz' is not in the subpath of '/home/linao/heritage_workspace/heritage_temi_robot-phase28' OR one path is relative and the other is absolute.
+
+/usr/lib/python3.10/pathlib.py:818: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_phase30_tour_replay.py::test_tour_export_uses_real_pose_speed_and_separates_gazebo_truth
+FAILED tests/test_phase30_tour_replay.py::test_tour_export_events_are_monotonic_and_include_state_and_detection
+FAILED tests/test_phase30_tour_replay.py::test_exported_archive_contains_only_verified_source_files
+3 failed, 2 passed in 0.08s

@@ -1,0 +1,13 @@
+PASS material docs/competition_final/key_metrics.md (6463 bytes)
+PASS material docs/competition_final/final_validation_matrix.md (7544 bytes)
+PASS material docs/competition_final/experiment_summary.md (8575 bytes)
+PASS material docs/competition_final/evidence_index.md (11997 bytes)
+PASS material docs/competition_final/final_progress.md (10941 bytes)
+PASS material docs/competition_final/blockers.md (7046 bytes)
+PASS material docs/competition_final/overnight_report.md (7974 bytes)
+PASS material docs/competition_final/six_minute_script.md (3949 bytes)
+PASS material docs/competition_final/slides_outline.md (2191 bytes)
+PASS material docs/competition_final/demo_storyboard.md (2734 bytes)
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+AssertionError: docs/competition_final/innovation_summary.md: missing H1

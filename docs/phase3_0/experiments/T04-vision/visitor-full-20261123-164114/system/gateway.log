@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/start_nav2_gateway.py", line 90, in <module>
+    raise SystemExit(main())
+  File "/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/start_nav2_gateway.py", line 57, in main
+    raise RuntimeError('等待仿真 Nav2 和定位超时')
+RuntimeError: 等待仿真 Nav2 和定位超时

@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "scenario": "empty",
+  "layout": "official",
+  "source": "gazebo_model_states_and_set_entity_state",
+  "started_unix_sec": 1795428906.3945255,
+  "started_monotonic_sec": 89308.567404038,
+  "movement_started_monotonic_sec": null,
+  "movement_ended_monotonic_sec": null,
+  "duration_sec": 1.9897706979973009,
+  "seed": 0,
+  "speed_mps": 0.3,
+  "update_hz": 5.0,
+  "end_distance_m": 1.4,
+  "actor_motion": {
+    "continue_after_robot_stop": false,
+    "stop_at_target": true,
+    "movement_speed_mps": 0.3,
+    "target_distance_m": 1.4,
+    "hold_at_target_sec": 2.0,
+    "leave_after_hold": false,
+    "leave_distance_m": 3.9,
+    "leave_direction": "forward",
+    "hold_clear_sec": 1.0,
+    "pause_on_collision": true,
+    "motion_phase_events": [],
+    "contact_observed": null
+  },
+  "removed_previous_models": [
+    "phase25_person_01",
+    "phase25_person_02",
+    "phase25_person_03"
+  ],
+  "commanded_model_poses_world": [],
+  "robot_pose_world_at_spawn": null,
+  "gazebo_model_state_samples": [],
+  "model_asset": "simulation/models/person_mannequin/model.sdf",
+  "ground_truth_note": "轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。",
+  "cleanup_only": true,
+  "removed_after": [
+    "phase25_person_01",
+    "phase25_person_02",
+    "phase25_person_03"
+  ],
+  "ended_monotonic_sec": 89310.557174925
+}

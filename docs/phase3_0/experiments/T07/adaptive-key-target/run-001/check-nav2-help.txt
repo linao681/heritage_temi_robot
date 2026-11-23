@@ -1,0 +1,10 @@
+usage: check_nav2.py [-h] [--layout {official,adaptive}] [--full-tour]
+                     --domain-id DOMAIN_ID [--output OUTPUT]
+
+options:
+  -h, --help            show this help message and exit
+  --layout {official,adaptive}
+  --full-tour           五区顺序导航并前往出口
+  --domain-id DOMAIN_ID
+                        必须与已经预检的ROS_DOMAIN_ID一致
+  --output OUTPUT       独立新报告路径；拒绝覆盖已有文件

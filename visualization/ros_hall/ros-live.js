@@ -23,12 +23,15 @@
  const voiceButton=document.createElement('button');voiceButton.textContent='开启浏览器演示语音';interaction.appendChild(voiceButton);
  let voiceEnabled=false,lastSpeechId=null;
  voiceButton.onclick=()=>{voiceEnabled=!voiceEnabled;voiceButton.textContent=voiceEnabled?'关闭浏览器演示语音':'开启浏览器演示语音';if(!voiceEnabled)window.speechSynthesis?.cancel();};
- let sending=false;
+ let sending=false,lastData=null;
  async function interact(action, question, explanationLevel='basic'){
   if(sending)return;
   sending=true;feedback.textContent='等待 ROS 确认…';
   try{
-   const response=await fetch('/api/interact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,question,level:explanationLevel})});
+   const teamConfirmation=action==='resume'&&lastData?.team_decision_mode==='vision_conservative'&&lastData.tour?.team_recovery_required===true;
+   const payload={action:teamConfirmation?'confirm_team_recovery':action,question,level:explanationLevel};
+   if(teamConfirmation)payload.pause_event_id=lastData.tour.team_pause_event_id;
+   const response=await fetch('/api/interact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
    const result=await response.json();
    feedback.textContent=result.message||'未收到确认';
    if(result.success&&action==='ask')input.value='';
@@ -39,6 +42,7 @@
  const controls=[['start','接待游客'],['arm_visitor','等待游客到来'],['accept','同意导览'],['refuse','暂不需要'],['pause','暂停'],['resume','继续导览'],['straggle','队尾放慢'],['gather','提醒集合'],['finish_qa','结束问答'],['manual_takeover','人工接管'],['cancel','结束导览']];
  for(const [action,label] of controls){const button=document.createElement('button');button.textContent=label;button.dataset.action=action;button.onclick=()=>interact(action);actions.appendChild(button);}
  function updateInteraction(data){
+  lastData=data;
   const tour=data.tour, assist=tour?.visitor_assist||{};
   interaction.style.display=data.interactive?'block':'none';
   const live=Boolean(data.connected&&tour), state=tour?.state;
@@ -47,6 +51,7 @@
   status.textContent=live?(tour.reason||state)+' · 团队确认人数 '+(assist.expected_count||0):'等待实时导览状态';
   if(vision&&state==='PAUSED')status.textContent+=' · 视觉覆盖有限，继续操作需人工确认';
   const allowed={arm_visitor:assist.can_arm,accept:state==='WAITING_CONSENT'&&(!assist.active||assist.can_accept),refuse:state==='WAITING_CONSENT',pause:['NAVIGATING','RETURNING','EXPLAINING','QA'].includes(state),resume:state==='PAUSED'&&(!assist.active||assist.can_resume),finish_qa:state==='QA'&&tour?.qa_waiting,manual_takeover:!['IDLE','COMPLETED','ERROR'].includes(state),cancel:!['IDLE','COMPLETED','ERROR'].includes(state)};
+  if(vision)allowed.resume=state==='PAUSED'&&(tour?.pause_source==='manual'||(tour?.team_recovery_required===true&&tour?.team_resume_confirmed!==true&&Boolean(tour?.team_pause_event_id)));
   allowed.straggle=data.team?.count===3&&['NAVIGATING','RETURNING'].includes(state);
   allowed.start=state==='IDLE'&&(vision||data.team?.count===3);
   allowed.gather=vision?state==='PAUSED':data.team?.count===3;

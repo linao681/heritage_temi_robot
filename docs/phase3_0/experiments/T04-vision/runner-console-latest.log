@@ -1,0 +1,10 @@
+完整演示：http://127.0.0.1:8110
+证据：docs/phase3_0/experiments/T04-vision/visitor-full-20261123-154128
+IDLE: 等待游客
+模拟游客/操作员：start
+GREETING: 迎宾
+WAITING_CONSENT: 等待游客同意
+模拟游客/操作员：accept
+NAVIGATING: 前往入口待命点
+PAUSED: 导航安全停车
+{"status": "FAIL", "report": "docs/phase3_0/experiments/T04-vision/visitor-full-20261123-154128/report.json", "error": "resume: {'success': False, 'message': '视觉团队恢复必须确认当前暂停事件ID'}"}

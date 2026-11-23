@@ -2,6 +2,7 @@ from pathlib import Path
 import ast
 import json
 import sys
+from types import SimpleNamespace
 
 import pytest
 
@@ -11,8 +12,9 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 import run_visitor_full_demo as demo_runner
 from run_visitor_full_demo import (
     ResourceBlocked, allocate_run_directory, build_run_manifest, parse_args,
-    pause_stop_evidence, evaluate_resource_snapshot, gazebo_processes_from_ps,
-    summarize_navigation_motion,
+    pause_stop_evidence, evaluate_resource_snapshot, check_resource_preflight,
+    gazebo_processes_from_ps,
+    summarize_navigation_motion, summarize_pause_resumes,
 )
 
 
@@ -37,6 +39,56 @@ def test_full_demo_rejects_unknown_layout_and_invalid_timeout():
         parse_args(['--layout', 'unknown'])
     with pytest.raises(SystemExit):
         parse_args(['--timeout-sec', '0'])
+
+
+def test_resource_preflight_rejects_system_reserved_domains():
+    result = check_resource_preflight(SimpleNamespace(
+        domain_id=211, gazebo_port=11389, web_port=8114))
+
+    assert result['ready'] is False
+    assert 'ROS domain 211 is reserved by the local simulation setup' in result['reasons']
+
+
+def test_operator_mode_defaults_to_external_and_scripted_test_requires_vision_mode():
+    assert parse_args([]).operator_mode == 'external'
+    args = parse_args(['--team-decision-mode', 'vision_conservative',
+                       '--operator-mode', 'scripted_test'])
+    assert args.operator_mode == 'scripted_test'
+    with pytest.raises(SystemExit):
+        parse_args(['--operator-mode', 'scripted_test'])
+
+
+def test_vision_runner_does_not_inject_scripted_straggle():
+    assert demo_runner.should_inject_scripted_straggle('business_script')
+    assert not demo_runner.should_inject_scripted_straggle('vision_conservative')
+
+
+def test_scripted_operator_confirmation_requires_current_stopped_team_pause():
+    tour = {'state': 'PAUSED', 'pause_source': 'team',
+            'team_recovery_required': True, 'team_resume_confirmed': False,
+            'paused_session_id': 'nav-current',
+            'team_pause_event_id': 'pause-event-current'}
+    observation = {'requires_manual_confirmation': True}
+    stopped = {'confirmed': True}
+    assert demo_runner.scripted_operator_confirmation_allowed(
+        'scripted_test', 'vision_conservative', tour, observation, stopped)
+    assert not demo_runner.scripted_operator_confirmation_allowed(
+        'external', 'vision_conservative', tour, observation, stopped)
+    assert not demo_runner.scripted_operator_confirmation_allowed(
+        'scripted_test', 'vision_conservative', tour, observation,
+        {'confirmed': False})
+    assert not demo_runner.scripted_operator_confirmation_allowed(
+        'scripted_test', 'vision_conservative',
+        dict(tour, pause_source='manual'), observation, stopped)
+    assert not demo_runner.scripted_operator_confirmation_allowed(
+        'scripted_test', 'vision_conservative',
+        dict(tour, team_resume_confirmed=True), observation, stopped)
+    assert not demo_runner.scripted_operator_confirmation_allowed(
+        'scripted_test', 'vision_conservative',
+        dict(tour, paused_session_id=''), observation, stopped)
+    assert not demo_runner.scripted_operator_confirmation_allowed(
+        'scripted_test', 'vision_conservative',
+        dict(tour, team_pause_event_id=''), observation, stopped)
 
 
 def test_full_demo_run_directory_is_unique_and_never_overwritten(tmp_path):
@@ -83,9 +135,19 @@ def test_expected_visitor_count_is_an_explicit_observer_input():
 
 
 def test_pause_stop_requires_fresh_stationary_odom_and_manager_stop():
-    sample = {'tour': {'is_moving': False}, 'evidence': {
-        'odom': {'fresh': True, 'value': {'linear_speed_mps': 0.01}}}}
-    assert pause_stop_evidence(sample)['confirmed'] is True
+    sample = {'tour': {'is_moving': False, 'last_pause_stop_requested': True,
+                       'last_pause_stop_confirmed': True,
+                       'last_pause_action_quiescence_confirmed': True}, 'evidence': {
+        'odom': {'fresh': True, 'age_sec': 0.02, 'value': {
+            'linear_speed_mps': 0.01, 'angular_speed_rps': 0.01,
+            'stamp_ns': 1_000_000_000, 'received_monotonic_sec': 1.0}},
+        'cmd_vel': {'fresh': True, 'value': {'linear_speed_mps': 0.0,
+                                             'angular_speed_rps': 0.0}},
+        'fused': {'fresh': True, 'value': {'stop_confirmed': True,
+                                           'stop_confirmed_session_id': 'nav-a'}}}}
+    sample['tour'].update(state='PAUSED', pause_source='safety',
+                          paused_session_id='nav-a')
+    assert pause_stop_evidence(sample)['confirmed'] is False
     sample['evidence']['odom']['fresh'] = False
     assert pause_stop_evidence(sample)['confirmed'] is False
     sample['evidence']['odom']['fresh'] = True
@@ -95,12 +157,13 @@ def test_pause_stop_requires_fresh_stationary_odom_and_manager_stop():
 
 def test_run_manifest_records_layout_mode_and_map_hashes(tmp_path):
     args = parse_args(['--layout', 'adaptive', '--team-decision-mode', 'vision_conservative',
-                       '--expected-visitors', '3'])
+                       '--operator-mode', 'scripted_test', '--expected-visitors', '3'])
     run = allocate_run_directory(tmp_path, timestamp='manifest')
     manifest = build_run_manifest(run, args, command=['demo', '--layout', 'adaptive'])
 
     assert manifest['layout'] == 'adaptive'
     assert manifest['team_decision_mode'] == 'vision_conservative'
+    assert manifest['operator_mode'] == 'scripted_test'
     assert manifest['expected_visitors'] == 3
     assert manifest['team_truth_used_for_decision'] is False
     assert manifest['map_sha256']
@@ -206,13 +269,32 @@ def test_business_script_handles_gathered_team_with_pending_recovery_latch():
 
 
 def test_vision_runner_handles_generic_pause_from_unconfirmed_observation():
-    tour = {'state': 'PAUSED', 'reason': '导航安全停车', 'pause_source': 'safety'}
+    tour = {'state': 'PAUSED', 'reason': '导航安全停车', 'pause_source': 'safety',
+            'team_recovery_required': True}
     observation = {
         'valid': True, 'observation_state': 'UNKNOWN', 'observed_count': 1,
         'expected_count': 3, 'requires_manual_confirmation': True,
     }
 
     assert demo_runner.should_handle_paused_team(
+        'vision_conservative', tour, observation)
+
+
+def test_vision_runner_does_not_turn_unknown_observation_into_safety_resume():
+    tour = {'state': 'PAUSED', 'reason': '导航安全停车', 'pause_source': 'safety',
+            'team_recovery_required': False}
+    observation = {'requires_manual_confirmation': True}
+
+    assert not demo_runner.should_handle_paused_team(
+        'vision_conservative', tour, observation)
+
+
+def test_vision_runner_does_not_override_manual_pause_with_team_confirmation():
+    tour = {'state': 'PAUSED', 'reason': '用户暂停', 'pause_source': 'manual',
+            'team_recovery_required': True}
+    observation = {'requires_manual_confirmation': True}
+
+    assert not demo_runner.should_handle_paused_team(
         'vision_conservative', tour, observation)
 
 
@@ -228,19 +310,39 @@ def test_vision_runner_does_not_flag_confirmed_observation_as_team_pause():
 
 
 def test_terminal_stop_uses_fresh_odom_while_motion_evidence_uses_cmd_vel_and_odom(tmp_path):
-    stopped = {'tour': {'is_moving': False}, 'evidence': {
+    stopped = {'tour': {'state': 'COMPLETED', 'target': 'exit', 'is_moving': False}, 'evidence': {
         'cmd_vel': {'fresh': False, 'age_sec': 3.6, 'value': None},
-        'odom': {'fresh': True, 'value': {'linear_speed_mps': 0.003}}}}
-    assert pause_stop_evidence(stopped)['confirmed'] is True
+        'odom': {'fresh': True, 'age_sec': 0.02, 'value': {
+            'linear_speed_mps': 0.003, 'angular_speed_rps': 0.001,
+            'stamp_ns': 10_000_000_000, 'received_monotonic_sec': 10.0}}}}
+    window = demo_runner.StationaryStopWindow()
+    assert pause_stop_evidence(stopped, window)['confirmed'] is False
+    final_stop = None
+    for index in range(1, 6):
+        stopped['evidence']['odom']['value'] = {
+            'linear_speed_mps': 0.003, 'angular_speed_rps': 0.001,
+            'stamp_ns': 10_000_000_000 + index * 100_000_000,
+            'received_monotonic_sec': 10.0 + index * 0.1,
+        }
+        final_stop = pause_stop_evidence(stopped, window)
+    assert final_stop['confirmed'] is True
 
     rows = []
     for target in ('zone_1', 'zone_2', 'zone_3', 'zone_4', 'zone_5', 'exit'):
-        for _ in range(3):
+        for index in range(3):
+            received = 10.0 + index * 0.1
             rows.append({'tour': {'state': 'RETURNING' if target == 'exit' else 'NAVIGATING',
                                   'target': target},
                          'evidence': {
-                             'cmd_vel': {'fresh': True, 'value': {'linear_speed_mps': 0.3}},
-                             'odom': {'fresh': True, 'value': {'linear_speed_mps': 0.29}}}})
+                             'cmd_vel': {'fresh': True, 'age_sec': 0.01,
+                                         'value': {'linear_speed_mps': 0.3,
+                                                   'received_monotonic_sec': received}},
+                             'odom': {'fresh': True, 'age_sec': 0.01,
+                                      'value': {'linear_speed_mps': 0.29,
+                                                'stamp_ns': 10_000_000_000 + index * 100_000_000,
+                                                'received_monotonic_sec': received}},
+                             'fused': {'fresh': True, 'value': {
+                                 'navigation_session_id': f'nav-{target}'}}}})
     path = tmp_path / 'motion.jsonl'
     path.write_text(''.join(json.dumps(row) + '\n' for row in rows))
 
@@ -248,12 +350,15 @@ def test_terminal_stop_uses_fresh_odom_while_motion_evidence_uses_cmd_vel_and_od
     assert summary['complete'] is True
     assert summary['missing_targets'] == []
     assert summary['targets']['zone_3']['paired_odom_motion_samples'] == 3
+    assert summary['targets']['zone_3']['navigation_sessions'] == ['nav-zone_3']
 
 
 def test_motion_evidence_rejects_stale_or_unpaired_velocity_samples(tmp_path):
     path = tmp_path / 'motion.jsonl'
     rows = [{'tour': {'state': 'NAVIGATING', 'target': 'zone_1'}, 'evidence': {
-        'cmd_vel': {'fresh': True, 'value': {'linear_speed_mps': 0.3}},
+        'cmd_vel': {'fresh': True, 'age_sec': 0.01,
+                    'value': {'linear_speed_mps': 0.3,
+                              'received_monotonic_sec': 10.0}},
         'odom': {'fresh': False, 'value': {'linear_speed_mps': 0.3}}}}
         for _ in range(5)]
     path.write_text(''.join(json.dumps(row) + '\n' for row in rows))
@@ -263,6 +368,50 @@ def test_motion_evidence_rejects_stale_or_unpaired_velocity_samples(tmp_path):
     assert summary['missing_targets'] == ['zone_1', 'zone_2', 'zone_3', 'zone_4', 'zone_5', 'exit']
     assert summary['targets']['zone_1']['cmd_vel_motion_samples'] == 5
     assert summary['targets']['zone_1']['paired_odom_motion_samples'] == 0
+
+
+def test_motion_evidence_rejects_misaligned_velocity_samples(tmp_path):
+    row = {'tour': {'state': 'NAVIGATING', 'target': 'zone_1'}, 'evidence': {
+        'cmd_vel': {'fresh': True, 'age_sec': 0.01,
+                    'value': {'linear_speed_mps': 0.3,
+                              'received_monotonic_sec': 10.0}},
+        'odom': {'fresh': True, 'age_sec': 0.01,
+                 'value': {'linear_speed_mps': 0.29, 'stamp_ns': 10_000_000_000,
+                           'received_monotonic_sec': 10.3}},
+        'fused': {'fresh': True, 'value': {'navigation_session_id': 'nav-zone-1'}}}}
+    path = tmp_path / 'misaligned-motion.jsonl'
+    path.write_text(json.dumps(row) + '\n')
+    summary = summarize_navigation_motion(path)
+    assert summary['targets']['zone_1']['cmd_vel_motion_samples'] == 1
+    assert summary['targets']['zone_1']['paired_odom_motion_samples'] == 0
+
+
+def test_pause_resume_summary_requires_new_session_for_same_target_and_pairs_motion(tmp_path):
+    pause = {'elapsed_sec': 1.0, 'tour': {
+        'state': 'PAUSED', 'pause_source': 'team', 'team_recovery_required': True,
+        'team_pause_event_id': 'event-1', 'paused_session_id': 'old-uuid',
+        'route_index': 2, 'target': 'zone_2'}, 'evidence': {}}
+    resumed = {'elapsed_sec': 2.0, 'tour': {
+        'state': 'NAVIGATING', 'route_index': 2, 'target': 'zone_2'}, 'evidence': {
+        'fused': {'fresh': True, 'value': {'navigation_session_id': 'new-uuid'}},
+        'cmd_vel': {'fresh': True, 'value': {
+            'linear_speed_mps': 0.25, 'received_monotonic_sec': 2.0}},
+        'odom': {'fresh': True, 'value': {
+            'linear_speed_mps': 0.23, 'stamp_ns': 2_000_000_000,
+            'received_monotonic_sec': 2.05}}}}
+    path = tmp_path / 'pause-resume.jsonl'
+    path.write_text(''.join(json.dumps(row) + '\n' for row in (pause, resumed)))
+
+    summary = summarize_pause_resumes(path)
+
+    assert summary == [{
+        'pause_event_id': 'event-1', 'pause_source': 'team',
+        'paused_session_id': 'old-uuid', 'route_index': 2, 'target': 'zone_2',
+        'resumed_session_id': 'new-uuid', 'uuid_changed': True,
+        'same_target': True, 'paired_motion_samples': 1,
+        'max_cmd_vel_linear_mps': 0.25, 'max_odom_linear_mps': 0.23,
+        'physical_motion_observed': True, 'status': 'PASS',
+    }]
 
 
 def test_business_script_completion_requires_the_whole_team_gathered():

@@ -1,0 +1,29 @@
+{
+  "status": "BLOCKED",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "run_id": "visitor-full-20261123-145926",
+  "manifest": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-145926/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": false,
+    "available_memory_gib": 5.910621643066406,
+    "free_disk_gib": 44.46380615234375,
+    "load_per_cpu": 0.079375,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": [
+      "available memory below 6.0 GiB"
+    ]
+  },
+  "error": "available memory below 6.0 GiB",
+  "events": [],
+  "elapsed_sec": 0.010241206997307017
+}

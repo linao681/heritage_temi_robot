@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "scenario": "empty",
+  "layout": "official",
+  "source": "gazebo_model_states_and_set_entity_state",
+  "started_unix_sec": 1795429388.6073203,
+  "started_monotonic_sec": 89790.78019868,
+  "movement_started_monotonic_sec": null,
+  "movement_ended_monotonic_sec": null,
+  "duration_sec": 6.552132311000605,
+  "seed": 31,
+  "speed_mps": 0.25,
+  "update_hz": 5.0,
+  "end_distance_m": 1.4,
+  "actor_motion": {
+    "continue_after_robot_stop": false,
+    "stop_at_target": true,
+    "movement_speed_mps": 0.25,
+    "target_distance_m": 1.4,
+    "hold_at_target_sec": 2.0,
+    "leave_after_hold": false,
+    "leave_distance_m": 3.9,
+    "leave_direction": "forward",
+    "hold_clear_sec": 1.0,
+    "pause_on_collision": true,
+    "motion_phase_events": [
+      {
+        "phase": "WAIT_NAV",
+        "time_monotonic_sec": 89790.78019868
+      }
+    ],
+    "contact_observed": null
+  },
+  "removed_previous_models": [
+    "phase25_person_01"
+  ],
+  "commanded_model_poses_world": [],
+  "robot_pose_world_at_spawn": {
+    "x": -12.651348060477712,
+    "y": -7.902176652619834,
+    "yaw": -6.617800496580692e-05
+  },
+  "gazebo_model_state_samples": [],
+  "model_asset": "simulation/models/person_mannequin/model.sdf",
+  "ground_truth_note": "轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。",
+  "navigation_trigger": {
+    "task_id": "03c3ec0b264440608e6be8383b6675ed",
+    "target": "zone_1",
+    "status": "going",
+    "odom_speed_mps": 0.060675028245160946,
+    "navigation_age_sec": 0.16350057000818197,
+    "odom_age_sec": 5.007399886380881e-05
+  },
+  "models_spawned_monotonic_sec": 89792.331983675,
+  "ended_monotonic_sec": 89797.332331784,
+  "stopped_by_actual_safety_status": false,
+  "removed_after": []
+}

@@ -109,6 +109,26 @@ def test_recording_schema_has_clock_map_pose_and_readback_fields():
     }.issubset(FIELDS)
 
 
+def test_recorder_can_use_simulation_clock(tmp_path):
+    import rclpy
+
+    initialized_here = not rclpy.ok()
+    if initialized_here:
+        rclpy.init(args=None)
+    recorder = None
+    try:
+        recorder = Phase2Recorder(
+            tmp_path / 'sim-clock.csv', 'sim-clock-test', 10.0,
+            use_sim_time=True)
+        assert recorder.get_parameter('use_sim_time').value is True
+    finally:
+        if recorder is not None:
+            recorder.close()
+            recorder.destroy_node()
+        if initialized_here:
+            rclpy.try_shutdown()
+
+
 def _recorder_with_transform(transform=None, error=None):
     from tf2_ros import TransformException
 

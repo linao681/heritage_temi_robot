@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "operator_mode": "external",
+  "run_id": "visitor-full-20261123-161819",
+  "manifest": "docs/phase3_0/experiments/T04-business/visitor-full-20261123-161819/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode_description": "simulated visitor consent; vision recovery requires an external operator action",
+  "scripted_operator_scope": null,
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 6.126949310302734,
+    "free_disk_gib": 44.308998107910156,
+    "load_per_cpu": 0.02625,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "error": "仿真系统已退出，查看 system.log",
+  "events": [],
+  "elapsed_sec": 0.5088107319897972
+}

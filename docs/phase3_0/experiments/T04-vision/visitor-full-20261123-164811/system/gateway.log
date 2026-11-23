@@ -1,0 +1,6 @@
+Gazebo Nav2 网关就绪（播报为无音频模拟）
+[WARN] [1795423716.694181646] [temi_gateway]: 拒绝导航调速: 导航Action已被STOP阻断，活动会话=928d25f197d44b77aca59e13142bd4df
+[WARN] [1795423743.056092840] [temi_gateway]: 拒绝导航调速: 没有活动导航Action
+[WARN] [1795423833.156488188] [temi_gateway]: 拒绝导航调速: 没有活动导航Action
+[WARN] [1795423876.554498757] [temi_gateway]: 拒绝导航调速: 没有活动导航Action
+[WARN] [1795423943.255996560] [temi_gateway]: 拒绝导航调速: 没有活动导航Action

@@ -1,0 +1,619 @@
+{
+  "experiment_id": "E04-CROSS-FRONT",
+  "started_utc": "2026-11-23T09:13:45.194617+00:00",
+  "domain_id": 203,
+  "status": "FAIL",
+  "expected_route": [
+    "wait",
+    "zone_1",
+    "zone_2",
+    "zone_3",
+    "zone_4",
+    "zone_5",
+    "exit"
+  ],
+  "safety_pause_timeout_budget_sec": 43.0,
+  "operator_consent": "test harness called accept after WAITING_CONSENT",
+  "speech_mode": "Mock Speak Action; successful action is not real audio",
+  "visitor_gate": {
+    "valid": true,
+    "people_count": 1,
+    "expected_count": 0,
+    "group_state": "untracked",
+    "source": "camera",
+    "stable": true,
+    "stable_fresh": true,
+    "sample_timestamp_monotonic_sec": 85627.171518188,
+    "sample_age_sec": 0.17670691800594795
+  },
+  "manager_start_gate": {
+    "connected": true,
+    "is_moving": false,
+    "current_location": "",
+    "stable_sec": 0.503
+  },
+  "start_service": "start: 已接受",
+  "dynamic_scenario": {
+    "scenario": "crossing",
+    "target": "zone_1",
+    "person_speed_mps": 0.25,
+    "end_distance_m": 1.4,
+    "leave_direction": "forward",
+    "truth_output": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-002/tour/scenario/truth.json",
+    "trigger": "child ready before consent; matching navigation UUID/target plus fresh moving odom",
+    "cleanup": {
+      "exit_code": 0,
+      "truth_output": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-002/tour/scenario/cleanup.json",
+      "stdout": "{\"status\": \"PASS\", \"scenario\": \"empty\", \"layout\": \"official\", \"source\": \"gazebo_model_states_and_set_entity_state\", \"started_unix_sec\": 1795425229.9730206, \"started_monotonic_sec\": 85632.145898911, \"movement_started_monotonic_sec\": null, \"movement_ended_monotonic_sec\": null, \"duration_sec\": 0.007674642009078525, \"seed\": 0, \"speed_mps\": 0.3, \"update_hz\": 5.0, \"end_distance_m\": 1.4, \"actor_motion\": {\"continue_after_robot_stop\": false, \"stop_at_target\": true, \"movement_speed_mps\": 0.3, \"target_distance_m\": 1.4, \"hold_at_target_sec\": 2.0, \"leave_after_hold\": false, \"leave_distance_m\": 3.9, \"leave_direction\": \"forward\", \"hold_clear_sec\": 1.0, \"pause_on_collision\": true, \"motion_phase_events\": [], \"contact_observed\": null}, \"removed_previous_models\": [], \"commanded_model_poses_world\": [], \"robot_pose_world_at_spawn\": null, \"gazebo_model_state_samples\": [], \"model_asset\": \"simulation/models/person_mannequin/model.sdf\", \"ground_truth_note\": \"轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。\", \"cleanup_only\": true, \"removed_after\": [], \"ended_monotonic_sec\": 85632.153573708}\n",
+      "stderr": "",
+      "truth": {
+        "status": "PASS",
+        "scenario": "empty",
+        "layout": "official",
+        "source": "gazebo_model_states_and_set_entity_state",
+        "started_unix_sec": 1795425229.9730206,
+        "started_monotonic_sec": 85632.145898911,
+        "movement_started_monotonic_sec": null,
+        "movement_ended_monotonic_sec": null,
+        "duration_sec": 0.007674642009078525,
+        "seed": 0,
+        "speed_mps": 0.3,
+        "update_hz": 5.0,
+        "end_distance_m": 1.4,
+        "actor_motion": {
+          "continue_after_robot_stop": false,
+          "stop_at_target": true,
+          "movement_speed_mps": 0.3,
+          "target_distance_m": 1.4,
+          "hold_at_target_sec": 2.0,
+          "leave_after_hold": false,
+          "leave_distance_m": 3.9,
+          "leave_direction": "forward",
+          "hold_clear_sec": 1.0,
+          "pause_on_collision": true,
+          "motion_phase_events": [],
+          "contact_observed": null
+        },
+        "removed_previous_models": [],
+        "commanded_model_poses_world": [],
+        "robot_pose_world_at_spawn": null,
+        "gazebo_model_state_samples": [],
+        "model_asset": "simulation/models/person_mannequin/model.sdf",
+        "ground_truth_note": "轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。",
+        "cleanup_only": true,
+        "removed_after": [],
+        "ended_monotonic_sec": 85632.153573708
+      }
+    }
+  },
+  "consent_service": "accept: 已接受",
+  "error": "RuntimeError: 动态人物场景失败，退出码 1: model_asset\": \"simulation/models/person_mannequin/model.sdf\", \"ground_truth_note\": \"轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。\", \"navigation_trigger\": {\"task_id\": \"f44525a27d0a43e8911eab85f7d608ea\", \"target\": \"zone_1\", \"status\": \"going\", \"odom_speed_mps\": 0.06449743962744718, \"navigation_age_sec\": 0.12863607500912622, \"odom_age_sec\": 6.58570061204955e-05}, \"geometry_envelope\": {\"robot_radius_m\": 0.29000000000000004, \"actor_radius_m\": 0.42727922061357854, \"margin_m\": 0.1, \"source\": {\"robot\": \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/simulation/robot/heritage_robot.urdf\", \"actor\": \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/simulation/models/person_mannequin/model.sdf\", \"assumption\": \"XY circumscribed collision circles; conservative geometry proxy, not contact sensing\"}, \"assumption\": \"conservative planar circumscribed circles from URDF/SDF collision shapes; contact sensing unavailable\"}, \"ended_monotonic_sec\": 85630.930964391, \"error\": \"KeyError: 'start_distance_m'\", \"failed_cleanup_removed\": [\"phase25_person_01\"]}\nTraceback (most recent call last):\n  File \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/spawn_people_scenario.py\", line 827, in <module>\n    main()\n  File \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/spawn_people_scenario.py\", line 607, in main\n    record['actor_motion']['start_distance_m'] = actor_config['start_distance_m']\nKeyError: 'start_distance_m'\n",
+  "ended_utc": "2026-11-23T09:13:49.408938+00:00",
+  "tour_events": [
+    {
+      "time_monotonic_sec": 85627.369422142,
+      "kind": "tour_status",
+      "state": "IDLE",
+      "reason": "等待游客",
+      "outcome": "idle",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85627.874959767,
+      "kind": "tour_status",
+      "state": "IDLE",
+      "reason": "开始新导览任务",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85628.210242105,
+      "kind": "tour_status",
+      "state": "GREETING",
+      "reason": "迎宾",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85628.214179972,
+      "kind": "tour_status",
+      "state": "WAITING_CONSENT",
+      "reason": "等待游客同意",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85630.495285977,
+      "kind": "tour_status",
+      "state": "PLANNING",
+      "reason": "确定固定导览路线",
+      "outcome": "running",
+      "route_index": -1,
+      "target": "",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85630.496323791,
+      "kind": "tour_status",
+      "state": "NAVIGATING",
+      "reason": "前往入口待命点",
+      "outcome": "running",
+      "route_index": 0,
+      "target": "wait",
+      "visited": [],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85630.573072329,
+      "kind": "tour_status",
+      "state": "EXPLAINING",
+      "reason": "讲解入口待命点",
+      "outcome": "running",
+      "route_index": 0,
+      "target": "wait",
+      "visited": [
+        "wait"
+      ],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85630.595594572,
+      "kind": "tour_status",
+      "state": "NAVIGATING",
+      "reason": "前往非遗概览",
+      "outcome": "running",
+      "route_index": 1,
+      "target": "zone_1",
+      "visited": [
+        "wait"
+      ],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": ""
+    },
+    {
+      "time_monotonic_sec": 85630.617336843,
+      "kind": "tour_status",
+      "state": "NAVIGATING",
+      "reason": "前往非遗概览",
+      "outcome": "running",
+      "route_index": 1,
+      "target": "zone_1",
+      "visited": [
+        "wait"
+      ],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": false,
+      "current_location": "wait"
+    },
+    {
+      "time_monotonic_sec": 85630.81629501,
+      "kind": "tour_status",
+      "state": "NAVIGATING",
+      "reason": "前往非遗概览",
+      "outcome": "running",
+      "route_index": 1,
+      "target": "zone_1",
+      "visited": [
+        "wait"
+      ],
+      "qa_waiting": false,
+      "qa_result": null,
+      "connected": true,
+      "is_moving": true,
+      "current_location": "wait"
+    }
+  ],
+  "navigation_events": [
+    {
+      "time_monotonic_sec": 85630.502236056,
+      "task_id": "4a110b170c334d80ab34b8be39b77a98",
+      "target": "wait",
+      "status": "start",
+      "description": "开始 Nav2 导航"
+    },
+    {
+      "time_monotonic_sec": 85630.503520432,
+      "task_id": "4a110b170c334d80ab34b8be39b77a98",
+      "target": "wait",
+      "status": "calculating",
+      "description": "提交 Nav2 导航目标"
+    },
+    {
+      "time_monotonic_sec": 85630.525810976,
+      "task_id": "4a110b170c334d80ab34b8be39b77a98",
+      "target": "wait",
+      "status": "going",
+      "description": "Nav2 已接受导航目标"
+    },
+    {
+      "time_monotonic_sec": 85630.569100575,
+      "task_id": "4a110b170c334d80ab34b8be39b77a98",
+      "target": "wait",
+      "status": "complete",
+      "description": "Nav2 已到达目标",
+      "robot_map_pose": {
+        "x": -12.65390884333352,
+        "y": -7.902172579831855
+      },
+      "goal_map_pose": {
+        "x": -12.653908843860373,
+        "y": -7.902236951471988
+      },
+      "position_error_m": 6.437164013511019e-05
+    },
+    {
+      "time_monotonic_sec": 85630.63378979,
+      "task_id": "f44525a27d0a43e8911eab85f7d608ea",
+      "target": "zone_1",
+      "status": "start",
+      "description": "开始 Nav2 导航"
+    },
+    {
+      "time_monotonic_sec": 85630.634386474,
+      "task_id": "f44525a27d0a43e8911eab85f7d608ea",
+      "target": "zone_1",
+      "status": "calculating",
+      "description": "提交 Nav2 导航目标"
+    },
+    {
+      "time_monotonic_sec": 85630.655334262,
+      "task_id": "f44525a27d0a43e8911eab85f7d608ea",
+      "target": "zone_1",
+      "status": "going",
+      "description": "Nav2 已接受导航目标"
+    }
+  ],
+  "stop_status_events": [
+    {
+      "time_monotonic_sec": 85627.377459873,
+      "state": "CLEAR",
+      "navigation_session_id": "",
+      "reason": "无停车请求",
+      "valid": true,
+      "action_terminal": false,
+      "linear_speed_mps": 3.3138401249743765e-06,
+      "angular_speed_rps": 8.531470484740566e-06,
+      "odom_age_sec": 0.016743788495659828,
+      "stopped_duration_sec": 0.0
+    },
+    {
+      "time_monotonic_sec": 85630.541539888,
+      "state": "CLEAR",
+      "navigation_session_id": "4a110b170c334d80ab34b8be39b77a98",
+      "reason": "当前导航会话未请求停车",
+      "valid": true,
+      "action_terminal": false,
+      "linear_speed_mps": 3.313858314868412e-06,
+      "angular_speed_rps": 8.533897016604897e-06,
+      "odom_age_sec": 0.03128858655691147,
+      "stopped_duration_sec": 0.0
+    },
+    {
+      "time_monotonic_sec": 85630.640751404,
+      "state": "CLEAR",
+      "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea",
+      "reason": "当前导航会话未请求停车",
+      "valid": true,
+      "action_terminal": false,
+      "linear_speed_mps": 3.629833736340515e-05,
+      "angular_speed_rps": 1.0390274837845936e-05,
+      "odom_age_sec": 0.026000000536441803,
+      "stopped_duration_sec": 0.0
+    }
+  ],
+  "odom_samples": 98,
+  "speed_controller_events": [
+    {
+      "time_monotonic_sec": 85628.210358065,
+      "status": {
+        "state": "IDLE",
+        "reason": "当前无导航任务",
+        "navigation_session_id": "",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": null,
+        "command_status": "not_sent",
+        "input_valid": true
+      }
+    },
+    {
+      "time_monotonic_sec": 85630.590247132,
+      "status": {
+        "state": "SLOW",
+        "reason": "团队状态未知，保守降速",
+        "navigation_session_id": "4a110b170c334d80ab34b8be39b77a98",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": 0.3,
+        "command_status": "sent_pending_confirmation",
+        "input_valid": true
+      }
+    },
+    {
+      "time_monotonic_sec": 85630.690048589,
+      "status": {
+        "state": "SLOW",
+        "reason": "人群密度未标定，采用默认限速",
+        "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": 0.5,
+        "command_status": "sent_pending_confirmation",
+        "input_valid": true
+      }
+    },
+    {
+      "time_monotonic_sec": 85630.793604857,
+      "status": {
+        "state": "SLOW",
+        "reason": "人群密度未标定，采用默认限速",
+        "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": 0.5,
+        "command_status": "not_sent",
+        "input_valid": true
+      }
+    },
+    {
+      "time_monotonic_sec": 85631.292300734,
+      "status": {
+        "state": "SLOW",
+        "reason": "团队状态未知，保守降速",
+        "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": 0.44940950100135524,
+        "command_status": "sent_pending_confirmation",
+        "input_valid": true
+      }
+    },
+    {
+      "time_monotonic_sec": 85631.389872488,
+      "status": {
+        "state": "SLOW",
+        "reason": "团队状态未知，保守降速",
+        "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": 0.3998812674981309,
+        "command_status": "not_sent",
+        "input_valid": true
+      }
+    },
+    {
+      "time_monotonic_sec": 85631.491480347,
+      "status": {
+        "state": "SLOW",
+        "reason": "团队状态未知，保守降速",
+        "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea",
+        "stop_requested": false,
+        "stop_confirmed": false,
+        "resume_requested": false,
+        "target_speed_mps": 0.39958140850649215,
+        "command_status": "not_sent",
+        "input_valid": true
+      }
+    }
+  ],
+  "perception_events": [
+    {
+      "time_monotonic_sec": 85628.351367664,
+      "valid": true,
+      "error": "",
+      "people_count": 1,
+      "people_valid": true,
+      "sample_age_sec": 0.4323338270187378,
+      "person_observation_state": "PERSON_DISTANCE_VALID",
+      "person_observation_valid": true,
+      "person_distance_valid": true,
+      "nearest_person_m": 2.8494250774383545,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 2.7409279346466064,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": false,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": ""
+    },
+    {
+      "time_monotonic_sec": 85630.359345097,
+      "valid": false,
+      "error": "稳定游客人数数据无效、过期或断流",
+      "people_count": 0,
+      "people_valid": false,
+      "sample_age_sec": 0.26780930161476135,
+      "person_observation_state": "NO_PERSON_OBSERVED",
+      "person_observation_valid": true,
+      "person_distance_valid": false,
+      "nearest_person_m": null,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 2.74092698097229,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": false,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": ""
+    },
+    {
+      "time_monotonic_sec": 85630.559757441,
+      "valid": false,
+      "error": "稳定游客人数数据无效、过期或断流",
+      "people_count": 0,
+      "people_valid": false,
+      "sample_age_sec": 0.36435750126838684,
+      "person_observation_state": "NO_PERSON_OBSERVED",
+      "person_observation_valid": true,
+      "person_distance_valid": false,
+      "nearest_person_m": null,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 3.6283164024353027,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": true,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": "4a110b170c334d80ab34b8be39b77a98"
+    },
+    {
+      "time_monotonic_sec": 85630.657474766,
+      "valid": true,
+      "error": "",
+      "people_count": 0,
+      "people_valid": true,
+      "sample_age_sec": 0.26374736428260803,
+      "person_observation_state": "NO_PERSON_OBSERVED",
+      "person_observation_valid": true,
+      "person_distance_valid": false,
+      "nearest_person_m": null,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 3.6283154487609863,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": true,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea"
+    },
+    {
+      "time_monotonic_sec": 85630.960093249,
+      "valid": true,
+      "error": "",
+      "people_count": 0,
+      "people_valid": true,
+      "sample_age_sec": 0.36283937096595764,
+      "person_observation_state": "NO_PERSON_OBSERVED",
+      "person_observation_valid": true,
+      "person_distance_valid": false,
+      "nearest_person_m": null,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 3.4886317253112793,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": true,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea"
+    },
+    {
+      "time_monotonic_sec": 85631.258557789,
+      "valid": false,
+      "error": "稳定游客人数数据无效、过期或断流",
+      "people_count": 0,
+      "people_valid": false,
+      "sample_age_sec": 0.30744242668151855,
+      "person_observation_state": "PERSON_DISTANCE_VALID",
+      "person_observation_valid": true,
+      "person_distance_valid": true,
+      "nearest_person_m": 3.641918897628784,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 3.537881851196289,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": true,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea"
+    },
+    {
+      "time_monotonic_sec": 85631.357943966,
+      "valid": false,
+      "error": "稳定游客人数数据无效、过期或断流",
+      "people_count": 0,
+      "people_valid": false,
+      "sample_age_sec": 0.21578370034694672,
+      "person_observation_state": "NO_PERSON_OBSERVED",
+      "person_observation_valid": true,
+      "person_distance_valid": false,
+      "nearest_person_m": null,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 3.5021448135375977,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": true,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea"
+    },
+    {
+      "time_monotonic_sec": 85631.557533367,
+      "valid": false,
+      "error": "稳定游客人数数据无效、过期或断流",
+      "people_count": 0,
+      "people_valid": false,
+      "sample_age_sec": 0.2122706025838852,
+      "person_observation_state": "NO_PERSON_OBSERVED",
+      "person_observation_valid": true,
+      "person_distance_valid": false,
+      "nearest_person_m": null,
+      "obstacle_distance_valid": true,
+      "obstacle_distance_m": 3.445089101791382,
+      "safety_stop": false,
+      "stop_confirmed": false,
+      "navigating": true,
+      "explaining": false,
+      "navigation_error": false,
+      "navigation_session_id": "f44525a27d0a43e8911eab85f7d608ea"
+    }
+  ],
+  "gazebo_robot_last_pose": {
+    "time_monotonic_sec": 85631.537544234,
+    "robot_x": -12.494220176162484,
+    "robot_y": -7.871743153897965,
+    "person_count": 0
+  }
+}

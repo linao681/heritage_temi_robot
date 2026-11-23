@@ -1,0 +1,39 @@
+PASS material docs/competition_final/key_metrics.md (6463 bytes)
+PASS material docs/competition_final/final_validation_matrix.md (7544 bytes)
+PASS material docs/competition_final/experiment_summary.md (8575 bytes)
+PASS material docs/competition_final/evidence_index.md (11997 bytes)
+PASS material docs/competition_final/final_progress.md (10941 bytes)
+PASS material docs/competition_final/blockers.md (7046 bytes)
+PASS material docs/competition_final/overnight_report.md (7974 bytes)
+PASS material docs/competition_final/six_minute_script.md (3949 bytes)
+PASS material docs/competition_final/slides_outline.md (2191 bytes)
+PASS material docs/competition_final/demo_storyboard.md (2734 bytes)
+PASS material docs/competition_final/innovation_summary.md (3278 bytes)
+PASS material docs/competition_final/technical_architecture.md (2430 bytes)
+PASS material docs/competition_final/figure_evidence_map.md (2758 bytes)
+PASS material docs/competition_final/jury_qa.md (5564 bytes)
+PASS six-minute sections: 40+50+120+70+50+30=360s
+PASS jury Q&A: 26 items
+PASS storyboard and evidence links exist
+PASS SHA-256 docs/phase3_0/experiments/T04-business/visitor-full-20261123-162126/report.json 6afc1a912eeb3d95212ecdc643b071c6ad99e197b328e38dc93f1d7eb1be3f31
+PASS SHA-256 docs/phase3_0/experiments/T04-vision/visitor-full-20261123-160651/report.json c8def186c8bc3cd6f5b67fa87e70bb6e8bd106c1fde68bb95ec786d7906f05e0
+PASS SHA-256 docs/phase3_0/experiments/T08/replay/visitor-full-20261123-125818-run-003/replay.json 3bb0e05025ef67fbfb63beb8d3f9d68bf0803629d295b4d8b058a0aa3372167c
+PASS SHA-256 docs/phase3_0/experiments/T07/adaptive-business-tour/run-001/tour/report.json 378ce074c4488bdbc045618e770fad23996b4f2efe7b5b7b40c4a983ec3114d6
+PASS SHA-256 docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-004/tour/report.json cfdba1e6ea9278715322b993cce1546a3f7af40e3aa3d8793df98e4fbd9cbdf2
+PASS replay sidecar matches replay.json
+PASS evidence reference T04 business: docs/competition_final/evidence_index.md
+PASS evidence reference T04 business: docs/competition_final/demo_storyboard.md
+PASS evidence reference T04 business: docs/competition_final/figure_evidence_map.md
+PASS evidence reference T04 vision: docs/competition_final/evidence_index.md
+PASS evidence reference T04 vision: docs/competition_final/demo_storyboard.md
+PASS evidence reference T04 vision: docs/competition_final/figure_evidence_map.md
+PASS evidence reference T08 replay: docs/competition_final/evidence_index.md
+PASS evidence reference T08 replay: docs/competition_final/demo_storyboard.md
+PASS evidence reference T08 replay: docs/competition_final/figure_evidence_map.md
+PASS evidence reference T07 business: docs/competition_final/evidence_index.md
+PASS evidence reference T07 business: docs/competition_final/figure_evidence_map.md
+PASS evidence reference T05 E04: docs/competition_final/evidence_index.md
+PASS all T09 plan checkboxes checked
+Traceback (most recent call last):
+  File "<stdin>", line 39, in <module>
+AssertionError: trailing whitespace docs/phase3_0/progress.md:3

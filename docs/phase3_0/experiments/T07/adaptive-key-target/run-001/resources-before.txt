@@ -1,0 +1,5 @@
+               total        used        free      shared  buff/cache   available
+内存：       15Gi       7.0Gi       4.3Gi       127Mi       4.1Gi       8.8Gi
+交换：         0B          0B          0B
+文件系统        大小  已用  可用 已用% 挂载点
+/dev/nvme0n1p4  196G  142G   45G   77% /

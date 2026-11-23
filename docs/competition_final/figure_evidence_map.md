@@ -1,16 +1,15 @@
-# 图表与证据映射
+# 图表与证据映射（阶段3.0）
 
-| 展示内容 | 证据文件/来源 | 可以说什么 | 不可以说什么 |
+| 图表/画面 | 实际来源 | 可以表达 | 不能表达 |
 |---|---|---|---|
-| 五区路线流程 | `config/submission_exhibits.yaml`、`config/submission_system.yaml` | 软件配置了 wait、zone_1至zone_5、exit | 不能单凭配置称真实导航成功 |
-| 官方/适配展厅平面图 | `simulation/generated/{official,adaptive}.*` | 有两套独立地图与目标配置；启动代码按layout传值 | 本轮没有A/B完整Nav2验收 |
-| YOLOX匿名检测/距离 | 阶段2.8报告 `docs/phase2_8/final_report.md` | 仅可引用其中历史单帧标注和样本量 | 不可作为阶段2.9动态精度或团队跟踪结论 |
-| Tour Manager服务状态 | 新阶段2.9 live run未来输出 `/api/pose`与`live_evidence.jsonl` | 在时间戳/run_id一致时说明状态与事件 | 没有本阶段浏览器截图，不能称现场验收通过 |
-| Nav2速度参数 | 当前新增 `GetParameters` 只读API | 显示FollowPath和velocity_smoother的参数返回 | 参数不等同有效速度，也不等同odom实速 |
-| cmd_vel/odom | 本阶段未来run JSONL | 展示命令与机器人仿真里程计响应 | 仿真odom不等于实体temi物理速度 |
-| 人物位置 | `Gazebo /model_states` 与真实图像两条数据流 | 分别标真值与YOLOX估计，比较误差 | 禁止把真值演员坐标当相机检测 |
-| 问答答案 | `config/knowledge.yaml` 的条目与来源URL | 展示知识命中、来源和模拟播报状态 | 不宣称实体Temi TTS或真实ASR |
-| 五区导览耗时 | 阶段2.7历史`504.840秒` | 可作为历史模拟流程记录并明确版本 | 不能转作阶段2.9新run或实体指标 |
-| 成本 | 询价记录（目前未取得） | 说明采购类别和询价缺口 | 不编精确价格或成本优势 |
+| 官方五区业务路线 | T04 `visitor-full-20261123-162126/report.json` SHA `6afc1a912eeb3d95212ecdc643b071c6ad99e197b328e38dc93f1d7eb1be3f31` | Gazebo业务状态机从wait经过五区到exit，Tour COMPLETED、377.088秒；知识问答命中 | 不可说实体temi、真实游客自主同意或真实TTS |
+| 视觉UNKNOWN及安全暂停 | T04 `visitor-full-20261123-160651/report.json` SHA `c8def186c8bc3cd6f5b67fa87e70bb6e8bd106c1fde68bb95ec786d7906f05e0` | 1078条观察UNKNOWN；六个停稳证据有新鲜odom和测试操作员恢复 | 不可说视觉队伍检测成功；测试操作员输入不代表自主恢复 |
+| E07-A掉队 | 阶段2.9 WP04 run `visitor-full-20261123-125818` report SHA `5d745cb17badc728bda90cfd3f45afddd446e08c905a3681760349f914958ddd` | 脚本演员 LOST→GATHERED 21.42秒，人工确认后新UUID恢复原目标 | 不是视觉掉队识别；非受控前后实验 |
+| E04前向横穿 | T05 `E04-CROSS-FRONT/run-004`，CSV SHA `190d73af1b6e47afbc5c22a36853d8ee05d3b765002d160df7abaa56db57cdd1` | Gazebo演员移动；YOLOX/RGB-D人距与Scan共存，策略响应、停车、odom停稳 | 未做纯视觉/纯激光消融；0.544m是几何代理，不是碰撞认证 |
+| E02人数对照 | T06 `E02-evidence.md`及各run CSV | 0/3人路线成功、1人轮失败；可报告视觉人数、限速读回和采样窗 | 三人限速仍0.300m/s，稳定窗不足；不得说人群增多引发实速减慢；5人未测 |
+| adaptive布局B | T07六目标报告SHA `b8b2dccedee1a4216e63c6b758590fd64b3113fb8396452fcccc93a399aca7b5`；业务报告SHA `378ce074c4488bdbc045618e770fad23996b4f2efe7b5b7b40c4a983ec3114d6` | 6/6 Nav2目标及独立业务全程完成；地图和目标配置对应B | 不代表实体地图、三人视觉跟随或五区业务与导航为同一个run |
+| 轨迹/速度回放 | T08 `replay.json` SHA `3bb0e05025ef67fbfb63beb8d3f9d68bf0803629d295b4d8b058a0aa3372167c` | 1269 ROS TF位姿、3813 Gazebo真值游客位姿、2250 cmd/odom样本 | 源数据没有RGB/depth图像；阶段2.9历史business_script，不是T04实时画面 |
+| 检测框/真实相机画面 | 当前素材未采集/未导出；T08回放未含图像 | 标注“当前无图像帧” | 不得画伪造bbox或用ModelStates位置伪装YOLOX |
+| 成本与实体部署 | [`real_temi_deployment.md`](real_temi_deployment.md)、[`cost_estimate.md`](cost_estimate.md) | 说明依赖、步骤和待询价项目 | 不得编造精确价格或称硬件已有 |
 
-每张比赛图表应附run_id、数据时间段、版本、单位、分母、失败样本和“仿真/实体”标签。没有对应证据的图表标“待采集”，不要使用装饰性假数值。
+每幅图应带来源、时间、run_id、模式、单位、分母及Gazebo/ROS/脚本/Mock标签。T10完整套件680 passed，七包构建7/7；阶段2.9的624 passed为历史记录。

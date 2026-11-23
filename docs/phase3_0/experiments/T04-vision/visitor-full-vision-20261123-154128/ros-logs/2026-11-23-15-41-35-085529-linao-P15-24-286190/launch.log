@@ -1,0 +1,11 @@
+1795419695.0868840 [INFO] [launch]: All log files can be found below /home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T04-vision/visitor-full-vision-20261123-154128/ros-logs/2026-11-23-15-41-35-085529-linao-P15-24-286190
+1795419695.0871053 [INFO] [launch]: Default logging verbosity is set to INFO
+1795419695.1882744 [INFO] [visitor_perception-1]: process started with pid [286321]
+1795419695.1906576 [INFO] [yolox_person_detector-2]: process started with pid [286323]
+1795419695.1908197 [INFO] [depth_association-3]: process started with pid [286325]
+1795419695.1909220 [INFO] [team_observer-4]: process started with pid [286327]
+1795419695.1910207 [INFO] [perception_fusion-5]: process started with pid [286329]
+1795419710.1350799 [INFO] [team_observer-4]: process has finished cleanly [pid 286327]
+1795419710.1600096 [INFO] [depth_association-3]: process has finished cleanly [pid 286325]
+1795419710.1861193 [INFO] [perception_fusion-5]: process has finished cleanly [pid 286329]
+1795419710.2854149 [INFO] [yolox_person_detector-2]: process has finished cleanly [pid 286323]

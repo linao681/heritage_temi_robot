@@ -1,0 +1,6 @@
+PASS final report has seven requested sections
+PASS repository version branch=phase2_9-work HEAD=f372e3f4e0702470eb91b2a32683e62590777840
+PASS six old/new UUID pairs, target, motion samples and fresh stop evidence match source JSON
+Traceback (most recent call last):
+  File "<stdin>", line 22, in <module>
+AssertionError: 21.42 s

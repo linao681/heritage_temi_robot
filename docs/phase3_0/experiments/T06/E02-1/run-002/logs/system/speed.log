@@ -1,0 +1,4 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-18-29-48-965577-linao-P15-24-483057
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [483166]
+[speed_controller-1] [WARN] [1795429804.508543045] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "17aff9416d3a41b281c8c37025445976", "status": "stale", "requested_target_speed_mps": 0.3, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "f5dc7242dbae451f9b97b41aea9bd542"}

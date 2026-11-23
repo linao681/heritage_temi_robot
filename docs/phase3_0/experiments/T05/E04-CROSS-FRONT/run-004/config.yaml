@@ -1,0 +1,26 @@
+route:
+- wait
+- zone_1
+- zone_2
+- zone_3
+- zone_4
+- zone_5
+- exit
+timeouts:
+  preflight_sec: 240.0
+  tour_sec: 600.0
+  visitor_sec: 90.0
+  shutdown_sec: 20.0
+seed: 31
+id: E04-CROSS-FRONT
+scenario: crossing
+scenario_target: zone_1
+robot_speed_mps: 0.3
+camera_height_m: 0.55
+camera_pitch_down_deg: 0.0
+actor_motion:
+  continue_after_robot_stop: true
+  movement_speed_mps: 0.25
+  hold_at_target_sec: 2.0
+  leave_after_hold: false
+layout: official

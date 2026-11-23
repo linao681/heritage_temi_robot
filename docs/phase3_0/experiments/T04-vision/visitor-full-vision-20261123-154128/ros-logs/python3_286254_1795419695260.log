@@ -1,0 +1,2 @@
+[WARN] [1795419708.610885047] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "fb1d58202da5427ea3c1e77b06e99247", "status": "stale", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "fcf3f8b437f2403ba62c1188c187f8f5"}
+[WARN] [1795419708.665455587] [temi_speed_controller]: 请求导航停止: 安全停车条件

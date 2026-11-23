@@ -19,6 +19,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/StopRobot.srv"
   "srv/AskHeritage.srv"
   "srv/SubmitQuestion.srv"
+  "srv/ConfirmTeamRecovery.srv"
   "srv/SetNavigationSpeed.srv"
   DEPENDENCIES std_msgs action_msgs
 )

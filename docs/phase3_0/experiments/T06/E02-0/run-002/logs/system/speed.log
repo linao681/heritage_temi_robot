@@ -1,0 +1,4 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-18-22-55-183184-linao-P15-24-466495
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [466534]
+[speed_controller-1] [ERROR] [1795429390.035449444] [temi_speed_controller]: 调速接口未完成: {"command_id": "c720091b4232493a919cebb16f22f66a", "status": "error", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "导航会话不匹配，活动会话=03c3ec0b264440608e6be8383b6675ed，请求会话=3977ba2946ef427f8cacb3ff8620328b", "stale_session": false, "navigation_session_id": "3977ba2946ef427f8cacb3ff8620328b"}

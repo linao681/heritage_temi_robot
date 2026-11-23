@@ -1,0 +1,4 @@
+string pause_event_id
+---
+bool accepted
+string message

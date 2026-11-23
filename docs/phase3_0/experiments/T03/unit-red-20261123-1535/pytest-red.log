@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_pause_stop_requires_fresh_stationary_odom_and_manager_stop ________
+
+    def test_pause_stop_requires_fresh_stationary_odom_and_manager_stop():
+        sample = {'tour': {'is_moving': False}, 'evidence': {
+            'odom': {'fresh': True, 'age_sec': 0.02, 'value': {
+                'linear_speed_mps': 0.01, 'angular_speed_rps': 0.01,
+                'stamp_ns': 1_000_000_000, 'received_monotonic_sec': 1.0}},
+            'cmd_vel': {'fresh': True, 'value': {'linear_speed_mps': 0.0,
+                                                 'angular_speed_rps': 0.0}},
+            'fused': {'fresh': True, 'value': {'stop_confirmed': True,
+                                               'stop_confirmed_session_id': 'nav-a'}}}}
+        sample['tour'].update(state='PAUSED', pause_source='safety',
+                              paused_session_id='nav-a')
+>       assert pause_stop_evidence(sample)['confirmed'] is False
+E       assert True is False
+
+tests/test_phase29_full_demo.py:130: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_phase29_full_demo.py::test_pause_stop_requires_fresh_stationary_odom_and_manager_stop
+1 failed in 0.04s

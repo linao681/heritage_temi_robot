@@ -1,0 +1,21 @@
+Exception in thread Thread-1 (spin_executor):
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.10/threading.py", line 953, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/record_phase2_topics.py", line 550, in spin_executor
+    executor.spin()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 323, in spin
+    self.spin_once()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 863, in spin_once
+    self._spin_once_impl(timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 844, in _spin_once_impl
+    handler, entity, node = self.wait_for_ready_callbacks(
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 780, in wait_for_ready_callbacks
+    return next(self._cb_iter)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 653, in _wait_for_ready_callbacks
+    wait_set = _rclpy.WaitSet(
+rclpy._rclpy_pybind11.RCLError: failed to initialize wait set: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/wait.c:130
+{"output": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-002/tour/experiment_data.csv", "rows": 37, "duration_sec": 3.787}
+{"status": "FAIL", "report": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase3_0/experiments/T05/E04-CROSS-FRONT/run-002/tour/report.json", "error": "RuntimeError: 动态人物场景失败，退出码 1: model_asset\": \"simulation/models/person_mannequin/model.sdf\", \"ground_truth_note\": \"轨迹样本来自 Gazebo /model_states 的模型位姿回读；commanded_* 字段是 SetEntityState 输入，不是视觉检测。\", \"navigation_trigger\": {\"task_id\": \"f44525a27d0a43e8911eab85f7d608ea\", \"target\": \"zone_1\", \"status\": \"going\", \"odom_speed_mps\": 0.06449743962744718, \"navigation_age_sec\": 0.12863607500912622, \"odom_age_sec\": 6.58570061204955e-05}, \"geometry_envelope\": {\"robot_radius_m\": 0.29000000000000004, \"actor_radius_m\": 0.42727922061357854, \"margin_m\": 0.1, \"source\": {\"robot\": \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/simulation/robot/heritage_robot.urdf\", \"actor\": \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/simulation/models/person_mannequin/model.sdf\", \"assumption\": \"XY circumscribed collision circles; conservative geometry proxy, not contact sensing\"}, \"assumption\": \"conservative planar circumscribed circles from URDF/SDF collision shapes; contact sensing unavailable\"}, \"ended_monotonic_sec\": 85630.930964391, \"error\": \"KeyError: 'start_distance_m'\", \"failed_cleanup_removed\": [\"phase25_person_01\"]}\nTraceback (most recent call last):\n  File \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/spawn_people_scenario.py\", line 827, in <module>\n    main()\n  File \"/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/spawn_people_scenario.py\", line 607, in main\n    record['actor_motion']['start_distance_m'] = actor_config['start_distance_m']\nKeyError: 'start_distance_m'\n"}

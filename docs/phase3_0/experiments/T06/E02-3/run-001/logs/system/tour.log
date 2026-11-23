@@ -1,0 +1,22 @@
+[INFO] [1795428565.165313824] [heritage_tour_manager]: Tour Manager ready; awaiting explicit start
+2026-11-23 18:09:52,007 INFO heritage_tour_manager.tour_manager: IDLE: 开始新导览任务
+2026-11-23 18:09:52,008 INFO heritage_tour_manager.tour_manager: GREETING: 迎宾
+2026-11-23 18:09:52,031 INFO heritage_tour_manager.tour_manager: WAITING_CONSENT: 等待游客同意
+2026-11-23 18:09:53,969 INFO heritage_tour_manager.tour_manager: PLANNING: 确定固定导览路线
+2026-11-23 18:09:53,970 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往入口待命点
+2026-11-23 18:09:54,059 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解入口待命点
+2026-11-23 18:09:54,082 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往非遗概览
+2026-11-23 18:10:21,478 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解非遗概览
+2026-11-23 18:10:21,501 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传统工艺
+2026-11-23 18:11:01,376 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解传统工艺
+2026-11-23 18:11:01,398 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往代表作品
+2026-11-23 18:11:53,564 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解代表作品
+2026-11-23 18:11:53,586 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往传承故事
+2026-11-23 18:12:39,093 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解传承故事
+2026-11-23 18:12:39,117 INFO heritage_tour_manager.tour_manager: NAVIGATING: 前往互动体验
+2026-11-23 18:13:45,005 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解互动体验
+2026-11-23 18:13:45,026 INFO heritage_tour_manager.tour_manager: QA: 互动等待，接受文字提问、人工结束或超时继续
+2026-11-23 18:13:45,030 INFO heritage_tour_manager.tour_manager: QA: 知识问答与播报
+2026-11-23 18:13:45,063 INFO heritage_tour_manager.tour_manager: RETURNING: 前往出口
+2026-11-23 18:15:05,756 INFO heritage_tour_manager.tour_manager: EXPLAINING: 讲解出口
+2026-11-23 18:15:05,778 INFO heritage_tour_manager.tour_manager: COMPLETED: 完整导览已结束
