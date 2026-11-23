@@ -212,6 +212,11 @@ def test_pause_resume_and_cancel_stop_real_navigation(rig, pause_command):
     assert rig.backend.get_status().y == paused.y
     assert rig.statuses[-1]['visited'] == visited
     assert rig.statuses[-1]['error_count'] == (1 if pause_command == 'visitor_lost' else 0)
+    if pause_command == 'visitor_lost':
+        team = rig.client.create_publisher(String, 'heritage/simulation/team_status', 10)
+        team.publish(String(data=json.dumps({'valid': True, 'source': 'gazebo_scripted_actors',
+                                             'count': 3, 'state': 'GATHERED', 'gathered': True})))
+        wait_until(rig.tour._business_team_ready)
     call(rig, 'resume')
     wait_until(lambda: rig.backend.get_status().is_moving)
     call(rig, 'cancel')

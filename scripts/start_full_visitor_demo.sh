@@ -9,4 +9,4 @@ bash scripts/build_ros2.sh
 set +u
 source ros2_ws/install/setup.bash
 set -u
-exec .venv/bin/python scripts/run_visitor_full_demo.py --keep-open "$@"
+exec .venv/bin/python scripts/run_visitor_full_demo.py "$@"

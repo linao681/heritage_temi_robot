@@ -22,6 +22,13 @@ LEGACY_PREFIX = 'phase2_person_'
 MAX_PEOPLE = 8
 
 
+def pose_sample_is_newer(sample_monotonic_sec, after_monotonic_sec):
+    values = (sample_monotonic_sec, after_monotonic_sec)
+    if any(type(value) not in (int, float) or not math.isfinite(value) for value in values):
+        return False
+    return sample_monotonic_sec > after_monotonic_sec
+
+
 class PeopleScenario(Node):
     def __init__(self):
         super().__init__('phase25_people_scenario')
@@ -174,11 +181,14 @@ class PeopleScenario(Node):
             return None
         return self._pose(pose)
 
-    def wait_for_model_pose(self, name, expected=None, timeout_sec=5.0, tolerance_m=0.08):
+    def wait_for_model_pose(self, name, expected=None, timeout_sec=5.0, tolerance_m=0.08,
+                            after_monotonic=None):
         deadline = time.monotonic() + timeout_sec
         while rclpy.ok() and time.monotonic() < deadline:
             pose = self.model_pose(name)
-            if pose is not None and (expected is None or
+            sample_is_fresh = (after_monotonic is None or pose_sample_is_newer(
+                self._model_states_received_at, after_monotonic))
+            if sample_is_fresh and pose is not None and (expected is None or
                                      math.hypot(pose['x'] - expected[0],
                                                 pose['y'] - expected[1]) <= tolerance_m):
                 self._last_pose_confirmation_source = 'gazebo_model_states'
@@ -261,7 +271,9 @@ class PeopleScenario(Node):
         state.pose.position.x, state.pose.position.y = x, y
         state.pose.orientation.z, state.pose.orientation.w = math.sin(yaw / 2), math.cos(yaw / 2)
         self._call(self._set_state, SetEntityState.Request(state=state))
-        return self.wait_for_model_pose(name, (x, y), tolerance_m=0.02)
+        acknowledged_at = time.monotonic()
+        return self.wait_for_model_pose(name, (x, y), tolerance_m=0.02,
+                                        after_monotonic=acknowledged_at)
 
 
 def _basis(pose):

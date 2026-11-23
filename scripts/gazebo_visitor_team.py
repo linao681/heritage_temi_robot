@@ -29,6 +29,7 @@ def create_lost_service_client(node, team_decision_mode):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--layout', choices=('official', 'adaptive'), default='official')
     parser.add_argument('--duration-sec', type=float, default=1200)
     parser.add_argument('--team-decision-mode', choices=('business_script', 'vision_conservative'),
                         default='business_script')
@@ -48,6 +49,7 @@ def main():
     pause_future = None
     publisher = node.create_publisher(String, 'heritage/simulation/team_status', 10)
     lost = create_lost_service_client(node, args.team_decision_mode)
+    lost_service_state = 'disabled' if lost is None else 'waiting'
 
     def receive(message):
         nonlocal tour
@@ -72,7 +74,7 @@ def main():
     # Static collision map is used for every actor step, including corners.
     import yaml
     from PIL import Image
-    metadata = yaml.safe_load((ROOT/'simulation/generated/official.yaml').read_text())
+    metadata = yaml.safe_load((ROOT/f'simulation/generated/{args.layout}.yaml').read_text())
     image = Image.open(ROOT/'simulation/generated'/metadata['image']).convert('L')
     resolution = metadata['resolution']
     ox, oy, _ = metadata['origin']
@@ -254,12 +256,17 @@ def main():
                     member['progress'] = next_progress
                 lag = max((max(0, m.get('target_progress', m['progress'])-m['progress']) for m in members), default=0)
                 joined = bool(members) and all(m['joined'] for m in members)
-                if (joined and lag > 1.5 and not pause_sent and lost is not None and
-                        lost.service_is_ready()):
-                    pause_future = lost.call_async(Trigger.Request())
-                    pause_sent = True
+                if joined and lag > 1.5 and not pause_sent and lost is not None:
+                    if lost.service_is_ready():
+                        pause_future = lost.call_async(Trigger.Request())
+                        pause_sent = True
+                        lost_service_state = 'request_pending'
+                    else:
+                        lost_service_state = 'service_unavailable'
                 if pause_future is not None and pause_future.done():
-                    if not pause_future.result().success:
+                    response = pause_future.result()
+                    lost_service_state = 'accepted' if response.success else 'rejected'
+                    if not response.success:
                         pause_sent = False
                     pause_future = None
                 actual = [node.model_pose(m['id']) for m in members]
@@ -268,7 +275,10 @@ def main():
                 gathered = joined and lag < .35 and not slow and (not blocked or safe_hold)
                 if gathered and tour.get('state') in ('NAVIGATING', 'RETURNING'):
                     pause_sent = False
+                    lost_service_state = 'waiting'
                 status = {'valid': True, 'source': 'gazebo_scripted_actors',
+                          'team_decision_mode': args.team_decision_mode,
+                          'visitor_lost_request_state': lost_service_state,
                           'state': 'RECEPTION' if not joined else 'LOST' if lag > 1.5 else 'GATHERED' if gathered else 'FOLLOWING',
                           'count': len(members), 'lag_m': lag, 'gathered': gathered,
                           'blocked': blocked, 'members': [dict(m) for m in members],

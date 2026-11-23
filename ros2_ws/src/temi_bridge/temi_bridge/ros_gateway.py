@@ -219,11 +219,24 @@ class TemiGatewayNode(Node):
             return response
         with self._lock:
             active = self._active.get('navigation')
-            if (active is None or active.blocked.is_set() or active.task_id != request.navigation_session_id or
-                    self._stopping or 'speech' in self._active):
+            rejection = None
+            if active is None:
+                rejection = '没有活动导航Action'
+            elif active.blocked.is_set():
+                rejection = f'导航Action已被STOP阻断，活动会话={active.task_id}'
+            elif active.task_id != request.navigation_session_id:
+                rejection = (f'导航会话不匹配，活动会话={active.task_id}，'
+                             f'请求会话={request.navigation_session_id}')
+            elif self._stopping:
+                rejection = 'STOP正在执行'
+            elif 'speech' in self._active:
+                rejection = '语音任务占用机器人，禁止调速'
+            if rejection is not None:
                 response.success = False
-                response.message = '导航会话不匹配或当前任务禁止调速'
+                response.stale_session = active is None
+                response.message = rejection
                 response.sdk_return_code = -1
+                self.get_logger().warning(f'拒绝导航调速: {rejection}')
                 return response
         try:
             result = self._submit(partial(self._backend.set_navigation_speed, speed,

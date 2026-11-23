@@ -332,6 +332,49 @@ def test_failed_speed_result_from_finished_session_does_not_poison_new_navigatio
     assert retry.navigation_session_id == 'zone-1'
 
 
+def test_gateway_stale_speed_rejection_does_not_latch_error(monkeypatch):
+    import json
+
+    class ImmediateFuture:
+        def __init__(self, result):
+            self._result = result
+
+        def add_done_callback(self, callback):
+            callback(self)
+
+        def result(self):
+            return self._result
+
+    class Client:
+        def service_is_ready(self):
+            return True
+
+        def call_async(self, _request):
+            return ImmediateFuture(SimpleNamespace(
+                success=False, stale_session=True, sdk_return_code=-1,
+                message='没有活动导航Action'))
+
+    published = []
+    logs = []
+    node = SpeedControllerNode.__new__(SpeedControllerNode)
+    node._speed_future = None
+    node._speed_client = Client()
+    node._commands = SimpleNamespace(publish=lambda message: published.append(message.data))
+    node._policy = SpeedController()
+    node._latest_navigation_session_id = 'finished-session'
+    monkeypatch.setattr(SpeedControllerNode, 'get_logger', lambda _self: SimpleNamespace(
+        error=logs.append, warning=logs.append))
+    decision = SimpleNamespace(command_id='command-a', navigation_session_id='finished-session',
+                               target_speed_mps=0.5, reason='normal', state='NORMAL')
+
+    SpeedControllerNode._set_speed(node, decision)
+
+    assert node._policy.state != 'ERROR'
+    assert json.loads(published[-1])['status'] == 'stale'
+    assert node._policy._confirmed_session == ''
+    assert not any('调速接口未完成' in message for message in logs)
+
+
 def test_stale_speed_failure_after_current_session_confirmation_does_not_retrigger_command():
     controller = SpeedController()
     old = controller.update(sample(navigation_session_id='instant-wait'), now=0.0)

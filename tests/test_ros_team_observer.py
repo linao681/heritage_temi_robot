@@ -55,6 +55,22 @@ def test_observer_publishes_anonymous_tracks_and_conservative_team_state():
         assert received['team']['source'] == 'vision_tracker'
         assert received['team']['observation_state'] == 'UNKNOWN'
         assert received['team']['requires_manual_confirmation'] is True
+
+        invalid = PersonDetectionArray()
+        invalid.header.stamp.sec = int(time.time()) + 1
+        invalid.header.frame_id = 'depth_camera_optical_frame'
+        invalid.source = 'yolox_rgb'
+        invalid.sample_age_sec = float('inf')
+        invalid.valid = False
+        node._on_detections(invalid)
+        deadline = time.monotonic() + 2.0
+        while (received.get('team', {}).get('sample_age_sec') is not None and
+               time.monotonic() < deadline):
+            time.sleep(0.01)
+        assert received['team']['valid'] is False
+        assert received['team']['sample_age_sec'] is None
+        assert received['team']['observation_state'] == 'UNKNOWN'
+        assert received['team']['requires_manual_confirmation'] is True
     finally:
         executor.shutdown(timeout_sec=2.0)
         thread.join(timeout=2.0)

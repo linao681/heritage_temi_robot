@@ -30,3 +30,10 @@ __pycache__/
 /artifacts/phase2_8/archive/
 
 /artifacts/phase2_8/replays/
+
+# 阶段2.9高频游客状态原始流保留在本机；可验证的gzip归档、摘要和哈希清单进入版本管理。
+/docs/phase2_9/experiments/**/system/visitor_team.jsonl
+/docs/phase2_9/experiments/**/system/*.pid
+
+# pytest生成的Mock系统运行目录不是实验验收证据。
+/docs/runs/mock-system-*/

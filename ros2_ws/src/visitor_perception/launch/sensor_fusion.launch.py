@@ -12,6 +12,7 @@ def generate_launch_description():
     model = LaunchConfiguration('model_path')
     confidence = LaunchConfiguration('confidence')
     image_topic = LaunchConfiguration('image_topic')
+    expected_visitors = LaunchConfiguration('expected_visitors')
     use_sim_time = ParameterValue(simulation, value_type=bool)
     config = PathJoinSubstitution([FindPackageShare('visitor_perception'), 'config', 'camera.yaml'])
     return LaunchDescription([
@@ -19,6 +20,7 @@ def generate_launch_description():
         DeclareLaunchArgument('model_path', default_value='assets/vision/object_detection_yolox_2022nov.onnx'),
         DeclareLaunchArgument('confidence', default_value='0.5'),
         DeclareLaunchArgument('image_topic', default_value='depth_camera/image_raw'),
+        DeclareLaunchArgument('expected_visitors', default_value='0'),
         Node(package='visitor_perception', executable='visitor_perception',
              arguments=['--config', config], output='screen'),
         Node(package='visitor_perception', executable='yolox_person_detector',
@@ -28,7 +30,8 @@ def generate_launch_description():
              parameters=[{'simulation_mode': simulation,
                           'min_detection_confidence': confidence}], output='screen'),
         Node(package='visitor_perception', executable='team_observer',
-             parameters=[{'coverage': 'forward_only'}], output='screen'),
+             parameters=[{'coverage': 'forward_only',
+                          'expected_count': ParameterValue(expected_visitors, value_type=int)}], output='screen'),
         Node(package='visitor_perception', executable='perception_fusion',
              parameters=[{'simulation_mode': simulation}], output='screen'),
     ])

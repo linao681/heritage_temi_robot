@@ -1,0 +1,11 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-10-50-02-086191-linao-P15-24-210144
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [210213]
+[speed_controller-1] [ERROR] [1795402216.928513868] [temi_speed_controller]: 调速接口未完成: {"command_id": "a37e684d09fe40538e87b2301bb31528", "status": "error", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "Nav2 限速参数未确认或会话已失效", "navigation_session_id": "395b08c73d274e66b304ccb1423abfa0"}
+[speed_controller-1] [WARN] [1795402222.322433768] [temi_speed_controller]: 请求导航停止: 近距离人员停车
+[speed_controller-1] [WARN] [1795402237.823835401] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795402245.222826450] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795402263.222334461] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795402309.123261602] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795402369.622330238] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795402383.923401493] [temi_speed_controller]: 请求导航停止: 安全停车条件

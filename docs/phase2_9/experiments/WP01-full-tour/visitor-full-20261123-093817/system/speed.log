@@ -1,0 +1,8 @@
+[INFO] [launch]: All log files can be found below /tmp/phase29-ros-logs/2026-11-23-09-38-23-995703-linao-P15-24-189800
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [189854]
+[speed_controller-1] [ERROR] [1795397919.177133391] [temi_speed_controller]: 调速接口未完成: {"command_id": "2ca21fb45c084b489f701b4f68dcaca4", "status": "error", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "Nav2 限速参数未确认或会话已失效", "navigation_session_id": "176e3dc2b2484eafbf223a8f1e1711d3"}
+[speed_controller-1] [WARN] [1795397924.356261860] [temi_speed_controller]: 请求导航停止: 近距离人员停车
+[speed_controller-1] [WARN] [1795397941.556501776] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795397948.756270909] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795397965.556319968] [temi_speed_controller]: 请求导航停止: 安全停车条件

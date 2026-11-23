@@ -1,0 +1,33 @@
+{
+  "status": "BLOCKED",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "run_id": "visitor-full-20261123-020925",
+  "manifest": "/tmp/phase29-wp01-blocked/visitor-full-20261123-020925/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": false,
+    "available_memory_gib": 5.098186492919922,
+    "free_disk_gib": 45.73817825317383,
+    "load_per_cpu": 0.663125,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": false,
+    "port_errors": [
+      "gazebo:11441 PermissionError: [Errno 1] Operation not permitted",
+      "web:8141 PermissionError: [Errno 1] Operation not permitted"
+    ],
+    "reasons": [
+      "available memory below 6.0 GiB",
+      "one or more required local ports cannot be bound"
+    ]
+  },
+  "error": "available memory below 6.0 GiB; one or more required local ports cannot be bound",
+  "events": [],
+  "elapsed_sec": 0.00432548000026145
+}

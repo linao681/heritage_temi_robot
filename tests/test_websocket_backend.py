@@ -98,6 +98,38 @@ def test_non_private_bind_is_rejected(host):
         WebSocketConfig(bind_host=host)
 
 
+def test_listener_without_bound_socket_fails_closed(monkeypatch):
+    import temi_bridge.websocket_backend as websocket_module
+    from temi_bridge.websocket_backend import WebSocketConfig, WebSocketTemiBackend
+
+    class EmptyServer:
+        sockets = ()
+        closed = False
+
+        def close(self):
+            self.closed = True
+
+        async def wait_closed(self):
+            return None
+
+    server = EmptyServer()
+
+    async def serve_without_sockets(*_args, **_kwargs):
+        return server
+
+    monkeypatch.setattr(websocket_module, 'serve', serve_without_sockets)
+
+    async def scenario():
+        backend = WebSocketTemiBackend(WebSocketConfig(port=0), TOKEN)
+        result = await backend.connect()
+
+        assert not result.success
+        assert backend._server is None
+        assert server.closed
+
+    asyncio.run(scenario())
+
+
 def test_authentication_single_client_and_ready_snapshot():
     async def scenario():
         backend = make_backend()

@@ -18,7 +18,7 @@ def load(path):
         if not aliases or not all(isinstance(x, str) and x.strip() for x in aliases):
             raise ValueError('无效主题别名')
         for entry in topic['entries']:
-            if entry['id'] in ids or not all(isinstance(entry[k], str) and entry[k].strip() for k in ('id','basic','advanced')):
+            if entry['id'] in ids or not all(isinstance(entry[k], str) and entry[k].strip() for k in ('id','basic','child','advanced')):
                 raise ValueError('无效或重复条目')
             ids.add(entry['id'])
             if not entry['keywords'] or not all(isinstance(x,str) and x.strip() for x in entry['keywords']):

@@ -1,0 +1,550 @@
+{
+  "status": "PASS",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "run_id": "visitor-full-20261123-104955",
+  "manifest": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-104955/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 7.792945861816406,
+    "free_disk_gib": 44.94891357421875,
+    "load_per_cpu": 0.02625,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "navigation_motion_evidence": {
+    "complete": true,
+    "required_targets": [
+      "zone_1",
+      "zone_2",
+      "zone_3",
+      "zone_4",
+      "zone_5",
+      "exit"
+    ],
+    "minimum_paired_motion_samples_per_target": 3,
+    "missing_targets": [],
+    "targets": {
+      "zone_1": {
+        "cmd_vel_motion_samples": 55,
+        "paired_odom_motion_samples": 55,
+        "max_cmd_vel_linear_mps": 0.3421052631578947,
+        "max_odom_linear_mps": 0.3507687370554406
+      },
+      "zone_2": {
+        "cmd_vel_motion_samples": 104,
+        "paired_odom_motion_samples": 104,
+        "max_cmd_vel_linear_mps": 0.3421052631578947,
+        "max_odom_linear_mps": 0.34821133346609767
+      },
+      "zone_3": {
+        "cmd_vel_motion_samples": 153,
+        "paired_odom_motion_samples": 153,
+        "max_cmd_vel_linear_mps": 0.3421052631578947,
+        "max_odom_linear_mps": 0.35171443548591597
+      },
+      "zone_4": {
+        "cmd_vel_motion_samples": 116,
+        "paired_odom_motion_samples": 115,
+        "max_cmd_vel_linear_mps": 0.34189664219555094,
+        "max_odom_linear_mps": 0.34231603053310206
+      },
+      "zone_5": {
+        "cmd_vel_motion_samples": 166,
+        "paired_odom_motion_samples": 165,
+        "max_cmd_vel_linear_mps": 0.3375615320707623,
+        "max_odom_linear_mps": 0.3431461243532491
+      },
+      "exit": {
+        "cmd_vel_motion_samples": 210,
+        "paired_odom_motion_samples": 210,
+        "max_cmd_vel_linear_mps": 0.349412739276886,
+        "max_odom_linear_mps": 0.3549956976431859
+      }
+    }
+  },
+  "final_team": {
+    "valid": true,
+    "source": "gazebo_scripted_actors",
+    "team_decision_mode": "business_script",
+    "visitor_lost_request_state": "waiting",
+    "state": "GATHERED",
+    "count": 3,
+    "lag_m": 0,
+    "gathered": true,
+    "blocked": false,
+    "members": [
+      {
+        "id": "phase25_person_06",
+        "progress": 81.45714533535286,
+        "gap": 2.4,
+        "joined": true,
+        "target_progress": 81.45714533535286,
+        "joining_path": [],
+        "detouring": false,
+        "yielding": false
+      },
+      {
+        "id": "phase25_person_07",
+        "progress": 80.25714533535287,
+        "gap": 3.5,
+        "joined": true,
+        "target_progress": 80.25714533535287,
+        "joining_path": [],
+        "detouring": false,
+        "yielding": false
+      },
+      {
+        "id": "phase25_person_08",
+        "progress": 78.95714533535289,
+        "gap": 4.6,
+        "joined": true,
+        "target_progress": 78.95714533535289,
+        "joining_path": [],
+        "detouring": false,
+        "yielding": false
+      }
+    ],
+    "safe_hold": true,
+    "tour_state": "COMPLETED",
+    "time_monotonic_sec": 63134.692778181
+  },
+  "final_tour": {
+    "state": "COMPLETED",
+    "reason": "完整导览已结束",
+    "target": "exit",
+    "visited": [
+      "wait",
+      "zone_1",
+      "zone_2",
+      "zone_3",
+      "zone_4",
+      "zone_5",
+      "exit"
+    ],
+    "outcome": "completed",
+    "qa_waiting": false,
+    "qa_result": {
+      "found": true,
+      "entry_id": "music_types",
+      "answer": "潮州音乐大致分为广场乐和室内乐。",
+      "source": {
+        "name": "中国非物质文化遗产网·潮州音乐",
+        "url": "https://www.ihchina.cn/project_details/12553/",
+        "checked": "2026-11-20"
+      },
+      "spoken": true
+    },
+    "visitor_assist": {
+      "armed": false,
+      "observed_empty": false,
+      "active": false,
+      "expected_count": 0,
+      "can_arm": true,
+      "can_accept": false,
+      "can_resume": false,
+      "waiting_reason": "未启用本次协作"
+    },
+    "connected": true,
+    "is_moving": false,
+    "history": [
+      {
+        "state": "IDLE",
+        "reason": "开始新导览任务",
+        "elapsed_sec": 0.0
+      },
+      {
+        "state": "GREETING",
+        "reason": "迎宾",
+        "elapsed_sec": 0.002
+      },
+      {
+        "state": "WAITING_CONSENT",
+        "reason": "等待游客同意",
+        "elapsed_sec": 6.025
+      },
+      {
+        "state": "PLANNING",
+        "reason": "确定固定导览路线",
+        "elapsed_sec": 8.121
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往入口待命点",
+        "elapsed_sec": 8.122
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解入口待命点",
+        "elapsed_sec": 8.206
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往非遗概览",
+        "elapsed_sec": 12.424
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 14.787
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往非遗概览",
+        "elapsed_sec": 17.092
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 30.007
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往非遗概览",
+        "elapsed_sec": 32.989
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 37.194
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往非遗概览",
+        "elapsed_sec": 40.691
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解非遗概览",
+        "elapsed_sec": 44.543
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往传统工艺",
+        "elapsed_sec": 48.764
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 55.423
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往传统工艺",
+        "elapsed_sec": 59.387
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解传统工艺",
+        "elapsed_sec": 88.335
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往代表作品",
+        "elapsed_sec": 92.345
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 101.34
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往代表作品",
+        "elapsed_sec": 156.586
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 161.846
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往代表作品",
+        "elapsed_sec": 170.988
+      },
+      {
+        "state": "PAUSED",
+        "reason": "导航安全停车",
+        "elapsed_sec": 175.995
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往代表作品",
+        "elapsed_sec": 303.988
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解代表作品",
+        "elapsed_sec": 336.787
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往传承故事",
+        "elapsed_sec": 341.005
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解传承故事",
+        "elapsed_sec": 379.319
+      },
+      {
+        "state": "NAVIGATING",
+        "reason": "前往互动体验",
+        "elapsed_sec": 383.338
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解互动体验",
+        "elapsed_sec": 442.717
+      },
+      {
+        "state": "QA",
+        "reason": "互动等待，接受文字提问、人工结束或超时继续",
+        "elapsed_sec": 446.744
+      },
+      {
+        "state": "QA",
+        "reason": "知识问答与播报",
+        "elapsed_sec": 446.917
+      },
+      {
+        "state": "RETURNING",
+        "reason": "前往出口",
+        "elapsed_sec": 450.942
+      },
+      {
+        "state": "EXPLAINING",
+        "reason": "讲解出口",
+        "elapsed_sec": 519.605
+      },
+      {
+        "state": "COMPLETED",
+        "reason": "完整导览已结束",
+        "elapsed_sec": 523.617
+      }
+    ],
+    "elapsed_sec": 523.617,
+    "route_index": 6,
+    "pause_source": "",
+    "paused_session_id": "",
+    "team_recovery_required": false,
+    "team_resume_confirmed": false,
+    "recovery_ack_id": ""
+  },
+  "final_stop_evidence": {
+    "confirmed": true,
+    "tour_is_moving": false,
+    "odom_fresh": true,
+    "odom_linear_speed_mps": 0.005910108608053005,
+    "odom_age_sec": 0.0029328840028028935,
+    "navigation_session_id": ""
+  },
+  "terminal_cmd_vel_snapshot": {
+    "fresh": false,
+    "age_sec": 3.8474541710020276,
+    "value": null
+  },
+  "pause_stop_evidence": [
+    {
+      "elapsed_sec": 42.90788032099954,
+      "reason": "导航安全停车",
+      "confirmed": true,
+      "tour_is_moving": false,
+      "odom_fresh": true,
+      "odom_linear_speed_mps": 0.00530906037536839,
+      "odom_age_sec": 0.004697263000707608,
+      "navigation_session_id": "c3078909f5fa48b48719e0f4d98ecf06"
+    },
+    {
+      "elapsed_sec": 49.99853108700336,
+      "reason": "导航安全停车",
+      "confirmed": true,
+      "tour_is_moving": false,
+      "odom_fresh": true,
+      "odom_linear_speed_mps": 4.2718436609246527e-10,
+      "odom_age_sec": 0.017015400000673253,
+      "navigation_session_id": "50900c3d0bca43e0ae9077b84c65f0d9"
+    },
+    {
+      "elapsed_sec": 68.44691549400159,
+      "reason": "导航安全停车",
+      "confirmed": true,
+      "tour_is_moving": false,
+      "odom_fresh": true,
+      "odom_linear_speed_mps": 0.005919715327327874,
+      "odom_age_sec": 0.022916344001714606,
+      "navigation_session_id": "16adf6d701d340b58e7e83a47056ac41"
+    },
+    {
+      "elapsed_sec": 114.15371422500175,
+      "reason": "导航安全停车",
+      "confirmed": true,
+      "tour_is_moving": false,
+      "odom_fresh": true,
+      "odom_linear_speed_mps": 0.0038492925324012223,
+      "odom_age_sec": 0.01650601499568438,
+      "navigation_session_id": "c88f071a76b2443ab9c528a576141f69"
+    },
+    {
+      "elapsed_sec": 174.84572079699865,
+      "reason": "导航安全停车",
+      "confirmed": true,
+      "tour_is_moving": false,
+      "odom_fresh": true,
+      "odom_linear_speed_mps": 1.695120623746254e-10,
+      "odom_age_sec": 0.024880671000573784,
+      "navigation_session_id": "2ea22888076a441dbcbf7aad260dca96"
+    },
+    {
+      "elapsed_sec": 188.93963443300163,
+      "reason": "导航安全停车",
+      "confirmed": true,
+      "tour_is_moving": false,
+      "odom_fresh": true,
+      "odom_linear_speed_mps": 2.2195064832120696e-10,
+      "odom_age_sec": 0.024292685004184023,
+      "navigation_session_id": "a28be840d4954fb4b2b77b541a4cc2f4"
+    }
+  ],
+  "events": [
+    {
+      "elapsed_sec": 12.844791579998855,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 20.968109428002208,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 42.959596241002146,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 45.753202384999895,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 50.05215184199915,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 53.45916927899816,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 61.75691672300309,
+      "action": "straggle",
+      "result": {
+        "success": true,
+        "message": "队尾游客放慢脚步"
+      }
+    },
+    {
+      "elapsed_sec": 68.49995322700124,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 72.2007608999993,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 114.20704786900023,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 169.36826605699753,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 174.9001112410042,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 183.78149354200286,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 188.99202105300355,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 316.82428258800064,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 459.7605004959987,
+      "action": "ask",
+      "result": {
+        "success": true,
+        "message": "已接受文字提问"
+      }
+    }
+  ],
+  "elapsed_sec": 536.9289392700011
+}

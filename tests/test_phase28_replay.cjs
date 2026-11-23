@@ -47,6 +47,9 @@ async function fixture() {
   assert.match(html, /RECORDED_ROS2/);
   assert.match(liveJs, /LIVE_ROS2/);
   assert.match(liveJs, /DEMO_SIMULATED/);
-  assert.doesNotMatch(js, /fetch\(|XMLHttpRequest|\/api\/interact/);
+  assert.match(js, /location\.hostname === '127\.0\.0\.1'/);
+  assert.match(js, /fetch\('\/recording\/replay\.json'/);
+  assert.match(js, /fetch\('\/recording\/replay\.json\.sha256'/);
+  assert.doesNotMatch(js, /XMLHttpRequest|\/api\/(interact|stop|resume|navigate)|method:\s*['\"]POST/i);
   console.log('replay integrity and read-only checks passed');
 })().catch(error => { console.error(error); process.exitCode = 1; });

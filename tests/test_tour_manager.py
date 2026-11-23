@@ -244,6 +244,30 @@ def test_qa_question_speaks_and_then_completes(found):
     asyncio.run(scenario())
 
 
+def test_child_level_is_carried_to_the_knowledge_lookup():
+    async def scenario():
+        manager, backend, driver, changes, monitor = await setup_rig()
+        requests = []
+
+        async def lookup(question, exhibit, level):
+            requests.append((question, exhibit, level))
+            return {'found': True, 'entry_id': 'opera_language',
+                    'answer': '潮剧用潮州话演唱。',
+                    'source': {'url': 'https://example.invalid'}}
+
+        manager.qa_lookup = lookup
+        try:
+            await accept(manager)
+            await wait_until(lambda: manager.state.value == 'QA')
+            assert manager.submit_question('潮剧用什么语言', 'exhibit_04', level='child')
+            await wait_until(lambda: manager.state.value == 'COMPLETED')
+            assert requests == [('潮剧用什么语言', 'exhibit_04', 'child')]
+            assert '潮剧用潮州话演唱。' in driver.speech_calls
+        finally:
+            await end_rig(manager, monitor)
+    asyncio.run(scenario())
+
+
 def test_qa_cancel_while_lookup_pending_never_speaks_late_answer():
     async def scenario():
         manager, backend, driver, changes, monitor = await setup_rig()

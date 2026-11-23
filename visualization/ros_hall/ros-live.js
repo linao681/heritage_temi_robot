@@ -12,41 +12,45 @@
  document.body.appendChild(evidence);
  const interaction=document.createElement('section');
  interaction.style.cssText='position:fixed;z-index:99997;bottom:16px;right:16px;width:min(390px,90vw);padding:14px;background:#f7f1e5;border:1px solid #b79b73;border-radius:8px;color:#30291f;display:none;box-shadow:0 4px 20px #0002';
- interaction.innerHTML='<h3 style="margin:0 0 8px">游客交互 · ROS 实时</h3><div id="ros-interaction-state"></div><div id="ros-interaction-actions" style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"></div><div id="ros-interaction-question" style="display:flex;gap:6px"><input aria-label="游客提问" maxlength="500" placeholder="例如：潮州音乐有哪些类型？" style="min-width:0;flex:1"><button>提问</button></div><p aria-live="polite" id="ros-interaction-feedback" style="margin:8px 0 0"></p>';
+ interaction.innerHTML='<h3 style="margin:0 0 8px">游客交互 · ROS 实时</h3><div id="ros-interaction-state"></div><div id="ros-interaction-actions" style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"></div><div id="ros-interaction-question" style="display:flex;gap:6px;flex-wrap:wrap"><select aria-label="讲解模式"><option value="basic">大众版</option><option value="child">儿童版</option><option value="advanced">深度版</option></select><input aria-label="游客提问" maxlength="500" placeholder="例如：潮州音乐有哪些类型？" style="min-width:0;flex:1"><button>提问</button></div><p aria-live="polite" id="ros-interaction-feedback" style="margin:8px 0 0"></p>';
  document.body.appendChild(interaction);
  const actions=interaction.querySelector('#ros-interaction-actions');
  const status=interaction.querySelector('#ros-interaction-state');
  const questionBox=interaction.querySelector('#ros-interaction-question');
  const input=questionBox.querySelector('input');
+ const level=questionBox.querySelector('select');
  const feedback=interaction.querySelector('#ros-interaction-feedback');
  const voiceButton=document.createElement('button');voiceButton.textContent='开启浏览器演示语音';interaction.appendChild(voiceButton);
  let voiceEnabled=false,lastSpeechId=null;
  voiceButton.onclick=()=>{voiceEnabled=!voiceEnabled;voiceButton.textContent=voiceEnabled?'关闭浏览器演示语音':'开启浏览器演示语音';if(!voiceEnabled)window.speechSynthesis?.cancel();};
  let sending=false;
- async function interact(action, question){
+ async function interact(action, question, explanationLevel='basic'){
   if(sending)return;
   sending=true;feedback.textContent='等待 ROS 确认…';
   try{
-   const response=await fetch('/api/interact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,question})});
+   const response=await fetch('/api/interact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,question,level:explanationLevel})});
    const result=await response.json();
    feedback.textContent=result.message||'未收到确认';
    if(result.success&&action==='ask')input.value='';
   }catch(e){feedback.textContent='连接失败，请查看当前状态后重试';}
   finally{sending=false;}
  }
- questionBox.querySelector('button').onclick=()=>interact('ask',input.value);
+ questionBox.querySelector('button').onclick=()=>interact('ask',input.value,level.value);
  const controls=[['start','接待游客'],['arm_visitor','等待游客到来'],['accept','同意导览'],['refuse','暂不需要'],['pause','暂停'],['resume','继续导览'],['straggle','队尾放慢'],['gather','提醒集合'],['finish_qa','结束问答'],['manual_takeover','人工接管'],['cancel','结束导览']];
  for(const [action,label] of controls){const button=document.createElement('button');button.textContent=label;button.dataset.action=action;button.onclick=()=>interact(action);actions.appendChild(button);}
  function updateInteraction(data){
   const tour=data.tour, assist=tour?.visitor_assist||{};
   interaction.style.display=data.interactive?'block':'none';
   const live=Boolean(data.connected&&tour), state=tour?.state;
+  const business=data.team_decision_mode==='business_script';
+  const vision=data.team_decision_mode==='vision_conservative';
   status.textContent=live?(tour.reason||state)+' · 团队确认人数 '+(assist.expected_count||0):'等待实时导览状态';
+  if(vision&&state==='PAUSED')status.textContent+=' · 视觉覆盖有限，继续操作需人工确认';
   const allowed={arm_visitor:assist.can_arm,accept:state==='WAITING_CONSENT'&&(!assist.active||assist.can_accept),refuse:state==='WAITING_CONSENT',pause:['NAVIGATING','RETURNING','EXPLAINING','QA'].includes(state),resume:state==='PAUSED'&&(!assist.active||assist.can_resume),finish_qa:state==='QA'&&tour?.qa_waiting,manual_takeover:!['IDLE','COMPLETED','ERROR'].includes(state),cancel:!['IDLE','COMPLETED','ERROR'].includes(state)};
   allowed.straggle=data.team?.count===3&&['NAVIGATING','RETURNING'].includes(state);
-  allowed.start=state==='IDLE'&&data.team?.count===3;
-  allowed.gather=data.team?.count===3;
-  if(data.team){status.textContent+=' · 队伍 '+data.team.state+' · 落后 '+(data.team.lag_m||0).toFixed(1)+' m';allowed.resume=allowed.resume&&data.team.gathered;}
+  allowed.start=state==='IDLE'&&(vision||data.team?.count===3);
+  allowed.gather=vision?state==='PAUSED':data.team?.count===3;
+  if(data.team){status.textContent+=' · Gazebo演员 '+data.team.state+'（场景真值）';if(business){status.textContent+=' · 落后 '+(data.team.lag_m||0).toFixed(1)+' m';allowed.resume=allowed.resume&&data.team.gathered;}}
   actions.querySelectorAll('button').forEach(button=>button.disabled=!live||sending||!allowed[button.dataset.action]);
   questionBox.querySelector('button').disabled=!live||sending||state!=='QA'||!tour?.qa_waiting;
  }
@@ -94,7 +98,14 @@
   rows.push(cmd?.fresh?'cmd_vel '+cmd.value.linear_speed_mps.toFixed(2)+' m/s · '+cmd.value.angular_speed_rps.toFixed(2)+' rad/s · '+age(cmd):'cmd_vel 无效/过期 · '+age(cmd));
   rows.push(odom?.fresh?'odom 实际 '+odom.value.linear_speed_mps.toFixed(2)+' m/s · '+odom.value.angular_speed_rps.toFixed(2)+' rad/s · '+age(odom):'odom 实际速度 无效/过期 · '+age(odom));
   if(speed)rows.push('安全状态 '+(speed.stop_confirmed?'STOP_CONFIRMED':speed.state||'—')+' · 动态停车距离 '+(Number.isFinite(speed.dynamic_stop_distance_m)?speed.dynamic_stop_distance_m.toFixed(2)+' m':'无效')+' · UUID '+(speed.navigation_session_id||'无'));
-  rows.push('Nav2 限速独立回读：'+(e.nav2_limit_readback?.valid?'有效':'当前接口未提供'));
+  const limit=e.nav2_limit_readback, lv=limit?.value;
+  rows.push(lv&&limit.fresh&&lv.valid?('Nav2 GetParameters · FollowPath.max_vel_x '+lv.controller_followpath_max_vel_x_mps.toFixed(2)+' m/s · max_speed_xy '+lv.controller_followpath_max_speed_xy_mps.toFixed(2)+' m/s · smoother X '+lv.velocity_smoother_max_velocity_x_mps.toFixed(2)+' m/s · '+age(limit)+' · 配置值，不代表完整有效上限'):'Nav2 参数读回无效/过期 · '+age(limit)+' · '+(lv?.reason||''));
+  const history=data.tour?.history;
+  rows.push('ROS状态机事件时间线（来源：heritage/tour/status，单调时钟相对秒）');
+  if(Array.isArray(history))for(const [offset,item] of history.slice(-8).entries()){
+   const t=Number.isFinite(item.elapsed_sec)?'+'+item.elapsed_sec.toFixed(1)+' s':'时间无效';
+   rows.push('  tour-history-'+(history.length-Math.min(history.length,8)+offset)+' · '+t+' · '+(item.state||'未知')+' · '+(item.reason||''));
+  }
   evidence.textContent=rows.join('\n');
  }
  function updateVisitors(poses){

@@ -8,6 +8,14 @@ web_port="${3:-8089}"
 robot_speed_limit="${4:-0.35}"
 camera_height_m="${5:-0.55}"
 camera_pitch_down_deg="${6:-0}"
+layout="${7:-official}"
+expected_visitors="${PHASE25_EXPECTED_VISITORS:-0}"
+[[ "$layout" == official || "$layout" == adaptive ]] || {
+  echo '布局必须为 official 或 adaptive' >&2; exit 2;
+}
+[[ "$expected_visitors" =~ ^[0-8]$ ]] || {
+  echo '预期游客人数必须为0–8的整数' >&2; exit 2;
+}
 [[ "$domain_id" =~ ^[0-9]+$ ]] && (( domain_id >= 0 && domain_id <= 232 )) || {
   echo 'ROS 域必须为 0–232' >&2; exit 2;
 }
@@ -127,7 +135,7 @@ trap 'exit 0' INT TERM
 
 echo "日志目录：$log_dir"
 start_group hall ros2 launch "$project_dir/simulation/hall.launch.py" \
-  layout:=official gui:=false camera_height_m:="$camera_height_m" \
+  layout:=$layout gui:=false camera_height_m:="$camera_height_m" \
   camera_pitch_down_deg:="$camera_pitch_down_deg"
 deadline=$((SECONDS + 60))
 until ros2 service list 2>/dev/null | grep -q '^/spawn_entity$'; do
@@ -136,21 +144,21 @@ until ros2 service list 2>/dev/null | grep -q '^/spawn_entity$'; do
   sleep 1
 done
 start_group navigation ros2 launch "$project_dir/simulation/navigation.launch.py" \
-  layout:=official max_linear_speed_mps:="$robot_speed_limit"
+  layout:=$layout max_linear_speed_mps:="$robot_speed_limit"
 sleep 2
 gateway_args=()
 if [[ "${PHASE25_PRESENTATION:-0}" == 1 ]]; then gateway_args+=(--presentation); fi
-start_group gateway python3 scripts/start_nav2_gateway.py --layout official --domain-id "$domain_id" "${gateway_args[@]}"
+start_group gateway python3 scripts/start_nav2_gateway.py --layout "$layout" --domain-id "$domain_id" "${gateway_args[@]}"
 start_group knowledge ros2 run heritage_knowledge knowledge_node --config config/knowledge.yaml
 team_decision_mode="${PHASE28_TEAM_DECISION_MODE:-business_script}"
 start_group tour ros2 run heritage_tour_manager tour_manager --config config/submission_system.yaml --exhibits config/submission_exhibits.yaml --ros-args -p "team_decision_mode:=$team_decision_mode"
 start_group speed ros2 launch temi_speed_controller speed_control.launch.py mock_mode:=false allow_simulated_sources:=true
-start_group perception ros2 launch visitor_perception sensor_fusion.launch.py simulation_mode:=true model_path:=assets/vision/object_detection_yolox_2022nov.onnx confidence:=0.5
+start_group perception ros2 launch visitor_perception sensor_fusion.launch.py simulation_mode:=true model_path:=assets/vision/object_detection_yolox_2022nov.onnx confidence:=0.5 expected_visitors:=$expected_visitors
 visualization_args=()
 if [[ "${PHASE25_INTERACTIVE:-0}" == 1 ]]; then visualization_args+=(--interactive); fi
-start_group visualization .venv/bin/python scripts/visualization_bridge.py --layout official --port "$web_port" --domain-id "$domain_id" "${visualization_args[@]}"
+start_group visualization .venv/bin/python scripts/visualization_bridge.py --layout "$layout" --port "$web_port" --domain-id "$domain_id" --team-decision-mode "$team_decision_mode" "${visualization_args[@]}"
 if [[ "${PHASE25_VISITOR_TEAM:-0}" == 1 ]]; then
-  start_group visitor_team .venv/bin/python scripts/gazebo_visitor_team.py --output "$log_dir/visitor_team.jsonl"
+  start_group visitor_team .venv/bin/python scripts/gazebo_visitor_team.py --layout "$layout" --team-decision-mode "$team_decision_mode" --output "$log_dir/visitor_team.jsonl"
 fi
 
 preflight_timeout="${PHASE25_PREFLIGHT_TIMEOUT_SEC:-240}"

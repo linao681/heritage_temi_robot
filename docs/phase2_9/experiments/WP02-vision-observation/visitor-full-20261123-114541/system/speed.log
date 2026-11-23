@@ -1,0 +1,50 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-11-45-47-229337-linao-P15-24-226831
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [speed_controller-1]: process started with pid [226900]
+[speed_controller-1] [WARN] [1795405560.648793893] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "33e915daa4e349fc96edb7d4aa39af77", "status": "stale", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "ca84deaa02bc494f9b683c6a4991507e"}
+[speed_controller-1] [WARN] [1795405564.886260005] [temi_speed_controller]: 丢弃无活动导航Action的过期调速响应: {"command_id": "1d6a9cc4cf56446382f0335a5aa53432", "status": "stale", "requested_target_speed_mps": 0.5, "sdk_return_code": -1, "message": "没有活动导航Action", "stale_session": true, "navigation_session_id": "2ab40d0302514d39ae66670d56af98e1"}
+[speed_controller-1] [WARN] [1795405564.983198827] [temi_speed_controller]: 请求导航停止: 安全停车条件
+[speed_controller-1] [WARN] [1795405586.782057480] [temi_speed_controller]: 请求导航停止: 感知数据无效或过期
+[speed_controller-1] [ERROR] [1795405586.881944345] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405586.982014822] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.081902343] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.182022915] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.281982888] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.381844986] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.481889512] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.582075800] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.681810493] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.782035040] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.882033457] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405587.981945297] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.081901923] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.182074175] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.281984831] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.382055674] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.481857290] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.581915324] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.681824128] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.781858529] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.881997230] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405588.981973945] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.081994529] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.181928109] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.281888913] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.381895817] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.481847374] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.581844097] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.681900035] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.781946167] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.881998668] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405589.981863182] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.081901361] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.182015313] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.281918933] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.381872502] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.481893827] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.581882224] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.681857071] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.781861442] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.881870151] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405590.981876543] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位
+[speed_controller-1] [ERROR] [1795405591.081886078] [temi_speed_controller]: 速度控制 ERROR: 故障锁存，等待人工复位

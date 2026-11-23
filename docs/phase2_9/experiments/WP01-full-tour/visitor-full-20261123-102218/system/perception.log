@@ -1,0 +1,15 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-10-22-24-560052-linao-P15-24-199952
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [200022]
+[INFO] [yolox_person_detector-2]: process started with pid [200024]
+[INFO] [depth_association-3]: process started with pid [200026]
+[INFO] [team_observer-4]: process started with pid [200028]
+[INFO] [perception_fusion-5]: process started with pid [200030]
+[visitor_perception-1] [INFO] [1795400546.856980265] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 3, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 60949.016613943, 'sample_age_sec': 1.4047996955923736e-05}
+[visitor_perception-1] [INFO] [1795400565.584430781] [visitor_perception]: 游客感知: departure, {'valid': True, 'people_count': 0, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 60967.756600753, 'sample_age_sec': 1.2432006769813597e-05}
+[visitor_perception-1] [INFO] [1795400715.072567261] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 1, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 61117.244711347, 'sample_age_sec': 1.3116004993207753e-05}
+[INFO] [team_observer-4]: process has finished cleanly [pid 200028]
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 200030]
+[INFO] [depth_association-3]: process has finished cleanly [pid 200026]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 200024]
+[visitor_perception-1] [INFO] [1795400731.098094441] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 61132.187611858, 'sample_age_sec': 1.083053029004077}

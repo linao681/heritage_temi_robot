@@ -1,23 +1,25 @@
 # 项目状态
 
 
-## 最新状态：阶段 2.8（执行中，2026-11-23）
+## 最新状态：阶段 2.9（执行中，2026-11-23）
 
-本阶段在隔离分支 `phase2_8-work` 上推进，**整体尚未完成**。执行快照、逐工作包结果与最终报告见[阶段2.8进度](phase2_8/progress.md)、[验证矩阵](phase2_8/validation_matrix.md)、[最终报告](phase2_8/final_report.md)。未自动提交或推送。
+当前工作区为`/home/linao/heritage_workspace/heritage_temi_robot-phase28`，分支`phase2_9-work`，HEAD `24c14231de61840a11c5462805df0cd6160af84d`。阶段2.9改动在工作树中，未提交、未推送、未合并；`main`和`phase2_8-work`不是本阶段当前分支。逐工作包结果见[阶段2.9进度](phase2_9/progress.md)、[验证矩阵](phase2_9/validation_matrix.md)、[国赛交接报告](competition_final/overnight_report.md)。
 
 | 项目 | 当前结果 |
 |---|---|
-| ROS2 构建与全量测试 | 最新七包构建 7/7 通过；全 `tests` 550 passed、0 failed/skip/error（196.49秒）；WebSocket/网关专项2 passed。最终使用预检为空的 Domain 231，测试后再次确认空域 |
-| 视觉匿名跟踪 | 匿名 IoU 跟踪与保守团队 observer 已实现；一轮真实 Gazebo RGB-D 静态样本保存12 RGB/5 depth，一帧3人手工框 P/R=1.0。样本过小，推理FPS、深度误差和ID switch不可计算 |
-| 游客团队闭环 | 静态三人不证明动态掉队；视觉 observer 的47次输出均为 UNKNOWN，整路线 E07-A/B 未运行 |
-| 安全竞态 | 12类软件竞态回归通过；Gazebo 真实停稳/恢复时序本阶段未执行 |
-| 实时网页 | ROS结构化证据面板已实际加载并显示 CameraInfo、视觉/真值、fusion、Scan、速度、安全与 odom；代码现含深度有效像素与相机TF摘要，但这些新字段未重新做浏览器现场核验；无相机视频和已保存截图 |
-| 记录回放 | 独立离线 `RECORDED_ROS2` 播放器已实现；真实 WP01 归档导出186事件、12 RGB、5深度元数据并通过SHA校验；缺世界坐标/速度曲线，浏览器文件预览未完成 |
-| 其他工作包 | E02–E07动态实验、速度标定、稳定性、性能窗口、完整演示视频仍未完成；详见矩阵 |
-| 日志归档 | WP01样本30个文件归档，逐文件SHA256复核通过，原始文件保留 |
-| 实体 temi | 无实体设备；Android源码本阶段未修改，实机行为 `HARDWARE_REQUIRED` |
+| ROS2构建与全量测试 | 七包ROS2构建7/7；最新完整`tests/`为624 passed、190.10秒，退出码0。ROS Domain 226测试前后均为空；真实日志及SHA见[证据索引](competition_final/evidence_index.md) |
+| 完整导览 | official布局`business_script` run `visitor-full-20261123-125818`完成入口接待、同意、五区、知识库问答和出口，Tour `COMPLETED`；游客为Gazebo脚本演员，播报为模拟字幕 |
+| 视觉团队观察 | `visitor-full-20261123-133255`真实Gazebo RGB→YOLOX→RGB-D团队观察845条均为`UNKNOWN`，触发安全暂停且有新鲜odom停稳证据；整体run为FAIL，未恢复或完成路线。通用暂停handler已修复并纳入624项全量测试 |
+| E07与集合 | E07-A脚本游客在zone_3掉队、停稳、集合，模拟操作员确认后以新UUID恢复并完成路线，`PASS_WITH_RISK`；E07-B视觉恢复未完成 |
+| 未完成实验 | E02 0/6、E04 0/3、0.3/0.5/0.7m/s速度标定0/3、动态视觉八阶段、adaptive布局B Nav2路线、现场浏览器及完整回放检查仍未完成 |
+| 决赛材料 | 六分钟讲稿、分镜、页纲、图证映射、创新与答辩、实体部署和待询价成本材料已整理；没有经验证演示视频、PPTX源文件或最终PDF |
+| 实体temi | 无设备；SDK底盘运动、真实制动、相机、TTS/ASR和现场安全均为`HARDWARE_REQUIRED` |
 
-阶段2.7下文内容保留为当时的历史结果，不代表阶段2.8已通过，也不覆盖其旧测试数或风险说明。
+阶段2.8及更早内容继续保留为历史快照，不代表阶段2.9验收。
+
+## 阶段2.8历史状态快照（2026-11-23，阶段2.9之前）
+
+阶段2.8当时在隔离分支`phase2_8-work`上推进，整体尚未完成。下表及关联报告只记录当时结果，不覆盖当前阶段2.9 Git状态或测试数字。
 
 ## 阶段2.7状态快照（2026-11-22，阶段2.8之前）
 

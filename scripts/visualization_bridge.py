@@ -18,6 +18,8 @@ from tf2_ros import Buffer, TransformListener
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
+from rcl_interfaces.msg import ParameterType
+from rcl_interfaces.srv import GetParameters
 from sensor_msgs.msg import CameraInfo, Image, LaserScan
 from temi_interfaces.msg import PerceptionInput
 from gazebo_msgs.msg import ModelStates
@@ -35,11 +37,18 @@ def interaction_request(payload):
         raise ValueError('未知交互操作')
     action = payload['action']
     if action != 'ask':
-        return action, None
+        return action, None, 'basic'
     question = payload.get('question')
     if not isinstance(question, str) or not 1 <= len(question.strip()) <= 500:
         raise ValueError('请输入 1–500 字的问题')
-    return action, question.strip()
+    level = payload.get('level', 'basic')
+    if level not in ('basic', 'child', 'advanced'):
+        raise ValueError('讲解模式无效')
+    return action, question.strip(), level
+
+
+def resume_requires_scripted_gather(team_decision_mode):
+    return team_decision_mode == 'business_script'
 
 
 def convert_pose(x, y, yaw):
@@ -63,6 +72,26 @@ def snapshot_payload(value, received_at, now, max_age_sec):
     age = None if received_at is None else now - received_at
     fresh = value is not None and age is not None and 0 <= age <= max_age_sec
     return {'fresh': fresh, 'age_sec': age, 'value': value if fresh else None}
+
+
+def summarize_nav2_speed_limits(controller_max_vel_x, controller_max_speed_xy,
+                                smoother_max_velocity):
+    values = (controller_max_vel_x, controller_max_speed_xy)
+    if (not all(isinstance(value, (int, float)) and math.isfinite(value) and value >= 0
+                for value in values) or
+            not isinstance(smoother_max_velocity, (list, tuple)) or
+            not smoother_max_velocity or
+            not isinstance(smoother_max_velocity[0], (int, float)) or
+            not math.isfinite(smoother_max_velocity[0]) or smoother_max_velocity[0] < 0):
+        return {'valid': False, 'reason': 'Nav2 speed parameter response missing or invalid'}
+    return {
+        'valid': True,
+        'source': 'ROS GetParameters',
+        'controller_followpath_max_vel_x_mps': float(controller_max_vel_x),
+        'controller_followpath_max_speed_xy_mps': float(controller_max_speed_xy),
+        'velocity_smoother_max_velocity_x_mps': float(smoother_max_velocity[0]),
+        'reason': 'Configured parameters only; other velocity constraints may be lower',
+    }
 
 
 def scan_summary(ranges, *, angle_min, angle_increment, range_min, range_max):
@@ -135,6 +164,8 @@ def main():
     parser.add_argument('--layout', choices=['official', 'adaptive'], default='official')
     parser.add_argument('--port', type=int, default=8088)
     parser.add_argument('--domain-id', type=int, default=211)
+    parser.add_argument('--team-decision-mode', choices=('business_script', 'vision_conservative'),
+                        default='business_script')
     parser.add_argument('--interactive', action='store_true')
     args = parser.parse_args()
     if (os.environ.get('ROS_LOCALHOST_ONLY') != '1' or
@@ -167,6 +198,57 @@ def main():
     node.fused_snapshot = (None, None)
     node.cmd_vel_snapshot = (None, None)
     node.odom_snapshot = (None, None)
+    node.nav2_limit_snapshot = ({'valid': False, 'reason': 'waiting for Nav2 parameter services'},
+                                time.monotonic())
+    node.nav2_limit_pending = None
+    controller_parameters = node.create_client(GetParameters, 'controller_server/get_parameters')
+    smoother_parameters = node.create_client(GetParameters, 'velocity_smoother/get_parameters')
+
+    def poll_nav2_limits():
+        now = time.monotonic()
+        pending = node.nav2_limit_pending
+        if pending is not None:
+            controller_future, smoother_future, requested_at = pending
+            if controller_future.done() and smoother_future.done():
+                try:
+                    controller_response = controller_future.result()
+                    smoother_response = smoother_future.result()
+                    controller_values = controller_response.values
+                    smoother_values = smoother_response.values
+                    controller_numbers = [
+                        value.double_value if value.type == ParameterType.PARAMETER_DOUBLE else None
+                        for value in controller_values[:2]]
+                    smoother_numbers = (
+                        list(smoother_values[0].double_array_value)
+                        if smoother_values and
+                        smoother_values[0].type == ParameterType.PARAMETER_DOUBLE_ARRAY else [])
+                    summary = summarize_nav2_speed_limits(
+                        *(controller_numbers + [smoother_numbers]))
+                    summary.update(requested_at_monotonic_sec=requested_at,
+                                   received_at_monotonic_sec=now)
+                except Exception as error:
+                    summary = {'valid': False, 'reason': f'Nav2 parameter readback failed: {type(error).__name__}',
+                               'requested_at_monotonic_sec': requested_at,
+                               'received_at_monotonic_sec': now}
+                node.nav2_limit_snapshot = (summary, now)
+                node.nav2_limit_pending = None
+            elif now - requested_at > 3.0:
+                node.nav2_limit_snapshot = ({'valid': False, 'reason': 'Nav2 parameter readback timed out',
+                                             'requested_at_monotonic_sec': requested_at}, now)
+                node.nav2_limit_pending = None
+            return
+        if controller_parameters.service_is_ready() and smoother_parameters.service_is_ready():
+            requested_at = now
+            controller_future = controller_parameters.call_async(GetParameters.Request(
+                names=['FollowPath.max_vel_x', 'FollowPath.max_speed_xy']))
+            smoother_future = smoother_parameters.call_async(GetParameters.Request(
+                names=['max_velocity']))
+            node.nav2_limit_pending = (controller_future, smoother_future, requested_at)
+        elif now - node.nav2_limit_snapshot[1] > 3.0:
+            node.nav2_limit_snapshot = ({'valid': False,
+                                         'reason': 'Nav2 parameter services unavailable'}, now)
+
+    node.create_timer(1.0, poll_nav2_limits)
     def receive_tracks(message):
         try:
             value = json.loads(message.data)
@@ -275,7 +357,11 @@ def main():
             if not isinstance(value, dict):
                 return
             node.tour_status = {key: value.get(key) for key in
-                                ('state', 'reason', 'target', 'visited', 'outcome', 'qa_waiting', 'qa_result', 'visitor_assist', 'connected', 'is_moving')}
+                                ('state', 'reason', 'target', 'visited', 'outcome', 'qa_waiting',
+                                 'qa_result', 'visitor_assist', 'connected', 'is_moving',
+                                 'history', 'elapsed_sec', 'route_index', 'pause_source',
+                                 'paused_session_id', 'team_recovery_required',
+                                 'team_resume_confirmed', 'recovery_ack_id')}
             node.tour_received = time.monotonic()
         except (TypeError, ValueError):
             pass
@@ -319,19 +405,20 @@ def main():
                 length = int(self.headers.get('Content-Length', '0'))
                 if not 0 < length <= 8192:
                     raise ValueError('请求大小异常')
-                action, question = interaction_request(json.loads(self.rfile.read(length)))
+                action, question, level = interaction_request(json.loads(self.rfile.read(length)))
             except (ValueError, TypeError):
                 return self.send_json(400, {'success': False, 'message': '交互请求无效'})
             if not control_lock.acquire(blocking=False):
                 return self.send_json(409, {'success': False, 'message': '正在等待上一条指令'})
             try:
                 team, received = node.team_snapshot
-                if action == 'resume' and team is not None and (time.monotonic()-received > 1 or not team.get('gathered')):
+                if (action == 'resume' and resume_requires_scripted_gather(args.team_decision_mode) and
+                        team is not None and (time.monotonic()-received > 1 or not team.get('gathered'))):
                     return self.send_json(409, {'success': False, 'message': '游客尚未集合或队伍状态过期'})
                 client = question_client if action == 'ask' else controls[action]
                 if not client.service_is_ready():
                     return self.send_json(503, {'success': False, 'message': '导览服务未就绪'})
-                request = (SubmitQuestion.Request(question=question, exhibit='exhibit_05', level='basic')
+                request = (SubmitQuestion.Request(question=question, exhibit='exhibit_05', level=level)
                            if action == 'ask' else Trigger.Request())
                 future = client.call_async(request)
                 deadline = time.monotonic() + 8
@@ -351,7 +438,9 @@ def main():
         def do_GET(self):
             if self.path != '/api/pose':
                 return super().do_GET()
-            data = {'connected': False, 'layout': args.layout, 'interactive': args.interactive}
+            data = {'connected': False, 'layout': args.layout,
+                    'team_decision_mode': args.team_decision_mode,
+                    'interactive': args.interactive}
             data['route'] = fresh_status(node.route_status, node.route_received)
             data['tour'] = node.tour_status if time.monotonic()-node.tour_received < 3 else None
             data['speed_control'] = node.speed_control if time.monotonic()-node.speed_received < 3 else None
@@ -372,8 +461,7 @@ def main():
                 'fused': snapshot_payload(*node.fused_snapshot, now, 1.0),
                 'cmd_vel': snapshot_payload(*node.cmd_vel_snapshot, now, 0.5),
                 'odom': snapshot_payload(*node.odom_snapshot, now, 0.5),
-                'nav2_limit_readback': {'valid': False, 'value_mps': None,
-                                         'reason': '当前 SetNavigationSpeed 接口未提供独立限速回读'},
+                'nav2_limit_readback': snapshot_payload(*node.nav2_limit_snapshot, now, 3.0),
             }
             try:
                 camera_transform = buffer.lookup_transform('base_footprint',

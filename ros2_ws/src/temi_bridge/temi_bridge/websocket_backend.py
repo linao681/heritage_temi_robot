@@ -108,7 +108,7 @@ class WebSocketTemiBackend(TemiBackend):
         async with self._lifecycle_lock:
             if self._server is None:
                 try:
-                    self._server = await serve(
+                    server = await serve(
                         self._handle_connection, self.config.bind_host, self.config.port,
                         process_request=self._authenticate, origins=[None], compression=None,
                         max_size=65536, open_timeout=5.0, close_timeout=1.0,
@@ -118,6 +118,12 @@ class WebSocketTemiBackend(TemiBackend):
                 except OSError as error:
                     LOGGER.error('WebSocket 本机监听失败: %s', error)
                     return TaskResult(False, 'WebSocket 服务启动失败')
+                if not server.sockets:
+                    server.close()
+                    await server.wait_closed()
+                    LOGGER.error('WebSocket 服务启动失败：没有成功绑定监听端口')
+                    return TaskResult(False, 'WebSocket 服务启动失败')
+                self._server = server
                 LOGGER.info('WebSocket 服务等待 Android：%s:%d', self.config.bind_host, self.bound_port)
             return TaskResult(self._state.connected, '机器人已就绪' if self._state.connected else '等待 Android 就绪')
 

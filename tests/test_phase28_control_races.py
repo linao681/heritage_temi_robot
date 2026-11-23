@@ -34,14 +34,38 @@ def test_user_cancel_supersedes_pending_safety_pause_and_cannot_be_downgraded():
     assert manager._control == ('cancel', '用户取消导览')
 
 
-def test_automatic_team_pause_cannot_downgrade_safety_stop():
+def test_team_loss_latches_without_downgrading_pending_safety_stop():
     manager = make_manager()
     manager.state = TourState.NAVIGATING
 
     assert manager.safety_pause('nav-old')
-    assert not manager.visitor_lost()
+    assert manager.visitor_lost()
     assert manager._control == ('safety_pause', '导航安全停车')
-    assert manager.error_count == 0
+    assert manager.status()['team_recovery_required'] is True
+    assert manager.error_count == 1
+
+
+def test_team_loss_during_safety_pause_waits_for_gather_and_operator_ack():
+    manager = make_manager()
+    manager.state = TourState.PAUSED
+    manager._pause_source = 'safety'
+    manager._paused_session_id = 'nav-old'
+    manager.connected = True
+    manager.is_moving = False
+    team_ready = [False]
+    manager._visitor_guard = lambda: team_ready[0]
+
+    assert manager.visitor_lost()
+    assert manager._control is None
+    assert not manager.resume()
+    assert not manager.resume_safety('nav-old', lambda: True)
+
+    team_ready[0] = True
+    assert manager.resume()
+    assert manager.status()['team_resume_confirmed'] is True
+    assert not manager._resume_event.is_set()
+    assert manager.resume_safety('nav-old', lambda: True)
+    assert manager._resume_event.is_set()
 
 
 def test_manual_pause_supersedes_automatic_safety_pause():
@@ -171,10 +195,11 @@ def test_repeated_team_recovery_reuses_the_same_exhibit_without_skipping_route()
                                                  current_location='entrance', is_moving=False)
                 return OperationResult(True, 'Mock停车已确认')
 
-        async def wait_state(expected):
+        async def wait_state(expected, **matches):
             while True:
                 status = await changes.get()
-                if status['state'] == expected:
+                if status['state'] == expected and all(status.get(key) == value
+                                                       for key, value in matches.items()):
                     return status
 
         robot = Robot()
@@ -190,7 +215,7 @@ def test_repeated_team_recovery_reuses_the_same_exhibit_without_skipping_route()
         first_target, _ = await nav_started.get()
         for _ in range(2):
             assert manager.visitor_lost()
-            paused = await wait_state('PAUSED')
+            paused = await wait_state('PAUSED', team_resume_confirmed=False)
             assert paused['route_index'] == 0
             assert paused['target'] == first_target
             assert manager.resume()

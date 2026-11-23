@@ -315,23 +315,33 @@ class SpeedControllerNode(Node):
         def completed(done):
             try:
                 result = done.result()
-                outcome = {'command_id': decision.command_id, 'status': 'complete' if result.success else 'error',
+                stale_session = bool(getattr(result, 'stale_session', False))
+                status = ('stale' if stale_session else
+                          'complete' if result.success else 'error')
+                outcome = {'command_id': decision.command_id, 'status': status,
                            'requested_target_speed_mps': decision.target_speed_mps,
                            'sdk_return_code': result.sdk_return_code, 'message': result.message,
+                           'stale_session': stale_session,
                            'navigation_session_id': decision.navigation_session_id}
             except Exception as error:
                 outcome = {'command_id': decision.command_id, 'status': 'error',
                            'requested_target_speed_mps': decision.target_speed_mps,
                            'sdk_return_code': None, 'message': str(error),
+                           'stale_session': False,
                            'navigation_session_id': decision.navigation_session_id}
             self._commands.publish(String(data=json.dumps(outcome, ensure_ascii=False)))
-            if outcome['status'] != 'complete':
+            if outcome['status'] == 'error':
                 self.get_logger().error('调速接口未完成: '+json.dumps(outcome, ensure_ascii=False))
-            self._policy.report_speed_result(
-                outcome['status'] == 'complete',
-                navigation_session_id=decision.navigation_session_id,
-                current_navigation_session_id=self._latest_navigation_session_id,
-                recovery_command=decision.state == 'RECOVERING')
+            elif outcome['status'] == 'stale':
+                self.get_logger().warning('丢弃无活动导航Action的过期调速响应: '+
+                                          json.dumps(outcome, ensure_ascii=False))
+                if decision.state == 'RECOVERING':
+                    self._policy.interrupt_recovery()
+            else:
+                self._policy.report_speed_result(
+                    True, navigation_session_id=decision.navigation_session_id,
+                    current_navigation_session_id=self._latest_navigation_session_id,
+                    recovery_command=decision.state == 'RECOVERING')
         future.add_done_callback(completed)
         return 'sent_pending_confirmation'
 

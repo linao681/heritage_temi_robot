@@ -182,8 +182,10 @@ def test_tour_cannot_forget_transient_hazard_after_recovery_proposal(hazard, mon
     node = adapter.HeritageTourNode.__new__(adapter.HeritageTourNode)
     monkeypatch.setattr(adapter.time, 'monotonic', lambda: 10.1)
     status = dict(state='PAUSED', pause_source='safety', connected=True, is_moving=False,
-                  paused_session_id='old', target='zone')
-    node._manager = SimpleNamespace(status=lambda: status)
+                  paused_session_id='old', target='zone', team_recovery_required=True,
+                  team_resume_confirmed=False)
+    node._manager = SimpleNamespace(status=lambda: status,
+                                    _visitor_ready_to_resume=lambda: True)
     node._fused = None
     node._last_telemetry = 10.0
     node._recovery_interrupted_at = -float('inf')
@@ -199,6 +201,8 @@ def test_tour_cannot_forget_transient_hazard_after_recovery_proposal(hazard, mon
                  position_valid=True, communication_valid=True, safety_stop_valid=True, safety_stop=False,
                  stop_confirmed=True, stop_confirmed_session_id='old', group_state='following')
     node._update_fused(PerceptionInput(**clear), 10.0)
+    assert node._recovery_ack(status) == ''
+    status['team_resume_confirmed'] = True
     assert node._recovery_ack(status) == 'decision'
     node._update_fused(PerceptionInput(**(clear | hazard)), 10.05)
     node._update_fused(PerceptionInput(**clear), 10.06)

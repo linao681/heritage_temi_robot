@@ -21,7 +21,7 @@ label.file{display:inline-block;padding:9px 14px;border:1px solid var(--gold);bo
 <header><h1>非遗智导 · 实验记录回放</h1><span id="mode-badge" class="mode">RECORDED_ROS2 · 等待来源校验</span></header>
 <main class="wrap">
 <section class="card wide"><h2>载入真实运行记录</h2>
-<label class="file">选择 replay.json 与 replay.json.sha256<input id="recording-file" type="file" accept=".json,.sha256,application/json,text/plain" multiple hidden></label>
+<label class="file">本地预览会自动读取已校验记录；也可选择 replay.json 与 replay.json.sha256<input id="recording-file" type="file" accept=".json,.sha256,application/json,text/plain" multiple hidden></label>
 <p id="load-state" role="status">回放文件必须由 export_phase28_replay.py 从带归档哈希的 run 导出；校验失败时不会显示为 RECORDED_ROS2。</p>
 <p id="recording-meta" class="muted">尚未载入实验ID与来源。</p></section>
 <section class="card"><h2>同步图像与匿名检测</h2><div class="canvas-wrap"><canvas id="frame-canvas" width="640" height="480"></canvas></div><p id="frame-caption" class="muted">检测框只叠加在时间戳匹配的已保存 RGB 图像上。</p>

@@ -8,7 +8,7 @@ def normalize(text):
 
 def answer(kb, question, exhibit='', level='basic'):
     refusal = {'found': False, 'entry_id': '', 'answer': '暂未找到可靠资料，请向工作人员咨询或明确非遗主题。', 'source': {}}
-    if not isinstance(question, str) or len(question) > 256 or level not in ('basic','advanced'):
+    if not isinstance(question, str) or len(question) > 256 or level not in ('basic','child','advanced'):
         return refusal
     query = normalize(question)
     if not query or any(w in query for w in ('多少钱','价格','天气','机器人','门票','地址','电话号码')):

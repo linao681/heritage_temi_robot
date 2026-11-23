@@ -1,0 +1,140 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "run_id": "visitor-full-20261123-103559",
+  "manifest": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-103559/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 7.815761566162109,
+    "free_disk_gib": 45.16714859008789,
+    "load_per_cpu": 0.036875,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "error": "终点缺少新鲜cmd_vel/odom或停稳证据",
+  "events": [
+    {
+      "elapsed_sec": 13.149048463004874,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 21.276196447004622,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 46.86752139500459,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 50.25885924100294,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 58.22386986300262,
+      "action": "straggle",
+      "result": {
+        "success": true,
+        "message": "队尾游客放慢脚步"
+      }
+    },
+    {
+      "elapsed_sec": 64.65298893300496,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 68.35754073999851,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 110.98550864400022,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 165.54799756400462,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 171.07237672000338,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 179.6391841520017,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 184.24793517099897,
+      "action": "gather",
+      "result": {
+        "success": true,
+        "message": "游客追赶队伍，机器人仍需人工确认继续"
+      }
+    },
+    {
+      "elapsed_sec": 386.027351413999,
+      "action": "resume",
+      "result": {
+        "success": true,
+        "message": "resume: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 525.9630456910018,
+      "action": "ask",
+      "result": {
+        "success": true,
+        "message": "已接受文字提问"
+      }
+    }
+  ],
+  "elapsed_sec": 602.8927282660006
+}

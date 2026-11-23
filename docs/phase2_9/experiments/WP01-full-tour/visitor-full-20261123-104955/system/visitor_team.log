@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/gazebo_visitor_team.py", line 296, in <module>
+    main()
+  File "/home/linao/heritage_workspace/heritage_temi_robot-phase28/scripts/gazebo_visitor_team.py", line 287, in main
+    publisher.publish(String(data=json.dumps(status)))
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/publisher.py", line 70, in publish
+    self.__publisher.publish(msg)
+rclpy._rclpy_pybind11.RCLError: Failed to publish: publisher's context is invalid, at ./src/rcl/publisher.c:389

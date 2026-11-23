@@ -1,0 +1,44 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "vision_conservative",
+  "run_id": "visitor-full-20261123-114541",
+  "manifest": "docs/phase2_9/experiments/WP02-vision-observation/visitor-full-20261123-114541/manifest.json",
+  "team_evidence_source": "vision_tracker",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 7.817798614501953,
+    "free_disk_gib": 44.75936508178711,
+    "load_per_cpu": 0.04375,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "error": "完整演示超时",
+  "events": [
+    {
+      "elapsed_sec": 11.31515331499395,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 19.449317892998806,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    }
+  ],
+  "elapsed_sec": 45.023210728002596
+}

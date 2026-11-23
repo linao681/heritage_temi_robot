@@ -1,0 +1,44 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "run_id": "visitor-full-20261123-102218",
+  "manifest": "/home/linao/heritage_workspace/heritage_temi_robot-phase28/docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-102218/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 7.8747711181640625,
+    "free_disk_gib": 45.22771453857422,
+    "load_per_cpu": 0.054375,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "error": "演示被操作员中断",
+  "events": [
+    {
+      "elapsed_sec": 13.160026869998546,
+      "action": "start",
+      "result": {
+        "success": true,
+        "message": "start: 已接受"
+      }
+    },
+    {
+      "elapsed_sec": 21.293271246002405,
+      "action": "accept",
+      "result": {
+        "success": true,
+        "message": "accept: 已接受"
+      }
+    }
+  ],
+  "elapsed_sec": 191.7572302490007
+}

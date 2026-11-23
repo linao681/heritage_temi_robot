@@ -14,16 +14,25 @@ def stamp_ns(header):
     return header.stamp.sec * 1_000_000_000 + header.stamp.nanosec
 
 
+def finite_sample_age_sec(value):
+    if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+        return None
+    return float(value)
+
+
 class TeamObserverNode(Node):
     def __init__(self):
         super().__init__('anonymous_team_observer')
         self.declare_parameter('detections_topic', 'heritage/visitor/person_detections')
         self.declare_parameter('expected_count_topic', 'heritage/visitor/expected_count')
         self.declare_parameter('coverage', 'forward_only')
+        self.declare_parameter('expected_count', 0)
         self.declare_parameter('max_missed_sec', 0.5)
         self.declare_parameter('max_sample_age_sec', 0.5)
         self.coverage = str(self.get_parameter('coverage').value)
-        self.expected_count = 0
+        self.expected_count = int(self.get_parameter('expected_count').value)
+        if not 0 <= self.expected_count <= 8:
+            raise ValueError('expected_count must be between 0 and 8')
         self.tracker = PersonTracker(max_missed_sec=float(
             self.get_parameter('max_missed_sec').value))
         self.observer = TeamObserver(max_age_sec=float(
@@ -73,7 +82,7 @@ class TeamObserverNode(Node):
         team = self.observer.observe(tracks, stamp, valid, self.coverage,
                                      self.expected_count, stamp if valid else None)
         team['frame_id'] = message.header.frame_id
-        team['sample_age_sec'] = message.sample_age_sec
+        team['sample_age_sec'] = finite_sample_age_sec(message.sample_age_sec)
         tracks_json = json.dumps({'schema_version': 1, 'stamp_ns': stamp,
                                   'source': 'vision_tracker', 'valid': valid,
                                   'tracks': serialized_tracks}, allow_nan=False)

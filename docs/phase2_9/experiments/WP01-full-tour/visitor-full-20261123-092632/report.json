@@ -1,0 +1,31 @@
+{
+  "status": "BLOCKED",
+  "layout": "official",
+  "team_decision_mode": "business_script",
+  "run_id": "visitor-full-20261123-092632",
+  "manifest": "docs/phase2_9/experiments/WP01-full-tour/visitor-full-20261123-092632/manifest.json",
+  "team_evidence_source": "gazebo_scripted_actors",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": false,
+    "available_memory_gib": 6.762973785400391,
+    "free_disk_gib": 45.298583984375,
+    "load_per_cpu": 0.8825,
+    "cpu_cores": 16,
+    "gazebo_processes": [
+      "gzserver"
+    ],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": [
+      "another Gazebo process is already running"
+    ]
+  },
+  "error": "another Gazebo process is already running",
+  "events": [],
+  "elapsed_sec": 0.019545757997548208
+}

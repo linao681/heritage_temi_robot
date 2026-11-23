@@ -1,0 +1,27 @@
+{
+  "status": "FAIL",
+  "layout": "official",
+  "team_decision_mode": "vision_conservative",
+  "run_id": "visitor-full-20261123-114400",
+  "manifest": "docs/phase2_9/experiments/WP02-vision-observation/visitor-full-20261123-114400/manifest.json",
+  "team_evidence_source": "vision_tracker",
+  "actor_source": "Gazebo scripted visitor actors",
+  "expected_visitors": 3,
+  "expected_visitors_source": "explicit demo/operator configuration",
+  "operator_mode": "scripted simulated consent; business regroup is scripted; vision resume requires an external operator action",
+  "speech_mode": "timed subtitles, no physical temi audio",
+  "resource_preflight": {
+    "ready": true,
+    "available_memory_gib": 7.844341278076172,
+    "free_disk_gib": 44.760128021240234,
+    "load_per_cpu": 0.084375,
+    "cpu_cores": 16,
+    "gazebo_processes": [],
+    "ports_available": true,
+    "port_errors": [],
+    "reasons": []
+  },
+  "error": "仿真系统已退出，查看 system.log",
+  "events": [],
+  "elapsed_sec": 2.0163795099942945
+}

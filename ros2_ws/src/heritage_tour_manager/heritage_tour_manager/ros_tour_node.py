@@ -219,7 +219,7 @@ class HeritageTourNode(Node):
             self.create_subscription(String, 'heritage/visitor/team_observation',
                                      self._on_vision_team, 10)
         controls = {
-            'start': self._manager.start,
+            'start': self._start_tour,
             'accept': partial(self._manager.consent, True),
             'refuse': partial(self._manager.consent, False),
             'pause': self._manager.pause,
@@ -338,6 +338,10 @@ class HeritageTourNode(Node):
             return ''
         evidence, received_at = self._speed_recovery
         eligible_states = ('PAUSED', 'NAVIGATING', 'RETURNING') if consuming else ('PAUSED',)
+        if (status.get('team_recovery_required') and
+                (not status.get('team_resume_confirmed') or
+                 not self._manager._visitor_ready_to_resume())):
+            return ''
         if (not isinstance(evidence, dict) or status['state'] not in eligible_states or
                 status['pause_source'] != 'safety' or not status['connected'] or status['is_moving'] or
                 not isinstance(evidence.get('decision_id'), str) or not evidence['decision_id'] or
@@ -446,6 +450,20 @@ class HeritageTourNode(Node):
             response.message = '提问确认超时'
         return response
 
+    def _business_team_ready(self):
+        team = self._sim_team
+        age = time.monotonic() - self._sim_team_received
+        return (isinstance(team, dict) and team.get('valid') is True and
+                team.get('source') == 'gazebo_scripted_actors' and
+                team.get('gathered') is True and 0 <= age <= 1.0)
+
+    def _start_tour(self):
+        if self._team_decision_mode == 'business_script':
+            guard = lambda: (not self._manager.status()['team_recovery_required'] or
+                             self._business_team_ready())
+            return self._manager.start(visitor_guard=guard)
+        return self._manager.start()
+
     def _on_sim_team(self, message):
         if not simulation_team_controls(self._team_decision_mode):
             return
@@ -497,8 +515,9 @@ class HeritageTourNode(Node):
             response.message = '视觉模式拒绝脚本掉队指令；状态由视觉观察器提供'
             return response
         team = self._sim_team
-        if (self._team_decision_mode == 'business_script' and name == 'resume' and team is not None and
-                (time.monotonic()-self._sim_team_received > 1.0 or not team.get('gathered'))):
+        if (self._team_decision_mode == 'business_script' and name == 'resume' and
+                self._manager.status()['team_recovery_required'] and
+                not self._business_team_ready()):
             response.success = False
             response.message = '游客尚未集合或队伍状态过期，保持暂停'
             return response

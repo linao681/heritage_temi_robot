@@ -240,6 +240,23 @@
       }
     });
 
+    if (location.protocol === 'http:' && location.hostname === '127.0.0.1') {
+      Promise.all([
+        fetch('/recording/replay.json', {cache: 'no-store'}),
+        fetch('/recording/replay.json.sha256', {cache: 'no-store'})
+      ]).then(async ([jsonResponse, checksumResponse]) => {
+        if (!jsonResponse.ok || !checksumResponse.ok) throw new Error('本地回放文件读取失败');
+        const [jsonText, checksumText] = await Promise.all([
+          jsonResponse.text(), checksumResponse.text()
+        ]);
+        loadRecording(await verifyRecordingFiles(jsonText, checksumText, 'replay.json'));
+      }).catch(error => {
+        mode.textContent = 'RECORDED_ROS2 · 校验失败';
+        mode.className = 'mode invalid';
+        loadState.textContent = error.message || '本地记录无效，已拒绝载入。';
+      });
+    }
+
     slider.addEventListener('input', () => recording && drawFrame());
     playButton.addEventListener('click', () => {
       if (!recording) return;

@@ -1,6 +1,7 @@
 import sys
 import math
 import json
+import inspect
 from types import SimpleNamespace
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -11,12 +12,65 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 
+import spawn_people_scenario
 from spawn_people_scenario import (ground_truth_path_lengths, scenario_anchor,
                                    scene_positions, trajectory_duration,
                                    trajectory_position, write_truth_record,
                                    PeopleScenario, navigation_heading)
 from run_phase25_clean_tour import TourEvidence, validate_dynamic_scenario_evidence
 from run_phase25_clean_tour import validate_leaving_recovery_evidence
+
+
+def test_model_pose_wait_ignores_cache_sample_from_before_move_ack(monkeypatch):
+    parameters = inspect.signature(PeopleScenario.wait_for_model_pose).parameters
+    assert 'after_monotonic' in parameters
+
+    class FakeScenario:
+        _model_states_received_at = 10.0
+        _last_pose_confirmation_source = ''
+        spin_count = 0
+
+        @staticmethod
+        def model_pose(_name):
+            return {'x': 1.0, 'y': 2.0, 'yaw': 0.0}
+
+    scenario = FakeScenario()
+
+    def spin_once(node, timeout_sec=0.1):
+        node.spin_count += 1
+        node._model_states_received_at = 10.1
+
+    monkeypatch.setattr(spawn_people_scenario.rclpy, 'ok', lambda: True)
+    monkeypatch.setattr(spawn_people_scenario.rclpy, 'spin_once', spin_once)
+
+    pose = PeopleScenario.wait_for_model_pose(
+        scenario, 'visitor', (1.0, 2.0), timeout_sec=0.5,
+        tolerance_m=0.02, after_monotonic=10.0)
+
+    assert pose['x'] == pytest.approx(1.0)
+    assert scenario.spin_count == 1
+    assert scenario._last_pose_confirmation_source == 'gazebo_model_states'
+
+
+def test_actor_move_uses_ack_time_as_model_state_freshness_boundary(monkeypatch):
+    class FakeScenario:
+        _set_state = object()
+        acknowledged_at = 10.0
+        freshness_boundary = None
+
+        def _call(self, _client, _request):
+            pass
+
+        def wait_for_model_pose(self, _name, _expected, **kwargs):
+            self.freshness_boundary = kwargs.get('after_monotonic')
+
+    monkeypatch.setattr(spawn_people_scenario.time, 'monotonic', lambda: 10.1)
+    scenario = FakeScenario()
+
+    PeopleScenario.move(scenario, 'visitor', 1.0, 2.0, 0.0)
+
+    assert scenario.freshness_boundary == 10.1
+    assert scenario.freshness_boundary > scenario.acknowledged_at
 
 
 def test_local_person_model_has_camera_visible_geometry_and_collisions():

@@ -4,5 +4,6 @@ float32 target_speed_mps
 string control_reason
 ---
 bool success
+bool stale_session
 string message
 int32 sdk_return_code

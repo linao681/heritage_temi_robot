@@ -87,6 +87,8 @@ class TourManager:
         self._returning_low = False
         self._safe_return_completed = False
         self._visitor_guard: Callable[[], bool] | None = None
+        self._team_recovery_required = False
+        self._team_resume_confirmed = False
         self.qa_lookup = qa_lookup
         self._qa_open = False
         self._qa_question = None
@@ -116,6 +118,8 @@ class TourManager:
             'current_location': self.current_location, 'connected': self.connected,
             'battery_percentage': self.battery_percentage, 'is_moving': self.is_moving,
             'error_count': self.error_count, 'elapsed_sec': round(elapsed, 3),
+            'team_recovery_required': self._team_recovery_required,
+            'team_resume_confirmed': self._team_resume_confirmed,
             'safe_return_completed': self._safe_return_completed,
             'qa_waiting': self.state is TourState.QA and self._qa_open and not self._qa_event.is_set(),
             'qa_result': self._qa_result,
@@ -151,6 +155,7 @@ class TourManager:
         self._qa_open = False
         self._qa_question = self._qa_result = None
         self._visitor_guard = visitor_guard
+        self._team_recovery_required = self._team_resume_confirmed = False
         self._control = None
         self._pause_source = self._paused_session_id = self._pending_safety_session_id = ''
         self._recovery_guard = None
@@ -192,29 +197,51 @@ class TourManager:
         self._pending_safety_session_id = session_id
         return True
 
-    def visitor_lost(self) -> bool:
-        accepted = ((self.state is not TourState.PAUSED or self._pause_source == 'safety') and
-                    self._request('team_pause', '游客掉队，等待重新集合'))
+    def _request_visitor_pause(self, reason: str) -> bool:
+        if self._team_recovery_required:
+            return True
+        if self._control is not None:
+            if self._control[0] != 'safety_pause':
+                return False
+            accepted = True
+        elif self.state is TourState.PAUSED:
+            if self._pause_source != 'safety':
+                return False
+            accepted = True
+        else:
+            accepted = self._request('team_pause', reason)
         if accepted:
+            self._team_recovery_required = True
+            self._team_resume_confirmed = False
             self.error_count += 1
+            self._emit()
         return accepted
+
+    def visitor_lost(self) -> bool:
+        return self._request_visitor_pause('游客掉队，等待重新集合')
 
     def visitor_uncertain(self) -> bool:
-        accepted = ((self.state is not TourState.PAUSED or self._pause_source == 'safety') and
-                    self._request('team_pause', '团队视觉信息不完整，安全等待人工确认'))
-        if accepted:
-            self.error_count += 1
-        return accepted
+        return self._request_visitor_pause('团队视觉信息不完整，安全等待人工确认')
 
     def resume(self) -> bool:
-        if not self._can_resume() or self._pause_source == 'safety':
+        if not self._can_resume():
             return False
+        if self._pause_source == 'safety':
+            if not self._team_recovery_required:
+                return False
+            self._team_resume_confirmed = True
+            self._emit()
+            return True
+        if self._team_recovery_required:
+            self._team_resume_confirmed = True
         self._resume_event.set()
+        self._emit()
         return True
 
     def resume_safety(self, session_id: str, guard: Callable[[], bool]) -> bool:
         if (not self._can_resume() or self._pause_source != 'safety' or
-                session_id != self._paused_session_id or not guard()):
+                session_id != self._paused_session_id or not guard() or
+                self._team_recovery_required and not self._team_resume_confirmed):
             return False
         self._recovery_guard = guard
         self._resume_event.set()
@@ -229,7 +256,18 @@ class TourManager:
         """Validate the current control and recovery immediately before goal submission."""
         if self._control is not None:
             return False
+        if (self._team_recovery_required and not self._returning_low and
+                (not self._team_resume_confirmed or not self._visitor_ready_to_resume())):
+            self._team_resume_confirmed = False
+            if self._pause_source == 'safety':
+                self._resume_event.clear()
+                self._recovery_guard = None
+                self._pending_safety_session_id = self._paused_session_id
+                self._request('safety_pause', '游客集合确认失效，继续等待人工确认')
+            return False
         if self._pause_source != 'safety':
+            if consume:
+                self._clear_team_recovery()
             return True
         if (not self._resume_event.is_set() or not self.connected or self.is_moving or
                 not self._visitor_ready_to_resume() or self._recovery_guard is None or
@@ -241,15 +279,25 @@ class TourManager:
             self._pause_source = self._paused_session_id = ''
             self._recovery_guard = None
             self._resume_event.clear()
+            self._clear_team_recovery()
         return True
 
     def _visitor_ready_to_resume(self) -> bool:
-        return self._visitor_guard is None or self._returning_low or self._visitor_guard()
+        ready = self._visitor_guard is None or self._returning_low or self._visitor_guard()
+        if not ready and self._team_recovery_required:
+            self._team_resume_confirmed = False
+        return ready
+
+    def _clear_team_recovery(self):
+        self._team_recovery_required = False
+        self._team_resume_confirmed = False
 
     def invalidate_visitor_resume(self):
         """辅助队伍状态失效时撤销尚未消费的恢复请求。"""
         if self._visitor_guard is not None and not self._returning_low and self.state is TourState.PAUSED:
             self._resume_event.clear()
+            if self._team_recovery_required:
+                self._team_resume_confirmed = False
 
     def visitor_source_lost(self) -> bool:
         return self._request('disconnect', '辅助导览 Mock 机器人来源失效')
@@ -270,7 +318,7 @@ class TourManager:
         """互动区一次仅接收一个明确文本问题，拒绝迟到或重复请求。"""
         if (self.state is not TourState.QA or not self._qa_open or self._qa_event.is_set() or
                 self._control is not None or not isinstance(question, str) or not question.strip() or
-                len(question) > 256 or level not in ('basic', 'advanced') or
+                len(question) > 256 or level not in ('basic', 'child', 'advanced') or
                 exhibit not in ('', 'exhibit_01', 'exhibit_02', 'exhibit_03', 'exhibit_04', 'exhibit_05')):
             return False
         self._qa_question = (question, exhibit, level)

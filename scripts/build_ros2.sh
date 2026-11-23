@@ -8,7 +8,9 @@ source /opt/ros/humble/setup.bash
 
 # 每次使用 mktemp 创建当前用户独享的目录，避免复用不可信的共享 CMake 缓存。
 build_base=$(mktemp -d /tmp/heritage-temi-ros2-build.XXXXXX)
+log_base="${COLCON_LOG_BASE:-$workspace/log}"
+install_base="${COLCON_INSTALL_BASE:-$workspace/install}"
 printf 'ROS2 build cache: %s\n' "$build_base"
 
 cd "$workspace"
-colcon build --base-paths src --build-base "$build_base" --install-base "$workspace/install" "$@"
+colcon --log-base "$log_base" build --base-paths src --build-base "$build_base" --install-base "$install_base" "$@"

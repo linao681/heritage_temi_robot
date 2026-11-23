@@ -1,0 +1,13 @@
+[INFO] [launch]: All log files can be found below /home/linao/.ros/log/2026-11-23-11-30-56-296858-linao-P15-24-222446
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [visitor_perception-1]: process started with pid [222501]
+[INFO] [yolox_person_detector-2]: process started with pid [222503]
+[INFO] [depth_association-3]: process started with pid [222505]
+[INFO] [team_observer-4]: process started with pid [222522]
+[INFO] [perception_fusion-5]: process started with pid [222524]
+[visitor_perception-1] [INFO] [1795404659.431436966] [visitor_perception]: 游客感知: arrival, {'valid': True, 'people_count': 2, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': True, 'stable_fresh': True, 'sample_timestamp_monotonic_sec': 65061.595639266, 'sample_age_sec': 1.2764001439791173e-05}
+[INFO] [team_observer-4]: process has finished cleanly [pid 222522]
+[INFO] [perception_fusion-5]: process has finished cleanly [pid 222524]
+[INFO] [depth_association-3]: process has finished cleanly [pid 222505]
+[INFO] [yolox_person_detector-2]: process has finished cleanly [pid 222503]
+[visitor_perception-1] [INFO] [1795404670.463308978] [visitor_perception]: 游客感知: data_stale, {'valid': False, 'people_count': None, 'expected_count': 0, 'group_state': 'untracked', 'source': 'camera', 'stable': False, 'stable_fresh': False, 'sample_timestamp_monotonic_sec': 65071.556522099, 'sample_age_sec': 1.079348144994583}

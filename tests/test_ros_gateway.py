@@ -53,6 +53,66 @@ def test_concurrent_stops_wait_for_the_same_confirmation(rig):
     assert len(calls) == 1
 
 
+def test_speed_rejection_reports_active_and_requested_navigation_sessions(rig):
+    from temi_interfaces.srv import SetNavigationSpeed
+
+    reservation = SimpleNamespace(task_id='active-session', blocked=Event())
+    with rig.gateway._lock:
+        rig.gateway._active['navigation'] = reservation
+    request = SetNavigationSpeed.Request(
+        command_id='speed-command', navigation_session_id='requested-session',
+        target_speed_mps=0.5, control_reason='diagnostic-test',
+    )
+
+    response = rig.gateway._set_navigation_speed(
+        request, SetNavigationSpeed.Response())
+
+    assert not response.success
+    assert not response.stale_session
+    assert 'active-session' in response.message
+    assert 'requested-session' in response.message
+    with rig.gateway._lock:
+        rig.gateway._active.pop('navigation', None)
+
+
+def test_speed_rejection_without_active_action_is_marked_stale(rig):
+    from temi_interfaces.srv import SetNavigationSpeed
+
+    request = SetNavigationSpeed.Request(
+        command_id='speed-command', navigation_session_id='finished-session',
+        target_speed_mps=0.5, control_reason='diagnostic-test',
+    )
+
+    response = rig.gateway._set_navigation_speed(
+        request, SetNavigationSpeed.Response())
+
+    assert not response.success
+    assert response.stale_session
+    assert response.message == '没有活动导航Action'
+
+
+def test_speed_rejection_during_stop_is_not_marked_stale(rig):
+    from temi_interfaces.srv import SetNavigationSpeed
+
+    reservation = SimpleNamespace(task_id='active-session', blocked=Event())
+    reservation.blocked.set()
+    with rig.gateway._lock:
+        rig.gateway._active['navigation'] = reservation
+    request = SetNavigationSpeed.Request(
+        command_id='speed-command', navigation_session_id='active-session',
+        target_speed_mps=0.5, control_reason='diagnostic-test',
+    )
+
+    response = rig.gateway._set_navigation_speed(
+        request, SetNavigationSpeed.Response())
+
+    assert not response.success
+    assert not response.stale_session
+    assert '被STOP阻断' in response.message
+    with rig.gateway._lock:
+        rig.gateway._active.pop('navigation', None)
+
+
 @pytest.fixture
 def rig(monkeypatch, tmp_path):
     from temi_bridge.ros_gateway import TemiGatewayNode

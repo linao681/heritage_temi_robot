@@ -25,6 +25,18 @@ def test_context_and_level(kb):
     assert not answer(kb,'潮绣有什么特点','exhibit_02')['found']
     assert not answer(kb,'潮绣有什么特点',level='invalid')['found']
 
+def test_child_answers_exist_and_are_used_for_every_topic_entry(kb):
+    for topic in kb['topics']:
+        for entry in topic['entries']:
+            assert entry['child'].strip()
+            result = answer(kb, topic['aliases'][0] + entry['keywords'][0],
+                            topic['exhibit'], level='child')
+            assert result['found']
+            assert result['entry_id'] == entry['id']
+            assert result['answer'] == entry['child']
+            assert result['answer'] != entry['basic']
+            assert result['source']['url'].startswith('https://')
+
 @pytest.mark.parametrize('question,expected', [
     ('潮州刺绣发源地','embroidery_region'),('潮绣哪年入选','embroidery_list'),
     ('潮州木雕的历史','wood_history'),('潮州木雕的构图','wood_composition'),

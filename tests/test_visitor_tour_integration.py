@@ -167,6 +167,12 @@ def test_new_arrival_consent_and_dropout_requires_explicit_resume(rig):
     wait(lambda: assist(rig)['can_resume'])
     time.sleep(0.25)
     assert rig.statuses[-1]['state'] == 'PAUSED' and not rig.backend.get_status().is_moving
+    team = rig.client.create_publisher(String, 'heritage/simulation/team_status', 10)
+    wait(lambda: team.get_subscription_count() > 0)
+    team.publish(String(data=json.dumps({'valid': True, 'source': 'gazebo_scripted_actors',
+                                         'count': 3, 'state': 'GATHERED', 'gathered': True,
+                                         'time_monotonic_sec': time.monotonic()})))
+    wait(rig.tour._business_team_ready)
     call(rig, 'resume')
     wait(lambda: rig.statuses[-1]['state'] == 'NAVIGATING' and
          rig.statuses[-1]['target'] == 'exhibit_01' and rig.backend.get_status().is_moving)
